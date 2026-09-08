@@ -1,0 +1,38 @@
+workflows:
+  ios-unsigned:
+    name: iOS — build de vérification (non signé)
+    # Vérifie juste que le projet iOS compile (Podfile, plugins, config) —
+    # aucune signature, donc aucun compte Apple Developer requis. Utile en
+    # attendant l'inscription à l'Apple Developer Program : voir le workflow
+    # ios-signed ci-dessous, à activer une fois ce compte obtenu.
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Flutter pub get
+        script: flutter pub get
+      - name: Build iOS (release, non signé)
+        script: flutter build ios --release --no-codesign
+    artifacts:
+      - build/ios/iphoneos/*.app
+
+  # ios-signed:
+  #   name: iOS — build signé + TestFlight
+  #   À activer une fois l'Apple Developer Program obtenu (99$/an,
+  #   indépendant du SIRET). Nécessite de générer une clé API App Store
+  #   Connect et de la renseigner dans Codemagic (Teams > Code signing
+  #   identities), puis de décommenter ce bloc avec :
+  #     environment:
+  #       ios_signing:
+  #         distribution_type: app_store   # ou ad_hoc pour un simple test iPhone
+  #         bundle_identifier: com.lnaapp.plottwisted
+  #       vars:
+  #         APP_STORE_CONNECT_KEY_IDENTIFIER: ...
+  #     scripts:
+  #       - flutter build ipa --release
+  #     publishing:
+  #       app_store_connect:
+  #         auth: integration
