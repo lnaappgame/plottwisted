@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"print\\('ok'\\)\")",
+      "Bash(cd \"/c/Users/NEOPHI~1/AppData/Local/Temp/claude/C--Users-Neophilis-Documents-cine-devinette/ff928cde-e881-4c2d-9efa-ad7518acd640/scratchpad/xlsx_us/xl/worksheets/\" *)",
+      "Read(//c/Users/NEOPHI~1/AppData/Local/Temp/claude/C--Users-Neophilis-Documents-cine-devinette/ff928cde-e881-4c2d-9efa-ad7518acd640/scratchpad//**)",
+      "Bash(/c/src/flutter/bin/dart run *)",
+      "Bash(node \"C:\\\\Users\\\\Neophilis\\\\Documents\\\\cine-devinette\\\\lib\\\\data\\\\puzzles_data.dart\")",
+      "Bash(awk '{ n=gsub\\(/\\\\\\(/,\"\\(\"\\); m=gsub\\(/\\\\\\)/,\"\\)\"\\); open+=n; close+=m } END { print \"open=\"open, \"close=\"close }' \"C:\\\\Users\\\\Neophilis\\\\Documents\\\\cine-devinette\\\\lib\\\\data\\\\puzzles_data.dart\")",
+      "Bash(/c/src/flutter/bin/flutter test *)",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell screencap -p /sdcard/screen1.png)",
+      "Bash(MSYS_NO_PATHCONV=1 adb pull /sdcard/screen1.png \"C:\\\\Users\\\\NEOPHI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Neophilis-Documents-cine-devinette\\\\ff928cde-e881-4c2d-9efa-ad7518acd640\\\\scratchpad\\\\bilingual_check1.png\")",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell input tap 610 1560)",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell screencap -p /sdcard/screen2.png)",
+      "Bash(MSYS_NO_PATHCONV=1 adb pull /sdcard/screen2.png \"C:\\\\Users\\\\NEOPHI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Neophilis-Documents-cine-devinette\\\\ff928cde-e881-4c2d-9efa-ad7518acd640\\\\scratchpad\\\\bilingual_check2.png\")",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell screencap -p /sdcard/screen3.png)",
+      "Bash(MSYS_NO_PATHCONV=1 adb pull /sdcard/screen3.png \"C:\\\\Users\\\\NEOPHI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Neophilis-Documents-cine-devinette\\\\ff928cde-e881-4c2d-9efa-ad7518acd640\\\\scratchpad\\\\bilingual_check3.png\")",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell input tap 95 238)",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell screencap -p /sdcard/screen4.png)",
+      "Bash(MSYS_NO_PATHCONV=1 adb pull /sdcard/screen4.png \"C:\\\\Users\\\\NEOPHI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Neophilis-Documents-cine-devinette\\\\ff928cde-e881-4c2d-9efa-ad7518acd640\\\\scratchpad\\\\bilingual_check4.png\")",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell screencap -p /sdcard/screen5.png)",
+      "Bash(MSYS_NO_PATHCONV=1 adb pull /sdcard/screen5.png \"C:\\\\Users\\\\NEOPHI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Neophilis-Documents-cine-devinette\\\\ff928cde-e881-4c2d-9efa-ad7518acd640\\\\scratchpad\\\\bilingual_check5.png\")",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell input tap 1113 238)",
+      "Bash(MSYS_NO_PATHCONV=1 adb shell screencap -p /sdcard/screen6.png)",
+      "Bash(MSYS_NO_PATHCONV=1 adb pull /sdcard/screen6.png \"C:\\\\Users\\\\NEOPHI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Neophilis-Documents-cine-devinette\\\\ff928cde-e881-4c2d-9efa-ad7518acd640\\\\scratchpad\\\\bilingual_check6.png\")"
+    ]
+  }
+}

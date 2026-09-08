@@ -1,0 +1,66 @@
+name: cine_devinette
+description: "Plot Twist(ed) — devine le film derrière le pitch détourné."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2          # gestion d'état simple (GameState)
+  google_fonts: ^6.2.1      # polices Bebas Neue / Libre Franklin
+  cupertino_icons: ^1.0.6
+  url_launcher: ^6.3.0      # lien "Voir la fiche du film" (Allociné)
+  audioplayers: ^6.1.0      # effets sonores (lettre, bonne/mauvaise réponse)
+  google_mobile_ads: ^9.1.0 # pubs AdMob (forcées + volontaires) — Android/iOS uniquement
+  shared_preferences: ^2.3.2 # sauvegarde locale de la progression
+  in_app_purchase: ^3.2.3   # boutique (jokers, retrait des pubs)
+  firebase_core: ^3.8.0     # classement de L'énigme de la semaine
+  firebase_auth: ^5.3.3     # identifiant anonyme par appareil, sans compte joueur
+  cloud_firestore: ^5.5.0   # stockage des temps de résolution
+  flutter_local_notifications: ^22.3.0
+  timezone: ^0.11.1
+  firebase_analytics: ^11.6.0
+  firebase_crashlytics: ^4.3.10
+  google_sign_in: ^7.2.0
+  in_app_review: ^2.0.12
+  video_player: ^2.9.2      # animation de lancement, lue depuis une vidéo embarquée
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.20.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.2
+  flutter_native_splash: ^2.4.8
+  video_player_platform_interface: ^6.9.0 # fake plateforme pour tester IntroTeaserScreen
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/sounds/
+    - assets/icon/
+    - assets/video/
+
+# Génère les icônes d'app pour Android/iOS depuis assets/icon/icon.png :
+# `dart run flutter_launcher_icons`
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
+# Génère l'écran de démarrage natif (avant même que Flutter ne s'initialise) :
+# `dart run flutter_native_splash:create`
+flutter_native_splash:
+  color: "#0C0906"
+  image: assets/icon/splash_reel.png
+  android_12:
+    color: "#0C0906"
+    image: assets/icon/splash_reel.png

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fond de l'écran de lancement natif (voir drawable/launch_background.xml
+         et values-v31/styles.xml) — identique au fond de l'animation Flutter
+         (IntroTeaserPainter) pour une transition invisible. -->
+    <color name="launch_background_color">#14100C</color>
+</resources>

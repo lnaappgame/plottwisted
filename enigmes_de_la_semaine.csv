@@ -1,0 +1,105 @@
+﻿Ordre,Categorie,Sujet,Texte,AnneeOuDateNaissance
+1,Acteur,JENNIFER LAWRENCE,"Cette actrice américaine a incarné une jeune tireuse à l'arc se rebellant contre un régime totalitaire, devenant très jeune l'une des actrices les mieux payées au monde.",15/8/1990
+2,Personnage,HOMELANDER,Ce super heros venere du public cache une instabilite profonde et une soif de controle absolu derriere un sourire televisuel parfaitement maitrise en toute circonstance,
+3,Acteur,CHARLIZE THERON,"Cette actrice sud-africaine a incarné une tueuse en série condamnée à mort dans un rôle très transformé physiquement, ainsi qu'une guerrière traversant un désert dévasté.",7/8/1975
+4,Acteur,CHRISTIAN BALE,"Cet acteur britannique très transformiste a incarné un milliardaire justicier masqué dans une trilogie sombre, changeant radicalement son physique pour chaque nouveau rôle.",30/1/1974
+5,Acteur,NATALIE PORTMAN,"Cette actrice américano-israélienne a incarné une danseuse classique sombrant lentement dans la folie, ainsi qu'une reine dans une lointaine et vaste saga spatiale.",9/6/1981
+6,Acteur,MORGAN FREEMAN,"Cet acteur américain à la voix si reconnaissable a incarné Dieu, un détective vieillissant et un président des États-Unis, souvent dans des rôles empreints de sagesse.",1/6/1937
+7,Personnage,KATNISS EVERDEEN,Cette jeune archère se porte courageusement volontaire à la place de sa sœur pour un jeu télévisé mortel opposant chaque année des adolescents de différents districts.,
+8,Film,ROCKY,"Un boxeur amateur de Philadelphie, inconnu de tous et sans grande ambition dans la vie, se voit offrir la chance inespérée d'affronter le champion du monde en titre.",1976
+9,Acteur,SAMUEL L. JACKSON,"Cet acteur américain reconnaissable entre mille a incarné un tueur à gages philosophe citant la Bible, ainsi qu'un espion borgne dirigeant une agence de super-héros.",21/12/1948
+10,Personnage,JACK SPARROW,Ce capitaine pirate excentrique navigue sur les mers des caraibes en cherchant sans cesse un tresor legendaire il perd puis retrouve sans arret son propre navire,
+11,Personnage,BARBIE,Cette poupee mondialement connue mene une existence parfaite dans un monde entierement rose avant de decouvrir avec stupeur et fascination le monde reel bien plus imparfait,
+12,Acteur,FLORENCE PUGH,Cette actrice britannique a affronte un culte scandinave inquietant avant de rejoindre une celebre famille de super heros et une saga de science fiction desertique,3/1/1996
+13,Personnage,JASON VOORHEES,Ce tueur masqué et totalement silencieux traque sans relâche les jeunes moniteurs d'une colonie de vacances installée près d'un lac isolé réputé maudit depuis des années.,
+14,Film,"2001, L'ODYSSÉE DE L'ESPACE",Un équipage de scientifiques part en mission vers Jupiter à bord d'un vaisseau contrôlé par une intelligence artificielle qui se retourne peu à peu contre eux tous.,1968
+15,Film,APOCALYPSE NOW,Un jeune capitaine de l'armée américaine remonte lentement un fleuve en pleine guerre du Vietnam pour retrouver et exécuter un colonel devenu totalement incontrôlable.,1979
+16,Film,LES DENTS DE LA MER,Un shérif fraîchement arrivé dans une petite station balnéaire américaine doit convaincre les habitants du danger que représente un immense requin rôdant tout près des côtes.,1975
+17,Acteur,CHRIS HEMSWORTH,"Cet acteur australien musclé a incarné un dieu nordique maniant un marteau enchanté indestructible, tout en multipliant les rôles d'action très physiques au cinéma.",11/8/1983
+18,Acteur,JOHNNY DEPP,"Cet acteur américain excentrique a incarné un pirate haut en couleur et instable, ainsi qu'un homme aux mains couvertes de lames tranchantes créé par un inventeur.",9/6/1963
+19,Acteur,NICOLE KIDMAN,"Cette actrice australienne d'origine a incarné une chanteuse de cabaret tuberculeuse à Paris, ainsi que l'écrivaine Virginia Woolf dans un drame sur trois vies entrelacées.",20/6/1967
+20,Acteur,ANA DE ARMAS,Cette actrice cubaine installee aux Etats Unis a incarne une James Bond girl redoutable avant de jouer une idole hollywoodienne tragique dans un biopic tres remarque,30/4/1988
+21,Personnage,THANOS,Ce titan violet obsédé par l'équilibre de l'univers cherche à réunir six pierres surpuissantes pour effacer la moitié de toute vie existante d'un simple claquement.,
+22,Film,LE GRAND BLEU,"Deux plongeurs en apnée que tout oppose et pourtant tout unit se livrent une rivalité amicale depuis l'enfance, jusqu'à tenter ensemble un ultime record du monde.",1988
+23,Acteur,LEONARDO DICAPRIO,Cet acteur americain a incarne un naufrage celebre un voleur de reves et un courtier sans scrupules il a finalement remporte un oscar apres plusieurs nominations manquees,11/11/1974
+24,Film,LE PARRAIN,Un chef mafieux vieillissant transmet peu a peu son pouvoir a son fils reticent qui devient malgre lui le nouveau chef dune puissante famille installee a New York,1972
+25,Personnage,LE TERMINATOR,"Ce robot venu du futur, à l'apparence humaine indestructible, est envoyé dans le passé pour protéger ou éliminer une personne clé pour l'avenir de l'humanité entière.",
+26,Film,SUEURS FROIDES,"Un ancien policier de San Francisco sujet au vertige est engagé pour surveiller la femme d'un vieil ami, avant de tomber dangereusement amoureux d'elle malgré lui.",1958
+27,Acteur,SYDNEY SWEENEY,Cette actrice americaine sest fait connaitre dans une serie sur des lyceennes new yorkaises avant de multiplier les roles dans des comedies et des thrillers recents,12/9/1997
+28,Film,RETOUR VERS LE FUTUR,Un adolescent californien des années 1980 est propulsé trente ans en arrière grâce à une voiture transformée en machine à voyager dans le temps par un scientifique un peu fou.,1985
+29,Acteur,TOM HOLLAND,Cet acteur britannique originaire de Londres a dabord danse dans une comedie musicale avant de devenir tres jeune le nouveau visage dun celebre tisseur de toiles au cinema,1/6/1996
+30,Personnage,SIMBA,Ce jeune lionceau destiné à régner un jour sur la savane doit fuir après un terrible complot fomenté contre son père bien-aimé par un oncle jaloux du trône royal.,
+31,Personnage,JAMES BOND,Cet agent secret britannique porte un matricule commencant par zero zero il conduit des voitures sophistiquees affronte des espions et commande toujours le meme cocktail,
+32,Acteur,TOM HANKS,Cet acteur americain a incarne un naufrage volontaire un capitaine de navire et un homme simple traversant toute son histoire personnelle avec une celebre boite de chocolats,9/7/1956
+33,Personnage,FURIOSA,Cette guerriere au bras mecanique et au crane rase conduit un immense camion a travers un desert devaste a la recherche du lieu verdoyant ou elle a grandi enfant,
+34,Acteur,DENZEL WASHINGTON,"Cet acteur américain très respecté a incarné un policier corrompu, un pilote héroïque et un tueur à gages solitaire, remportant deux Oscars au fil de sa longue carrière.",28/12/1954
+35,Personnage,SHERLOCK HOLMES,Ce detective britannique tres celebre resout des enquetes impossibles grace a des deductions fulgurantes il vit avec son fidele ami medecin tout juste rentre de la guerre,
+36,Film,LA LISTE DE SCHINDLER,"Un industriel allemand d'abord opportuniste emploie des travailleurs juifs dans son usine de munitions, avant de risquer sa fortune pour en sauver des centaines.",1993
+37,Personnage,INDIANA JONES,Cet archeologue aventurier porte toujours un chapeau et un fouet il traque des artefacts anciens tout en evitant des pieges mortels et des rivaux sans scrupules,
+38,Acteur,SCARLETT JOHANSSON,Cette actrice americaine a incarne une espionne russe redoutable une intelligence artificielle et une chanteuse timide elle compte parmi les actrices les mieux payees,22/11/1984
+39,Personnage,BATMAN,Ce milliardaire orphelin patrouille la nuit dans une ville sombre pour venger ses parents assassines il ne possede aucun pouvoir mais utilise une technologie tres avancee,
+40,Acteur,ROBERT DOWNEY JR.,"Cet acteur américain, longtemps en grande difficulté personnelle, a relancé sa carrière en incarnant un milliardaire excentrique doté d'une armure high-tech rouge et or.",4/4/1965
+41,Film,CASABLANCA,"Le propriétaire cynique d'un bar au Maroc, en pleine guerre, voit resurgir un amour perdu, désormais mariée à un résistant recherché par les autorités allemandes.",1942
+42,Personnage,GANDALF,Ce sorcier errant à la longue barbe grise guide un petit groupe de compagnons à travers des terres hostiles pour aller détruire un anneau de pouvoir profondément maléfique.,
+43,Personnage,LE MANDALORIEN,Ce chasseur de primes casque ne retire jamais son armure devant autrui et protege farouchement un petit etre vert aux grandes oreilles doue de pouvoirs mysterieux,
+44,Film,LE SEIGNEUR DES ANNEAUX,Un tout petit hobbit doit detruire un anneau tres maléfique en le jetant dans un volcan lointain accompagne par une communaute de guerriers humains nains et elfes,2001
+45,Personnage,SHREK,"Cet ogre solitaire et bourru voit sa tranquillité menacée lorsque des créatures entières de contes de fées envahissent son marais, chassées par un seigneur local cupide.",
+46,Acteur,AL PACINO,"Cet acteur américain new-yorkais a incarné un jeune héritier de la mafia devenu parrain malgré lui, ainsi qu'un trafiquant de drogue cubain impitoyable et paranoïaque.",25/4/1940
+47,Personnage,HANNIBAL LECTER,"Ce psychiatre brillant et cannibale, enfermé dans une prison de très haute sécurité, aide malgré lui une jeune enquêtrice du FBI à traquer un autre tueur en série actif.",
+48,Personnage,YODA,Ce petit maître aux longues oreilles et à la grammaire particulière enseigne les arts de la Force à des générations d'apprentis dans une galaxie très lointaine.,
+49,Acteur,ROBERT DE NIRO,Cet acteur americain a incarne un boxeur violent un jeune parrain sicilien et un chauffeur de taxi solitaire il a souvent collabore avec le meme grand realisateur,17/8/1943
+50,Film,E.T. L'EXTRA-TERRESTRE,"Un jeune garçon solitaire de banlieue découvre dans son jardin une créature venue d'ailleurs, oubliée sur Terre, et tente en secret de l'aider à rentrer chez elle.",1982
+51,Acteur,ZENDAYA,Cette actrice et chanteuse americaine a debute tres jeune sur une chaine destinee aux enfants avant de simposer dans une serie provocante puis dans une grande saga desertique,1/9/1996
+52,Personnage,VOLDEMORT,"Ce mage noir au visage sans nez terrorise le monde de la magie tout entier, obsédé par sa propre immortalité et par l'élimination d'un jeune sorcier ayant survécu de justesse.",
+53,Film,TAXI DRIVER,"Un ancien marine insomniaque conduit un taxi chaque nuit dans les rues de New York, sombrant peu à peu dans une spirale de violence solitaire et obsessionnelle.",1976
+54,Personnage,ROBOCOP,"Ce policier gravement blessé en service est reconstruit sous la forme d'un cyborg surpuissant, patrouillant une ville de Détroit rongée par la criminalité et la corruption.",
+55,Acteur,WILL SMITH,"Cet acteur américain, d'abord connu comme rappeur avant de percer au cinéma, a incarné un agent secret traquant des extraterrestres, ainsi qu'un tireur d'élite légendaire.",25/9/1968
+56,Personnage,BLACK WIDOW,"Cette ancienne espionne russe reconvertie rejoint une équipe de héros aux pouvoirs surpuissants, portant un très lourd passé qu'elle tente sans cesse de racheter.",
+57,Personnage,DARK VADOR,"Ce seigneur noir vêtu d'une armure sombre et respirant bruyamment commande une flotte impériale, révélant un lien de parenté bouleversant avec le héros de la saga.",
+58,Acteur,CATE BLANCHETT,"Cette actrice australienne polyvalente a incarné une elfe intemporelle dans une grande saga fantastique, ainsi qu'une cheffe d'orchestre dans un drame musical très remarqué.",14/5/1969
+59,Acteur,KEANU REEVES,"Cet acteur canadien discret dans la vie a incarné un homme découvrant que sa réalité n'est qu'une simulation informatique, ainsi qu'un tueur à gages revenu venger son chien.",2/9/1964
+60,Film,FORREST GUMP,Un homme simple et naif traverse par hasard les grands evenements du vingtieme siecle porte par son amour sincere pour une amie rencontree tres jeune jamais oubliee,1994
+61,Film,STAR WARS,Un jeune fermier isole decouvre son destin quand un petit droide lui transmet un message urgent envoye par une princesse captive il rejoint bientot une rebellion armee,1977
+62,Acteur,TOM CRUISE,Cet acteur américain très populaire a incarné un pilote de chasse fougueux ainsi qu'un agent secret réalisant lui-même ses cascades les plus vertigineuses au grand écran.,3/7/1962
+63,Film,"LE BON, LA BRUTE ET LE TRUAND",Trois hommes que absolument tout oppose se lancent dans une longue course effrénée à travers un pays déchiré par la guerre pour mettre la main sur un trésor caché.,1966
+64,Personnage,MILES MORALES,Ce jeune lyceen new yorkais mordu par une araignee particuliere developpe des pouvoirs et rejoint un univers peuple de nombreuses autres versions du meme heros masque,
+65,Personnage,HARRY POTTER,Ce jeune sorcier orphelin porte une cicatrice semblable a un eclair sur le front il decouvre tres jeune sa destinee face a un mage noir tres puissant et redoute,
+66,Acteur,BRAD PITT,Cet acteur americain tres celebre a incarne un boxeur clandestin un tueur nazi et un vampire il a longtemps forme un couple tres celebre avec une autre grande actrice,18/12/1963
+67,Personnage,LE JOKER,"Ce criminel au visage peint et au rire inquiétant sème le chaos dans une ville entière rongée par la corruption, sans jamais sembler suivre de plan ni de logique claire.",
+68,Personnage,JOHN WICK,Cet ancien tueur a gages legendaire ressort discretement de sa retraite apres la mort de son chien offert par sa defunte epouse pour se venger sans aucune limite,
+69,Acteur,MARGOT ROBBIE,Cette actrice australienne venue de la cote est a incarne une criminelle extravagante avant de porter des annees plus tard la tenue rose dune poupee mondialement connue,2/7/1990
+70,Film,PULP FICTION,Deux tueurs a gages parlent de sujets tres banals avant leurs missions violentes un boxeur doit aussi perdre un combat truque pour le compte dun patron dangereux,1994
+71,Personnage,WANDA MAXIMOFF,Cette femme aux pouvoirs presque illimites faconne la realite selon sa volonte apres avoir perdu lhomme quelle aimait plongeant toute une ville dans une illusion parfaite,
+72,Personnage,NEO,Cet informaticien mène une double vie de pirate informatique avant de découvrir que le monde qu'il connaît n'est en réalité qu'une gigantesque simulation numérique.,
+73,Film,IL ÉTAIT UNE FOIS DANS L'OUEST,"Un mystérieux inconnu jouant sans cesse de l'harmonica traque un tueur impitoyable dans l'Ouest américain, sur fond de conquête ferroviaire et de vengeance ancienne.",1968
+74,Personnage,FREDDY KRUEGER,"Ce tueur au visage brûlé et aux griffes acérées hante les rêves des adolescents d'une petite ville américaine, s'attaquant à eux uniquement pendant leur sommeil.",
+75,Film,BLADE RUNNER,"Un policier spécialisé traque dans une mégapole futuriste et pluvieuse des androïdes quasi indiscernables des humains, échappés d'une lointaine colonie spatiale.",1982
+76,Film,LES AFFRANCHIS,"Un jeune garçon fasciné depuis l'enfance par la mafia locale gravit les échelons du crime organisé new-yorkais, entre loyauté, trahison et ascension fulgurante.",1990
+77,Film,PSYCHOSE,"Une jeune femme en fuite avec de l'argent volé à son patron s'arrête pour la nuit dans un motel isolé, tenu par un jeune homme étrangement attaché au souvenir de sa mère.",1960
+78,Acteur,IDRIS ELBA,"Cet acteur britannique polyvalent a incarné un inspecteur londonien torturé et brillant, ainsi qu'un dieu nordique gardien d'un pont arc-en-ciel dans une saga de super-héros.",6/9/1972
+79,Film,TITANIC,Un jeune artiste sans fortune embarque sur un immense paquebot pour son voyage inaugural puis seduit une riche passagere deja promise a un autre homme le navire heurte un iceberg,1997
+80,Personnage,WEDNESDAY ADDAMS,Cette adolescente au visage impassible et aux tresses noires frequente une ecole pour parias resout des enquetes surnaturelles et deteste sourire en toute occasion,
+81,Acteur,RYAN GOSLING,Cet acteur canadien ancien enfant star a danse dans une comedie musicale a Los Angeles avant dincarner avec beaucoup dautoderision un jouet blond tres populaire au cinema,12/11/1980
+82,Film,SCARFACE,Un réfugié cubain arrivé sans le sou aux États-Unis dans les années 1980 gravit les échelons du trafic de drogue à Miami jusqu'à devenir un baron impitoyable et tout-puissant.,1983
+83,Personnage,ELSA,Cette jeune reine dotée de pouvoirs glacés incontrôlables s'isole loin de son royaume après avoir accidentellement plongé tout son pays dans un hiver permanent et glacial.,
+84,Acteur,AUSTIN BUTLER,Cet acteur americain a transforme sa voix et sa demarche pour incarner un chanteur legendaire du Tennessee avant de rejoindre une saga de science fiction desertique,17/8/1991
+85,Acteur,ANGELINA JOLIE,Cette actrice américaine très engagée a incarné une pilleuse de tombes intrépide et une fée vengeresse ayant jeté une malédiction sur une princesse tout juste née.,4/6/1975
+86,Film,JURASSIC PARK,Des scientifiques ressuscitent des dinosaures grace a un ADN tres ancien pour ouvrir un immense parc a theme mais les systemes de securite tombent brutalement en panne,1993
+87,Personnage,ROCKY BALBOA,"Ce boxeur modeste de Philadelphie, jamais vraiment favori sur le papier, enchaîne les combats les plus improbables tout au long d'une longue carrière personnelle.",
+88,Film,LE ROI LION,"Dans la savane africaine, un jeune lionceau destiné à régner doit fuir loin de son royaume après la mort tragique de son père, orchestrée par son oncle jaloux et manipulateur.",1994
+89,Acteur,MERYL STREEP,Cette actrice americaine tres recompensee et adulee a incarne une redactrice de mode redoutable une cuisiniere celebre et une chanteuse tres maladroite mais attachante,22/6/1949
+90,Film,GLADIATOR,"Un général romain trahi par un empereur cruel et jaloux de sa popularité, réduit en esclavage, doit combattre dans l'arène pour venger sa femme et son fils assassinés.",2000
+91,Film,"ALIEN, LE HUITIÈME PASSAGER","L'équipage endormi d'un vaisseau spatial commercial ramène par erreur à son bord une créature extraterrestre implacable, mortelle et quasiment indestructible et invisible.",1979
+92,Personnage,WOLVERINE,Ce mutant increvable aux griffes rétractiles en métal indestructible souffre d'une mémoire trouée par de terribles expériences militaires clandestines menées sur lui autrefois.,
+93,Acteur,HUGH JACKMAN,"Cet acteur australien a incarné pendant près de vingt ans un mutant aux griffes rétractiles increvable, tout en excellant également dans la comédie musicale sur scène.",12/10/1968
+94,Personnage,LOKI,Ce dieu de la malice change constamment de visage et de camp au fil des trahisons capable de voyager entre les lignes temporelles pour echapper a ses propres echecs,
+95,Film,AVATAR,Un ancien marine paraplegique explore une lune extraterrestre grace a un corps de substitution il tombe amoureux de la fille du chef local et trahit sa propre armee,2009
+96,Acteur,TIMOTHEE CHALAMET,Cet acteur franco americain tres apprecie a incarne un jeune heritier sur une planete desertique avant de se glisser dans le costume dun celebre chocolatier excentrique,27/12/1995
+97,Personnage,ELEVEN,Cette jeune fille aux pouvoirs telekinesiques sechappe dun laboratoire secret et se lie damitie avec une bande de garcons dans une petite ville americaine des annees quatre vingt,
+98,Acteur,EMMA WATSON,"Cette actrice britannique révélée très jeune a incarné une sorcière érudite dans une célèbre saga scolaire, avant de jouer une femme éprise d'une créature ensorcelée.",15/4/1990
+99,Personnage,HERMIONE GRANGER,Cette jeune sorcière brillante et studieuse accompagne fidèlement son meilleur ami à la cicatrice si célèbre dans absolument toutes ses aventures les plus périlleuses.,
+100,Acteur,ANYA TAYLOR-JOY,Cette actrice americano britannique au regard tres reconnaissable a incarne une joueuse dechecs prodige avant de conduire un vehicule blinde dans un desert post apocalyptique,16/4/1996
+101,Personnage,ARAGORN,Cet héritier caché d'un royaume oublié voyage incognito comme rôdeur avant de reprendre sa place légitime lors d'une grande guerre contre les forces des ténèbres.,
+102,Acteur,MATTHEW MCCONAUGHEY,"Cet acteur américain texan a incarné un ancien astronaute traversant un trou de ver pour sauver l'humanité, ainsi qu'un détective torturé dans une célèbre série policière.",4/11/1969
+103,Acteur,EMMA STONE,"Cette actrice américaine récompensée a incarné une actrice en devenir amoureuse d'un pianiste de jazz, ainsi qu'une jeune femme ramenée à la vie par un scientifique fou.",6/11/1988
+104,Personnage,LEGOLAS,Cet archer elfe aux réflexes surnaturels accompagne un groupe hétéroclite de compagnons dans une longue quête visant à détruire un objet maléfique très convoité de tous.,

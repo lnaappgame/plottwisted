@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fond uni identique à celui de l'animation de lancement Flutter (voir
+     IntroTeaserPainter), sans logo : sur Android < 12 (sans l'API Splash
+     Screen système), ce drawable EST l'écran affiché pendant le chargement
+     du moteur Flutter — un logo ici clignoterait avant l'animation. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/launch_background_color"/>
+</layer-list>
