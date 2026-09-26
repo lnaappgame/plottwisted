@@ -1,19 +1,12 @@
 import '../models/multiplayer.dart';
 
-// Fichier régénéré automatiquement — import bilingue FR/US (2026-09-05).
-// 498 énigmes : celles du fichier précédent (520) qui ont une
-// traduction dans cine_devinette_structure_us.xlsx (pas de marqueur "Limite
-// du jeu actuelle V1" sur cette feuille, donc tout ce qui a un id commun avec
-// le fichier précédent est repris) — 22 entrées non traduites
-// ont été retirées pour rester 100% bilingue.
-// Plus de distinction "calibration" par énigme : voir
-// kMultiplayerCalibrationMinRuns dans multiplayer_state.dart, qui décide au
-// niveau du service si une énigme précise a assez de vraies parties
-// enregistrées pour un vrai matching, quelle que soit l'énigme piochée.
-// Pour régénérer, relancer le script de génération sur la base xlsx.
+// Fichier regenere automatiquement depuis cine_devinette_CORRIGE_v2.xlsx
+// (derniere MAJ V1, 2026-09-15). Chaque enigme deja en jeu est retrouvee par
+// son id dans le fichier.
+// Pour regenerer, relancer tool/regenerate_from_xlsx.dart.
 
 final List<MultiplayerEnigme> kMultiplayerEnigmes = [
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-001',
     type: MultiplayerType.film,
     pitch: 'Roi de la jungle, orphelin de son père',
@@ -21,15 +14,15 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'LE ROI LION',
     reponseUs: 'The Lion King',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-002',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Araignée qui grimpe aux buildings new-yorkais',
     pitchUs: 'Spider who climbs New York City buildings',
     reponse: 'SPIDER-MAN',
     reponseUs: 'Spider-Man',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-003',
     type: MultiplayerType.film,
     pitch: 'Un requin terrorise une station balnéaire',
@@ -37,7 +30,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'LES DENTS DE LA MER',
     reponseUs: 'Jaws',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-004',
     type: MultiplayerType.film,
     pitch: 'Extraterrestre oublié, doigt lumineux',
@@ -45,15 +38,15 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'E.T.',
     reponseUs: 'E.T.',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-005',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Sorcier à cicatrice entre à l\'école de magie',
     pitchUs: 'Scarred wizard enrolls in magic school',
     reponse: 'HARRY POTTER',
     reponseUs: 'Harry Potter',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-006',
     type: MultiplayerType.film,
     pitch: 'Un anneau maudit à détruire dans un volcan',
@@ -61,15 +54,15 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'LE SEIGNEUR DES ANNEAUX',
     reponseUs: 'The Lord of the Rings',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-007',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Boxeur outsider défie le champion du monde',
     pitchUs: 'Underdog boxer challenges the world champion',
     reponse: 'ROCKY',
     reponseUs: 'Rocky',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-008',
     type: MultiplayerType.film,
     pitch: 'Paquebot, iceberg, amour impossible',
@@ -77,7 +70,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'TITANIC',
     reponseUs: 'Titanic',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-009',
     type: MultiplayerType.film,
     pitch: 'Dinosaures ressuscités, parc en plein chaos',
@@ -85,55 +78,55 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'JURASSIC PARK',
     reponseUs: 'Jurassic Park',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-010',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un robot tueur revient tuer dans le passé',
     pitchUs: 'A killer robot returns to kill in the past',
     reponse: 'TERMINATOR',
     reponseUs: 'The Terminator',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-011',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Pirate excentrique cherche un trésor perdu',
     pitchUs: 'Eccentric pirate seeks a lost treasure',
     reponse: 'JACK SPARROW',
     reponseUs: 'Jack Sparrow',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-012',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un ogre vert épouse une princesse maudite',
     pitchUs: 'A green ogre marries a cursed princess',
     reponse: 'SHREK',
     reponseUs: 'Shrek',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-013',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Une poupée rose découvre le monde réel',
     pitchUs: 'A pink doll discovers the real world',
     reponse: 'BARBIE',
     reponseUs: 'Barbie',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-014',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un clown tueur hante les égouts d\'une ville',
     pitchUs: 'A killer clown haunts a city\'s sewers',
     reponse: 'ÇA',
     reponseUs: 'It',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-015',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Espion zéro zéro sept boit son cocktail favori',
     pitchUs: 'Double-oh-seven spy sips his favorite cocktail',
     reponse: 'JAMES BOND',
     reponseUs: 'James Bond',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-016',
     type: MultiplayerType.film,
     pitch: 'Voiture volante, retour dans le passé',
@@ -141,15 +134,15 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'RETOUR VERS LE FUTUR',
     reponseUs: 'Back to the Future',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-017',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Chevalier masqué protège une ville sombre',
     pitchUs: 'Masked knight protects a dark city',
     reponse: 'BATMAN',
     reponseUs: 'Batman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-018',
     type: MultiplayerType.film,
     pitch: 'Des super-héros s\'unissent pour sauver le monde',
@@ -157,15 +150,15 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'AVENGERS',
     reponseUs: 'Avengers',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-019',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Une sirène amoureuse échange sa voix',
     pitchUs: 'A mermaid in love trades her voice',
     reponse: 'LA PETITE SIRÈNE',
     reponseUs: 'The Little Mermaid',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-020',
     type: MultiplayerType.film,
     pitch: 'Un tueur au masque blanc traque des lycéens',
@@ -173,7 +166,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'SCREAM',
     reponseUs: 'Scream',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-021',
     type: MultiplayerType.film,
     pitch: 'Un paquebot insubmersible sombre lors de son premier voyage.',
@@ -181,7 +174,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Titanic',
     reponseUs: 'Titanic',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-022',
     type: MultiplayerType.film,
     pitch: 'Un ex-marine infiltre un peuple bleu sur une lune lointaine.',
@@ -189,7 +182,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Avatar',
     reponseUs: 'Avatar',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-023',
     type: MultiplayerType.film,
     pitch: 'Un voleur s\'infiltre dans un rêve pour y implanter une idée',
@@ -197,7 +190,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Inception',
     reponseUs: 'Inception',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-024',
     type: MultiplayerType.film,
     pitch: 'Un général romain trahi devient esclave puis gladiateur.',
@@ -205,7 +198,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Gladiator',
     reponseUs: 'Gladiator',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-025',
     type: MultiplayerType.film,
     pitch: 'Des dinosaures ressuscités s\'échappent dans un parc à thème.',
@@ -213,7 +206,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Jurassic Park',
     reponseUs: 'Jurassic Park',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-026',
     type: MultiplayerType.film,
     pitch: 'Le fils cadet d\'un chef mafieux new-yorkais prend sa relève.',
@@ -221,7 +214,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Parrain',
     reponseUs: 'The Godfather',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-027',
     type: MultiplayerType.film,
     pitch: 'Deux tueurs à gages philosophes traversent Los Angeles.',
@@ -229,7 +222,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Pulp Fiction',
     reponseUs: 'Pulp Fiction',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-028',
     type: MultiplayerType.film,
     pitch: 'Un homme simple traverse les grands événements américains.',
@@ -237,7 +230,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Forrest Gump',
     reponseUs: 'Forrest Gump',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-029',
     type: MultiplayerType.film,
     pitch: 'Une employée en fuite s\'arrête dans un motel isolé fatal.',
@@ -245,7 +238,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Psychose',
     reponseUs: 'Psycho',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-030',
     type: MultiplayerType.film,
     pitch: 'Un policier vertigineux s\'éprend d\'une femme mystérieuse.',
@@ -253,7 +246,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Vertigo',
     reponseUs: 'Vertigo',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-031',
     type: MultiplayerType.film,
     pitch: 'Un psychiatre cannibale aide une recrue du FBI à traquer.',
@@ -261,7 +254,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Silence des agneaux',
     reponseUs: 'The Silence of the Lambs',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-032',
     type: MultiplayerType.film,
     pitch: 'Deux inspecteurs traquent un tueur inspiré des sept péchés.',
@@ -269,7 +262,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Seven',
     reponseUs: 'Se7en',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-033',
     type: MultiplayerType.film,
     pitch: 'Un insomniaque organise des combats clandestins nocturnes.',
@@ -277,7 +270,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Fight Club',
     reponseUs: 'Fight Club',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-034',
     type: MultiplayerType.film,
     pitch: 'Un programmeur découvre que la réalité est simulée.',
@@ -285,7 +278,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Matrix',
     reponseUs: 'The Matrix',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-035',
     type: MultiplayerType.film,
     pitch: 'Une escouade cherche un soldat parachuté en Normandie.',
@@ -293,7 +286,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Il faut sauver le soldat Ryan',
     reponseUs: 'Saving Private Ryan',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-036',
     type: MultiplayerType.film,
     pitch: 'Un industriel allemand sauve des Juifs en les employant.',
@@ -301,7 +294,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Liste de Schindler',
     reponseUs: 'Schindler\'s List',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-037',
     type: MultiplayerType.film,
     pitch: 'Un exilé américain retrouve son ex-amour au Maroc en 1941.',
@@ -309,7 +302,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Casablanca',
     reponseUs: 'Casablanca',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-038',
     type: MultiplayerType.film,
     pitch: 'Des journalistes enquêtent sur le dernier mot d\'un magnat.',
@@ -317,7 +310,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Citizen Kane',
     reponseUs: 'Citizen Kane',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-039',
     type: MultiplayerType.film,
     pitch: 'Un policier traque des androïdes dans une ville pluvieuse',
@@ -325,7 +318,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Blade Runner',
     reponseUs: 'Blade Runner',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-040',
     type: MultiplayerType.film,
     pitch: 'Une créature traque l\'équipage d\'un cargo spatial isolé.',
@@ -333,7 +326,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Alien',
     reponseUs: 'Alien',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-041',
     type: MultiplayerType.film,
     pitch: 'Un requin géant terrorise une station balnéaire.',
@@ -341,7 +334,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Les Dents de la mer',
     reponseUs: 'Jaws',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-042',
     type: MultiplayerType.film,
     pitch: 'Un homme d\'affaires découvre un frère autiste surdoué.',
@@ -349,7 +342,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Rain Man',
     reponseUs: 'Rain Man',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-043',
     type: MultiplayerType.film,
     pitch: 'Une mariée laissée pour morte se venge de ses complices.',
@@ -357,7 +350,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Kill Bill',
     reponseUs: 'Kill Bill',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-044',
     type: MultiplayerType.film,
     pitch: 'Un esclave affranchi devient chasseur de primes pour l\'aimée',
@@ -365,7 +358,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Django Unchained',
     reponseUs: 'Django Unchained',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-045',
     type: MultiplayerType.film,
     pitch: 'Un banquier accusé à tort tisse une amitié en prison.',
@@ -373,7 +366,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Les Évadés',
     reponseUs: 'The Shawshank Redemption',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-046',
     type: MultiplayerType.film,
     pitch: 'Un enfant cache un être venu d\'ailleurs égaré chez lui.',
@@ -381,7 +374,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'E.T.',
     reponseUs: 'E.T.',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-047',
     type: MultiplayerType.film,
     pitch: 'Un ado voyage dans le temps grâce à une DeLorean.',
@@ -389,7 +382,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Retour vers le futur',
     reponseUs: 'Back to the Future',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-048',
     type: MultiplayerType.film,
     pitch: 'Un boxeur inconnu obtient sa chance face au champion.',
@@ -397,7 +390,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Rocky',
     reponseUs: 'Rocky',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-049',
     type: MultiplayerType.film,
     pitch: 'Un pianiste de jazz et une actrice se croisent à Los Angeles',
@@ -405,7 +398,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La La Land',
     reponseUs: 'La La Land',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-050',
     type: MultiplayerType.film,
     pitch: 'Un clown désabusé sombre dans la folie meurtrière.',
@@ -413,7 +406,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Joker',
     reponseUs: 'Joker',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-051',
     type: MultiplayerType.film,
     pitch: 'Une famille pauvre s\'infiltre peu à peu chez des gens aisés.',
@@ -421,7 +414,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Parasite',
     reponseUs: 'Parasite',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-052',
     type: MultiplayerType.film,
     pitch: 'Un lionceau exilé revient réclamer son trône usurpé.',
@@ -429,7 +422,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Roi Lion',
     reponseUs: 'The Lion King',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-053',
     type: MultiplayerType.film,
     pitch: 'Des vaisseaux géants menacent d\'anéantir l\'humanité.',
@@ -437,7 +430,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Independence Day',
     reponseUs: 'Independence Day',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-054',
     type: MultiplayerType.film,
     pitch: 'Une agence secrète surveille les extraterrestres sur Terre.',
@@ -445,7 +438,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Men in Black',
     reponseUs: 'Men in Black',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-055',
     type: MultiplayerType.film,
     pitch: 'Un homme assassiné hante sa compagne sous forme de fantôme.',
@@ -453,7 +446,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ghost',
     reponseUs: 'Ghost',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-056',
     type: MultiplayerType.film,
     pitch: 'Une prostituée est engagée une semaine par un riche homme.',
@@ -461,7 +454,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Pretty Woman',
     reponseUs: 'Pretty Woman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-057',
     type: MultiplayerType.film,
     pitch: 'Une rédactrice de mode tyrannique terrorise son assistante.',
@@ -469,7 +462,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Diable s\'habille en Prada',
     reponseUs: 'The Devil Wears Prada',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-058',
     type: MultiplayerType.film,
     pitch: 'Une mère sans diplôme enquête contre une usine polluante.',
@@ -477,7 +470,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Erin Brockovich',
     reponseUs: 'Erin Brockovich',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-059',
     type: MultiplayerType.film,
     pitch: 'Une astronaute livrée à elle-même après un accident spatial.',
@@ -485,7 +478,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Gravity',
     reponseUs: 'Gravity',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-060',
     type: MultiplayerType.film,
     pitch: 'Un astronaute cultive des patates sur une planète rouge.',
@@ -493,7 +486,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Seul sur Mars',
     reponseUs: 'The Martian',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-061',
     type: MultiplayerType.film,
     pitch: 'Un pilote traverse un trou de ver pour sauver l\'humanité.',
@@ -501,7 +494,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Interstellar',
     reponseUs: 'Interstellar',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-062',
     type: MultiplayerType.film,
     pitch: 'Un physicien dirige le projet de la première bombe atomique.',
@@ -509,7 +502,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Oppenheimer',
     reponseUs: 'Oppenheimer',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-063',
     type: MultiplayerType.film,
     pitch: 'Un jeune batteur affronte un prof de conservatoire féroce',
@@ -517,7 +510,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Whiplash',
     reponseUs: 'Whiplash',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-064',
     type: MultiplayerType.film,
     pitch: 'Une femme de ménage muette aime une créature amphibie.',
@@ -525,7 +518,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Forme de l\'eau',
     reponseUs: 'The Shape of Water',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-065',
     type: MultiplayerType.film,
     pitch: 'Un jeune homme découvre les secrets de sa belle-famille.',
@@ -533,7 +526,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Get Out',
     reponseUs: 'Get Out',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-066',
     type: MultiplayerType.film,
     pitch: 'Un chasseur trouve de l\'argent volé, un tueur le traque.',
@@ -541,7 +534,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'No Country for Old Men',
     reponseUs: 'No Country for Old Men',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-067',
     type: MultiplayerType.film,
     pitch: 'Un prospecteur pétrolier impitoyable bâtit sa fortune.',
@@ -549,7 +542,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'There Will Be Blood',
     reponseUs: 'There Will Be Blood',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-068',
     type: MultiplayerType.film,
     pitch: 'Un acteur has-been tente un retour triomphal sur scène.',
@@ -557,7 +550,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Birdman',
     reponseUs: 'Birdman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-069',
     type: MultiplayerType.film,
     pitch: 'Un homme libre est enlevé et vendu comme esclave en 1841.',
@@ -565,7 +558,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: '12 Years a Slave',
     reponseUs: '12 Years a Slave',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-070',
     type: MultiplayerType.film,
     pitch: 'Un jeune indien des bidonvilles brille à un jeu télévisé.',
@@ -573,7 +566,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Slumdog Millionaire',
     reponseUs: 'Slumdog Millionaire',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-071',
     type: MultiplayerType.film,
     pitch: 'Un acteur du muet décline avec l\'arrivée du parlant.',
@@ -581,7 +574,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Artist',
     reponseUs: 'The Artist',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-072',
     type: MultiplayerType.film,
     pitch: 'Un compositeur jaloux complote contre un rival prodige.',
@@ -589,7 +582,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Amadeus',
     reponseUs: 'Amadeus',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-073',
     type: MultiplayerType.film,
     pitch: 'Un vendeur de voitures fait kidnapper sa propre femme.',
@@ -597,7 +590,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Fargo',
     reponseUs: 'Fargo',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-074',
     type: MultiplayerType.film,
     pitch: 'Un flemmard confondu avec un millionnaire mène l\'enquête.',
@@ -605,7 +598,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Big Lebowski',
     reponseUs: 'The Big Lebowski',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-075',
     type: MultiplayerType.film,
     pitch: 'Un groupe de jeunes toxicomanes erre dans Édimbourg.',
@@ -613,7 +606,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Trainspotting',
     reponseUs: 'Trainspotting',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-076',
     type: MultiplayerType.film,
     pitch: 'Un agent secret protège sa cheffe d\'un ex-collègue vengeur',
@@ -621,7 +614,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Skyfall',
     reponseUs: 'Skyfall',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-077',
     type: MultiplayerType.film,
     pitch: 'Une conductrice manchote aide des femmes à fuir un tyran.',
@@ -629,7 +622,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Mad Max: Fury Road',
     reponseUs: 'Mad Max: Fury Road',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-078',
     type: MultiplayerType.film,
     pitch: 'Le roi d\'un royaume africain caché protège son peuple.',
@@ -637,7 +630,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Black Panther',
     reponseUs: 'Black Panther',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-079',
     type: MultiplayerType.film,
     pitch: 'Des super-héros tentent d\'annuler une extinction cosmique.',
@@ -645,7 +638,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Avengers: Endgame',
     reponseUs: 'Avengers: Endgame',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-080',
     type: MultiplayerType.film,
     pitch: 'Un sort raté fait affluer des méchants d\'autres univers.',
@@ -653,7 +646,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Spider-Man: No Way Home',
     reponseUs: 'Spider-Man: No Way Home',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-081',
     type: MultiplayerType.film,
     pitch: 'Une fillette travaille dans des bains peuplés d\'esprits.',
@@ -661,7 +654,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Voyage de Chihiro',
     reponseUs: 'Spirited Away',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-082',
     type: MultiplayerType.film,
     pitch: 'Un prince maudit s\'interpose entre forêt et cité minière.',
@@ -669,7 +662,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Princesse Mononoké',
     reponseUs: 'Princess Mononoke',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-083',
     type: MultiplayerType.film,
     pitch: 'Deux fillettes rencontrent un esprit géant de la forêt.',
@@ -677,7 +670,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Mon voisin Totoro',
     reponseUs: 'My Neighbor Totoro',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-084',
     type: MultiplayerType.film,
     pitch: 'Un enfant mexicain visite le pays des morts en pleine fête.',
@@ -685,7 +678,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Coco',
     reponseUs: 'Coco',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-085',
     type: MultiplayerType.film,
     pitch: 'Des jouets prennent vie dès que les humains s\'absentent',
@@ -693,7 +686,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Toy Story',
     reponseUs: 'Toy Story',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-086',
     type: MultiplayerType.film,
     pitch: 'Un ogre solitaire délivre une princesse pour son marais',
@@ -701,7 +694,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Shrek',
     reponseUs: 'Shrek',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-087',
     type: MultiplayerType.film,
     pitch: 'Un vieil homme fait voler sa maison grâce à des ballons.',
@@ -709,7 +702,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Là-haut',
     reponseUs: 'Up',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-088',
     type: MultiplayerType.film,
     pitch: 'Un petit robot solitaire nettoie une Terre abandonnée.',
@@ -717,7 +710,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'WALL-E',
     reponseUs: 'WALL-E',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-089',
     type: MultiplayerType.film,
     pitch: 'Une serveuse parisienne améliore en secret la vie des autres',
@@ -725,7 +718,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Fabuleux Destin d\'Amélie Poulain',
     reponseUs: 'Amélie',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-090',
     type: MultiplayerType.film,
     pitch: 'Un tétraplégique embauche un homme sorti de prison',
@@ -733,7 +726,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Intouchables',
     reponseUs: 'The Intouchables',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-091',
     type: MultiplayerType.film,
     pitch: 'Un tueur à gages recueille une adolescente orpheline.',
@@ -741,7 +734,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Léon',
     reponseUs: 'Léon: The Professional',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-092',
     type: MultiplayerType.film,
     pitch: 'Deux plongeurs en apnée rivalisent depuis leur enfance.',
@@ -749,7 +742,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Grand Bleu',
     reponseUs: 'The Big Blue',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-093',
     type: MultiplayerType.film,
     pitch: 'Une jeune délinquante devient tueuse pour l\'État français',
@@ -757,7 +750,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Nikita',
     reponseUs: 'La Femme Nikita',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-094',
     type: MultiplayerType.film,
     pitch: 'Un poète au grand nez souffle ses mots à un rival séduisant.',
@@ -765,7 +758,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Cyrano de Bergerac',
     reponseUs: 'Cyrano de Bergerac',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-095',
     type: MultiplayerType.film,
     pitch: 'Trois jeunes de banlieue vivent une nuit après une émeute.',
@@ -773,7 +766,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Haine',
     reponseUs: 'La Haine',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-096',
     type: MultiplayerType.film,
     pitch: 'Un surveillant crée une chorale dans un internat difficile.',
@@ -781,7 +774,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Les Choristes',
     reponseUs: 'The Chorus',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-097',
     type: MultiplayerType.film,
     pitch: 'Un directeur muté dans le Nord change son regard.',
@@ -789,7 +782,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Bienvenue chez les Ch\'tis',
     reponseUs: 'Welcome to the Sticks',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-098',
     type: MultiplayerType.film,
     pitch: 'Un espion français maladroit multiplie les gaffes.',
@@ -797,7 +790,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'OSS 117',
     reponseUs: 'OSS 117: Cairo, Nest of Spies',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-099',
     type: MultiplayerType.film,
     pitch: 'Un architecte gaulois doit bâtir un palais en trois mois.',
@@ -805,7 +798,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Astérix et Obélix : Mission Cléopâtre',
     reponseUs: 'Asterix & Obelix: Mission Cleopatra',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-100',
     type: MultiplayerType.film,
     pitch: 'Un chauffeur marseillais aide un policier maladroit.',
@@ -813,7 +806,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Taxi',
     reponseUs: 'Taxi',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-101',
     type: MultiplayerType.film,
     pitch: 'Des cadres invitent chacun un convive naïf à un repas piégé.',
@@ -821,7 +814,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Dîner de Cons',
     reponseUs: 'The Dinner Game',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-102',
     type: MultiplayerType.film,
     pitch: 'Un père invente un jeu pour protéger son fils dans un camp.',
@@ -829,7 +822,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Vie est belle',
     reponseUs: 'Life Is Beautiful',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-103',
     type: MultiplayerType.film,
     pitch: 'Un musicien juif survit seul dans le Varsovie occupé.',
@@ -837,7 +830,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Pianiste',
     reponseUs: 'The Pianist',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-104',
     type: MultiplayerType.film,
     pitch: 'Une chanteuse française monte des faubourgs à la gloire.',
@@ -845,7 +838,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Môme',
     reponseUs: 'La Vie en Rose',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-105',
     type: MultiplayerType.film,
     pitch: 'D\'anciens truands se disputent l\'héritage d\'un parrain.',
@@ -853,7 +846,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Les Tontons flingueurs',
     reponseUs: 'Crooks in Clover',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-106',
     type: MultiplayerType.film,
     pitch: 'Deux Français cachent des aviateurs anglais en 1942',
@@ -861,7 +854,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Grande Vadrouille',
     reponseUs: 'Don\'t Look Now: We\'re Being Shot At',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-107',
     type: MultiplayerType.film,
     pitch: 'Un chevalier atterrit par erreur au vingtième siècle.',
@@ -869,7 +862,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Les Visiteurs',
     reponseUs: 'Just Visiting',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-108',
     type: MultiplayerType.film,
     pitch: 'Une jeune femme boiteuse cherche son fiancé disparu.',
@@ -877,7 +870,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Un long dimanche de fiançailles',
     reponseUs: 'A Very Long Engagement',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-109',
     type: MultiplayerType.film,
     pitch: 'Un jeune détenu illettré gravit les échelons de la pègre.',
@@ -885,7 +878,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Un prophète',
     reponseUs: 'A Prophet',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-110',
     type: MultiplayerType.film,
     pitch: 'Une romancière est jugée après la mort suspecte de son mari.',
@@ -893,487 +886,487 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Anatomie d\'une chute',
     reponseUs: 'Anatomy of a Fall',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-111',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur a coulé avec un paquebot puis dompté Mars.',
     pitchUs: 'This actor sank with a liner, then tamed Mars',
     reponse: 'Leonardo DiCaprio',
     reponseUs: 'Leonardo DiCaprio',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-112',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur a couru dans l\'histoire, chocolats en main.',
     pitchUs: 'This actor ran through history, chocolates in hand',
     reponse: 'Tom Hanks',
     reponseUs: 'Tom Hanks',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-113',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce chauffeur de taxi insomniaque devint un boxeur violent.',
     pitchUs: 'This insomniac cab driver later became a violent boxer',
     reponse: 'Robert De Niro',
     reponseUs: 'Robert De Niro',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-114',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce fils cadet d\'un parrain mafieux dit bonjour à son ami.',
     pitchUs: 'This mob boss\'s youngest son says hello to his little friend',
     reponse: 'Al Pacino',
     reponseUs: 'Al Pacino',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-115',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce pilote alcoolique fut aussi un flic corrompu récompensé.',
     pitchUs: 'This alcoholic pilot was also a rewarded corrupt cop',
     reponse: 'Denzel Washington',
     reponseUs: 'Denzel Washington',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-116',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce séducteur de motel devint fondateur d\'un club clandestin.',
     pitchUs: 'This motel seducer went on to found an underground club',
     reponse: 'Brad Pitt',
     reponseUs: 'Brad Pitt',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-117',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce capitaine pirate titube et porte des lames en mains.',
     pitchUs: 'This pirate captain staggers around with blades for hands',
     reponse: 'Johnny Depp',
     reponseUs: 'Johnny Depp',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-118',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette rédactrice de mode tyrannique a aussi été Dame de fer.',
     pitchUs: 'This tyrannical fashion editor also played an Iron Lady',
     reponse: 'Meryl Streep',
     reponseUs: 'Meryl Streep',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-119',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Australienne a régné sur l\'Angleterre et sur Gotham.',
     pitchUs: 'This Australian ruled over England and over Gotham',
     reponse: 'Cate Blanchett',
     reponseUs: 'Cate Blanchett',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-120',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Australienne a chanté au Moulin Rouge sous faux nez.',
     pitchUs: 'This Australian sang at the Moulin Rouge under a fake name',
     reponse: 'Nicole Kidman',
     reponseUs: 'Nicole Kidman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-121',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette espionne en combinaison noire hante un hôtel de Tokyo.',
     pitchUs: 'This spy in a black suit haunts a Tokyo hotel',
     reponse: 'Scarlett Johansson',
     reponseUs: 'Scarlett Johansson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-122',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette prostituée du Sunset Boulevard dénonça une pollution.',
     pitchUs: 'This Sunset Boulevard sex worker exposed a pollution case',
     reponse: 'Julia Roberts',
     reponseUs: 'Julia Roberts',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-123',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice a désamorcé un bus et flotté dans l\'espace.',
     pitchUs: 'This actress defused a bus and drifted in space',
     reponse: 'Sandra Bullock',
     reponseUs: 'Sandra Bullock',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-124',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette aventurière aux formes iconiques devint une fée cornue',
     pitchUs: 'This iconic adventurer later became a horned fairy',
     reponse: 'Angelina Jolie',
     reponseUs: 'Angelina Jolie',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-125',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce pilote de chasse a aussi coaché deux futures championnes.',
     pitchUs: 'This fighter pilot also coached two future champions',
     reponse: 'Will Smith',
     reponseUs: 'Will Smith',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-126',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette voix grave a guidé un détenu et un chef d\'État.',
     pitchUs: 'This deep voice guided an inmate and a head of state',
     reponse: 'Morgan Freeman',
     reponseUs: 'Morgan Freeman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-127',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce psychiatre cannibale a régné sur un royaume céleste.',
     pitchUs: 'This cannibal psychiatrist also ruled over a heavenly realm',
     reponse: 'Anthony Hopkins',
     reponseUs: 'Anthony Hopkins',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-128',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce clown au sourire figé a aussi simulé la folie en asile.',
     pitchUs: 'This frozen-smile clown also faked madness in an asylum',
     reponse: 'Jack Nicholson',
     reponseUs: 'Jack Nicholson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-129',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce contrebandier galactique porte aussi chapeau et fouet.',
     pitchUs: 'This galactic smuggler also wears a hat and a whip',
     reponse: 'Harrison Ford',
     reponseUs: 'Harrison Ford',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-130',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet agent impossible a aussi survolé le ciel en pilote.',
     pitchUs: 'This impossible agent also flew high as a fighter pilot',
     reponse: 'Tom Cruise',
     reponseUs: 'Tom Cruise',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-131',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce tueur vengeant son chiot avale aussi une pilule rouge.',
     pitchUs: 'This puppy-avenging killer also swallows a red pill',
     reponse: 'Keanu Reeves',
     reponseUs: 'Keanu Reeves',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-132',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce directeur borgne cite aussi la Bible avant de tirer.',
     pitchUs: 'This one-eyed director also quotes the Bible before shooting',
     reponse: 'Samuel L. Jackson',
     reponseUs: 'Samuel L. Jackson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-133',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce milliardaire orphelin a aussi maigri pour un insomniaque.',
     pitchUs: 'This orphaned billionaire also starved for an insomniac role',
     reponse: 'Christian Bale',
     reponseUs: 'Christian Bale',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-134',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet agent amnésique a aussi cultivé des patates sur Mars.',
     pitchUs: 'This amnesiac agent also grew potatoes on Mars',
     reponse: 'Matt Damon',
     reponseUs: 'Matt Damon',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-135',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce meneur de onze escrocs a aussi flotté dans l\'espace.',
     pitchUs: 'This eleven-man crew leader also drifted through space',
     reponse: 'George Clooney',
     reponseUs: 'George Clooney',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-136',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette danseuse paranoïaque a aussi régné sur une planète.',
     pitchUs: 'This paranoid dancer also ruled over a planet',
     reponse: 'Natalie Portman',
     reponseUs: 'Natalie Portman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-137',
-    type: MultiplayerType.acteur,
-    pitch: 'Cette actrice enchaîne les auditions ratées à Los Angeles.',
-    pitchUs: 'This actress endures failed audition after audition in LA',
+    type: MultiplayerType.film,
+    pitch: 'Cette actrice en devenir tombe amoureuse d\'un pianiste de jazz idéaliste, dans une comédie musicale aux couleurs éclatantes qui rend hommage au Hollywood d\'antan.',
+    pitchUs: 'This aspiring actress falls for an idealistic jazz pianist in a vividly colored musical paying tribute to old Hollywood.',
     reponse: 'Emma Stone',
     reponseUs: 'Emma Stone',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-138',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette archère se porte volontaire pour sauver sa sœur.',
     pitchUs: 'This archer volunteers to save her sister',
     reponse: 'Jennifer Lawrence',
     reponseUs: 'Jennifer Lawrence',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-139',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette conductrice manchote a tué en Floride, méconnaissable.',
     pitchUs: 'This one-armed driver killed in Florida, unrecognizable',
     reponse: 'Charlize Theron',
     reponseUs: 'Charlize Theron',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-140',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette passagère de première classe a coulé avec un paquebot.',
     pitchUs: 'This first-class passenger sank with an ocean liner',
     reponse: 'Kate Winslet',
     reponseUs: 'Kate Winslet',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-141',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce mutant aux griffes rétractables chante sous un chapiteau.',
     pitchUs: 'This clawed mutant also sings under a circus tent',
     reponse: 'Hugh Jackman',
     reponseUs: 'Hugh Jackman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-142',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce pianiste de jazz est aussi cascadeur silencieux le jour.',
     pitchUs: 'This jazz pianist is also a silent daytime stunt driver',
     reponse: 'Ryan Gosling',
     reponseUs: 'Ryan Gosling',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-143',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce prospecteur pétrolier n\'a qu\'un pied gauche valide.',
     pitchUs: 'This oil prospector has only one working leg',
     reponse: 'Daniel Day-Lewis',
     reponseUs: 'Daniel Day-Lewis',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-144',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce vampire centenaire a aussi joué un Premier ministre.',
     pitchUs: 'This centuries-old vampire also played a prime minister',
     reponse: 'Gary Oldman',
     reponseUs: 'Gary Oldman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-145',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette générale africaine dirige aussi des super-criminels.',
     pitchUs: 'This African general also leads a team of super-criminals',
     reponse: 'Viola Davis',
     reponseUs: 'Viola Davis',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-146',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce détective londonien maîtrise aussi les arts mystiques.',
     pitchUs: 'This London detective also masters the mystic arts',
     reponse: 'Benedict Cumberbatch',
     reponseUs: 'Benedict Cumberbatch',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-147',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce gardien doré veille aussi sur des robots géants marins.',
     pitchUs: 'This golden guardian also watches over giant sea robots',
     reponse: 'Idris Elba',
     reponseUs: 'Idris Elba',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-148',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet Espagnol tue à pile ou face et dompte des vers de sable.',
     pitchUs: 'This Spaniard kills on a coin flip and tames sandworms',
     reponse: 'Javier Bardem',
     reponseUs: 'Javier Bardem',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-149',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Espagnole peint sa jalousie puis navigue en pirate.',
     pitchUs: 'This Spaniard paints her jealousy, then sails as a pirate',
     reponse: 'Penélope Cruz',
     reponseUs: 'Penélope Cruz',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-150',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Française chanta puis hanta les rêves d\'un voleur.',
     pitchUs: 'This Frenchwoman sang, then haunted a thief\'s dreams',
     reponse: 'Marion Cotillard',
     reponseUs: 'Marion Cotillard',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-151',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Française réprimée enseigne le piano à Vienne.',
     pitchUs: 'This repressed Frenchwoman teaches piano in Vienna',
     reponse: 'Isabelle Huppert',
     reponseUs: 'Isabelle Huppert',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-152',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur français livrait des menhirs à mains nues.',
     pitchUs: 'This French actor delivered standing stones bare-handed',
     reponse: 'Gérard Depardieu',
     reponseUs: 'Gérard Depardieu',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-153',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Française veille un patient brûlé dans un monastère.',
     pitchUs: 'This Frenchwoman tends a burned patient in a monastery',
     reponse: 'Juliette Binoche',
     reponseUs: 'Juliette Binoche',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-154',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce Français devient aide de vie d\'un riche tétraplégique.',
     pitchUs: 'This Frenchman becomes caregiver to a wealthy quadriplegic',
     reponse: 'Omar Sy',
     reponseUs: 'Omar Sy',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-155',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette serveuse parisienne facétieuse aide son quartier.',
     pitchUs: 'This whimsical Parisian waitress helps her neighborhood',
     reponse: 'Audrey Tautou',
     reponseUs: 'Audrey Tautou',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-156',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette icône blonde chanta l\'anniversaire d\'un président.',
     pitchUs: 'This blonde icon sang happy birthday to a president',
     reponse: 'Marilyn Monroe',
     reponseUs: 'Marilyn Monroe',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-157',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice élégante déjeunait devant un joaillier réputé.',
     pitchUs: 'This elegant actress ate breakfast outside a famous jeweler',
     reponse: 'Audrey Hepburn',
     reponseUs: 'Audrey Hepburn',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-158',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur au poncho est aussi devenu réalisateur oscarisé.',
     pitchUs: 'This poncho-clad actor also became an Oscar-winning director',
     reponse: 'Clint Eastwood',
     reponseUs: 'Clint Eastwood',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-159',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce vagabond muet à la canne dénonçait aussi les dictateurs.',
     pitchUs: 'This silent tramp with a cane also called out dictators',
     reponse: 'Charlie Chaplin',
     reponseUs: 'Charlie Chaplin',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-160',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur murmure une offre qu\'on ne peut refuser.',
     pitchUs: 'This actor whispers an offer no one can refuse',
     reponse: 'Marlon Brando',
     reponseUs: 'Marlon Brando',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-161',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet exilé américain regardait partir un avion au Maroc.',
     pitchUs: 'This American exile watched a plane leave in Morocco',
     reponse: 'Humphrey Bogart',
     reponseUs: 'Humphrey Bogart',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-162',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette princesse de cinéma épousa un vrai prince monégasque.',
     pitchUs: 'This screen princess married an actual Monaco prince',
     reponse: 'Grace Kelly',
     reponseUs: 'Grace Kelly',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-163',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet Écossais fut le premier sous le matricule 007.',
     pitchUs: 'This Scotsman was the first to hold agent number 007',
     reponse: 'Sean Connery',
     reponseUs: 'Sean Connery',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-164',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur français cascadeur imitait Bogart en cavale.',
     pitchUs: 'This French stuntman-actor mimicked Bogart on the run',
     reponse: 'Jean-Paul Belmondo',
     reponseUs: 'Jean-Paul Belmondo',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-165',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce comédien gesticulait derrière un comptoir de voyages.',
     pitchUs: 'This comedian gestured wildly behind a travel agency counter',
     reponse: 'Louis de Funès',
     reponseUs: 'Louis de Funès',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-166',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce comique au long visage chevalin jouait un curé rural.',
     pitchUs: 'This long-faced comic actor played a rural priest',
     reponse: 'Fernandel',
     reponseUs: 'Fernandel',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-167',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette icône française du cinéma incarna une belle de jour.',
     pitchUs: 'This French screen icon played a daytime call girl',
     reponse: 'Catherine Deneuve',
     reponseUs: 'Catherine Deneuve',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-168',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur français a aussi menacé un banquier au pistolet.',
     pitchUs: 'This French actor also held a banker at gunpoint',
     reponse: 'Vincent Cassel',
     reponseUs: 'Vincent Cassel',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-169',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur français arrêta la boxe pour toucher un piano.',
     pitchUs: 'This French actor quit boxing to play the piano',
     reponse: 'Romain Duris',
     reponseUs: 'Romain Duris',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-170',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice chevauche des vers géants sur Arrakis.',
     pitchUs: 'This actress rides giant worms across a desert planet',
     reponse: 'Zendaya',
     reponseUs: 'Zendaya',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-171',
     type: MultiplayerType.serie,
     pitch: 'Plusieurs familles rivales se disputent un trône de fer.',
@@ -1381,7 +1374,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Game of Thrones',
     reponseUs: 'Game of Thrones',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-172',
     type: MultiplayerType.serie,
     pitch: 'Un prof de chimie malade fabrique de la drogue au désert',
@@ -1389,7 +1382,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Breaking Bad',
     reponseUs: 'Breaking Bad',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-173',
     type: MultiplayerType.serie,
     pitch: 'Six amis new-yorkais traînent dans un café, dix saisons.',
@@ -1397,7 +1390,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Friends',
     reponseUs: 'Friends',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-174',
     type: MultiplayerType.serie,
     pitch: 'Une équipe de bureau absurde est filmée façon documentaire.',
@@ -1405,7 +1398,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Office',
     reponseUs: 'The Office',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-175',
     type: MultiplayerType.serie,
     pitch: 'Des enfants affrontent des monstres d\'un monde inversé.',
@@ -1413,7 +1406,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Stranger Things',
     reponseUs: 'Stranger Things',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-176',
     type: MultiplayerType.serie,
     pitch: 'Une famille de gangsters domine Birmingham après la guerre.',
@@ -1421,7 +1414,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Peaky Blinders',
     reponseUs: 'Peaky Blinders',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-177',
     type: MultiplayerType.serie,
     pitch: 'Cette série retrace le règne d\'une monarque britannique.',
@@ -1429,7 +1422,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Crown',
     reponseUs: 'The Crown',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-178',
     type: MultiplayerType.serie,
     pitch: 'Des joueurs endettés jouent leur vie à des jeux d\'enfants.',
@@ -1437,7 +1430,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Squid Game',
     reponseUs: 'Squid Game',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-179',
     type: MultiplayerType.serie,
     pitch: 'Des disparitions d\'enfants révèlent des boucles temporelles.',
@@ -1445,7 +1438,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Dark',
     reponseUs: 'Dark',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-180',
     type: MultiplayerType.serie,
     pitch: 'Cette série retrace la catastrophe nucléaire de 1986.',
@@ -1453,7 +1446,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Chernobyl',
     reponseUs: 'Chernobyl',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-181',
     type: MultiplayerType.serie,
     pitch: 'Un détective londonien moderne enquête avec son ami médecin.',
@@ -1461,7 +1454,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Sherlock',
     reponseUs: 'Sherlock',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-182',
     type: MultiplayerType.serie,
     pitch: 'Cette série suit flics et trafiquants à Baltimore.',
@@ -1469,7 +1462,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Wire',
     reponseUs: 'The Wire',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-183',
     type: MultiplayerType.serie,
     pitch: 'Un avocat marginal devient un homme de loi douteux.',
@@ -1477,7 +1470,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Better Call Saul',
     reponseUs: 'Better Call Saul',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-184',
     type: MultiplayerType.serie,
     pitch: 'Un politicien manipulateur grimpe vers la présidence.',
@@ -1485,7 +1478,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'House of Cards',
     reponseUs: 'House of Cards',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-185',
     type: MultiplayerType.serie,
     pitch: 'Cette série retrace l\'ascension d\'un baron colombien.',
@@ -1493,7 +1486,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Narcos',
     reponseUs: 'Narcos',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-186',
     type: MultiplayerType.serie,
     pitch: 'Des braqueurs masqués occupent l\'Hôtel des Monnaies espagnol',
@@ -1501,7 +1494,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Casa de Papel',
     reponseUs: 'Money Heist',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-187',
     type: MultiplayerType.serie,
     pitch: 'Cette série anthologie situe des crimes glacés au Minnesota.',
@@ -1509,7 +1502,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Fargo',
     reponseUs: 'Fargo',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-188',
     type: MultiplayerType.serie,
     pitch: 'Deux enquêteurs traquent un tueur rituel en Louisiane.',
@@ -1517,7 +1510,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'True Detective',
     reponseUs: 'True Detective',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-189',
     type: MultiplayerType.serie,
     pitch: 'Cette série anthologie explore les dérives technologiques.',
@@ -1525,7 +1518,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Black Mirror',
     reponseUs: 'Black Mirror',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-190',
     type: MultiplayerType.serie,
     pitch: 'Un gentleman cambrioleur venge son père injustement accusé.',
@@ -1533,7 +1526,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Lupin',
     reponseUs: 'Lupin',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-191',
     type: MultiplayerType.serie,
     pitch: 'Des agents artistiques parisiens gèrent des stars fantasques',
@@ -1541,7 +1534,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Dix pour cent',
     reponseUs: 'Call My Agent!',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-192',
     type: MultiplayerType.serie,
     pitch: 'Un agent secret français jongle missions et vie privée.',
@@ -1549,7 +1542,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Le Bureau des Légendes',
     reponseUs: 'The Bureau',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-193',
     type: MultiplayerType.serie,
     pitch: 'De jeunes internes s\'affrontent dans un hôpital de Seattle.',
@@ -1557,7 +1550,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Grey\'s Anatomy',
     reponseUs: 'Grey\'s Anatomy',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-194',
     type: MultiplayerType.serie,
     pitch: 'Des voisines de banlieue cachent des secrets meurtriers.',
@@ -1565,7 +1558,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Desperate Housewives',
     reponseUs: 'Desperate Housewives',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-195',
     type: MultiplayerType.serie,
     pitch: 'Quatre amies new-yorkaises chroniquent leur vie amoureuse.',
@@ -1573,7 +1566,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Sex and the City',
     reponseUs: 'Sex and the City',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-196',
     type: MultiplayerType.serie,
     pitch: 'Un ingénieur se fait incarcérer pour libérer son frère.',
@@ -1581,7 +1574,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Prison Break',
     reponseUs: 'Prison Break',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-197',
     type: MultiplayerType.serie,
     pitch: 'Des rescapés d\'un crash s\'échouent sur une île mystérieuse.',
@@ -1589,7 +1582,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Lost',
     reponseUs: 'Lost',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-198',
     type: MultiplayerType.serie,
     pitch: 'Un agent fédéral déjoue des attentats en temps réel.',
@@ -1597,7 +1590,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: '24 heures chrono',
     reponseUs: '24',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-199',
     type: MultiplayerType.serie,
     pitch: 'Une agente CIA soupçonne un soldat rapatrié d\'être retourné.',
@@ -1605,7 +1598,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Homeland',
     reponseUs: 'Homeland',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-200',
     type: MultiplayerType.serie,
     pitch: 'Un chasseur de primes masqué protège un enfant vert.',
@@ -1613,7 +1606,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Mandalorian',
     reponseUs: 'The Mandalorian',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-201',
     type: MultiplayerType.serie,
     pitch: 'Cette série suit un guerrier nordique devenu roi légendaire.',
@@ -1621,7 +1614,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Vikings',
     reponseUs: 'Vikings',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-202',
     type: MultiplayerType.serie,
     pitch: 'Des super-héros corrompus sont traqués par des sans-pouvoir.',
@@ -1629,7 +1622,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Boys',
     reponseUs: 'The Boys',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-203',
     type: MultiplayerType.serie,
     pitch: 'Des lycéens américains traversent addictions et amours.',
@@ -1637,7 +1630,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Euphoria',
     reponseUs: 'Euphoria',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-204',
     type: MultiplayerType.serie,
     pitch: 'Une famille de magnats médiatiques se déchire l\'héritage.',
@@ -1645,7 +1638,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Succession',
     reponseUs: 'Succession',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-205',
     type: MultiplayerType.serie,
     pitch: 'Une femme réduite à l\'esclavage reproductif fuit un régime.',
@@ -1653,7 +1646,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Handmaid\'s Tale',
     reponseUs: 'The Handmaid\'s Tale',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-206',
     type: MultiplayerType.serie,
     pitch: 'Des familles aristocratiques cherchent un mariage à Londres.',
@@ -1661,7 +1654,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Bridgerton',
     reponseUs: 'Bridgerton',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-207',
     type: MultiplayerType.serie,
     pitch: 'Une jeune Américaine du marketing s\'installe en France.',
@@ -1669,7 +1662,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Emily in Paris',
     reponseUs: 'Emily in Paris',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-208',
     type: MultiplayerType.serie,
     pitch: 'L\'ado d\'une famille macabre enquête dans un pensionnat.',
@@ -1677,7 +1670,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Wednesday',
     reponseUs: 'Wednesday',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-209',
     type: MultiplayerType.serie,
     pitch: 'Un contrebandier escorte une ado immunisée à un champignon.',
@@ -1685,7 +1678,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Last of Us',
     reponseUs: 'The Last of Us',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-210',
     type: MultiplayerType.serie,
     pitch: 'Une Londonienne caustique brise le mur de sa vie chaotique.',
@@ -1693,247 +1686,247 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Fleabag',
     reponseUs: 'Fleabag',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-211',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a fait voler des vélos face à la lune.',
     pitchUs: 'This filmmaker made bicycles fly across the moon',
     reponse: 'Steven Spielberg',
     reponseUs: 'Steven Spielberg',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-212',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste new-yorkais filme gangsters et rédemption.',
     pitchUs: 'This New York filmmaker shoots gangsters and redemption',
     reponse: 'Martin Scorsese',
     reponseUs: 'Martin Scorsese',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-213',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste aime dialogues bavards et valises mystères.',
     pitchUs: 'This filmmaker loves talky dialogue and mystery briefcases',
     reponse: 'Quentin Tarantino',
     reponseUs: 'Quentin Tarantino',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-214',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste aime les récits à la chronologie brisée.',
     pitchUs: 'This filmmaker loves stories with broken timelines',
     reponse: 'Christopher Nolan',
     reponseUs: 'Christopher Nolan',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-215',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste apparaissait brièvement dans ses propres films.',
     pitchUs: 'This filmmaker briefly appeared in his own films',
     reponse: 'Alfred Hitchcock',
     reponseUs: 'Alfred Hitchcock',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-216',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste perfectionniste a filmé un hôtel hanté en hiver.',
     pitchUs: 'This perfectionist filmmaker shot a haunted winter hotel',
     reponse: 'Stanley Kubrick',
     reponseUs: 'Stanley Kubrick',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-217',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a coulé un paquebot puis peuplé une lune bleue.',
     pitchUs: 'This filmmaker sank a liner, then populated a blue moon',
     reponse: 'James Cameron',
     reponseUs: 'James Cameron',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-218',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a fait naître un monstre dans un cargo spatial.',
     pitchUs: 'This filmmaker birthed a monster aboard a cargo spaceship',
     reponse: 'Ridley Scott',
     reponseUs: 'Ridley Scott',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-219',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste affectionne mains ciseaux et univers gothiques.',
     pitchUs: 'This filmmaker loves scissor hands and gothic worlds',
     reponse: 'Tim Burton',
     reponseUs: 'Tim Burton',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-220',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste filme des tueurs en série et thrillers glacés.',
     pitchUs: 'This filmmaker shoots serial killers and icy thrillers',
     reponse: 'David Fincher',
     reponseUs: 'David Fincher',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-221',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste compose des cadres parfaitement symétriques.',
     pitchUs: 'This filmmaker composes perfectly symmetrical frames',
     reponse: 'Wes Anderson',
     reponseUs: 'Wes Anderson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-222',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste espagnol filme des femmes hautes en couleur.',
     pitchUs: 'This Spanish filmmaker shoots colorful, larger-than-life women',
     reponse: 'Pedro Almodóvar',
     reponseUs: 'Pedro Almodóvar',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-223',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste japonais a réuni sept samouraïs pour un village.',
     pitchUs: 'This Japanese filmmaker gathered seven samurai for a village',
     reponse: 'Akira Kurosawa',
     reponseUs: 'Akira Kurosawa',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-224',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste fit recueillir une orpheline par un tueur pro.',
     pitchUs: 'This filmmaker had an orphan taken in by a professional killer',
     reponse: 'Luc Besson',
     reponseUs: 'Luc Besson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-225',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste rendit une serveuse parisienne facétieuse.',
     pitchUs: 'This filmmaker brought a whimsical Parisian waitress to life',
     reponse: 'Jean-Pierre Jeunet',
     reponseUs: 'Jean-Pierre Jeunet',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-226',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur devenu cinéaste tourne encore à un âge avancé.',
     pitchUs: 'This actor turned filmmaker still directs at an advanced age',
     reponse: 'Clint Eastwood',
     reponseUs: 'Clint Eastwood',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-227',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste new-yorkais névrosé filme sa ville et lui-même.',
     pitchUs: 'This neurotic New York filmmaker shoots his city and himself',
     reponse: 'Woody Allen',
     reponseUs: 'Woody Allen',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-228',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste filma l\'ascension d\'une famille mafieuse.',
     pitchUs: 'This filmmaker chronicled the rise of a mafia family',
     reponse: 'Francis Ford Coppola',
     reponseUs: 'Francis Ford Coppola',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-229',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a imaginé une guerre des étoiles lointaine.',
     pitchUs: 'This filmmaker imagined a war among distant stars',
     reponse: 'George Lucas',
     reponseUs: 'George Lucas',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-230',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a filmé la destruction d\'un anneau maléfique.',
     pitchUs: 'This filmmaker shot the destruction of an evil ring',
     reponse: 'Peter Jackson',
     reponseUs: 'Peter Jackson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-231',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste mexicain aime créatures et contes noirs.',
     pitchUs: 'This Mexican filmmaker loves creatures and dark fairy tales',
     reponse: 'Guillermo del Toro',
     reponseUs: 'Guillermo del Toro',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-232',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste québécois a filmé des vers géants sur Dune.',
     pitchUs: 'This Quebecois filmmaker shot giant worms on Dune',
     reponse: 'Denis Villeneuve',
     reponseUs: 'Denis Villeneuve',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-233',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste coréen infiltre des pauvres chez des riches.',
     pitchUs: 'This Korean filmmaker infiltrates the poor into a rich home',
     reponse: 'Bong Joon-ho',
     reponseUs: 'Bong Joon-ho',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-234',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste anime forêts, esprits et enfants volants.',
     pitchUs: 'This filmmaker animates forests, spirits, and flying children',
     reponse: 'Hayao Miyazaki',
     reponseUs: 'Hayao Miyazaki',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-235',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cette cinéaste a filmé une unité de déminage en Irak.',
     pitchUs: 'This filmmaker shot a bomb disposal unit in Iraq',
     reponse: 'Kathryn Bigelow',
     reponseUs: 'Kathryn Bigelow',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-236',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cette cinéaste a fait sortir une poupée de son monde rose.',
     pitchUs: 'This filmmaker sent a doll out of her pink world',
     reponse: 'Greta Gerwig',
     reponseUs: 'Greta Gerwig',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-237',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cette cinéaste a filmé un rancher dur du Montana en 1925.',
     pitchUs: 'This filmmaker shot a harsh Montana rancher in 1925',
     reponse: 'Jane Campion',
     reponseUs: 'Jane Campion',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-238',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cette cinéaste française a filmé une peintre et son modèle.',
     pitchUs: 'This French filmmaker shot a painter and her subject',
     reponse: 'Céline Sciamma',
     reponseUs: 'Céline Sciamma',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-239',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cette pionnière française filmait la Nouvelle Vague.',
     pitchUs: 'This French pioneer filmed the New Wave',
     reponse: 'Agnès Varda',
     reponseUs: 'Agnès Varda',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-240',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cette cinéaste française a filmé le procès d\'une romancière.',
     pitchUs: 'This French filmmaker shot the trial of a novelist',
     reponse: 'Justine Triet',
     reponseUs: 'Justine Triet',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-241',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur allemand fait rugir les cors sur Dune.',
@@ -1941,7 +1934,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Hans Zimmer',
     reponseUs: 'Hans Zimmer',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-242',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur a écrit le thème menaçant d\'un requin géant.',
@@ -1949,7 +1942,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'John Williams',
     reponseUs: 'John Williams',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-243',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur italien a sifflé les westerns spaghetti.',
@@ -1957,7 +1950,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ennio Morricone',
     reponseUs: 'Ennio Morricone',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-244',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur français a mis en musique un hôtel Budapest.',
@@ -1965,7 +1958,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Alexandre Desplat',
     reponseUs: 'Alexandre Desplat',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-245',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur signe la musique de nombreux films de Burton.',
@@ -1973,7 +1966,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Danny Elfman',
     reponseUs: 'Danny Elfman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-246',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur a mis en musique un rat cuisinier parisien.',
@@ -1981,7 +1974,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Michael Giacchino',
     reponseUs: 'Michael Giacchino',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-247',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur canadien a mis en musique un anneau unique.',
@@ -1989,7 +1982,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Howard Shore',
     reponseUs: 'Howard Shore',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-248',
     type: MultiplayerType.personnalite,
     pitch: 'Ce compositeur grec a mis en musique des androïdes pluvieux.',
@@ -1997,7 +1990,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Vangelis',
     reponseUs: 'Vangelis',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-249',
     type: MultiplayerType.personnalite,
     pitch: 'Ce scénariste américain a cocréé Spider-Man et les Avengers.',
@@ -2005,7 +1998,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Stan Lee',
     reponseUs: 'Stan Lee',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-250',
     type: MultiplayerType.personnalite,
     pitch: 'Ce dessinateur américain a cocréé Hulk, Thor et les X-Men.',
@@ -2013,7 +2006,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Jack Kirby',
     reponseUs: 'Jack Kirby',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-251',
     type: MultiplayerType.personnalite,
     pitch: 'Ce dessinateur a réinventé Batman en chevalier noir.',
@@ -2021,7 +2014,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Frank Miller',
     reponseUs: 'Frank Miller',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-252',
     type: MultiplayerType.personnalite,
     pitch: 'Ce scénariste anglais a écrit Watchmen et V pour Vendetta.',
@@ -2029,7 +2022,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Alan Moore',
     reponseUs: 'Alan Moore',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-253',
     type: MultiplayerType.personnalite,
     pitch: 'Ce scénariste français a cocréé un petit Gaulois moustachu.',
@@ -2037,7 +2030,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'René Goscinny',
     reponseUs: 'René Goscinny',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-254',
     type: MultiplayerType.personnalite,
     pitch: 'Ce dessinateur a cocréé un village gaulois résistant.',
@@ -2045,7 +2038,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Albert Uderzo',
     reponseUs: 'Albert Uderzo',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-255',
     type: MultiplayerType.personnalite,
     pitch: 'Ce dessinateur américain a cocréé un justicier de Gotham.',
@@ -2053,7 +2046,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Bob Kane',
     reponseUs: 'Bob Kane',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-256',
     type: MultiplayerType.personnalite,
     pitch: 'Cet écrivain britannique a créé un espion matricule 007.',
@@ -2061,7 +2054,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ian Fleming',
     reponseUs: 'Ian Fleming',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-257',
     type: MultiplayerType.personnalite,
     pitch: 'Cette écrivaine a créé un jeune sorcier à lunettes rondes.',
@@ -2069,7 +2062,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'J.K. Rowling',
     reponseUs: 'J.K. Rowling',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-258',
     type: MultiplayerType.personnalite,
     pitch: 'Cet écrivain britannique a créé la Terre du Milieu.',
@@ -2077,7 +2070,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'J.R.R. Tolkien',
     reponseUs: 'J.R.R. Tolkien',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-259',
     type: MultiplayerType.personnalite,
     pitch: 'Ce producteur orchestre tout un univers de super-héros.',
@@ -2085,7 +2078,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Kevin Feige',
     reponseUs: 'Kevin Feige',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-260',
     type: MultiplayerType.personnalite,
     pitch: 'Ce producteur a lancé des pirates et des avions de chasse.',
@@ -2093,7 +2086,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Jerry Bruckheimer',
     reponseUs: 'Jerry Bruckheimer',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-261',
     type: MultiplayerType.personnalite,
     pitch: 'Cette productrice dirige un studio de guerres stellaires.',
@@ -2101,7 +2094,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Kathleen Kennedy',
     reponseUs: 'Kathleen Kennedy',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-262',
     type: MultiplayerType.personnalite,
     pitch: 'Ce réalisateur australien a lancé un guerrier de la route.',
@@ -2109,7 +2102,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'George Miller',
     reponseUs: 'George Miller',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-263',
     type: MultiplayerType.personnalite,
     pitch: 'Ce chef opérateur a filmé des androïdes réplicants pluvieux.',
@@ -2117,7 +2110,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Roger Deakins',
     reponseUs: 'Roger Deakins',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-264',
     type: MultiplayerType.personnalite,
     pitch: 'Ce chef opérateur mexicain filme en lumière naturelle.',
@@ -2125,7 +2118,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Emmanuel Lubezki',
     reponseUs: 'Emmanuel Lubezki',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-265',
     type: MultiplayerType.personnalite,
     pitch: 'Ce scénariste a écrit les origines d\'un réseau social.',
@@ -2133,7 +2126,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Aaron Sorkin',
     reponseUs: 'Aaron Sorkin',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-266',
     type: MultiplayerType.personnalite,
     pitch: 'Ce scénariste efface des souvenirs amoureux au cinéma.',
@@ -2141,7 +2134,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Charlie Kaufman',
     reponseUs: 'Charlie Kaufman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-267',
     type: MultiplayerType.personnalite,
     pitch: 'Ce maquilleur a transformé des humains en loups-garous.',
@@ -2149,7 +2142,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Rick Baker',
     reponseUs: 'Rick Baker',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-268',
     type: MultiplayerType.personnalite,
     pitch: 'Ce marionnettiste américain a créé une grenouille verte.',
@@ -2157,7 +2150,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Jim Henson',
     reponseUs: 'Jim Henson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-269',
     type: MultiplayerType.personnalite,
     pitch: 'Cette chanteuse française a inspiré un biopic oscarisé.',
@@ -2165,7 +2158,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Édith Piaf',
     reponseUs: 'Édith Piaf',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-270',
     type: MultiplayerType.personnalite,
     pitch: 'Cet entrepreneur américain a créé une souris célèbre.',
@@ -2173,7 +2166,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Walt Disney',
     reponseUs: 'Walt Disney',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-271',
     type: MultiplayerType.film,
     pitch: 'Une bonne mexicaine veille sur une famille aisée en 1970.',
@@ -2181,7 +2174,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Roma',
     reponseUs: 'Roma',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-272',
     type: MultiplayerType.film,
     pitch: 'Un tueur à gages livre des camions puis des confidences.',
@@ -2189,7 +2182,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Irishman',
     reponseUs: 'The Irishman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-273',
     type: MultiplayerType.film,
     pitch: 'Un couple d\'artistes traverse un divorce douloureux.',
@@ -2197,7 +2190,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Marriage Story',
     reponseUs: 'Marriage Story',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-274',
     type: MultiplayerType.film,
     pitch: 'Un rancher brutal tourmente le nouveau mari de son frère.',
@@ -2205,7 +2198,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Power of the Dog',
     reponseUs: 'The Power of the Dog',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-275',
     type: MultiplayerType.film,
     pitch: 'Une mère aux yeux bandés guide ses enfants vers un refuge.',
@@ -2213,7 +2206,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Bird Box',
     reponseUs: 'Bird Box',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-276',
     type: MultiplayerType.film,
     pitch: 'Un mercenaire tatoué extrait un adolescent kidnappé.',
@@ -2221,7 +2214,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Extraction',
     reponseUs: 'Extraction',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-277',
     type: MultiplayerType.film,
     pitch: 'Des mercenaires immortels protègent l\'humanité en secret.',
@@ -2229,7 +2222,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Old Guard',
     reponseUs: 'The Old Guard',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-278',
     type: MultiplayerType.film,
     pitch: 'Six milliardaires anonymes renversent un dictateur.',
@@ -2237,7 +2230,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: '6 Underground',
     reponseUs: '6 Underground',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-279',
     type: MultiplayerType.film,
     pitch: 'Un agent Interpol traque deux voleurs d\'œufs de Cléopâtre.',
@@ -2245,7 +2238,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Red Notice',
     reponseUs: 'Red Notice',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-280',
     type: MultiplayerType.film,
     pitch: 'Deux astronomes alertent en vain d\'une comète mortelle.',
@@ -2253,7 +2246,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Don\'t Look Up',
     reponseUs: 'Don\'t Look Up',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-281',
     type: MultiplayerType.film,
     pitch: 'Un détective moustachu enquête sur une île de milliardaire.',
@@ -2261,7 +2254,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Glass Onion',
     reponseUs: 'Glass Onion',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-282',
     type: MultiplayerType.film,
     pitch: 'Un agent de la CIA devient la cible du monde entier.',
@@ -2269,7 +2262,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Gray Man',
     reponseUs: 'The Gray Man',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-283',
     type: MultiplayerType.film,
     pitch: 'La jeune sœur d\'un détective mène sa propre enquête.',
@@ -2277,7 +2270,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Enola Holmes',
     reponseUs: 'Enola Holmes',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-284',
     type: MultiplayerType.film,
     pitch: 'Un pilote voyage dans le temps rencontrer son enfance.',
@@ -2285,7 +2278,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Adam Project',
     reponseUs: 'The Adam Project',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-285',
     type: MultiplayerType.film,
     pitch: 'Des mercenaires braquent un casino infesté de zombies.',
@@ -2293,7 +2286,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Army of the Dead',
     reponseUs: 'Army of the Dead',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-286',
     type: MultiplayerType.film,
     pitch: 'Des prisonniers empilés partagent un repas qui descend.',
@@ -2301,7 +2294,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Platform',
     reponseUs: 'The Platform',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-287',
     type: MultiplayerType.film,
     pitch: 'Des rugbymen survivent à un crash dans les Andes enneigées.',
@@ -2309,7 +2302,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'La Société de la neige',
     reponseUs: 'Society of the Snow',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-288',
     type: MultiplayerType.film,
     pitch: 'Une guerrière recrute des rebelles pour affronter un empire.',
@@ -2317,7 +2310,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Rebel Moon',
     reponseUs: 'Rebel Moon',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-289',
     type: MultiplayerType.film,
     pitch: 'Une famille en vacances subit une mystérieuse cyberattaque.',
@@ -2325,7 +2318,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Leave the World Behind',
     reponseUs: 'Leave the World Behind',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-290',
     type: MultiplayerType.film,
     pitch: 'Un policier humain fait équipe avec un orc dans Los Angeles.',
@@ -2333,7 +2326,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Bright',
     reponseUs: 'Bright',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-291',
     type: MultiplayerType.film,
     pitch: 'Un facteur paresseux ranime Noël au pôle Nord.',
@@ -2341,7 +2334,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Klaus',
     reponseUs: 'Klaus',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-292',
     type: MultiplayerType.film,
     pitch: 'Deux pontifes discutent théologie avant une démission.',
@@ -2349,7 +2342,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Two Popes',
     reponseUs: 'The Two Popes',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-293',
     type: MultiplayerType.film,
     pitch: 'Un scénariste ivre écrit un film sur un magnat de presse.',
@@ -2357,7 +2350,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Mank',
     reponseUs: 'Mank',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-294',
     type: MultiplayerType.film,
     pitch: 'Quatre vétérans retournent chercher un trésor au Vietnam.',
@@ -2365,7 +2358,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Da 5 Bloods',
     reponseUs: 'Da 5 Bloods',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-295',
     type: MultiplayerType.film,
     pitch: 'Une tutrice légale dépouille des personnes âgées naïves.',
@@ -2373,7 +2366,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'I Care a Lot',
     reponseUs: 'I Care a Lot',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-296',
     type: MultiplayerType.film,
     pitch: 'Un tueur à gages méticuleux rate un contrat et se venge.',
@@ -2381,7 +2374,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Killer',
     reponseUs: 'The Killer',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-297',
     type: MultiplayerType.film,
     pitch: 'Trois frères s\'affrontent après la mort d\'un enfant.',
@@ -2389,7 +2382,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Athena',
     reponseUs: 'Athena',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-298',
     type: MultiplayerType.film,
     pitch: 'Une créature scandinave géante se réveille sous un mont.',
@@ -2397,7 +2390,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Troll',
     reponseUs: 'Troll',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-299',
     type: MultiplayerType.film,
     pitch: 'Une princesse sacrifiée doit survivre seule dans une grotte.',
@@ -2405,7 +2398,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Damsel',
     reponseUs: 'Damsel',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-300',
     type: MultiplayerType.film,
     pitch: 'Des soldats du futur recrutent le présent contre des aliens.',
@@ -2413,7 +2406,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Tomorrow War',
     reponseUs: 'The Tomorrow War',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-301',
     type: MultiplayerType.film,
     pitch: 'Des cadres Nike courtisent un jeune basketteur prometteur.',
@@ -2421,7 +2414,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Air',
     reponseUs: 'Air',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-302',
     type: MultiplayerType.film,
     pitch: 'Un étudiant modeste s\'incruste dans un manoir huppé.',
@@ -2429,7 +2422,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Saltburn',
     reponseUs: 'Saltburn',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-303',
     type: MultiplayerType.film,
     pitch: 'Un écrivain publie sous pseudo un roman qu\'il méprise.',
@@ -2437,7 +2430,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'American Fiction',
     reponseUs: 'American Fiction',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-304',
     type: MultiplayerType.film,
     pitch: 'Un ancien combattant devient videur dans un bar de Floride.',
@@ -2445,7 +2438,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Road House',
     reponseUs: 'Road House',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-305',
     type: MultiplayerType.film,
     pitch: 'Un prince africain cherche un fils inconnu au Queens.',
@@ -2453,7 +2446,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Coming 2 America',
     reponseUs: 'Coming 2 America',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-306',
     type: MultiplayerType.film,
     pitch: 'Un journaliste kazakh offre sa fille à un vice-président.',
@@ -2461,7 +2454,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Borat Subsequent Moviefilm',
     reponseUs: 'Borat Subsequent Moviefilm',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-307',
     type: MultiplayerType.film,
     pitch: 'Un policier marié cache une liaison masculine secrète.',
@@ -2469,7 +2462,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'My Policeman',
     reponseUs: 'My Policeman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-308',
     type: MultiplayerType.film,
     pitch: 'Un couple d\'acteurs de sitcom traverse une crise.',
@@ -2477,7 +2470,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Being the Ricardos',
     reponseUs: 'Being the Ricardos',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-309',
     type: MultiplayerType.film,
     pitch: 'Une pilote de montgolfière bat un record d\'altitude en 1862.',
@@ -2485,7 +2478,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Aeronauts',
     reponseUs: 'The Aeronauts',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-310',
     type: MultiplayerType.film,
     pitch: 'Trois sorcières ressuscitées sèment le chaos à Salem.',
@@ -2493,7 +2486,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Hocus Pocus 2',
     reponseUs: 'Hocus Pocus 2',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-311',
     type: MultiplayerType.film,
     pitch: 'Un pantin sculpté par un père veut devenir un vrai garçon.',
@@ -2501,7 +2494,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Pinocchio',
     reponseUs: 'Pinocchio',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-312',
     type: MultiplayerType.film,
     pitch: 'Une jeune chasseuse sioux affronte un prédateur invisible.',
@@ -2509,7 +2502,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Prey',
     reponseUs: 'Prey',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-313',
     type: MultiplayerType.film,
     pitch: 'Des adolescents explorent un cratère lunaire avant l\'exil.',
@@ -2517,7 +2510,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Crater',
     reponseUs: 'Crater',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-314',
     type: MultiplayerType.film,
     pitch: 'Une fillette s\'envole vers une île peuplée d\'enfants perdus.',
@@ -2525,7 +2518,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Peter Pan & Wendy',
     reponseUs: 'Peter Pan & Wendy',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-315',
     type: MultiplayerType.film,
     pitch: 'Une ado sans don magique sauve sa famille colombienne.',
@@ -2533,7 +2526,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Encanto',
     reponseUs: 'Encanto',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-316',
     type: MultiplayerType.film,
     pitch: 'Un pianiste de jazz mort erre entre son corps et l\'au-delà.',
@@ -2541,7 +2534,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Soul',
     reponseUs: 'Soul',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-317',
     type: MultiplayerType.film,
     pitch: 'Un monstre marin explore l\'Italie sous forme humaine.',
@@ -2549,7 +2542,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Luca',
     reponseUs: 'Luca',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-318',
     type: MultiplayerType.film,
     pitch: 'Une ado se transforme en panda roux géant sous le stress.',
@@ -2557,7 +2550,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Turning Red',
     reponseUs: 'Turning Red',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-319',
     type: MultiplayerType.film,
     pitch: 'La seule fille entendante d\'une famille sourde chante.',
@@ -2565,7 +2558,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'CODA',
     reponseUs: 'CODA',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-320',
     type: MultiplayerType.film,
     pitch: 'Des meurtres visent une tribu amérindienne pétrolière.',
@@ -2573,7 +2566,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Killers of the Flower Moon',
     reponseUs: 'Killers of the Flower Moon',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-321',
     type: MultiplayerType.film,
     pitch: 'Un artilleur corse gravit les échelons jusqu\'au trône.',
@@ -2581,7 +2574,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Napoleon',
     reponseUs: 'Napoleon',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-322',
     type: MultiplayerType.film,
     pitch: 'Une soldate blessée se reconstruit dans sa ville natale.',
@@ -2589,7 +2582,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Causeway',
     reponseUs: 'Causeway',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-323',
     type: MultiplayerType.film,
     pitch: 'Un commandant novice escorte un convoi sur l\'Atlantique.',
@@ -2597,7 +2590,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Greyhound',
     reponseUs: 'Greyhound',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-324',
     type: MultiplayerType.film,
     pitch: 'Un fleuriste découvre que sa nouvelle conquête est espionne.',
@@ -2605,7 +2598,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ghosted',
     reponseUs: 'Ghosted',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-325',
     type: MultiplayerType.film,
     pitch: 'Un jeune noble hérite d\'une planète désertique et l\'épice.',
@@ -2613,7 +2606,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Dune',
     reponseUs: 'Dune',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-326',
     type: MultiplayerType.serie,
     pitch: 'Un conseiller financier blanchit de l\'argent aux Ozarks.',
@@ -2621,7 +2614,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ozark',
     reponseUs: 'Ozark',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-327',
     type: MultiplayerType.serie,
     pitch: 'Un libraire obsessionnel traque ses victimes en ligne.',
@@ -2629,7 +2622,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'You',
     reponseUs: 'You',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-328',
     type: MultiplayerType.serie,
     pitch: 'Une New-Yorkaise aisée découvre la prison pour femmes.',
@@ -2637,7 +2630,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Orange Is the New Black',
     reponseUs: 'Orange Is the New Black',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-329',
     type: MultiplayerType.serie,
     pitch: 'Le fils d\'une sexothérapeute conseille ses camarades.',
@@ -2645,7 +2638,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Sex Education',
     reponseUs: 'Sex Education',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-330',
     type: MultiplayerType.serie,
     pitch: 'Sept enfants adoptés aux pouvoirs uniques sauvent le monde.',
@@ -2653,7 +2646,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Umbrella Academy',
     reponseUs: 'The Umbrella Academy',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-331',
     type: MultiplayerType.serie,
     pitch: 'Une mère et sa fille ado déménagent dans le Massachusetts.',
@@ -2661,7 +2654,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ginny & Georgia',
     reponseUs: 'Ginny & Georgia',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-332',
     type: MultiplayerType.serie,
     pitch: 'Un chasseur de monstres mutant traverse un continent maudit.',
@@ -2669,7 +2662,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Witcher',
     reponseUs: 'The Witcher',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-333',
     type: MultiplayerType.serie,
     pitch: 'Des ados fauchés cherchent un trésor sur une île américaine.',
@@ -2677,7 +2670,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Outer Banks',
     reponseUs: 'Outer Banks',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-334',
     type: MultiplayerType.serie,
     pitch: 'Des boursiers modestes intègrent un lycée espagnol huppé.',
@@ -2685,7 +2678,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Elite',
     reponseUs: 'Elite',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-335',
     type: MultiplayerType.serie,
     pitch: 'D\'anciens rivaux de karaté rouvrent leurs dojos.',
@@ -2693,7 +2686,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Cobra Kai',
     reponseUs: 'Cobra Kai',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-336',
     type: MultiplayerType.serie,
     pitch: 'Le diable en personne dirige un bar à Los Angeles.',
@@ -2701,7 +2694,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Lucifer',
     reponseUs: 'Lucifer',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-337',
     type: MultiplayerType.serie,
     pitch: 'Une orpheline surdouée devient prodige des échecs.',
@@ -2709,7 +2702,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Queen\'s Gambit',
     reponseUs: 'The Queen\'s Gambit',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-338',
     type: MultiplayerType.serie,
     pitch: 'Une jeune femme fuit sa communauté hassidique pour Berlin.',
@@ -2717,7 +2710,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Unorthodox',
     reponseUs: 'Unorthodox',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-339',
     type: MultiplayerType.serie,
     pitch: 'Un barman harcelé par une cliente raconte son calvaire.',
@@ -2725,7 +2718,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Baby Reindeer',
     reponseUs: 'Baby Reindeer',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-340',
     type: MultiplayerType.serie,
     pitch: 'Un accrochage routier déclenche une guerre entre inconnus.',
@@ -2733,7 +2726,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Beef',
     reponseUs: 'Beef',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-341',
     type: MultiplayerType.serie,
     pitch: 'Deux sœurs de bidonville s\'affrontent dans une cité magique.',
@@ -2741,7 +2734,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Arcane',
     reponseUs: 'Arcane',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-342',
     type: MultiplayerType.serie,
     pitch: 'Des collégiens sont guidés par des monstres hormonaux.',
@@ -2749,7 +2742,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Big Mouth',
     reponseUs: 'Big Mouth',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-343',
     type: MultiplayerType.serie,
     pitch: 'Un cheval-acteur has-been sombre dans la dépression.',
@@ -2757,7 +2750,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'BoJack Horseman',
     reponseUs: 'BoJack Horseman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-344',
     type: MultiplayerType.serie,
     pitch: 'Un garçon mi-cerf erre dans un monde en pandémie.',
@@ -2765,7 +2758,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Sweet Tooth',
     reponseUs: 'Sweet Tooth',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-345',
     type: MultiplayerType.serie,
     pitch: 'Une cartographe orpheline révèle un pouvoir de lumière rare.',
@@ -2773,7 +2766,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Shadow and Bone',
     reponseUs: 'Shadow and Bone',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-346',
     type: MultiplayerType.serie,
     pitch: 'Une lycéenne indo-américaine veut réinventer sa réputation.',
@@ -2781,7 +2774,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Never Have I Ever',
     reponseUs: 'Never Have I Ever',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-347',
     type: MultiplayerType.serie,
     pitch: 'Des cassettes posthumes révèlent un suicide lycéen.',
@@ -2789,7 +2782,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: '13 Reasons Why',
     reponseUs: '13 Reasons Why',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-348',
     type: MultiplayerType.serie,
     pitch: 'Une infirmière calculatrice infiltre un asile.',
@@ -2797,7 +2790,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ratched',
     reponseUs: 'Ratched',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-349',
     type: MultiplayerType.serie,
     pitch: 'Une mère célibataire fait des ménages pour fuir un ex.',
@@ -2805,7 +2798,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Maid',
     reponseUs: 'Maid',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-350',
     type: MultiplayerType.serie,
     pitch: 'Une fausse héritière allemande dupe le gratin new-yorkais.',
@@ -2813,7 +2806,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Inventing Anna',
     reponseUs: 'Inventing Anna',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-351',
     type: MultiplayerType.serie,
     pitch: 'Cette série retrace les crimes d\'un tueur de Milwaukee.',
@@ -2821,7 +2814,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Dahmer',
     reponseUs: 'Dahmer',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-352',
     type: MultiplayerType.serie,
     pitch: 'Le maître des rêves s\'évade après un siècle de captivité.',
@@ -2829,7 +2822,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Sandman',
     reponseUs: 'The Sandman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-353',
     type: MultiplayerType.serie,
     pitch: 'Une femme au foyer des années 50 devient humoriste stand-up.',
@@ -2837,7 +2830,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Marvelous Mrs. Maisel',
     reponseUs: 'The Marvelous Mrs. Maisel',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-354',
     type: MultiplayerType.serie,
     pitch: 'Un analyste de la CIA déjoue un complot terroriste mondial.',
@@ -2845,7 +2838,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Jack Ryan',
     reponseUs: 'Jack Ryan',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-355',
     type: MultiplayerType.serie,
     pitch: 'Cette série imagine une Amérique occupée après 1945.',
@@ -2853,7 +2846,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Man in the High Castle',
     reponseUs: 'The Man in the High Castle',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-356',
     type: MultiplayerType.serie,
     pitch: 'Un ancien militaire géant règle ses comptes à mains nues.',
@@ -2861,7 +2854,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Reacher',
     reponseUs: 'Reacher',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-357',
     type: MultiplayerType.serie,
     pitch: 'Une magicienne cherche un élu parmi cinq jeunes villageois.',
@@ -2869,7 +2862,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Wheel of Time',
     reponseUs: 'The Wheel of Time',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-358',
     type: MultiplayerType.serie,
     pitch: 'Des justiciers new-yorkais traquent des nazis cachés.',
@@ -2877,7 +2870,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Hunters',
     reponseUs: 'Hunters',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-359',
     type: MultiplayerType.serie,
     pitch: 'Un homme mourant choisit un paradis virtuel après sa mort.',
@@ -2885,7 +2878,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Upload',
     reponseUs: 'Upload',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-360',
     type: MultiplayerType.serie,
     pitch: 'Un commandant de Navy SEAL enquête sur la mort de son unité.',
@@ -2893,7 +2886,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Terminal List',
     reponseUs: 'The Terminal List',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-361',
     type: MultiplayerType.serie,
     pitch: 'Deux espions amnésiques doivent raviver une agence secrète.',
@@ -2901,7 +2894,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Citadel',
     reponseUs: 'Citadel',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-362',
     type: MultiplayerType.serie,
     pitch: 'Une habitante d\'un abri survit dans un désert nucléaire.',
@@ -2909,7 +2902,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Fallout',
     reponseUs: 'Fallout',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-363',
     type: MultiplayerType.serie,
     pitch: 'Cette série retrace la forge des anneaux à l\'aube d\'une ère.',
@@ -2917,7 +2910,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The Rings of Power',
     reponseUs: 'The Rings of Power',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-364',
     type: MultiplayerType.serie,
     pitch: 'Un groupe de rock des années 70 se déchire au sommet.',
@@ -2925,7 +2918,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Daisy Jones & The Six',
     reponseUs: 'Daisy Jones & The Six',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-365',
     type: MultiplayerType.serie,
     pitch: 'De jeunes super-héros rivalisent dans une université.',
@@ -2933,7 +2926,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Gen V',
     reponseUs: 'Gen V',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-366',
     type: MultiplayerType.serie,
     pitch: 'Un ado découvre des pouvoirs hérités d\'un père brutal.',
@@ -2941,7 +2934,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Invincible',
     reponseUs: 'Invincible',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-367',
     type: MultiplayerType.serie,
     pitch: 'Une sorcière endeuillée recrée sa vie en sitcoms rétro.',
@@ -2949,7 +2942,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'WandaVision',
     reponseUs: 'WandaVision',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-368',
     type: MultiplayerType.serie,
     pitch: 'Un dieu de la malice est recruté par une agence du temps.',
@@ -2957,7 +2950,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Loki',
     reponseUs: 'Loki',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-369',
     type: MultiplayerType.serie,
     pitch: 'Une lycéenne du New Jersey obtient des pouvoirs cosmiques.',
@@ -2965,7 +2958,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ms. Marvel',
     reponseUs: 'Ms. Marvel',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-370',
     type: MultiplayerType.serie,
     pitch: 'Un homme aux identités multiples sert un dieu égyptien.',
@@ -2973,7 +2966,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Moon Knight',
     reponseUs: 'Moon Knight',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-371',
     type: MultiplayerType.serie,
     pitch: 'Un archer vétéran forme une jeune tireuse pendant les fêtes.',
@@ -2981,7 +2974,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Hawkeye',
     reponseUs: 'Hawkeye',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-372',
     type: MultiplayerType.serie,
     pitch: 'Une avocate devient géante verte après un accident.',
@@ -2989,7 +2982,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'She-Hulk',
     reponseUs: 'She-Hulk',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-373',
     type: MultiplayerType.serie,
     pitch: 'Cette série retrace les débuts d\'un rebelle galactique.',
@@ -2997,7 +2990,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Andor',
     reponseUs: 'Andor',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-374',
     type: MultiplayerType.serie,
     pitch: 'Une ancienne Jedi traque un amiral impérial disparu.',
@@ -3005,7 +2998,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ahsoka',
     reponseUs: 'Ahsoka',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-375',
     type: MultiplayerType.serie,
     pitch: 'Des touristes fortunés révèlent leurs failles à l\'hôtel.',
@@ -3013,7 +3006,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'The White Lotus',
     reponseUs: 'The White Lotus',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-376',
     type: MultiplayerType.serie,
     pitch: 'Une dynastie de dragons se déchire pour un trône de fer.',
@@ -3021,7 +3014,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'House of the Dragon',
     reponseUs: 'House of the Dragon',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-377',
     type: MultiplayerType.serie,
     pitch: 'Un tueur à gages rêve de devenir acteur à Los Angeles.',
@@ -3029,7 +3022,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Barry',
     reponseUs: 'Barry',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-378',
     type: MultiplayerType.serie,
     pitch: 'Trois mères de Californie cachent un secret trouble.',
@@ -3037,7 +3030,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Big Little Lies',
     reponseUs: 'Big Little Lies',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-379',
     type: MultiplayerType.serie,
     pitch: 'D\'anciens justiciers masqués ressurgissent en Amérique.',
@@ -3045,7 +3038,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Watchmen',
     reponseUs: 'Watchmen',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-380',
     type: MultiplayerType.serie,
     pitch: 'Un coach américain entraîne un club anglais sceptique.',
@@ -3053,927 +3046,927 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Ted Lasso',
     reponseUs: 'Ted Lasso',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-381',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un copilote poilu et hurlant pilote un vaisseau volé.',
     pitchUs: 'A furry, howling co-pilot flies a stolen ship',
     reponse: 'Chewbacca',
     reponseUs: 'Chewbacca',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-382',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un petit maître vert enseigne la Force depuis des siècles.',
     pitchUs: 'A small green master has taught the Force for centuries',
     reponse: 'Yoda',
     reponseUs: 'Yoda',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-383',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un droïde astromécanique bipe et cache des plans secrets.',
     pitchUs: 'An astromech droid beeps and hides secret plans',
     reponse: 'R2-D2',
     reponseUs: 'R2-D2',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-384',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un droïde doré maîtrise des millions de formes de langage.',
     pitchUs: 'A golden droid is fluent in millions of forms of language',
     reponse: 'C-3PO',
     reponseUs: 'C-3PO',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-385',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un chasseur casqué traque Han Solo pour un gangster.',
     pitchUs: 'A helmeted hunter tracks Han Solo for a gangster',
     reponse: 'Boba Fett',
     reponseUs: 'Boba Fett',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-386',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un bébé vert aux grandes oreilles voyage avec un chasseur.',
     pitchUs: 'A big-eared green baby travels with a bounty hunter',
     reponse: 'Grogu',
     reponseUs: 'Grogu',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-387',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un chevalier noir au souffle mécanique sert un empire.',
     pitchUs: 'A dark knight with mechanical breathing serves an empire',
     reponse: 'Dark Vador',
     reponseUs: 'Darth Vader',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-388',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Une créature squelettique convoite un anneau qui l\'a rongé.',
     pitchUs: 'A skeletal creature covets a ring that consumed him',
     reponse: 'Gollum',
     reponseUs: 'Gollum',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-389',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un archer elfe aux flèches infaillibles rejoint la troupe.',
     pitchUs: 'An elf archer with unerring arrows joins the fellowship',
     reponse: 'Legolas',
     reponseUs: 'Legolas',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-390',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un nain hachereau rivalise d\'exploits avec un archer elfe.',
     pitchUs: 'An axe-wielding dwarf competes for kills with an elf archer',
     reponse: 'Gimli',
     reponseUs: 'Gimli',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-391',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un guerrier gondorien tente de s\'emparer d\'un anneau maudit.',
     pitchUs: 'A warrior from Gondor tries to seize a cursed ring',
     reponse: 'Boromir',
     reponseUs: 'Boromir',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-392',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un magicien blanc corrompu lève une armée d\'orcs hybrides.',
     pitchUs: 'A corrupted white wizard raises an army of hybrid orcs',
     reponse: 'Saroumane',
     reponseUs: 'Saruman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-393',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un seigneur elfe réunit un conseil pour détruire un anneau.',
     pitchUs: 'An elf lord gathers a council to destroy a ring',
     reponse: 'Elrond',
     reponseUs: 'Elrond',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-394',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un elfe de maison libéré protège un sorcier à lunettes.',
     pitchUs: 'A freed house-elf protects a bespectacled wizard',
     reponse: 'Dobby',
     reponseUs: 'Dobby',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-395',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un demi-géant garde-chasse élève des créatures interdites.',
     pitchUs: 'A half-giant gamekeeper raises forbidden creatures',
     reponse: 'Hagrid',
     reponseUs: 'Hagrid',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-396',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un professeur de potions insondable protège un secret amer.',
     pitchUs: 'An unreadable potions teacher guards a bitter secret',
     reponse: 'Severus Rogue',
     reponseUs: 'Severus Snape',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-397',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un mage noir sans nez cherche l\'immortalité éternelle.',
     pitchUs: 'A noseless dark wizard seeks eternal immortality',
     reponse: 'Voldemort',
     reponseUs: 'Voldemort',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-398',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Une sorcière surdouée résout les énigmes de son école.',
     pitchUs: 'A gifted witch solves her school\'s toughest riddles',
     reponse: 'Hermione Granger',
     reponseUs: 'Hermione Granger',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-399',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Le cadet roux d\'une fratrie sorcière craint les araignées.',
     pitchUs: 'The redheaded youngest son of a wizarding family fears spiders',
     reponse: 'Ron Weasley',
     reponseUs: 'Ron Weasley',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-400',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un dieu facétieux change sans cesse de camp et d\'apparence.',
     pitchUs: 'A mischievous god keeps switching sides and shapes',
     reponse: 'Loki',
     reponseUs: 'Loki',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-401',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un être végétal ne répétant que son nom protège ses amis.',
     pitchUs: 'A plant-based being who repeats only his name protects his friends',
     reponse: 'Groot',
     reponseUs: 'Groot',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-402',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un raton laveur bricoleur et bagarreur pilote un vaisseau.',
     pitchUs: 'A scrappy, quarrelsome raccoon pilots a spaceship',
     reponse: 'Rocket Raccoon',
     reponseUs: 'Rocket Raccoon',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-403',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un soldat au bras métallique fut manipulé par des espions.',
     pitchUs: 'A soldier with a metal arm was manipulated by spies',
     reponse: 'Bucky Barnes',
     reponseUs: 'Bucky Barnes',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-404',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un directeur borgne réunit des héros dispersés en équipe.',
     pitchUs: 'A one-eyed director assembles scattered heroes into a team',
     reponse: 'Nick Fury',
     reponseUs: 'Nick Fury',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-405',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un gardien doré voit tout depuis un pont arc-en-ciel.',
     pitchUs: 'A golden guardian sees all from a rainbow bridge',
     reponse: 'Heimdall',
     reponseUs: 'Heimdall',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-406',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un titan violet veut effacer la moitié de l\'univers.',
     pitchUs: 'A purple titan wants to erase half the universe',
     reponse: 'Thanos',
     reponseUs: 'Thanos',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-407',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un majordome loyal soigne un justicier masqué.',
     pitchUs: 'A loyal butler tends to a masked vigilante',
     reponse: 'Alfred Pennyworth',
     reponseUs: 'Alfred Pennyworth',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-408',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un jeune acolyte en cape combat le crime à Gotham.',
     pitchUs: 'A young caped sidekick fights crime in Gotham',
     reponse: 'Robin',
     reponseUs: 'Robin',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-409',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Une cambrioleuse féline défie un justicier de Gotham.',
     pitchUs: 'A feline burglar challenges a Gotham vigilante',
     reponse: 'Catwoman',
     reponseUs: 'Catwoman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-410',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un géant doux ne prononce qu\'un mot en portant les autres.',
     pitchUs: 'A gentle giant speaks only one word while carrying others',
     reponse: 'Hodor',
     reponseUs: 'Hodor',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-411',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un nain érudit et buveur navigue les intrigues d\'un royaume.',
     pitchUs: 'A scholarly, drinking dwarf navigates a kingdom\'s intrigues',
     reponse: 'Tyrion Lannister',
     reponseUs: 'Tyrion Lannister',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-412',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un garde brûlé au visage protège puis lâche une princesse.',
     pitchUs: 'A burn-scarred guard protects, then abandons, a princess',
     reponse: 'Le Limier',
     reponseUs: 'The Hound',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-413',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un bâtard sadique traque des proies humaines par plaisir.',
     pitchUs: 'A sadistic bastard hunts human prey for pleasure',
     reponse: 'Ramsay Bolton',
     reponseUs: 'Ramsay Bolton',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-414',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un bonhomme de neige naïf rêve de l\'été sans voir le danger.',
     pitchUs: 'A naive snowman dreams of summer, oblivious to the danger',
     reponse: 'Olaf',
     reponseUs: 'Olaf',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-415',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un esprit bleu enfermé dans une lampe exauce trois vœux.',
     pitchUs: 'A blue spirit trapped in a lamp grants three wishes',
     reponse: 'Le Génie',
     reponseUs: 'The Genie',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-416',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un suricate et un phacochère élèvent un lionceau sans souci.',
     pitchUs: 'A meerkat and a warthog raise a lion cub worry-free',
     reponse: 'Timon et Pumbaa',
     reponseUs: 'Timon and Pumbaa',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-417',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un lion à la crinière sombre complote pour voler un trône.',
     pitchUs: 'A dark-maned lion plots to steal a throne',
     reponse: 'Scar',
     reponseUs: 'Scar',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-418',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Une pieuvre des mers vole la voix d\'une princesse.',
     pitchUs: 'A sea octopus steals a princess\'s voice',
     reponse: 'Ursula',
     reponseUs: 'Ursula',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-419',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un vizir avide de pouvoir manipule un sultan naïf.',
     pitchUs: 'A power-hungry vizier manipulates a naive sultan',
     reponse: 'Jafar',
     reponseUs: 'Jafar',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-420',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un perroquet moqueur sert d\'espion à un vizir machiavélique.',
     pitchUs: 'A mocking parrot serves as spy for a scheming vizier',
     reponse: 'Iago',
     reponseUs: 'Iago',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-421',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un roi lion tombe d\'une falaise sous les yeux de son fils.',
     pitchUs: 'A lion king falls from a cliff before his son\'s eyes',
     reponse: 'Mufasa',
     reponseUs: 'Mufasa',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-422',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un crabe des Caraïbes chante et surveille une princesse.',
     pitchUs: 'A Caribbean crab sings and watches over a princess',
     reponse: 'Sébastien',
     reponseUs: 'Sebastian',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-423',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un robot gonflable soigneur réconforte un jeune inventeur.',
     pitchUs: 'An inflatable healthcare robot comforts a young inventor',
     reponse: 'Baymax',
     reponseUs: 'Baymax',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-424',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un compagnon bavard et têtu accompagne un ogre solitaire.',
     pitchUs: 'A chatty, stubborn companion tags along with a lonely ogre',
     reponse: 'L\'Âne',
     reponseUs: 'Donkey',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-425',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un félin séducteur au chapeau manie l\'épée avec panache.',
     pitchUs: 'A charming, hat-wearing feline wields a sword with flair',
     reponse: 'Le Chat Potté',
     reponseUs: 'Puss in Boots',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-426',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un hôte excentrique sert un thé perpétuel à une fillette.',
     pitchUs: 'An eccentric host serves endless tea to a little girl',
     reponse: 'Le Chapelier Toqué',
     reponseUs: 'The Mad Hatter',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-427',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un félin violet disparaît en laissant flotter son sourire.',
     pitchUs: 'A purple feline vanishes, leaving only its floating grin',
     reponse: 'Le Chat du Cheshire',
     reponseUs: 'The Cheshire Cat',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-428',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un avocat véreux blanchit l\'argent d\'un ex-prof de chimie.',
     pitchUs: 'A crooked lawyer launders money for an ex-chemistry teacher',
     reponse: 'Saul Goodman',
     reponseUs: 'Saul Goodman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-429',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un ancien flic taciturne nettoie les traces d\'un trafic.',
     pitchUs: 'A quiet former cop cleans up traces of a drug operation',
     reponse: 'Mike Ehrmantraut',
     reponseUs: 'Mike Ehrmantraut',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-430',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un ancien élève dealer s\'associe à son ex-professeur.',
     pitchUs: 'A former student dealer partners with his old teacher',
     reponse: 'Jesse Pinkman',
     reponseUs: 'Jesse Pinkman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-431',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un médecin blessé colocataire d\'un détective excentrique.',
     pitchUs: 'A wounded doctor rooms with an eccentric detective',
     reponse: 'Dr Watson',
     reponseUs: 'Dr. Watson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-432',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un terroriste raffiné prend en otage une tour à Los Angeles.',
     pitchUs: 'A refined terrorist takes hostages in a Los Angeles tower',
     reponse: 'Hans Gruber',
     reponseUs: 'Hans Gruber',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-433',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un programme aux lunettes noires traque un hacker.',
     pitchUs: 'A sunglasses-wearing program hunts a hacker',
     reponse: 'Agent Smith',
     reponseUs: 'Agent Smith',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-434',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un métal liquide imite n\'importe qui pour traquer un ado.',
     pitchUs: 'A liquid metal shapeshifter impersonates anyone to hunt a teen',
     reponse: 'T-1000',
     reponseUs: 'T-1000',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-435',
-    type: MultiplayerType.personnage,
+    type: MultiplayerType.film,
     pitch: 'Un collégien à l\'appareil dentaire déchiffre des codes.',
     pitchUs: 'A braces-wearing middle schooler decodes secret messages',
     reponse: 'Dustin',
     reponseUs: 'Dustin',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-436',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur a régné sur une planète d\'épice et chanté Dylan.',
     pitchUs: 'This actor ruled a spice planet and sang Bob Dylan songs',
     reponse: 'Timothée Chalamet',
     reponseUs: 'Timothée Chalamet',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-437',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Britannique a hurlé dans une secte suédoise en fleurs.',
     pitchUs: 'This Brit screamed inside a flower-filled Swedish cult',
     reponse: 'Florence Pugh',
     reponseUs: 'Florence Pugh',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-438',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Australienne a enfilé le rose puis un costume clown.',
     pitchUs: 'This Australian wore pink, then a clown\'s costume',
     reponse: 'Margot Robbie',
     reponseUs: 'Margot Robbie',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-439',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur brise le quatrième mur en costume rouge.',
     pitchUs: 'This actor breaks the fourth wall in a red suit',
     reponse: 'Ryan Reynolds',
     reponseUs: 'Ryan Reynolds',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-440',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice a lu des livres dans une bibliothèque magique.',
     pitchUs: 'This actress read books in a magical library',
     reponse: 'Emma Watson',
     reponseUs: 'Emma Watson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-441',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur porte lunettes rondes et cicatrice en éclair.',
     pitchUs: 'This actor wears round glasses and a lightning scar',
     reponse: 'Daniel Radcliffe',
     reponseUs: 'Daniel Radcliffe',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-442',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet Australien musclé brandit un marteau enchanté nordique.',
     pitchUs: 'This muscular Australian wields an enchanted Norse hammer',
     reponse: 'Chris Hemsworth',
     reponseUs: 'Chris Hemsworth',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-443',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur porte un bouclier étoilé après un sérum.',
     pitchUs: 'This actor carries a star-spangled shield after a serum',
     reponse: 'Chris Evans',
     reponseUs: 'Chris Evans',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-444',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur a construit une armure rouge et or.',
     pitchUs: 'This actor built a suit of red and gold armor',
     reponse: 'Robert Downey Jr.',
     reponseUs: 'Robert Downey Jr.',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-445',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur devient un géant vert sous l\'effet de la colère.',
     pitchUs: 'This actor turns into a green giant when angry',
     reponse: 'Mark Ruffalo',
     reponseUs: 'Mark Ruffalo',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-446',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice manipule la réalité grâce à un chaos écarlate.',
     pitchUs: 'This actress bends reality through scarlet chaos',
     reponse: 'Elizabeth Olsen',
     reponseUs: 'Elizabeth Olsen',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-447',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Ce jeune Britannique tisse des toiles entre les gratte-ciel.',
     pitchUs: 'This young Brit swings webs between skyscrapers',
     reponse: 'Tom Holland',
     reponseUs: 'Tom Holland',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-448',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur a régné sous un masque de panthère puis boxé.',
     pitchUs: 'This actor ruled behind a panther mask, then took up boxing',
     reponse: 'Michael B. Jordan',
     reponseUs: 'Michael B. Jordan',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-449',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur incarnait un roi africain masqué de vibranium.',
     pitchUs: 'This actor played a masked African king of vibranium',
     reponse: 'Chadwick Boseman',
     reponseUs: 'Chadwick Boseman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-450',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet Irlandais a joué des mutants et des androïdes froids.',
     pitchUs: 'This Irishman has played mutants and cold androids',
     reponse: 'Michael Fassbender',
     reponseUs: 'Michael Fassbender',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-451',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur bègue a dû prononcer un discours royal.',
     pitchUs: 'This actor with a stammer had to deliver a royal speech',
     reponse: 'Colin Firth',
     reponseUs: 'Colin Firth',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-452',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice adapta un roman de Jane Austen à l\'écran.',
     pitchUs: 'This actress adapted a Jane Austen novel for the screen',
     reponse: 'Emma Thompson',
     reponseUs: 'Emma Thompson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-453',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Canadienne oublie chaque matin l\'homme qu\'elle aime.',
     pitchUs: 'This Canadian forgets each morning the man she loves',
     reponse: 'Rachel McAdams',
     reponseUs: 'Rachel McAdams',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-454',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice débute stagiaire dans un magazine de mode.',
     pitchUs: 'This actress starts out as an intern at a fashion magazine',
     reponse: 'Anne Hathaway',
     reponseUs: 'Anne Hathaway',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-455',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice débarque en rose à la fac de droit d\'Harvard.',
     pitchUs: 'This actress arrives in pink at Harvard Law School',
     reponse: 'Reese Witherspoon',
     reponseUs: 'Reese Witherspoon',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-456',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice décrypte le langage d\'extraterrestres.',
     pitchUs: 'This actress decodes the language of aliens',
     reponse: 'Amy Adams',
     reponseUs: 'Amy Adams',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-457',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice traque un terroriste pendant dix ans.',
     pitchUs: 'This actress hunts a terrorist for ten years',
     reponse: 'Jessica Chastain',
     reponseUs: 'Jessica Chastain',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-458',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice a incarné une reine acariâtre et gouteuse.',
     pitchUs: 'This actress played a cranky, gluttonous queen',
     reponse: 'Olivia Colman',
     reponseUs: 'Olivia Colman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-459',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette actrice a incarné une reine d\'Angleterre austère.',
     pitchUs: 'This actress played an austere Queen of England',
     reponse: 'Helen Mirren',
     reponseUs: 'Helen Mirren',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-460',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur guide une communauté avec un bâton de bois.',
     pitchUs: 'This actor guides a fellowship with a wooden staff',
     reponse: 'Ian McKellen',
     reponseUs: 'Ian McKellen',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-461',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur anguleux a incarné un bouffon vert menaçant.',
     pitchUs: 'This angular-faced actor played a menacing green goblin',
     reponse: 'Willem Dafoe',
     reponseUs: 'Willem Dafoe',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-462',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur peint son visage en clown désabusé.',
     pitchUs: 'This actor paints his face as a disillusioned clown',
     reponse: 'Joaquin Phoenix',
     reponseUs: 'Joaquin Phoenix',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-463',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur au sabre rouge trahit sa famille.',
     pitchUs: 'This actor with a red lightsaber betrays his own family',
     reponse: 'Adam Driver',
     reponseUs: 'Adam Driver',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-464',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur pilote un chasseur dans une guerre stellaire.',
     pitchUs: 'This actor pilots a fighter in a war among the stars',
     reponse: 'Oscar Isaac',
     reponseUs: 'Oscar Isaac',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-465',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur a survécu seul sur Mars puis chassé au désert.',
     pitchUs: 'This actor survived alone on Mars, then hunted in the desert',
     reponse: 'Jake Gyllenhaal',
     reponseUs: 'Jake Gyllenhaal',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-466',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet Autrichien chasse des Juifs avec politesse glaciale.',
     pitchUs: 'This Austrian hunts Jews with icy politeness',
     reponse: 'Christoph Waltz',
     reponseUs: 'Christoph Waltz',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-467',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur a incarné un dealer puis un père pudique.',
     pitchUs: 'This actor played a drug dealer, then a reserved father',
     reponse: 'Mahershala Ali',
     reponseUs: 'Mahershala Ali',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-468',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Kényane a joué une esclave puis une reine guerrière.',
     pitchUs: 'This Kenyan actress played a slave, then a warrior queen',
     reponse: 'Lupita Nyong\'o',
     reponseUs: 'Lupita Nyong\'o',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-469',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cette Française a défié un espion britannique matricule 007.',
     pitchUs: 'This Frenchwoman faced off against agent 007',
     reponse: 'Léa Seydoux',
     reponseUs: 'Léa Seydoux',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-470',
-    type: MultiplayerType.acteur,
+    type: MultiplayerType.film,
     pitch: 'Cet acteur muet séduit le public à l\'ère du parlant.',
     pitchUs: 'This silent actor charms audiences in the era of talkies',
     reponse: 'Jean Dujardin',
     reponseUs: 'Jean Dujardin',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-471',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce Taïwanais a filmé un tigre et un naufragé en mer.',
     pitchUs: 'This Taiwanese director filmed a tiger and a castaway at sea',
     reponse: 'Ang Lee',
     reponseUs: 'Ang Lee',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-472',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce Mexicain a filmé un trappeur laissé pour mort.',
     pitchUs: 'This Mexican director filmed a trapper left for dead',
     reponse: 'Alejandro González Iñárritu',
     reponseUs: 'Alejandro González Iñárritu',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-473',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce Mexicain a filmé une bonne en noir et blanc.',
     pitchUs: 'This Mexican director filmed a housekeeper in black and white',
     reponse: 'Alfonso Cuarón',
     reponseUs: 'Alfonso Cuarón',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-474',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce Grec filme des mondes absurdes aux dialogues glacés.',
     pitchUs: 'This Greek director films absurd worlds with icy dialogue',
     reponse: 'Yórgos Lánthimos',
     reponseUs: 'Yórgos Lánthimos',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-475',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a filmé un prospecteur pétrolier impitoyable.',
     pitchUs: 'This filmmaker shot a ruthless oil prospector',
     reponse: 'Paul Thomas Anderson',
     reponseUs: 'Paul Thomas Anderson',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-476',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ces frères filment des kidnappings ratés dans la neige.',
     pitchUs: 'These brothers film botched kidnappings in the snow',
     reponse: 'Joel et Ethan Coen',
     reponseUs: 'Joel and Ethan Coen',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-477',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce Britannique a filmé deux soldats en un plan continu.',
     pitchUs: 'This Brit filmed two soldiers in one continuous shot',
     reponse: 'Sam Mendes',
     reponseUs: 'Sam Mendes',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-478',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a filmé un génie mathématique schizophrène.',
     pitchUs: 'This filmmaker shot a schizophrenic math genius',
     reponse: 'Ron Howard',
     reponseUs: 'Ron Howard',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-479',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a envoyé un ado dans le passé en DeLorean.',
     pitchUs: 'This filmmaker sent a teen back in time in a DeLorean',
     reponse: 'Robert Zemeckis',
     reponseUs: 'Robert Zemeckis',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-480',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste filme des robots géants et des explosions.',
     pitchUs: 'This filmmaker shoots giant robots and explosions',
     reponse: 'Michael Bay',
     reponseUs: 'Michael Bay',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-481',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste filme des super-héros en ralenti stylisé.',
     pitchUs: 'This filmmaker shoots superheroes in stylized slow motion',
     reponse: 'Zack Snyder',
     reponseUs: 'Zack Snyder',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-482',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a réveillé une force dans une lointaine galaxie.',
     pitchUs: 'This filmmaker awakened a force in a galaxy far away',
     reponse: 'J.J. Abrams',
     reponseUs: 'J.J. Abrams',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-483',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce Néo-Zélandais a rendu comique un dieu du tonnerre.',
     pitchUs: 'This New Zealander made a thunder god genuinely funny',
     reponse: 'Taika Waititi',
     reponseUs: 'Taika Waititi',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-484',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cette Chinoise filme des nomades américains sans domicile.',
     pitchUs: 'This Chinese filmmaker films homeless American nomads',
     reponse: 'Chloé Zhao',
     reponseUs: 'Chloé Zhao',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-485',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a filmé un batteur tyrannisé par son professeur.',
     pitchUs: 'This filmmaker shot a drummer tormented by his teacher',
     reponse: 'Damien Chazelle',
     reponseUs: 'Damien Chazelle',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-486',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a créé un tueur griffu hantant les rêves.',
     pitchUs: 'This filmmaker created a clawed killer haunting dreams',
     reponse: 'Wes Craven',
     reponseUs: 'Wes Craven',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-487',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a filmé un tueur masqué la nuit d\'Halloween.',
     pitchUs: 'This filmmaker shot a masked killer on Halloween night',
     reponse: 'John Carpenter',
     reponseUs: 'John Carpenter',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-488',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste filme des univers oniriques et dérangeants.',
     pitchUs: 'This filmmaker shoots dreamlike, unsettling worlds',
     reponse: 'David Lynch',
     reponseUs: 'David Lynch',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-489',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cet ex-Monty Python filme des univers rétro-futuristes.',
     pitchUs: 'This ex-Monty Python member films retro-futuristic worlds',
     reponse: 'Terry Gilliam',
     reponseUs: 'Terry Gilliam',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-490',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce Tchèque a filmé un rebelle dans un asile psychiatrique.',
     pitchUs: 'This Czech director filmed a rebel in a psychiatric ward',
     reponse: 'Milos Forman',
     reponseUs: 'Milos Forman',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-491',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a filmé un pianiste juif à Varsovie.',
     pitchUs: 'This filmmaker shot a Jewish pianist in Warsaw',
     reponse: 'Roman Polanski',
     reponseUs: 'Roman Polanski',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-492',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cet Italien a inventé le western spaghetti musical.',
     pitchUs: 'This Italian invented the musical spaghetti western',
     reponse: 'Sergio Leone',
     reponseUs: 'Sergio Leone',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-493',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Cet Italien filme les excès nocturnes de la Dolce Vita.',
     pitchUs: 'This Italian films the nightly excess of la dolce vita',
     reponse: 'Federico Fellini',
     reponseUs: 'Federico Fellini',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-494',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce pionnier de la Nouvelle Vague filmait à bout de souffle.',
     pitchUs: 'This New Wave pioneer filmed characters out of breath',
     reponse: 'Jean-Luc Godard',
     reponseUs: 'Jean-Luc Godard',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-495',
-    type: MultiplayerType.realisateur,
+    type: MultiplayerType.film,
     pitch: 'Ce cinéaste a filmé les 400 coups d\'un gamin parisien.',
     pitchUs: 'This filmmaker shot the 400 blows of a Parisian kid',
     reponse: 'François Truffaut',
     reponseUs: 'François Truffaut',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-504',
     type: MultiplayerType.personnalite,
     pitch: 'Cet écrivain a imaginé sept royaumes et un trône de fer.',
@@ -3981,7 +3974,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'George R.R. Martin',
     reponseUs: 'George R.R. Martin',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-506',
     type: MultiplayerType.personnalite,
     pitch: 'Cette Britannique a créé un détective belge moustachu.',
@@ -3989,7 +3982,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
     reponse: 'Agatha Christie',
     reponseUs: 'Agatha Christie',
   ),
-  const MultiplayerEnigme(
+  MultiplayerEnigme(
     id: 'mp-507',
     type: MultiplayerType.personnalite,
     pitch: 'Cet écrivain a créé un détective du 221B Baker Street.',

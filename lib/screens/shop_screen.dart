@@ -65,7 +65,25 @@ class ShopScreen extends StatelessWidget {
                         foregroundColor: const Color(0xFF1A1410),
                         disabledBackgroundColor: AppColors.gold.withOpacity(0.25),
                       ),
-                      child: Text(purchase.priceFor(item), style: AppTextStyles.body(size: 12, weight: FontWeight.w700)),
+                      child: item.strikethroughPrice == null
+                          ? Text(purchase.priceFor(item), style: AppTextStyles.body(size: 12, weight: FontWeight.w700))
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  item.strikethroughPrice!,
+                                  style: AppTextStyles.body(size: 12, weight: FontWeight.w700).copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationThickness: 2,
+                                    decorationColor: AppColors.crimson,
+                                    color: const Color(0xFF1A1410).withOpacity(0.6),
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(purchase.priceFor(item), style: AppTextStyles.body(size: 12, weight: FontWeight.w700)),
+                              ],
+                            ),
                     ),
                   ],
                 ),

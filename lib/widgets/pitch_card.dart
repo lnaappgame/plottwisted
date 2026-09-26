@@ -101,9 +101,20 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
             decoration: BoxDecoration(
               color: armed ? color.withOpacity(0.18) : null,
               borderRadius: BorderRadius.circular(3),
-              border: Border(bottom: BorderSide(color: color, width: 2)),
             ),
-            child: Text(label, style: AppTextStyles.body(size: 16, weight: FontWeight.w700, color: color)),
+            // Vrai soulignement de texte plutôt qu'une bordure de Container :
+            // une bordure peut s'étirer jusqu'au bout de la ligne quand ce
+            // span tombe en fin de ligne (constaté sur OnePlus) — la
+            // décoration de texte, elle, colle toujours exactement à la
+            // largeur réelle du mot.
+            child: Text(
+              label,
+              style: AppTextStyles.body(size: 16, weight: FontWeight.w700, color: color).copyWith(
+                decoration: TextDecoration.underline,
+                decorationColor: color,
+                decorationThickness: 2,
+              ),
+            ),
           ),
         ),
       ));

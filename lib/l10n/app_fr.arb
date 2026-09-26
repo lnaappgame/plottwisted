@@ -199,7 +199,7 @@
   "resultInFilm": ", dans {film}",
   "@resultInFilm": {"placeholders": {"film": {"type": "String"}}},
   "resultSeeFilmSheet": "Voir la fiche du film",
-  "resultNextFilm": "FILM SUIVANT",
+  "resultNextFilm": "SUIVANT",
 
   "worldComplete": "MONDE TERMINÉ !",
   "worldChooseNext": "Choisis le prochain monde",

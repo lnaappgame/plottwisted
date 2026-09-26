@@ -2,7 +2,7 @@
 
 *Dernière mise à jour : [à compléter à la publication]*
 
-> **Brouillon de travail — non relu par un juriste.** Version corrigée pour refléter fidèlement les traitements de données réellement effectués par l'application, y compris la sauvegarde cloud liée à un compte Google et les services Firebase (classements, mesure d'audience, diagnostic technique), absents de la version précédente. À faire valider par un professionnel du droit avant publication sur les stores, notamment une fois le SIRET et le numéro de TVA intracommunautaire obtenus.
+> **Brouillon de travail — non relu par un juriste.** Version corrigée pour refléter fidèlement les traitements de données réellement effectués par l'application, y compris la sauvegarde cloud liée à un compte Google et les services Firebase (classements, mesure d'audience, diagnostic technique), absents de la version précédente. À faire valider par un professionnel du droit avant publication sur les stores.
 
 ## 1. Éditeur de l'application
 
@@ -10,8 +10,9 @@ L'application mobile **Plot Twist(ed)** est éditée par :
 
 **LNA App**
 12 montée du Château, 13650 Meyrargues, France
-SIRET : [à compléter]
-Contact : [adresse e-mail à créer]
+SIRET : 790 346 076 00025
+Numéro de TVA intracommunautaire : FR 19790346076
+Contact : lna.app.game@gmail.com
 
 ## 2. Quelles données sont traitées ?
 
@@ -110,4 +111,4 @@ Cette politique de confidentialité peut être mise à jour, notamment lors de l
 
 ## 11. Contact
 
-Pour toute question relative à cette politique de confidentialité, ou pour exercer l'un des droits mentionnés au point 7 : [adresse e-mail à créer] — LNA App, 12 montée du Château, 13650 Meyrargues, France.
+Pour toute question relative à cette politique de confidentialité, ou pour exercer l'un des droits mentionnés au point 7 : lna.app.game@gmail.com — LNA App, 12 montée du Château, 13650 Meyrargues, France.

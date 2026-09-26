@@ -9,10 +9,16 @@ import 'package:video_player/video_player.dart';
 /// le cadrage/la fluidité/la fidélité des couleurs (voir mémoire projet) —
 /// une vidéo pré-enregistrée garantit les trois d'un coup.
 ///
-/// [assets/video/intro_teaser.mp4] est le fichier de référence tel quel
-/// (1080×1920, 5s, aucune piste audio) : une prise propre et complète, pas
-/// un enregistrement d'écran à découper — jouée intégralement du début à la
-/// fin, sans décalage ni boucle à gérer.
+/// [assets/video/intro_teaser.mp4] est le fichier de référence fourni par
+/// l'utilisateur, ré-encodé à 1072×1920 (au lieu de 1080×1920) : une largeur
+/// non multiple de 16 force le décodeur matériel à recadrer un macrobloc de
+/// bord, et le décodeur AVC matériel de cet appareil (MediaTek) corrompt
+/// visiblement ce recadrage par intermittence (blocs, cadrage décalé, teintes
+/// délavées) — confirmé en comparant un enregistrement d'écran de
+/// l'utilisateur montrant le défaut à l'écran d'accueil. 1072 est le multiple
+/// de 16 le plus proche ; la légère compression horizontale (0,74%) est
+/// imperceptible. 5s, aucune piste audio, jouée intégralement du début à la
+/// fin sans boucle à gérer.
 class IntroTeaserScreen extends StatefulWidget {
   final VoidCallback onComplete;
   const IntroTeaserScreen({super.key, required this.onComplete});

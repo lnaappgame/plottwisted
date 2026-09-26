@@ -34,6 +34,7 @@ class ShopItem {
   final String label;
   final String? subtitle;
   final String fallbackPrice; // affiché tant que le prix réel du store n'est pas encore chargé
+  final String? strikethroughPrice; // prix barré affiché à côté, pour un effet promo — purement visuel
   final JokerGrant jokers;
   final bool removesAdsForever;
   final int removeAdsForHours; // 0 = pas de retrait temporaire de pub
@@ -47,6 +48,7 @@ class ShopItem {
     required this.label,
     this.subtitle,
     required this.fallbackPrice,
+    this.strikethroughPrice,
     this.jokers = const JokerGrant(),
     this.removesAdsForever = false,
     this.removeAdsForHours = 0,
@@ -78,12 +80,13 @@ final List<ShopItem> kShopItems = [
     labelUs: '🎁 10 mixed jokers pack',
   ),
   ShopItem(
-    productId: 'jokers_pack_30_noads24h',
-    label: '🎁 Pack 30 jokers + no ads 24h',
-    fallbackPrice: '6,99 €',
+    productId: 'jokers_pack_30_noads',
+    label: '🎁 Pack 30 jokers + no ads',
+    fallbackPrice: '9,99 €',
+    strikethroughPrice: '13,96 €',
     jokers: JokerGrant.mixed(30),
-    removeAdsForHours: 24,
-    labelUs: '🎁 30 jokers + 24h no ads pack',
+    removesAdsForever: true,
+    labelUs: '🎁 30 jokers + no ads pack',
   ),
   ShopItem(
     productId: 'jokers_pack_100_noads',

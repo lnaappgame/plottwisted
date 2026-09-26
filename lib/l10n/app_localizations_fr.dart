@@ -595,7 +595,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get resultSeeFilmSheet => 'Voir la fiche du film';
 
   @override
-  String get resultNextFilm => 'FILM SUIVANT';
+  String get resultNextFilm => 'SUIVANT';
 
   @override
   String get worldComplete => 'MONDE TERMINÉ !';

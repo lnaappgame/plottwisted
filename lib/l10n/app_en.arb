@@ -197,7 +197,7 @@
   "resultInFilm": ", in {film}",
   "@resultInFilm": {"placeholders": {"film": {"type": "String"}}},
   "resultSeeFilmSheet": "See the film page",
-  "resultNextFilm": "NEXT FILM",
+  "resultNextFilm": "NEXT",
 
   "worldComplete": "WORLD COMPLETE!",
   "worldChooseNext": "Choose the next world",

@@ -1115,7 +1115,7 @@ abstract class AppLocalizations {
   /// No description provided for @resultNextFilm.
   ///
   /// In fr, this message translates to:
-  /// **'FILM SUIVANT'**
+  /// **'SUIVANT'**
   String get resultNextFilm;
 
   /// No description provided for @worldComplete.

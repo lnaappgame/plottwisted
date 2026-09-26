@@ -69,4 +69,11 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // Force une version récente : google_mobile_ads tire transitivement
+    // androidx.work:work-runtime 2.7.0 (2021), qui plante au lancement en
+    // release sur Android récent ("Failed to create an instance of
+    // androidx.work.impl.WorkDatabase") — la base Room générée par cette
+    // vieille version n'est pas compatible avec le runtime WorkManager
+    // moderne. Sans lien avec le contenu du jeu : bug de dépendance pure.
+    implementation("androidx.work:work-runtime:2.11.1")
 }

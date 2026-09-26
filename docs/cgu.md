@@ -1,8 +1,7 @@
 # Conditions Générales d'Utilisation — Plot Twist(ed)
 
 **⚠️ BROUILLON — pas un avis juridique.** Point de départ à faire relire
-avant publication. Champs à compléter : `[NOM DE L'AUTO-ENTREPRISE]`,
-`[SIRET]`, `[ADRESSE]`, `[EMAIL DE CONTACT]`, `[DATE]`.
+avant publication. Champ restant à compléter : `[DATE]`.
 
 *Dernière mise à jour : [DATE]*
 
@@ -10,9 +9,10 @@ avant publication. Champs à compléter : `[NOM DE L'AUTO-ENTREPRISE]`,
 
 Les présentes Conditions Générales d'Utilisation (CGU) régissent
 l'utilisation de l'application mobile Plot Twist(ed) (ci-après "l'Application"),
-éditée par **[NOM DE L'AUTO-ENTREPRISE]**, SIRET **[SIRET]**, **[ADRESSE]**
-(ci-après "l'Éditeur"). En installant ou en utilisant l'Application, vous
-acceptez les présentes CGU sans réserve.
+éditée par **LNA App**, SIRET **790 346 076 00025**, numéro de TVA
+intracommunautaire **FR 19790346076**, **12 montée du Château, 13650
+Meyrargues, France** (ci-après "l'Éditeur"). En installant ou en utilisant
+l'Application, vous acceptez les présentes CGU sans réserve.
 
 ## 2. Description du service
 
@@ -96,4 +96,4 @@ impératives protectrices du consommateur.
 
 ## 13. Contact
 
-**[EMAIL DE CONTACT]**
+**lna.app.game@gmail.com**

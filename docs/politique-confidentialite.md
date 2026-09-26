@@ -3,18 +3,18 @@
 **⚠️ BROUILLON — pas un avis juridique.** Ce document est un point de départ
 rédigé pour couvrir les obligations connues (RGPD, exigences Google
 AdMob/Play Store). Il doit être relu (idéalement par un juriste) et complété
-avant publication. Champs à remplir avant mise en ligne : `[NOM DE
-L'AUTO-ENTREPRISE]`, `[SIRET]`, `[ADRESSE]`, `[EMAIL DE CONTACT]`, `[DATE]`,
+avant publication. Champs restants à remplir avant mise en ligne : `[DATE]`,
 `[URL DE CETTE POLITIQUE]`.
 
 *Dernière mise à jour : [DATE]*
 
 ## Qui sommes-nous
 
-Plot Twist(ed) est édité par **[NOM DE L'AUTO-ENTREPRISE]**, auto-entreprise
-immatriculée sous le SIRET **[SIRET]**, dont le siège est **[ADRESSE]**.
-Pour toute question relative à vos données personnelles, contactez-nous à
-**[EMAIL DE CONTACT]**.
+Plot Twist(ed) est édité par **LNA App**, auto-entreprise immatriculée sous
+le SIRET **790 346 076 00025** (numéro de TVA intracommunautaire **FR
+19790346076**), dont le siège est **12 montée du Château, 13650 Meyrargues,
+France**. Pour toute question relative à vos données personnelles,
+contactez-nous à **lna.app.game@gmail.com**.
 
 ## Quelles données sont collectées
 
@@ -84,7 +84,7 @@ suppression à tout moment (voir "Vos droits" ci-dessous).
 
 Si vous résidez dans l'Union européenne, vous disposez d'un droit d'accès,
 de rectification, d'effacement et d'opposition concernant vos données. Pour
-exercer ces droits, contactez-nous à **[EMAIL DE CONTACT]**. Vous pouvez
+exercer ces droits, contactez-nous à **lna.app.game@gmail.com**. Vous pouvez
 également introduire une réclamation auprès de la CNIL (www.cnil.fr).
 
 ## Enfants
@@ -100,4 +100,4 @@ indiquée en haut de ce document.
 
 ## Contact
 
-**[EMAIL DE CONTACT]**
+**lna.app.game@gmail.com**

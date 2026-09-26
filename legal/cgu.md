@@ -2,7 +2,7 @@
 
 *Dernière mise à jour : [à compléter à la publication]*
 
-> **Brouillon de travail — non relu par un juriste.** Version étoffée pour couvrir l'ensemble des fonctionnalités réelles de l'application (achats intégrés, classements en ligne, connexion Google optionnelle, multijoueur). À faire valider par un professionnel du droit avant publication sur les stores, notamment une fois le SIRET et le numéro de TVA intracommunautaire obtenus. Les mentions entre crochets `[ ]` sont à compléter ou à confirmer.
+> **Brouillon de travail — non relu par un juriste.** Version étoffée pour couvrir l'ensemble des fonctionnalités réelles de l'application (achats intégrés, classements en ligne, connexion Google optionnelle, multijoueur). À faire valider par un professionnel du droit avant publication sur les stores. Les mentions entre crochets `[ ]` sont à compléter ou à confirmer.
 
 ## Sommaire
 
@@ -59,10 +59,10 @@ Les présentes CGU sont complétées par la [Politique de confidentialité](poli
 
 **LNA App**
 12 montée du Château, 13650 Meyrargues, France
-SIRET : [à compléter]
-Numéro de TVA intracommunautaire : [à compléter]
-Directeur de la publication : [nom à compléter]
-Contact : [adresse e-mail à créer]
+SIRET : 790 346 076 00025
+Numéro de TVA intracommunautaire : FR 19790346076
+Directeur de la publication : Damien Ellena
+Contact : lna.app.game@gmail.com
 
 ## 4. Capacité à contracter
 
@@ -234,4 +234,4 @@ En cas de litige, l'Utilisateur est invité à contacter en priorité l'Éditeur
 
 ## 28. Contact
 
-Pour toute question relative aux présentes CGU : [adresse e-mail à créer] — LNA App, 12 montée du Château, 13650 Meyrargues, France.
+Pour toute question relative aux présentes CGU : lna.app.game@gmail.com — LNA App, 12 montée du Château, 13650 Meyrargues, France.
