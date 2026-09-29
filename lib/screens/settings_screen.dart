@@ -8,11 +8,14 @@ import '../services/game_state.dart';
 import '../services/save_service.dart';
 import '../theme/app_theme.dart';
 
-// Pages légales hébergées séparément (brouillons non relus par un juriste au
-// 2026-09-08, à faire valider avant publication réelle sur les stores — voir
-// legal/cgu.md et legal/politique-de-confidentialite.md pour le source).
-const String _kCguUrl = 'https://claude.ai/code/artifact/fd8b8032-9701-40b3-9ac2-93ca68bf30d1';
-const String _kPrivacyPolicyUrl = 'https://claude.ai/code/artifact/db2e4e20-d211-4174-a02e-7638a142c8c9';
+// Page légale hébergée séparément (brouillon non relu par un juriste, à
+// faire valider avant publication réelle sur les stores — voir
+// legal/docs_page.html pour le source, legal/cgu.md et
+// legal/politique-de-confidentialite.md pour le contenu). Une seule page
+// avec les deux documents sous onglets ; les ancres #cgu/#conf ouvrent
+// directement le bon onglet.
+const String _kCguUrl = 'https://claude.ai/artifact/G4tjHnXwdxKsMevBhv18oU#cgu';
+const String _kPrivacyPolicyUrl = 'https://claude.ai/artifact/G4tjHnXwdxKsMevBhv18oU#conf';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

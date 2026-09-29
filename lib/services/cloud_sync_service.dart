@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -49,7 +50,15 @@ class CloudSyncService {
 
   /// `true` si le compte actuellement connecté est lié à une identité Google
   /// (donc que sa progression peut être restaurée sur un autre appareil).
+  ///
+  /// Firebase.initializeApp() se lance en tâche de fond après l'intro (voir
+  /// main.dart, pour ne pas retarder le splash) : si l'écran Réglages
+  /// s'ouvre avant que ça se termine, FirebaseAuth.instance lève une
+  /// exception ("No Firebase App '[DEFAULT]'..."), ce qui plantait le build
+  /// entier de la Dialog (écran vide). Ce getter est appelé directement
+  /// depuis build(), sans try/catch possible autour — d'où ce garde-fou.
   bool get isLinked {
+    if (Firebase.apps.isEmpty) return false;
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return false;
     return user.providerData.any((p) => p.providerId == 'google.com');
@@ -57,6 +66,7 @@ class CloudSyncService {
 
   /// L'adresse e-mail du compte Google lié, ou `null` si non lié.
   String? get linkedEmail {
+    if (Firebase.apps.isEmpty) return null;
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return null;
     for (final p in user.providerData) {
