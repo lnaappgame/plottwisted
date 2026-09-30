@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plot Twist(ed) — Documents légaux</title>
+<meta name="description" content="Politique de confidentialité et Conditions Générales d'Utilisation de Plot Twist(ed).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F6F1E6;
+    --paper-deep: #EFE7D6;
+    --ink: #2B2118;
+    --ink-soft: #7A6D5C;
+    --gold: #A9782C;
+    --gold-bright: #8C6423;
+    --crimson: #7A1F2B;
+    --rule: #DDD0B4;
+    --card: #FFFFFF;
+    --shadow: rgba(43,33,24,0.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #17120D;
+      --paper-deep: #1D1610;
+      --ink: #ECE3D2;
+      --ink-soft: #A6987F;
+      --gold: #D9B15E;
+      --gold-bright: #E8C578;
+      --crimson: #D67587;
+      --rule: #3A2E22;
+      --card: #211A13;
+      --shadow: rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #17120D;
+    --paper-deep: #1D1610;
+    --ink: #ECE3D2;
+    --ink-soft: #A6987F;
+    --gold: #D9B15E;
+    --gold-bright: #E8C578;
+    --crimson: #D67587;
+    --rule: #3A2E22;
+    --card: #211A13;
+    --shadow: rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Libre Franklin", system-ui, sans-serif;
+    line-height: 1.65;
+  }
+  .wrap{
+    max-width: 720px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 40px 64px;
+  }
+
+  header.top{
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .wordmark{
+    font-family: "Bebas Neue", system-ui, sans-serif;
+    letter-spacing: 0.04em;
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    color: var(--gold);
+    line-height: 1;
+  }
+  .wordmark span{ color: var(--crimson) }
+  .kicker{
+    font-family: "Courier Prime", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  nav.tabs{
+    display:flex;
+    gap: 8px;
+    justify-content:center;
+    margin: 28px 0 8px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0;
+  }
+  nav.tabs button{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    padding: 10px 6px 12px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  nav.tabs button:hover{ color: var(--ink) }
+  nav.tabs button[aria-selected="true"]{
+    color: var(--ink);
+    border-bottom-color: var(--gold);
+  }
+  nav.tabs button:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .doc{ display:none }
+  .doc.active{ display:block }
+
+  .masthead{
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px -12px var(--shadow);
+    padding: 22px 24px;
+    margin: 28px 0 36px;
+    font-family: "Courier Prime", monospace;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.9;
+  }
+  .masthead strong{ color: var(--ink); font-weight: 700 }
+  .masthead .doctitle{
+    display:block;
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .masthead .updated{
+    display:block;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic;
+  }
+  .masthead .draftnote{
+    display:block;
+    margin-top: 10px;
+    color: var(--crimson);
+    font-style: normal;
+  }
+
+  h2{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin: 2.4em 0 0.7em;
+    text-wrap: balance;
+    scroll-margin-top: 16px;
+  }
+  h3{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--gold-bright);
+    margin: 1.8em 0 0.5em;
+  }
+  p, li{
+    max-width: 64ch;
+    color: var(--ink);
+  }
+  p{ margin: 0 0 1em; }
+  strong{ color: var(--ink); font-weight: 700 }
+  a{ color: var(--gold-bright); text-decoration-color: var(--rule); text-underline-offset: 2px; }
+  a:hover{ text-decoration-color: var(--gold-bright); }
+  ul{ margin: 0 0 1.2em; padding-left: 1.3em; }
+  li{ margin-bottom: 0.5em; }
+
+  .toc{
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin: 24px 0 8px;
+    font-size: 0.88rem;
+  }
+  .toc summary{
+    cursor: pointer;
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .toc ol{
+    margin: 14px 0 0;
+    padding-left: 1.2em;
+    columns: 2;
+    column-gap: 24px;
+  }
+  .toc li{ margin-bottom: 0.35em; break-inside: avoid; color: var(--ink-soft) }
+  .toc a{ color: var(--ink-soft) }
+  .toc a:hover{ color: var(--gold-bright) }
+
+  .tablewrap{ overflow-x: auto; margin: 1em 0 1.4em; }
+  table{
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 420px;
+    font-size: 0.92rem;
+  }
+  th, td{
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  th{
+    font-family: "Libre Franklin", sans-serif;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  hr.rule{
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 2.4em 0;
+  }
+
+  footer.contact{
+    margin-top: 3em;
+    padding-top: 1.6em;
+    border-top: 1px solid var(--rule);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  footer.contact .copybtn{
+    font-family: "Libre Franklin", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+  footer.contact .copybtn:hover{ border-color: var(--gold-bright) }
+
+  @media (max-width: 480px){
+    .toc ol{ columns: 1; }
+    nav.tabs{ font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="wordmark">PLOT TWIST<span>(ED)</span></div>
+    <div class="kicker">Documents légaux — LNA App</div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Documents légaux">
+    <button id="tab-conf" role="tab" aria-selected="true" aria-controls="doc-conf">Politique de confidentialité</button>
+    <button id="tab-cgu" role="tab" aria-selected="false" aria-controls="doc-cgu">Conditions générales d'utilisation</button>
+  </nav>
+
+  <!-- ─────────────── Politique de confidentialité ─────────────── -->
+  <article id="doc-conf" class="doc active" role="tabpanel" aria-labelledby="tab-conf">
+    <div class="masthead">
+      <span class="doctitle">Politique de confidentialité — Plot Twist(ed)</span>
+      <strong>LNA App</strong><br>
+      12 montée du Château, 13650 Meyrargues, France<br>
+      SIRET : 790 346 076 00025<br>
+      TVA intracommunautaire : FR 19790346076<br>
+      Contact : lna.app.game@gmail.com
+      <span class="updated">Dernière mise à jour : 25 septembre 2026</span>
+      <span class="draftnote">Brouillon de travail, non relu par un juriste — à faire valider par un professionnel du droit avant publication sur les stores.</span>
+    </div>
+
+    <details class="toc">
+      <summary>Sommaire (11 sections)</summary>
+      <ol>
+        <li><a href="#c1">Éditeur de l'application</a></li>
+        <li><a href="#c2">Quelles données sont traitées</a></li>
+        <li><a href="#c3">Base légale et finalités</a></li>
+        <li><a href="#c4">Destinataires des données</a></li>
+        <li><a href="#c5">Transferts hors Union européenne</a></li>
+        <li><a href="#c6">Durée de conservation</a></li>
+        <li><a href="#c7">Tes droits</a></li>
+        <li><a href="#c8">Mineurs</a></li>
+        <li><a href="#c9">Sécurité</a></li>
+        <li><a href="#c10">Modification de cette politique</a></li>
+        <li><a href="#c11">Contact</a></li>
+      </ol>
+    </details>
+
+    <h2 id="c1">1. Éditeur de l'application</h2>
+    <p>L'application mobile <strong>Plot Twist(ed)</strong> est éditée par :</p>
+    <p><strong>LNA App</strong><br>
+    12 montée du Château, 13650 Meyrargues, France<br>
+    SIRET : 790 346 076 00025<br>
+    Numéro de TVA intracommunautaire : FR 19790346076<br>
+    Contact : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+
+    <h2 id="c2">2. Quelles données sont traitées ?</h2>
+
+    <h3>2.1 Données de jeu locales (par défaut)</h3>
+    <p>Plot Twist(ed) ne demande ni compte, ni nom, ni adresse e-mail pour jouer. Par défaut, ta progression (mondes débloqués, jokers, paramètres d'affichage et d'accessibilité, avatar choisi, identifiant de joueur généré automatiquement de type « Cinéphile #123456 ») est enregistrée <strong>uniquement sur ton appareil</strong> (mémoire locale de l'application) et n'est transmise à aucun serveur, sauf si tu actives toi-même l'une des fonctionnalités décrites aux points 2.2 et 2.3 ci-dessous. Si tu désinstalles l'application ou utilises la fonction « Réinitialiser la sauvegarde », ces données locales sont supprimées de ton appareil.</p>
+
+    <h3>2.2 Sauvegarde et restauration liées à un compte Google (optionnel)</h3>
+    <p>Si tu choisis d'activer le bouton « Sauvegarder avec Google » dans les réglages, l'application utilise les services <strong>Firebase Authentication</strong> et <strong>Firebase Firestore</strong> (fournis par Google) de la façon suivante :</p>
+    <ul>
+      <li>Chaque installation de l'application se voit attribuer, dès son premier lancement, un identifiant technique anonyme (compte Firebase « anonyme »), sans intervention de ta part.</li>
+      <li>En activant la sauvegarde Google, cet identifiant anonyme est lié à ton compte Google via le service <strong>Google Sign-In</strong>. Dans ce cadre, Google nous transmet ton <strong>adresse e-mail</strong> associée à ce compte, à la seule fin de reconnaître ce compte si tu te reconnectes plus tard depuis un autre appareil (pour te proposer de restaurer ta progression). Cette adresse e-mail n'est ni affichée à d'autres joueurs, ni utilisée à des fins de communication ou de marketing par LNA App.</li>
+      <li>L'ensemble de tes données de jeu locales (progression, paramètres, avatar, identifiant de joueur) est alors copié sur les serveurs <strong>Firestore</strong> de Google, dans un document technique associé à cet identifiant, afin de pouvoir être restauré sur un autre appareil ou après une réinstallation.</li>
+    </ul>
+    <p>Cette fonctionnalité est strictement optionnelle : si tu ne l'actives jamais, aucune de ces données n'est transmise et seul le fonctionnement décrit au point 2.1 s'applique.</p>
+
+    <h3>2.3 Classements en ligne et Multijoueur (Firestore)</h3>
+    <p>Les modes <strong>L'énigme de la semaine</strong> et <strong>Multijoueur</strong> reposent sur un classement ou une comparaison de performances communs à plusieurs joueurs, ce qui suppose de transmettre certaines données à nos serveurs <strong>Firebase Firestore</strong>, associées uniquement à l'identifiant technique anonyme mentionné au point 2.2 (jamais à ton nom ou ton adresse e-mail, y compris si tu as par ailleurs lié un compte Google) :</p>
+    <ul>
+      <li>pour L'énigme de la semaine : ton temps de résolution, le jour de résolution, et ton classement relatif aux autres joueurs de la semaine en cours ;</li>
+      <li>pour le Multijoueur : le résultat de chaque manche jouée (temps, victoire ou défaite), utilisé pour établir le temps de référence proposé aux autres joueurs et pour calculer ton classement (« Elo »).</li>
+    </ul>
+    <p>Ces deux fonctionnalités nécessitent une connexion Internet active. Les classements hebdomadaires passés ne sont pas automatiquement supprimés de nos serveurs après leur remplacement par la semaine suivante ; ils cessent simplement d'être affichés activement dans l'application (voir point 6).</p>
+
+    <h3>2.4 Mesure d'audience et diagnostic technique (Firebase Analytics et Crashlytics)</h3>
+    <p>L'application utilise <strong>Firebase Analytics</strong> pour mesurer l'usage général de l'application (par exemple : quel mode de jeu est lancé, un niveau terminé, une publicité visionnée, un achat effectué) et <strong>Firebase Crashlytics</strong> pour recevoir un rapport technique automatique en cas de plantage de l'application (type d'erreur, état technique de l'application au moment de l'incident). Ces outils, fournis par Google, collectent des données techniques sur ton appareil (modèle, version du système d'exploitation, identifiant d'installation) mais ne visent pas à t'identifier personnellement.</p>
+
+    <h3>2.5 Publicités (Google AdMob)</h3>
+    <p>L'application affiche des publicités (vidéos récompensées et publicités entre les niveaux) fournies par <strong>Google AdMob</strong>. Pour servir, mesurer et personnaliser ces publicités, Google peut collecter des données techniques sur ton appareil : identifiant publicitaire (AAID sur Android, IDFA sur iOS — ce dernier n'étant accessible qu'après ton autorisation explicite via la fenêtre de suivi imposée par Apple, « App Tracking Transparency »), adresse IP approximative, informations sur l'appareil et interactions avec les publicités.</p>
+    <p>LNA App ne reçoit ni ne stocke ces données elle-même : elles sont traitées directement par Google, selon sa propre politique de confidentialité, consultable ici : <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
+    <p>Un dispositif de recueil du consentement (Google User Messaging Platform) est présenté aux utilisateurs situés dans l'Espace économique européen avant l'affichage de toute publicité personnalisée, conformément au RGPD.</p>
+
+    <h3>2.6 Achats intégrés (Google Play / App Store)</h3>
+    <p>Plot Twist(ed) propose des achats intégrés facultatifs (packs de jokers, retrait des publicités — liste complète dans les CGU). Ces achats sont intégralement gérés par <strong>Google Play</strong> ou l'<strong>App Store d'Apple</strong> : LNA App ne voit et ne conserve à aucun moment tes informations de paiement (numéro de carte, etc.). Seule la confirmation qu'un achat a été effectué est transmise à l'application, pour débloquer le contenu correspondant.</p>
+
+    <h3>2.7 Polices de caractères (Google Fonts)</h3>
+    <p>L'application charge certaines polices de caractères depuis les serveurs de Google au premier lancement. Cet appel technique ne transmet aucune donnée personnelle au-delà de ce qui est strictement nécessaire à la livraison du fichier de police (adresse IP, traitée directement par Google).</p>
+
+    <h3>2.8 Ce que nous ne faisons pas</h3>
+    <p>LNA App ne vend aucune donnée à des tiers, n'exploite aucun outil de mesure ou de ciblage publicitaire en dehors de ceux listés ci-dessus (Google AdMob, Firebase), n'utilise les données décrites aux points 2.2 à 2.4 à aucune autre fin que celle pour laquelle elles ont été collectées, et n'a pas accès à tes contacts, photos, localisation précise ou autres données de ton appareil non mentionnées dans cette politique.</p>
+
+    <h2 id="c3">3. Base légale et finalités</h2>
+    <ul>
+      <li>Le fonctionnement du jeu et la sauvegarde locale (point 2.1) reposent sur l'exécution du service demandé par l'utilisateur.</li>
+      <li>La sauvegarde/restauration liée à un compte Google (point 2.2) et les classements en ligne (point 2.3) reposent sur l'exécution du service que tu demandes explicitement en activant ces fonctionnalités optionnelles.</li>
+      <li>La mesure d'audience et le diagnostic technique (point 2.4) reposent sur l'intérêt légitime de LNA App à comprendre l'usage de l'application et à corriger les dysfonctionnements techniques ; tu peux t'y opposer dans les limites décrites au point 7.</li>
+      <li>Les publicités personnalisées (point 2.5) reposent sur ton <strong>consentement</strong>, recueilli via le dispositif mentionné à ce point ; tu peux le refuser sans perdre l'accès au jeu (des publicités non personnalisées pourront alors être affichées).</li>
+      <li>Les achats intégrés (point 2.6) reposent sur l'exécution du contrat conclu au moment de l'achat.</li>
+    </ul>
+
+    <h2 id="c4">4. Destinataires des données</h2>
+    <p>Les destinataires des données décrites ci-dessus sont : <strong>Google</strong> (au titre de Firebase — Authentication, Firestore, Analytics, Crashlytics ; d'AdMob pour la publicité ; de Google Play pour les achats et la connexion Google Sign-In) et <strong>Apple</strong> (App Store, pour les achats sur iOS), chacun dans le cadre strict des services décrits ci-dessus. Aucune donnée n'est vendue ni transmise à d'autres tiers.</p>
+
+    <h2 id="c5">5. Transferts hors Union européenne</h2>
+    <p>Google et Apple peuvent traiter certaines données, notamment celles liées à Firebase et à AdMob, en dehors de l'Union européenne (en particulier aux États-Unis). Ces transferts s'appuient sur les garanties prévues par ces sociétés (clauses contractuelles types de la Commission européenne notamment). Voir leurs politiques de confidentialité respectives pour plus de détails : <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a> pour Google, <a href="https://www.apple.com/legal/privacy/fr/" target="_blank" rel="noopener">apple.com/legal/privacy/fr</a> pour Apple.</p>
+
+    <h2 id="c6">6. Durée de conservation</h2>
+    <ul>
+      <li>Les données de jeu locales (point 2.1) sont conservées sur ton appareil tant que tu ne désinstalles pas l'application ou ne les réinitialises pas manuellement.</li>
+      <li>Les données de sauvegarde liées à un compte Google (point 2.2) sont conservées jusqu'à ce que tu en demandes la suppression (voir point 7) ou que tu supprimes toi-même la liaison à ton compte Google.</li>
+      <li>Les résultats de classement (point 2.3) sont conservés au-delà de la semaine ou de la période à laquelle ils se rapportent ; les périodes passées ne sont plus affichées activement dans l'application mais peuvent rester archivées sur nos serveurs.</li>
+      <li>Les données de mesure d'audience et de diagnostic (point 2.4) sont conservées selon les durées par défaut de Firebase Analytics et Crashlytics, généralement de l'ordre de plusieurs mois.</li>
+      <li>Les données traitées par Google dans le cadre d'AdMob ou de Google Play sont conservées selon les durées définies par Google.</li>
+    </ul>
+
+    <h2 id="c7">7. Tes droits</h2>
+    <p>Conformément au RGPD, tu disposes d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité sur les données te concernant. Ces droits s'exercent :</p>
+    <ul>
+      <li>pour les données de jeu locales (point 2.1) : directement depuis l'application (Paramètres → Réinitialiser la sauvegarde) ou en désinstallant l'application ;</li>
+      <li>pour les données de sauvegarde ou de classement liées à Firebase (points 2.2 et 2.3) : en nous contactant à l'adresse indiquée au point 11, en précisant l'identifiant de joueur affiché dans l'application (par exemple « Cinéphile #123456 ») ou l'adresse e-mail du compte Google lié, afin que nous puissions localiser et supprimer les données correspondantes ;</li>
+      <li>pour les données traitées par Google ou Apple (AdMob, Play, App Store, mesure d'audience) : directement auprès de ces sociétés, via leurs outils de gestion des données publicitaires/de compte respectifs.</li>
+    </ul>
+    <p>Tu peux également nous contacter à l'adresse du point 11 pour toute question, et tu disposes du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
+
+    <h2 id="c8">8. Mineurs</h2>
+    <p>Plot Twist(ed) n'est pas spécifiquement destinée à un public de moins de 13 ans et ne collecte pas sciemment de données personnelles auprès d'enfants en dehors des traitements techniques décrits ci-dessus, communs à l'ensemble des utilisateurs.</p>
+
+    <h2 id="c9">9. Sécurité</h2>
+    <p>Les données de jeu stockées uniquement en local (point 2.1) ne présentent pas de risque de fuite côté serveur, puisqu'elles ne quittent pas ton appareil. Les données que tu choisis de transmettre à nos serveurs (sauvegarde Google, classements) sont hébergées sur l'infrastructure Firebase de Google et bénéficient des mesures de sécurité mises en œuvre par Google pour ce service ; l'accès à ces données par LNA App est limité à ce qui est nécessaire au fonctionnement des fonctionnalités décrites dans cette politique.</p>
+
+    <h2 id="c10">10. Modification de cette politique</h2>
+    <p>Cette politique de confidentialité peut être mise à jour, notamment lors de l'ajout de nouveaux modes de jeu ou de nouveaux traitements de données. La date de dernière mise à jour figure en haut de ce document.</p>
+
+    <h2 id="c11">11. Contact</h2>
+    <p>Pour toute question relative à cette politique de confidentialité, ou pour exercer l'un des droits mentionnés au point 7 : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+
+    <footer class="contact">
+      LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>
+      <button class="copybtn" data-copy="lna.app.game@gmail.com">Copier l'e-mail</button>
+    </footer>
+  </article>
+
+  <!-- ─────────────── CGU ─────────────── -->
+  <article id="doc-cgu" class="doc" role="tabpanel" aria-labelledby="tab-cgu">
+    <div class="masthead">
+      <span class="doctitle">Conditions Générales d'Utilisation — Plot Twist(ed)</span>
+      <strong>LNA App</strong><br>
+      12 montée du Château, 13650 Meyrargues, France<br>
+      SIRET : 790 346 076 00025<br>
+      TVA intracommunautaire : FR 19790346076<br>
+      Directeur de la publication : Damien Ellena<br>
+      Contact : lna.app.game@gmail.com
+      <span class="updated">Dernière mise à jour : 25 septembre 2026</span>
+      <span class="draftnote">Brouillon de travail, non relu par un juriste — à faire valider par un professionnel du droit avant publication sur les stores. Les mentions entre crochets [ ] restent à compléter ou à confirmer.</span>
+    </div>
+
+    <details class="toc">
+      <summary>Sommaire (28 articles)</summary>
+      <ol>
+        <li><a href="#g1">Objet et acceptation</a></li>
+        <li><a href="#g2">Définitions</a></li>
+        <li><a href="#g3">Éditeur de l'Application</a></li>
+        <li><a href="#g4">Capacité à contracter</a></li>
+        <li><a href="#g5">Description du Service</a></li>
+        <li><a href="#g6">Accès et disponibilité</a></li>
+        <li><a href="#g7">Identité de joueur et connexion Google</a></li>
+        <li><a href="#g8">Sauvegarde et progression</a></li>
+        <li><a href="#g9">Classements et multijoueur</a></li>
+        <li><a href="#g10">Publicités</a></li>
+        <li><a href="#g11">Achats intégrés</a></li>
+        <li><a href="#g12">Notifications</a></li>
+        <li><a href="#g13">Propriété intellectuelle</a></li>
+        <li><a href="#g14">Utilisation autorisée</a></li>
+        <li><a href="#g15">Sanctions</a></li>
+        <li><a href="#g16">Responsabilité et garanties</a></li>
+        <li><a href="#g17">Conditions App Store</a></li>
+        <li><a href="#g18">Conditions Google Play</a></li>
+        <li><a href="#g19">Données personnelles</a></li>
+        <li><a href="#g20">Modification des CGU</a></li>
+        <li><a href="#g21">Durée, suppression, résiliation</a></li>
+        <li><a href="#g22">Divisibilité</a></li>
+        <li><a href="#g23">Non-renonciation</a></li>
+        <li><a href="#g24">Intégralité de l'accord</a></li>
+        <li><a href="#g25">Cession</a></li>
+        <li><a href="#g26">Langue du contrat</a></li>
+        <li><a href="#g27">Droit applicable et litiges</a></li>
+        <li><a href="#g28">Contact</a></li>
+      </ol>
+    </details>
+
+    <h2 id="g1">1. Objet et acceptation</h2>
+    <p>Les présentes Conditions Générales d'Utilisation (ci-après les « <strong>CGU</strong> ») ont pour objet de définir les modalités et conditions dans lesquelles LNA App met à disposition l'application mobile <strong>Plot Twist(ed)</strong> (ci-après l'« <strong>Application</strong> ») et les conditions d'utilisation du service par toute personne y accédant (ci-après l'« <strong>Utilisateur</strong> »).</p>
+    <p>Le téléchargement, l'installation ou l'utilisation de l'Application, à quelque titre que ce soit, implique l'acceptation pleine, entière et sans réserve des présentes CGU. Si l'Utilisateur n'accepte pas tout ou partie des présentes CGU, il est invité à ne pas utiliser l'Application et à la désinstaller.</p>
+    <p>Les présentes CGU sont complétées par la <a href="#" data-goto="conf">Politique de confidentialité</a>, qui en fait partie intégrante et détaille les traitements de données personnelles réalisés dans le cadre de l'Application.</p>
+
+    <h2 id="g2">2. Définitions</h2>
+    <ul>
+      <li><strong>Application</strong> : le jeu mobile Plot Twist(ed), dans toutes ses versions et sur toutes les plateformes de distribution (Google Play, App Store).</li>
+      <li><strong>Éditeur</strong>, <strong>LNA App</strong>, <strong>« nous »</strong> : la personne physique ou morale décrite à l'article 3, éditrice de l'Application.</li>
+      <li><strong>Utilisateur</strong>, <strong>Joueur</strong>, <strong>« tu »/« vous »</strong> : toute personne utilisant l'Application.</li>
+      <li><strong>Store(s)</strong> : les plateformes de distribution d'applications par lesquelles l'Application est proposée au téléchargement (Google Play Store, Apple App Store).</li>
+      <li><strong>Contenu numérique</strong> : au sens du droit de la consommation, tout élément numérique fourni par l'Application, y compris les jokers, le retrait de publicités et toute fonctionnalité débloquée par un Achat Intégré.</li>
+      <li><strong>Achat Intégré</strong> : tout achat effectué depuis l'Application via le système de facturation du Store concerné.</li>
+      <li><strong>Progression</strong> : l'ensemble des données de jeu propres à un Utilisateur (mondes débloqués, jokers possédés, paramètres, statistiques, classement).</li>
+    </ul>
+
+    <h2 id="g3">3. Éditeur de l'Application</h2>
+    <p><strong>LNA App</strong><br>
+    12 montée du Château, 13650 Meyrargues, France<br>
+    SIRET : 790 346 076 00025<br>
+    Numéro de TVA intracommunautaire : FR 19790346076<br>
+    Directeur de la publication : Damien Ellena<br>
+    Contact : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+
+    <h2 id="g4">4. Capacité à contracter</h2>
+    <p>L'Application s'adresse à un public familial et ne comporte aucun contenu réservé à un public averti. Elle ne fait l'objet d'aucune restriction d'âge spécifique au-delà de celles imposées par les Stores eux-mêmes (classification indicative par tranche d'âge affichée sur la fiche de l'Application).</p>
+    <p>Les Achats Intégrés supposent que l'Utilisateur (ou, pour un mineur, son représentant légal disposant du moyen de paiement associé au compte du Store) dispose de la capacité juridique de contracter, ou soit dûment autorisé par la personne exerçant l'autorité parentale à effectuer de tels achats. L'Éditeur n'a aucun moyen de vérifier l'âge de l'Utilisateur ni son autorisation à effectuer un achat : cette responsabilité incombe au titulaire du compte Google Play ou Apple ID utilisé et est régie par les outils de contrôle parental proposés par chaque Store.</p>
+
+    <h2 id="g5">5. Description du Service</h2>
+    <p>Plot Twist(ed) est un jeu de devinette de films dans lequel l'Utilisateur retrouve le titre d'un film à partir d'un pitch dont les noms de personnages sont volontairement travestis, à l'aide d'indices et de jokers. L'Application est disponible en français et en anglais.</p>
+    <p>L'Application propose notamment les modes suivants :</p>
+    <ul>
+      <li><strong>Jeu principal</strong> : une progression par mondes thématiques regroupant chacun plusieurs devinettes, de difficulté croissante.</li>
+      <li><strong>Défi du jour</strong> : un défi quotidien chronométré, identique pour tous les joueurs le même jour, avec suivi du meilleur temps personnel.</li>
+      <li><strong>L'énigme de la semaine</strong> : une devinette hebdomadaire commune à tous les joueurs, dont le texte se révèle progressivement, assortie d'un classement en ligne (voir article 9).</li>
+      <li><strong>Multijoueur</strong> : des manches jouées contre un temps de référence (opposant réel précédemment enregistré ou temps de calibration lorsque les données réelles sont insuffisantes), avec un système de classement (« Elo ») et un historique des parties.</li>
+    </ul>
+    <p>L'Application propose des jokers d'aide obtenus par la progression, le visionnage de publicités facultatives ou l'achat, ainsi que des Achats Intégrés optionnels décrits à l'article 11.</p>
+    <p>Cette description est fournie à titre indicatif ; l'Éditeur se réserve le droit de faire évoluer, ajouter ou retirer des fonctionnalités dans les conditions de l'article 20.</p>
+
+    <h2 id="g6">6. Accès et disponibilité</h2>
+    <p>L'Application est disponible gratuitement au téléchargement sur les Stores compatibles. Elle ne nécessite aucune création de compte pour être utilisée dans son ensemble (voir toutefois l'article 7 pour la connexion Google optionnelle) et est accessible sans connexion Internet pour l'essentiel de ses fonctionnalités, à l'exception des fonctionnalités en ligne décrites à l'article 9, de l'affichage des publicités, du traitement des Achats Intégrés et de la connexion Google optionnelle.</p>
+    <p>L'Éditeur s'efforce d'assurer un accès continu à l'Application mais ne garantit pas une disponibilité permanente, notamment en cas de maintenance, de panne, ou d'indisponibilité des services tiers dont dépend l'Application (Google Play Services, Firebase, réseaux publicitaires).</p>
+
+    <h2 id="g7">7. Identité de joueur et connexion Google (optionnelle)</h2>
+    <p>Par défaut, l'Application attribue à chaque Utilisateur un identifiant de joueur généré automatiquement (par exemple sous la forme « Cinéphile #123456 ») ainsi qu'un avatar, sans qu'aucune information permettant d'identifier directement l'Utilisateur ne soit demandée ni collectée.</p>
+    <p>L'Application propose, de façon strictement optionnelle et à l'initiative de l'Utilisateur (bouton « Sauvegarder avec Google » dans les réglages), de lier la Progression à un compte Google via le service d'authentification Google Sign-In. Cette liaison a pour seul objet de permettre la sauvegarde de la Progression sur les serveurs Firebase de l'Éditeur et sa restauration ultérieure (par exemple après un changement d'appareil ou une réinstallation), et ne crée pas de compte utilisateur au sens d'un espace personnel consultable par des tiers ni d'une identité publique au sein de l'Application.</p>
+    <p>L'Utilisateur reste libre de ne jamais activer cette fonctionnalité, l'ensemble des modes de jeu restant accessibles sans elle, la Progression étant alors uniquement conservée localement comme décrit à l'article 8.</p>
+
+    <h2 id="g8">8. Sauvegarde et progression</h2>
+    <p><strong>Sauvegarde locale.</strong> Par défaut, la Progression de l'Utilisateur est enregistrée localement sur son appareil. Elle n'est ni transmise, ni consultée par l'Éditeur, ni synchronisée entre appareils, sauf activation de la sauvegarde Google décrite à l'article 7. Elle est irrémédiablement perdue en cas de désinstallation de l'Application, de changement d'appareil sans sauvegarde préalable, ou d'utilisation de la fonction de réinitialisation prévue dans les réglages.</p>
+    <p><strong>Sauvegarde Google (optionnelle).</strong> Lorsque l'Utilisateur active la liaison à un compte Google, une copie de sa Progression est également conservée sur les serveurs Firebase de l'Éditeur, associée à un identifiant technique lié à ce compte, afin de permettre sa restauration. Cette copie est traitée conformément à la Politique de confidentialité.</p>
+    <p>Dans tous les cas, l'Éditeur ne saurait être tenu responsable de la perte de la Progression, quelle qu'en soit la cause (désinstallation, changement d'appareil, panne, incompatibilité de version, dysfonctionnement du service de sauvegarde Google, etc.), l'Utilisateur étant seul responsable de la sauvegarde de ses propres données s'il y attache de l'importance.</p>
+
+    <h2 id="g9">9. Fonctionnalités en ligne : classements et multijoueur</h2>
+    <p><strong>L'énigme de la semaine.</strong> Le temps de résolution de l'Utilisateur ainsi que son classement relatif aux autres joueurs de la même semaine sont transmis et conservés sur les serveurs Firebase de l'Éditeur, associés à un identifiant anonyme technique (et non à une identité personnelle), afin de calculer et d'afficher un classement commun. Ce classement est réinitialisé chaque semaine ; un historique personnel des résultats passés reste consultable localement sur l'appareil de l'Utilisateur.</p>
+    <p><strong>Multijoueur.</strong> Ce mode ne met pas en relation deux joueurs en temps réel : il compare la performance de l'Utilisateur à un temps de référence, qui peut provenir d'une partie réellement enregistrée par un autre joueur à un moment différent, ou d'un temps de calibration générique lorsque les données réelles disponibles pour une énigme donnée sont insuffisantes. Le résultat de chaque manche jouée par l'Utilisateur (temps, victoire/défaite) est conservé sur les serveurs de l'Éditeur pour alimenter ce mécanisme au bénéfice de l'ensemble des joueurs, de façon anonyme.</p>
+    <p>L'Utilisateur s'engage à ne pas manipuler artificiellement ces mécanismes (automatisation, exploitation de failles techniques) dans le but de fausser un classement ou d'obtenir un avantage indu ; l'Éditeur se réserve le droit de retirer d'un classement tout résultat dont l'obtention serait manifestement frauduleuse.</p>
+    <p>Ces fonctionnalités nécessitent une connexion Internet active et ne sont pas disponibles hors ligne. Le nombre de parties Multijoueur quotidiennes peut être limité, avec possibilité d'obtenir des parties supplémentaires par le visionnage de publicités facultatives.</p>
+
+    <h2 id="g10">10. Publicités</h2>
+    <p>L'Application affiche des publicités fournies par le réseau publicitaire <strong>Google AdMob</strong>, sous deux formes : des publicités interstitielles pouvant s'afficher entre les niveaux (dont la fréquence est réduite pour les nouveaux joueurs), et des publicités facultatives donnant accès à une récompense en jeu (jokers, parties Multijoueur supplémentaires) que l'Utilisateur choisit librement de visionner.</p>
+    <p>Un dispositif de recueil du consentement (Google User Messaging Platform, conforme au cadre de transparence et de consentement de l'IAB Europe) est présenté à l'Utilisateur avant l'affichage de toute publicité personnalisée, conformément au RGPD. L'Utilisateur peut à tout moment revoir son choix depuis les réglages de l'Application (« Options de confidentialité des pubs »).</p>
+    <p>L'Éditeur ne sélectionne pas et ne contrôle pas le contenu précis des publicités diffusées par ce réseau tiers, et ne saurait être tenu responsable du contenu des publicités affichées, sous réserve du respect par l'Éditeur des règles de contenu publicitaire imposées par les Stores.</p>
+
+    <h2 id="g11">11. Achats intégrés</h2>
+    <p><strong>11.1 Description.</strong> L'Application propose les Achats Intégrés facultatifs suivants, à titre indicatif (la liste et les prix exacts, exprimés en euros toutes taxes comprises, sont ceux affichés dans l'Application au moment de l'achat et peuvent évoluer) :</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Produit</th><th>Contenu</th></tr></thead>
+        <tbody>
+          <tr><td>Retirer les pubs</td><td>Suppression définitive des publicités interstitielles</td></tr>
+          <tr><td>Pack 10 jokers mixtes</td><td>10 jokers d'aide de types variés</td></tr>
+          <tr><td>Pack 30 jokers + 24h sans pub</td><td>30 jokers d'aide + suppression temporaire des publicités pendant 24 heures</td></tr>
+          <tr><td>Pack 100 jokers + sans pub</td><td>100 jokers d'aide + suppression définitive des publicités</td></tr>
+          <tr><td>Pack 3 jokers rouges</td><td>3 jokers permettant de débloquer un nom orange</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Il s'agit exclusivement d'achats uniques (aucun abonnement n'est proposé à ce jour). Si l'Éditeur venait à proposer un abonnement à l'avenir, les présentes CGU seraient mises à jour en conséquence pour en préciser les conditions de reconduction et de résiliation.</p>
+    <p><strong>11.2 Traitement des paiements.</strong> Les Achats Intégrés sont exclusivement traités par le système de facturation du Store utilisé (Google Play ou App Store d'Apple), selon les conditions générales de vente, moyens de paiement et politiques de remboursement propres à chacun de ces Stores. L'Éditeur ne collecte, ne voit ni ne conserve à aucun moment les informations de paiement de l'Utilisateur (numéro de carte bancaire, etc.) ; seule la confirmation technique qu'un achat a été effectué est transmise à l'Application afin de débloquer le contenu correspondant.</p>
+    <p><strong>11.3 Portée des achats.</strong> Sauf mécanisme de restauration d'achat proposé par le Store concerné (par exemple lors d'une réinstallation avec le même compte Google Play ou Apple ID), les contenus débloqués par un Achat Intégré sont liés à l'appareil et à l'installation sur lesquels l'achat a été effectué et ne sont pas automatiquement transférés en cas de changement d'appareil non accompagné d'une telle restauration ou de la sauvegarde Google décrite à l'article 7.</p>
+    <p><strong>11.4 Absence de droit de rétractation.</strong> Conformément à l'article L.221-28, 13°, du Code de la consommation, le droit de rétractation de 14 jours prévu pour les contrats conclus à distance ne s'applique pas aux contrats de fourniture d'un contenu numérique non fourni sur un support matériel dont l'exécution a commencé après accord préalable exprès de l'Utilisateur et renoncement exprès à son droit de rétractation. En validant un Achat Intégré, dont le contenu est débloqué immédiatement, l'Utilisateur reconnaît et accepte expressément que l'exécution commence immédiatement et renonce en conséquence à son droit de rétractation.</p>
+    <p><strong>11.5 Réclamations.</strong> Toute réclamation relative au paiement lui-même (prélèvement erroné, remboursement) doit être adressée en priorité au service client du Store utilisé, seul habilité à intervenir sur la transaction. Pour toute question relative au contenu débloqué par un achat, l'Utilisateur peut contacter l'Éditeur aux coordonnées de l'article 28.</p>
+
+    <h2 id="g12">12. Notifications</h2>
+    <p>L'Application peut proposer d'envoyer des notifications locales (rappel du Défi du jour, rappel hebdomadaire de L'énigme de la semaine), générées directement par l'appareil de l'Utilisateur sans recours à un serveur distant. Ces notifications peuvent être désactivées à tout moment depuis les réglages du système d'exploitation de l'appareil.</p>
+
+    <h2 id="g13">13. Propriété intellectuelle</h2>
+    <p>L'Application, son code source, son interface, ses graphismes, ses textes, sa charte graphique et sa mécanique de jeu sont la propriété exclusive de LNA App ou de ses concédants de licence, et sont protégés par le droit de la propriété intellectuelle. Toute reproduction, représentation, modification, adaptation, ou exploitation non autorisée, totale ou partielle, de l'Application est strictement interdite.</p>
+    <p><strong>Plot Twist(ed) n'est affiliée, associée, sponsorisée ou approuvée par aucun studio de cinéma, distributeur, plateforme de streaming, ou détenteur de droits sur les films, séries ou personnages évoqués dans le jeu.</strong> Les titres de films, noms de personnages, noms d'acteurs et références cinématographiques utilisés dans les pitchs, indices et devinettes le sont à titre de citation et de commentaire, dans un but strictement ludique de reconnaissance culturelle, et restent la propriété de leurs ayants droit respectifs. Toute mention de ce type ne constitue ni une reproduction de l'œuvre elle-même, ni une atteinte volontaire aux droits desdits ayants droit.</p>
+    <p>Toute marque, logo ou signe distinctif tiers pouvant apparaître à titre de référence culturelle dans l'Application reste la propriété de son titulaire.</p>
+
+    <h2 id="g14">14. Utilisation autorisée et comportements interdits</h2>
+    <p>L'Utilisateur s'engage à utiliser l'Application conformément à sa destination, à des fins strictement personnelles et non commerciales, et notamment à ne pas :</p>
+    <ul>
+      <li>tenter de contourner, désactiver ou perturber les mécanismes de fonctionnement de l'Application (triche, exploitation de failles techniques, rétro-ingénierie, usage de robots ou de scripts automatisés) ;</li>
+      <li>manipuler artificiellement un classement ou un résultat Multijoueur, ou obtenir un Achat Intégré ou un joker par un moyen frauduleux ;</li>
+      <li>tenter d'accéder sans autorisation aux systèmes, données ou serveurs de l'Éditeur ;</li>
+      <li>utiliser l'Application à des fins illégales ou contraires à l'ordre public.</li>
+    </ul>
+
+    <h2 id="g15">15. Sanctions en cas de manquement</h2>
+    <p>En cas de manquement avéré aux articles 4 ou 14, l'Éditeur se réserve le droit, sans préavis ni indemnité, de suspendre ou de révoquer l'accès de l'Utilisateur aux fonctionnalités en ligne de l'Application (classements, Multijoueur, sauvegarde liée à un compte Google), notamment en invalidant un résultat obtenu de façon frauduleuse, sans préjudice de toute action judiciaire que l'Éditeur jugerait utile d'engager.</p>
+
+    <h2 id="g16">16. Responsabilité et garanties</h2>
+    <p>L'Application est fournie « en l'état » et « selon disponibilité », sans garantie d'absence d'erreur, de bug ou d'interruption. L'Éditeur met en œuvre les moyens raisonnables pour assurer le bon fonctionnement de l'Application mais ne peut garantir une compatibilité avec l'ensemble des configurations matérielles et logicielles existantes.</p>
+    <p>Dans les limites autorisées par la loi applicable, l'Éditeur ne saurait être tenu responsable des dommages indirects (perte de données, de temps, de jokers, préjudice moral ou commercial) résultant de l'utilisation ou de l'impossibilité d'utiliser l'Application, y compris en cas de perte de Progression ou d'indisponibilité temporaire ou définitive des fonctionnalités en ligne. Rien dans les présentes CGU n'a pour objet d'exclure ou de limiter la responsabilité de l'Éditeur dans les cas où la loi applicable ne le permet pas (notamment en cas de faute lourde ou dolosive).</p>
+
+    <h2 id="g17">17. Conditions spécifiques App Store (Apple)</h2>
+    <p>Lorsque l'Application est téléchargée depuis l'App Store d'Apple, les stipulations suivantes s'appliquent en complément des présentes CGU, conformément aux exigences d'Apple Inc. :</p>
+    <ul>
+      <li>Les présentes CGU sont conclues entre l'Utilisateur et l'Éditeur uniquement, et non avec Apple Inc. ; Apple n'est pas partie aux présentes CGU et n'a aucune obligation de fournir une quelconque maintenance ou assistance concernant l'Application.</li>
+      <li>En cas de non-conformité de l'Application à une garantie applicable, l'Utilisateur peut en informer Apple, qui pourra alors rembourser le prix d'achat de l'Application le cas échéant ; dans la limite maximale permise par la loi applicable, Apple n'aura aucune autre obligation de garantie concernant l'Application.</li>
+      <li>Apple n'est pas responsable du traitement des réclamations de l'Utilisateur, ni d'aucune réclamation de tiers relative à l'Application ou à sa détention et/ou son utilisation par l'Utilisateur, y compris les réclamations relatives à la propriété intellectuelle.</li>
+      <li>L'Utilisateur déclare ne pas se trouver dans un pays soumis à un embargo par les autorités américaines ou désigné par celles-ci comme un pays « soutenant le terrorisme », et ne pas figurer sur une liste américaine de parties interdites ou soumises à restriction.</li>
+      <li>Apple et ses filiales sont des tiers bénéficiaires des présentes CGU et sont, à ce titre, en droit de faire valoir les présentes CGU à l'encontre de l'Utilisateur en qualité de tiers bénéficiaires.</li>
+    </ul>
+
+    <h2 id="g18">18. Conditions spécifiques Google Play</h2>
+    <p>Lorsque l'Application est téléchargée depuis le Google Play Store, son utilisation est également soumise aux <a href="https://play.google.com/intl/fr/about/play-terms/" target="_blank" rel="noopener">Conditions d'utilisation de Google Play</a> et aux politiques associées. En cas de contradiction entre les présentes CGU et les conditions imposées par Google pour les aspects que celles-ci régissent spécifiquement (facturation des Achats Intégrés notamment), les conditions de Google prévalent pour ces aspects.</p>
+
+    <h2 id="g19">19. Données personnelles</h2>
+    <p>Les modalités de collecte et de traitement des données personnelles dans le cadre de l'utilisation de l'Application sont décrites en détail dans la <a href="#" data-goto="conf">Politique de confidentialité</a>, qui fait partie intégrante des présentes CGU.</p>
+
+    <h2 id="g20">20. Modification des CGU</h2>
+    <p>L'Éditeur se réserve le droit de modifier les présentes CGU à tout moment, notamment lors de l'ajout de nouvelles fonctionnalités, de l'évolution de la réglementation applicable, ou d'un changement dans les services tiers utilisés. Toute modification substantielle sera signalée dans l'Application ou sur sa fiche store, et prendra effet à la publication d'une nouvelle version de l'Application intégrant ces modifications ou à la date qui y sera indiquée. La poursuite de l'utilisation de l'Application après entrée en vigueur des modifications vaut acceptation des CGU modifiées.</p>
+
+    <h2 id="g21">21. Durée, suppression et résiliation</h2>
+    <p>Les présentes CGU s'appliquent tant que l'Utilisateur utilise l'Application. L'Utilisateur peut à tout moment cesser d'utiliser l'Application en la désinstallant de son appareil, ce qui entraîne la suppression de la Progression sauvegardée localement (la Progression sauvegardée via la connexion Google décrite à l'article 7 restant conservée sur les serveurs de l'Éditeur jusqu'à demande de suppression conformément à la Politique de confidentialité).</p>
+    <p>L'Éditeur se réserve le droit de cesser l'exploitation de l'Application ou de certaines de ses fonctionnalités en ligne, notamment en cas d'impossibilité économique ou technique de les maintenir, sous réserve d'un délai de préavis raisonnable lorsque les circonstances le permettent.</p>
+
+    <h2 id="g22">22. Divisibilité</h2>
+    <p>Si l'une quelconque des stipulations des présentes CGU était déclarée nulle ou inapplicable en vertu d'une loi, d'un règlement ou à la suite d'une décision de justice devenue définitive, elle serait réputée non écrite, sans que cela n'affecte la validité des autres stipulations, qui continueront à produire leurs effets.</p>
+
+    <h2 id="g23">23. Non-renonciation</h2>
+    <p>Le fait pour l'Éditeur de ne pas se prévaloir, à un moment donné, d'un manquement de l'Utilisateur à l'une quelconque des obligations visées dans les présentes CGU ne saurait être interprété comme une renonciation à se prévaloir dans l'avenir dudit manquement.</p>
+
+    <h2 id="g24">24. Intégralité de l'accord</h2>
+    <p>Les présentes CGU, complétées par la Politique de confidentialité, expriment l'intégralité des droits et obligations des parties relatifs à l'utilisation de l'Application. Elles remplacent et annulent tout accord antérieur, écrit ou oral, relatif au même objet.</p>
+
+    <h2 id="g25">25. Cession</h2>
+    <p>L'Éditeur peut céder ou transférer les présentes CGU, en tout ou partie, à toute société venant à reprendre l'exploitation de l'Application, sans que cette cession ne nécessite l'accord préalable de l'Utilisateur, sous réserve du respect des droits que l'Utilisateur tient des présentes CGU. L'Utilisateur ne peut céder les présentes CGU sans l'accord préalable écrit de l'Éditeur.</p>
+
+    <h2 id="g26">26. Langue du contrat</h2>
+    <p>Les présentes CGU sont rédigées en langue française. Une version en anglais peut être mise à disposition à titre informatif pour les Utilisateurs utilisant l'Application en anglais ; en cas de divergence entre les deux versions, la version française fait seule foi.</p>
+
+    <h2 id="g27">27. Droit applicable et règlement des litiges</h2>
+    <p>Les présentes CGU sont soumises au droit français, sans préjudice des dispositions impératives de protection du consommateur dont pourrait bénéficier l'Utilisateur en vertu de la loi de son pays de résidence au sein de l'Union européenne.</p>
+    <p>En cas de litige, l'Utilisateur est invité à contacter en priorité l'Éditeur aux coordonnées de l'article 28 afin de rechercher une solution amiable. À défaut de résolution amiable, et conformément aux articles L.616-1 et R.616-1 du Code de la consommation, tout consommateur a le droit de recourir gratuitement au service d'un médiateur de la consommation en vue de la résolution amiable du litige : [nom et coordonnées du médiateur de la consommation à désigner]. À défaut d'accord amiable ou de recours à la médiation, les tribunaux français compétents seront seuls saisis, sous réserve des règles impératives de compétence applicables aux consommateurs.</p>
+
+    <h2 id="g28">28. Contact</h2>
+    <p>Pour toute question relative aux présentes CGU : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+
+    <footer class="contact">
+      LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>
+      <button class="copybtn" data-copy="lna.app.game@gmail.com">Copier l'e-mail</button>
+    </footer>
+  </article>
+</div>
+
+<script>
+  const tabs = {
+    conf: { btn: document.getElementById('tab-conf'), panel: document.getElementById('doc-conf') },
+    cgu: { btn: document.getElementById('tab-cgu'), panel: document.getElementById('doc-cgu') },
+  };
+  function activate(name, push) {
+    for (const key in tabs) {
+      const isActive = key === name;
+      tabs[key].btn.setAttribute('aria-selected', String(isActive));
+      tabs[key].panel.classList.toggle('active', isActive);
+    }
+    if (push) history.replaceState(null, '', '#' + name);
+  }
+  tabs.conf.btn.addEventListener('click', () => activate('conf', true));
+  tabs.cgu.btn.addEventListener('click', () => activate('cgu', true));
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      activate(el.getAttribute('data-goto'), true);
+    });
+  });
+
+  function fromHash() {
+    const h = location.hash.replace('#', '');
+    if (h === 'cgu') activate('cgu', false);
+    else if (h === 'conf') activate('conf', false);
+  }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+
+  document.querySelectorAll('.copybtn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-copy');
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copié';
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(btn);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        btn.textContent = 'Sélectionné';
+      }
+      setTimeout(() => { btn.textContent = original; }, 1600);
+    });
+  });
+</script>
+
+</body>
+</html>
