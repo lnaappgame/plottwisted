@@ -87,13 +87,20 @@ class AdService {
     } catch (_) {}
   }
 
+  // Vrais blocs AdMob uniquement avec --dart-define=REAL_ADS=true (build de production) ; sinon pubs de test.
+  static const bool _useRealAds = bool.fromEnvironment('REAL_ADS');
+
   static String get _interstitialUnitId => defaultTargetPlatform == TargetPlatform.iOS
       ? 'ca-app-pub-3940256099942544/4411468910'
-      : 'ca-app-pub-3940256099942544/1033173712';
+      : _useRealAds
+          ? 'ca-app-pub-7543651245365030/7976627080'
+          : 'ca-app-pub-3940256099942544/1033173712';
 
   static String get _rewardedUnitId => defaultTargetPlatform == TargetPlatform.iOS
       ? 'ca-app-pub-3940256099942544/1712485313'
-      : 'ca-app-pub-3940256099942544/5224354917';
+      : _useRealAds
+          ? 'ca-app-pub-7543651245365030/7785055396'
+          : 'ca-app-pub-3940256099942544/5224354917';
 
   /// À appeler une fois au démarrage pour précharger les deux formats.
   void preload() {
