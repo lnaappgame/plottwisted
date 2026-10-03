@@ -8,14 +8,15 @@ import '../services/game_state.dart';
 import '../services/save_service.dart';
 import '../theme/app_theme.dart';
 
-// Page légale hébergée séparément (brouillon non relu par un juriste, à
-// faire valider avant publication réelle sur les stores — voir
-// legal/docs_page.html pour le source, legal/cgu.md et
-// legal/politique-de-confidentialite.md pour le contenu). Une seule page
-// avec les deux documents sous onglets ; les ancres #cgu/#conf ouvrent
-// directement le bon onglet.
-const String _kCguUrl = 'https://claude.ai/artifact/G4tjHnXwdxKsMevBhv18oU#cgu';
-const String _kPrivacyPolicyUrl = 'https://claude.ai/artifact/G4tjHnXwdxKsMevBhv18oU#conf';
+// Page légale hébergée sur GitHub Pages (brouillon non relu par un juriste,
+// à faire valider avant publication réelle sur les stores — source dans
+// docs/index.html, contenu dans legal/cgu.md et
+// legal/politique-de-confidentialite.md). Une seule page avec les deux
+// documents sous onglets ; les ancres #cgu/#conf ouvrent directement le bon
+// onglet. Hébergée ici (plutôt que sur claude.ai) car les robots de
+// vérification de Google Play/AdMob recevaient un 403 sur les artifacts.
+const String _kCguUrl = 'https://lnaappgame.github.io/plottwisted/#cgu';
+const String _kPrivacyPolicyUrl = 'https://lnaappgame.github.io/plottwisted/#conf';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
