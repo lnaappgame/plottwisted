@@ -41,6 +41,14 @@ Future<void> main() async {
   final saveService = SaveService();
   final appSettings = AppSettings(saveService: saveService);
   await appSettings.restore();
+  // Persiste immédiatement (plutôt que d'attendre un premier changement de
+  // réglage, qui peut ne jamais arriver) : sinon firstLaunchDay et playerId,
+  // générés "maintenant" à la construction ci-dessus, ne sont jamais écrits
+  // sur disque tant que le joueur ne touche aucun réglage. Résultat observé
+  // en prod : firstLaunchDay se réinitialise à "aujourd'hui" à chaque
+  // lancement à froid, donc defiIndexFor() (voir defi_service.dart) reste
+  // bloqué sur l'index 0 pour toujours — Défi du jour ne change jamais.
+  await saveService.saveSettings(appSettings.toJson());
   final gameState = GameState(adService: adService, saveService: saveService, settings: appSettings, analytics: analytics);
   await gameState.restore();
   final enigmeState = EnigmeState(saveService: saveService, settings: appSettings, analytics: analytics);
