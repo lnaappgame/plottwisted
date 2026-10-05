@@ -36,12 +36,12 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    // Cycle en boucle : pulsation de 0,7 s (210 ms montée, 490 ms descente)
+    // Cycle en boucle : pulsation de 1,4 s (420 ms montée, 980 ms descente)
     // puis 3 s de repos — les poids sont ces durées en millisecondes.
-    _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 3700));
+    _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 4400));
     _pulseAnim = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: Curves.easeOut)), weight: 210),
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0).chain(CurveTween(curve: Curves.easeIn)), weight: 490),
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: Curves.easeOut)), weight: 420),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0).chain(CurveTween(curve: Curves.easeIn)), weight: 980),
       TweenSequenceItem(tween: ConstantTween(0.0), weight: 3000),
     ]).animate(_pulseController);
   }

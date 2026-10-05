@@ -56,13 +56,14 @@ class _ClapperOverlay extends StatefulWidget {
 }
 
 class _ClapperOverlayState extends State<_ClapperOverlay> with SingleTickerProviderStateMixin {
-  static const _totalMs = 820.0;
+  static const _totalMs = 1050.0;
   static const _closeStartMs = 100.0;
   static const _impactMs = 360.0;
   // Le son part un peu avant l'impact visuel pour compenser la latence audio.
   static const _soundMs = 330.0;
   static const _actionMs = 430.0;
-  static const _fadeOutStartMs = 520.0;
+  // Sortie : le clap grossit en filant vers le haut, comme s'il sortait du cadre.
+  static const _exitStartMs = 470.0;
 
   late final AnimationController _c;
   bool _clapped = false;
@@ -71,7 +72,7 @@ class _ClapperOverlayState extends State<_ClapperOverlay> with SingleTickerProvi
   @override
   void initState() {
     super.initState();
-    _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 820))..addListener(_onTick);
+    _c = AnimationController(vsync: this, duration: Duration(milliseconds: _totalMs.toInt()))..addListener(_onTick);
     _c.forward().whenComplete(widget.onDone);
   }
 
@@ -99,23 +100,29 @@ class _ClapperOverlayState extends State<_ClapperOverlay> with SingleTickerProvi
       animation: _c,
       builder: (context, _) {
         final ms = _c.value * _totalMs;
+        final size = MediaQuery.sizeOf(context);
         final fadeIn = (ms / 120).clamp(0.0, 1.0);
-        final fadeOut =
-            ms < _fadeOutStartMs ? 1.0 : (1 - (ms - _fadeOutStartMs) / (_totalMs - _fadeOutStartMs)).clamp(0.0, 1.0);
-        final opacity = min(fadeIn, fadeOut);
         final closeT = Curves.easeIn.transform(((ms - _closeStartMs) / (_impactMs - _closeStartMs)).clamp(0.0, 1.0));
         final impact = ms < _impactMs ? 0.0 : 1 - ((ms - _impactMs) / 160).clamp(0.0, 1.0);
+        final exit = Curves.easeIn.transform(((ms - _exitStartMs) / (_totalMs - _exitStartMs)).clamp(0.0, 1.0));
+        final boardOpacity = min(fadeIn, 1 - ((exit - 0.8) / 0.2).clamp(0.0, 1.0));
         return Material(
           type: MaterialType.transparency,
           child: AbsorbPointer(
-            child: Opacity(
-              opacity: opacity,
-              child: Container(
-                color: Colors.black.withOpacity(0.55),
-                alignment: Alignment.center,
-                child: Transform.scale(
-                  scale: 0.9 + 0.1 * fadeIn + 0.05 * impact,
-                  child: _Clapperboard(english: widget.english, stickAngle: -0.6 * (1 - closeT)),
+            child: Container(
+              color: Colors.black.withOpacity(0.55 * fadeIn * (1 - exit)),
+              alignment: Alignment.center,
+              child: Opacity(
+                opacity: boardOpacity,
+                child: Transform.translate(
+                  offset: Offset(size.width * 0.25 * exit, -size.height * 0.75 * exit),
+                  child: Transform.rotate(
+                    angle: 0.3 * exit,
+                    child: Transform.scale(
+                      scale: 0.9 + 0.1 * fadeIn + 0.05 * impact + 2.2 * exit,
+                      child: _Clapperboard(english: widget.english, stickAngle: -0.6 * (1 - closeT)),
+                    ),
+                  ),
                 ),
               ),
             ),

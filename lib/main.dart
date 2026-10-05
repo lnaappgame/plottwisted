@@ -49,7 +49,8 @@ Future<void> main() async {
   // lancement à froid, donc defiIndexFor() (voir defi_service.dart) reste
   // bloqué sur l'index 0 pour toujours — Défi du jour ne change jamais.
   await saveService.saveSettings(appSettings.toJson());
-  final gameState = GameState(adService: adService, saveService: saveService, settings: appSettings, analytics: analytics);
+  final gameState =
+      GameState(adService: adService, saveService: saveService, settings: appSettings, analytics: analytics);
   await gameState.restore();
   final enigmeState = EnigmeState(saveService: saveService, settings: appSettings, analytics: analytics);
   await enigmeState.restore();
@@ -91,8 +92,7 @@ Future<void> main() async {
   // Bonus supplémentaire, cumulé avec celui du jour, quand le jour réel
   // tombe sur un grand événement du cinéma (César, Oscars...) — voir
   // kCinemaEvents. En jokers pour l'instant, faute de monnaie dédiée.
-  streakState.onCinemaEventReached =
-      (_) => gameState.grantJokers(reveal: 1, eliminate: 1, actor: 1, character: 1);
+  streakState.onCinemaEventReached = (_) => gameState.grantJokers(reveal: 1, eliminate: 1, actor: 1, character: 1);
   defiState.streakState = streakState;
   multiplayerState.streakState = streakState;
 
@@ -369,7 +369,8 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('🎬 LE RÉALISATEUR', style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)),
+              Text('🎬 LE RÉALISATEUR',
+                  style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)),
               const SizedBox(height: 10),
               Text(
                 'Première fois sur les planches ? Le tutoriel te montre les bases '
@@ -391,7 +392,8 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
                 width: double.infinity,
                 child: OutlinedButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: Text('PASSER AU MONDE 1', style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.gold)),
+                  child: Text('PASSER AU MONDE 1',
+                      style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.gold)),
                 ),
               ),
             ],
@@ -431,7 +433,15 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
       case _Screen.home:
         return HomeScreen(onPlay: _startGame);
       case _Screen.game:
-        return GameScreen(onBackToMenu: _backToMenu);
+        // Le jeu principal n'est pas une route poussée (contrairement aux
+        // autres modes) : sans ça, le bouton retour d'Android fermerait l'app.
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, _) {
+            if (!didPop) _backToMenu();
+          },
+          child: GameScreen(onBackToMenu: _backToMenu),
+        );
     }
   }
 }
