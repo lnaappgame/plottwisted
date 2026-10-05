@@ -6,6 +6,7 @@ class JokerGrant {
   final int character;
   final int hint;
   final int redJoker;
+  final int skip;
   const JokerGrant({
     this.reveal = 0,
     this.eliminate = 0,
@@ -13,9 +14,10 @@ class JokerGrant {
     this.character = 0,
     this.hint = 0,
     this.redJoker = 0,
+    this.skip = 0,
   });
 
-  int get total => reveal + eliminate + actor + character + hint + redJoker;
+  int get total => reveal + eliminate + actor + character + hint + redJoker + skip;
 
   /// Répartit [count] jokers le plus équitablement possible entre les 5 types.
   factory JokerGrant.mixed(int count) {
@@ -81,7 +83,7 @@ final List<ShopItem> kShopItems = [
   ),
   ShopItem(
     productId: 'jokers_pack_30_noads',
-    label: '🎁 Pack 30 jokers + no ads',
+    label: '🎁 Pack 30 jokers + sans pub',
     fallbackPrice: '9,99 €',
     strikethroughPrice: '13,96 €',
     jokers: JokerGrant.mixed(30),
@@ -90,7 +92,7 @@ final List<ShopItem> kShopItems = [
   ),
   ShopItem(
     productId: 'jokers_pack_100_noads',
-    label: '🎁 Pack 100 jokers + no ads',
+    label: '🎁 Pack 100 jokers + sans pub',
     fallbackPrice: '14,99 €',
     jokers: JokerGrant.mixed(100),
     removesAdsForever: true,
@@ -104,5 +106,14 @@ final List<ShopItem> kShopItems = [
     jokers: JokerGrant(redJoker: 3),
     labelUs: '🔴 3 red jokers pack',
     subtitleUs: 'Unlocks an orange name',
+  ),
+  const ShopItem(
+    productId: 'skip_level_joker',
+    label: '⏭️ Joker « Passer définitivement »',
+    subtitle: 'Résout le niveau en cours à ta place',
+    fallbackPrice: '1,00 €',
+    jokers: JokerGrant(skip: 1),
+    labelUs: '⏭️ "Skip for good" joker',
+    subtitleUs: 'Solves the current level for you',
   ),
 ];

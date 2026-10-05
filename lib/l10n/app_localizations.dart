@@ -866,23 +866,41 @@ abstract class AppLocalizations {
   /// **'Non merci'**
   String get gameNoThanks;
 
-  /// No description provided for @gameSkipOffer.
+  /// No description provided for @gameSkipLater.
   ///
   /// In fr, this message translates to:
-  /// **'Toujours sur ce niveau ? Tu peux le laisser de côté et y revenir plus tard — il reviendra en fin de monde.'**
-  String get gameSkipOffer;
+  /// **'Passer, j\'y reviendrai'**
+  String get gameSkipLater;
 
-  /// No description provided for @gameComeBackLater.
+  /// No description provided for @gameSkipLastLevel.
   ///
   /// In fr, this message translates to:
-  /// **'Revenir plus tard'**
-  String get gameComeBackLater;
+  /// **'C\'est le dernier niveau de ce monde : il ne peut pas être gardé pour plus tard.'**
+  String get gameSkipLastLevel;
 
-  /// No description provided for @gameKeepSearching.
+  /// No description provided for @gameSkipForGood.
   ///
   /// In fr, this message translates to:
-  /// **'Continuer à chercher'**
-  String get gameKeepSearching;
+  /// **'Passer définitivement'**
+  String get gameSkipForGood;
+
+  /// No description provided for @gameSkipForGoodConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Utiliser 1 joker « Passer définitivement » ? Le niveau sera résolu et sa réponse révélée.'**
+  String get gameSkipForGoodConfirm;
+
+  /// No description provided for @gameSkipForGoodUse.
+  ///
+  /// In fr, this message translates to:
+  /// **'UTILISER'**
+  String get gameSkipForGoodUse;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get commonCancel;
 
   /// No description provided for @gameJokerEarnedToast.
   ///

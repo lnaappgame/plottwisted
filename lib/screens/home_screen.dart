@@ -4,6 +4,8 @@ import '../l10n/app_localizations.dart';
 import '../services/app_settings.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/clapper_transition.dart';
+import '../widgets/scifi_background.dart';
 import 'defi_screen.dart';
 import 'enigme_screen.dart';
 import 'multiplayer_screen.dart';
@@ -13,11 +15,11 @@ import 'instructions_screen.dart';
 import 'streak_calendar_screen.dart';
 
 Map<int, String> _streakRecompenses(AppLocalizations t) => {
-  3: t.homeStreakReward3,
-  7: t.homeStreakReward7,
-  14: t.homeStreakReward14,
-  28: t.homeStreakReward28,
-};
+      3: t.homeStreakReward3,
+      7: t.homeStreakReward7,
+      14: t.homeStreakReward14,
+      28: t.homeStreakReward28,
+    };
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback onPlay;
@@ -51,9 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(t.homeStreakDays(streak.currentStreak), textAlign: TextAlign.center, style: AppTextStyles.display(size: 20)),
+              Text(t.homeStreakDays(streak.currentStreak),
+                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 20)),
               const SizedBox(height: 10),
-              Text(_streakRecompenses(t)[palier] ?? '', textAlign: TextAlign.center,
+              Text(_streakRecompenses(t)[palier] ?? '',
+                  textAlign: TextAlign.center,
                   style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5)),
               const SizedBox(height: 18),
               ElevatedButton(
@@ -68,6 +72,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ).then((_) => streak.acknowledgeCelebration());
   }
 
+  /// Entrée dans un mode de jeu : clap de cinéma, puis [action] une fois la
+  /// latte refermée.
+  void _enterMode(VoidCallback action) {
+    ClapperTransition.play(context, () {
+      if (mounted) action();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<AppSettings>();
@@ -77,174 +89,187 @@ class _HomeScreenState extends State<HomeScreen> {
     final t = AppLocalizations.of(context);
 
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          // LayoutBuilder + ConstrainedBox(minHeight) + IntrinsicHeight : sur
-          // un écran assez haut, le Column (avec ses Spacer) remplit l'espace
-          // exactement comme avant ; sur un écran trop court pour tout
-          // contenir (petits téléphones), le contenu défile au lieu de
-          // déborder — trouvé en testant à 360x640dp (bas de l'écran
-          // débordait de 40px derrière Shop/Help).
-          child: LayoutBuilder(
-            builder: (context, constraints) => SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () => showDialog(context: context, builder: (_) => const _ProfilDialog()),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(6, 6, 14, 6),
-                      decoration: BoxDecoration(
-                        color: colors.bgPanel,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppColors.gold.withOpacity(0.3)),
-                      ),
-                      child: Row(
+      body: Stack(
+        children: [
+          Positioned.fill(child: SciFiBackground(baseColor: colors.bgDeep)),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              // LayoutBuilder + ConstrainedBox(minHeight) + IntrinsicHeight : sur
+              // un écran assez haut, le Column (avec ses Spacer) remplit l'espace
+              // exactement comme avant ; sur un écran trop court pour tout
+              // contenir (petits téléphones), le contenu défile au lieu de
+              // déborder — trouvé en testant à 360x640dp (bas de l'écran
+              // débordait de 40px derrière Shop/Help).
+              child: LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Column(
                         children: [
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundColor: AppColors.gold,
-                            child: Text(settings.avatar, style: const TextStyle(fontSize: 15)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                borderRadius: BorderRadius.circular(20),
+                                onTap: () => showDialog(context: context, builder: (_) => const _ProfilDialog()),
+                                child: Container(
+                                  padding: const EdgeInsets.fromLTRB(6, 6, 14, 6),
+                                  decoration: BoxDecoration(
+                                    color: colors.bgPanel,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(color: AppColors.gold.withOpacity(0.3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 16,
+                                        backgroundColor: AppColors.gold,
+                                        child: Text(settings.avatar, style: const TextStyle(fontSize: 15)),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      ConstrainedBox(
+                                        constraints: const BoxConstraints(maxWidth: 110),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(settings.displayPlayerName,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                style: AppTextStyles.body(
+                                                    size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                                            Text(settings.playerId,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                style: AppTextStyles.body(size: 10, color: colors.muted)),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  _IconButton(
+                                    icon: Icons.settings,
+                                    colors: colors,
+                                    onTap: () => showDialog(context: context, builder: (_) => const SettingsScreen()),
+                                  ),
+                                  if (streak.currentStreak > 0) ...[
+                                    const SizedBox(height: 8),
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(20),
+                                      onTap: () =>
+                                          showDialog(context: context, builder: (_) => const StreakCalendarDialog()),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: colors.bgPanel,
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(color: AppColors.gold.withOpacity(0.3)),
+                                        ),
+                                        child: Text('📅 ${streak.jourDuCycle}',
+                                            style: AppTextStyles.body(
+                                                size: 13, weight: FontWeight.w700, color: AppColors.goldBright)),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 110),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(settings.displayPlayerName,
-                                    overflow: TextOverflow.ellipsis, maxLines: 1,
-                                    style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
-                                Text(settings.playerId,
-                                    overflow: TextOverflow.ellipsis, maxLines: 1,
-                                    style: AppTextStyles.body(size: 10, color: colors.muted)),
-                              ],
+                          const Spacer(),
+                          Text('PLOT TWIST(ed)', style: AppTextStyles.display(size: 42)),
+                          Text(t.homeTagline,
+                              style: AppTextStyles.body(size: 11, color: colors.muted).copyWith(letterSpacing: 2)),
+                          const Spacer(),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.crimson,
+                                padding: const EdgeInsets.symmetric(vertical: 18),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                              ),
+                              onPressed: () => _enterMode(onPlay),
+                              child: Text(t.homePlay, style: AppTextStyles.display(size: 22, color: colors.cream)),
                             ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: () => _enterMode(() =>
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EnigmeScreen()))),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                side: const BorderSide(color: AppColors.gold),
+                              ),
+                              child: Text(t.homeWeeklyPuzzle,
+                                  style: AppTextStyles.body(
+                                      size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: () => _enterMode(() =>
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DefiScreen()))),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                side: const BorderSide(color: AppColors.gold),
+                              ),
+                              child: Text(t.homeDailyChallenge,
+                                  style: AppTextStyles.body(
+                                      size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton(
+                              onPressed: () => _enterMode(() => Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (_) => const MultiplayerScreen()))),
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                side: const BorderSide(color: AppColors.gold),
+                              ),
+                              child: Text(t.homeMultiplayer,
+                                  style: AppTextStyles.body(
+                                      size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _SecondaryButton(
+                                label: t.homeShop,
+                                colors: colors,
+                                onTap: () => showDialog(context: context, builder: (_) => const ShopScreen()),
+                              ),
+                              const SizedBox(width: 10),
+                              _SecondaryButton(
+                                label: t.homeHelp,
+                                colors: colors,
+                                onTap: () => showDialog(context: context, builder: (_) => const InstructionsScreen()),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      _IconButton(
-                        icon: Icons.settings,
-                        colors: colors,
-                        onTap: () => showDialog(context: context, builder: (_) => const SettingsScreen()),
-                      ),
-                      if (streak.currentStreak > 0) ...[
-                        const SizedBox(height: 8),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: () => showDialog(context: context, builder: (_) => const StreakCalendarDialog()),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: colors.bgPanel,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: AppColors.gold.withOpacity(0.3)),
-                            ),
-                            child: Text('📅 ${streak.jourDuCycle}',
-                                style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.goldBright)),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Text('PLOT TWIST(ed)', style: AppTextStyles.display(size: 42)),
-              Text(t.homeTagline,
-                  style: AppTextStyles.body(size: 11, color: colors.muted).copyWith(letterSpacing: 2)),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.crimson,
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  ),
-                  onPressed: onPlay,
-                  child: Text(t.homePlay, style: AppTextStyles.display(size: 22, color: colors.cream)),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => const EnigmeScreen())),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    side: const BorderSide(color: AppColors.gold),
-                  ),
-                  child: Text(t.homeWeeklyPuzzle,
-                      style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => const DefiScreen())),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    side: const BorderSide(color: AppColors.gold),
-                  ),
-                  child: Text(t.homeDailyChallenge,
-                      style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => const MultiplayerScreen())),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    side: const BorderSide(color: AppColors.gold),
-                  ),
-                  child: Text(t.homeMultiplayer,
-                      style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _SecondaryButton(
-                    label: t.homeShop,
-                    colors: colors,
-                    onTap: () => showDialog(context: context, builder: (_) => const ShopScreen()),
-                  ),
-                  const SizedBox(width: 10),
-                  _SecondaryButton(
-                    label: t.homeHelp,
-                    colors: colors,
-                    onTap: () => showDialog(context: context, builder: (_) => const InstructionsScreen()),
-                  ),
-                ],
-              ),
-            ],
-                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -296,7 +321,8 @@ class _ProfilDialogState extends State<_ProfilDialog> {
             const SizedBox(height: 16),
             Wrap(
               alignment: WrapAlignment.center,
-              spacing: 8, runSpacing: 8,
+              spacing: 8,
+              runSpacing: 8,
               children: kAvatarEmojis.map((a) {
                 final selected = a == settings.avatar;
                 return InkWell(
@@ -355,7 +381,8 @@ class _IconButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        width: 38, height: 38,
+        width: 38,
+        height: 38,
         decoration: BoxDecoration(
           color: colors.bgPanel,
           borderRadius: BorderRadius.circular(10),

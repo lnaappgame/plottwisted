@@ -85,6 +85,7 @@ class GameState extends ChangeNotifier {
         'hintCount': hintCount,
         'revealWordCount': revealWordCount,
         'redJokerCount': redJokerCount,
+        'skipJokerCount': skipJokerCount,
         'minorMilestoneCount': minorMilestoneCount,
         'majorMilestoneCount': majorMilestoneCount,
         'colorsSeen': colorsSeen.toList(),
@@ -117,6 +118,7 @@ class GameState extends ChangeNotifier {
     hintCount = data['hintCount'] as int? ?? hintCount;
     revealWordCount = data['revealWordCount'] as int? ?? revealWordCount;
     redJokerCount = data['redJokerCount'] as int? ?? redJokerCount;
+    skipJokerCount = data['skipJokerCount'] as int? ?? skipJokerCount;
     minorMilestoneCount = data['minorMilestoneCount'] as int? ?? minorMilestoneCount;
     majorMilestoneCount = data['majorMilestoneCount'] as int? ?? majorMilestoneCount;
     final savedColors = (data['colorsSeen'] as List?)?.cast<String>();
@@ -165,13 +167,22 @@ class GameState extends ChangeNotifier {
   }
 
   /// Ajoute les jokers d'un [JokerGrant] (achat boutique, récompense, etc.).
-  void grantJokers({int reveal = 0, int eliminate = 0, int actor = 0, int character = 0, int hint = 0, int redJoker = 0}) {
+  void grantJokers({
+    int reveal = 0,
+    int eliminate = 0,
+    int actor = 0,
+    int character = 0,
+    int hint = 0,
+    int redJoker = 0,
+    int skip = 0,
+  }) {
     revealCount += reveal;
     eliminateCount += eliminate;
     actorCount += actor;
     characterCount += character;
     hintCount += hint;
     redJokerCount += redJoker;
+    skipJokerCount += skip;
     notifyListeners();
   }
 
@@ -188,23 +199,19 @@ class GameState extends ChangeNotifier {
   Set<int> worldsPlayedHistory = {};
   int get worldsPlayedCount => worldsPlayedHistory.length;
 
-  GameWorld get currentWorld =>
-      worldIndex == 0
-          ? GameWorld(number: 0, categoryLabel: 'Tutoriel', categoryLabelUs: 'Tutorial', puzzles: kTutorialPuzzles)
-          // orElse en filet de sécurité : ne doit normalement jamais servir
-          // (voir la validation dans restore()), mais un monde inexistant ne
-          // doit jamais planter l'app plutôt que de simplement mal s'afficher.
-          : kWorlds.firstWhere((w) => w.number == worldIndex, orElse: () => kWorlds.first);
+  GameWorld get currentWorld => worldIndex == 0
+      ? GameWorld(number: 0, categoryLabel: 'Tutoriel', categoryLabelUs: 'Tutorial', puzzles: kTutorialPuzzles)
+      // orElse en filet de sécurité : ne doit normalement jamais servir
+      // (voir la validation dans restore()), mais un monde inexistant ne
+      // doit jamais planter l'app plutôt que de simplement mal s'afficher.
+      : kWorlds.firstWhere((w) => w.number == worldIndex, orElse: () => kWorlds.first);
   bool get inTutorial => worldIndex == 0;
 
-  String get difficultyLabel =>
-      inTutorial ? 'Tutoriel' : (kDifficultyPattern[currentLevelNumber] ?? '');
-  String difficultyLabelFor(String loc) => loc == 'en'
-      ? (inTutorial ? 'Tutorial' : (kDifficultyPatternUs[currentLevelNumber] ?? ''))
-      : difficultyLabel;
+  String get difficultyLabel => inTutorial ? 'Tutoriel' : (kDifficultyPattern[currentLevelNumber] ?? '');
+  String difficultyLabelFor(String loc) =>
+      loc == 'en' ? (inTutorial ? 'Tutorial' : (kDifficultyPatternUs[currentLevelNumber] ?? '')) : difficultyLabel;
   String get levelTitle => 'Monde ${currentWorld.number}-$currentLevelNumber';
-  String levelTitleFor(String loc) =>
-      loc == 'en' ? 'World ${currentWorld.number}-$currentLevelNumber' : levelTitle;
+  String levelTitleFor(String loc) => loc == 'en' ? 'World ${currentWorld.number}-$currentLevelNumber' : levelTitle;
 
   // ─── Grille de réponse ───
   List<AnswerSlot> slots = [];
@@ -219,9 +226,15 @@ class GameState extends ChangeNotifier {
   Set<int> lockedSlots = {};
   int cursorIndex = -1;
 
-  // ─── Couleurs des noms du pitch (état courant, peut changer via jokers) ───
-  NameColor p1State = NameColor.red;
-  NameColor p2State = NameColor.red;
+  // ─── Couleurs des noms du pitch ───
+  // Pour chaque nom, ses deux dernières couleurs (couleur de départ, puis une
+  // par joker utilisé, la plus ancienne étant chassée au-delà de deux) : le
+  // pitch affiche les deux, et la plus récente fait foi pour toutes les
+  // règles (joker rouge sur un orange, "déjà de cette couleur"...).
+  List<NameColor> p1Colors = [NameColor.red];
+  List<NameColor> p2Colors = [NameColor.red];
+  NameColor get p1State => p1Colors.last;
+  NameColor get p2State => p2Colors.last;
   NameColor? activeNameJoker; // joker "Acteur" ou "Personnage" armé
 
   // ─── Jokers ───
@@ -244,6 +257,10 @@ class GameState extends ChangeNotifier {
   int redJokerCount = 0;
   bool redJokerAdWatchedThisLevel = false; // remis à zéro à chaque nouveau niveau, non persisté
 
+  // Joker "Passer définitivement" (achat boutique uniquement) : résout le
+  // niveau en cours comme si le joueur avait trouvé la réponse lui-même.
+  int skipJokerCount = 0;
+
   int minorMilestoneCount = 0; // cycle Révéler → Éliminer → Personnage au palier niveau 5 ET fin de monde
   int majorMilestoneCount = 0; // cycle Acteur → Indice → Révéler un mot au palier fin de monde
   int adsWatchedThisLevel = 0; // 80/20 mineur/majeur la 1ère pub du niveau, 60/40 ensuite
@@ -263,16 +280,9 @@ class GameState extends ChangeNotifier {
   String? pendingMinorJokerLabel;
   String? revealedHintText; // texte de l'indice affiché en permanence sous le pitch
 
-  // ─── Échecs / popup / inactivité ───
+  // ─── Échecs ───
   int failStreak = 0;
-  DateTime lastActivityTime = DateTime.now();
-  bool idlePopupShown = false;
   bool adCloseExplained = false; // affiche le toast d'explication une seule fois
-
-  void markActivity() {
-    lastActivityTime = DateTime.now();
-    idlePopupShown = false;
-  }
 
   // ─── Reprise de partie ───
   // gameStarted : une partie a déjà été lancée au moins une fois (permet à
@@ -385,6 +395,7 @@ class GameState extends ChangeNotifier {
     hintCount = 0;
     revealWordCount = 0;
     redJokerCount = 0;
+    skipJokerCount = 0;
     minorMilestoneCount = 0;
     majorMilestoneCount = 0;
     colorsSeen
@@ -410,8 +421,8 @@ class GameState extends ChangeNotifier {
     locale = settings.locale;
     final world = currentWorld;
     currentPuzzle = world.puzzles[currentLevelNumber - 1];
-    p1State = currentPuzzle.p1InitialColor;
-    p2State = currentPuzzle.p2InitialColor;
+    p1Colors = [currentPuzzle.p1InitialColor];
+    p2Colors = [currentPuzzle.p2InitialColor];
     activeNameJoker = null;
     lockedWords = {};
     lockedSlots = {};
@@ -421,8 +432,6 @@ class GameState extends ChangeNotifier {
     adsWatchedThisLevel = 0;
     redJokerAdWatchedThisLevel = false;
     levelStartTime = DateTime.now();
-    lastActivityTime = DateTime.now();
-    idlePopupShown = false;
 
     if (!orangeIntroShown && (p1State == NameColor.orange || p2State == NameColor.orange)) {
       orangeIntroShown = true;
@@ -455,7 +464,10 @@ class GameState extends ChangeNotifier {
     final correctDigits = <String>[];
     for (final s in slots) {
       if (s.isSpace || s.isAuto) continue;
-      if (s.isDigit) correctDigits.add(s.char); else correctLetters.add(s.char);
+      if (s.isDigit)
+        correctDigits.add(s.char);
+      else
+        correctLetters.add(s.char);
     }
     final hasLetters = correctLetters.isNotEmpty;
     final hasDigits = correctDigits.isNotEmpty;
@@ -512,9 +524,11 @@ class GameState extends ChangeNotifier {
   }
 
   // ─── Pitch : couleurs et interaction ───
-  String displayFor(String slotKey) {
+  /// Couleurs affichées pour ce nom, la plus récente d'abord (deux au plus).
+  List<NameColor> displayedColors(String slotKey) => (slotKey == 'p1' ? p1Colors : p2Colors).reversed.toList();
+
+  String displayFor(String slotKey, NameColor color) {
     final person = slotKey == 'p1' ? currentPuzzle.p1 : currentPuzzle.p2;
-    final color = slotKey == 'p1' ? p1State : p2State;
     return person.displayFor(color, locale);
   }
 
@@ -526,7 +540,6 @@ class GameState extends ChangeNotifier {
     if (color == NameColor.blue && actorCount <= 0) return;
     if (color == NameColor.green && characterCount <= 0) return;
     if (color == NameColor.red && redJokerCount <= 0) return;
-    markActivity(); // un joueur qui ne joue que via jokers reste actif
     activeNameJoker = activeNameJoker == color ? null : color;
     notifyListeners();
   }
@@ -539,8 +552,9 @@ class GameState extends ChangeNotifier {
     if (activeNameJoker == NameColor.red && current != NameColor.orange) {
       return "Le joker rouge ne fonctionne que sur un nom orange";
     }
-    markActivity(); // un joueur qui ne joue que via jokers reste actif
-    if (slotKey == 'p1') { p1State = activeNameJoker!; } else { p2State = activeNameJoker!; }
+    final colors = slotKey == 'p1' ? p1Colors : p2Colors;
+    colors.add(activeNameJoker!);
+    if (colors.length > 2) colors.removeAt(0);
     if (activeNameJoker == NameColor.blue) {
       actorCount--;
     } else if (activeNameJoker == NameColor.red) {
@@ -550,10 +564,12 @@ class GameState extends ChangeNotifier {
     }
     activeNameJoker = null;
     if (!orangeIntroShown && (p1State == NameColor.orange || p2State == NameColor.orange)) {
-      orangeIntroShown = true; colorsSeen.add('orange');
+      orangeIntroShown = true;
+      colorsSeen.add('orange');
     }
     if (!violetIntroShown && (p1State == NameColor.violet || p2State == NameColor.violet)) {
-      violetIntroShown = true; colorsSeen.add('violet');
+      violetIntroShown = true;
+      colorsSeen.add('violet');
     }
     notifyListeners();
     return null;
@@ -579,7 +595,6 @@ class GameState extends ChangeNotifier {
       // respecte ce choix tel quel, sans le rediriger.
       cursorIndex = i;
     }
-    markActivity();
     notifyListeners();
   }
 
@@ -594,7 +609,6 @@ class GameState extends ChangeNotifier {
     guess[target] = idx;
     tile.used = true;
     cursorIndex = _firstEmptySlotFrom(target + 1);
-    markActivity();
     notifyListeners();
   }
 
@@ -605,7 +619,6 @@ class GameState extends ChangeNotifier {
         pool[guess[i]!].used = false;
         guess[i] = null;
         cursorIndex = i;
-        markActivity();
         notifyListeners();
         return;
       }
@@ -615,9 +628,8 @@ class GameState extends ChangeNotifier {
   /// Résultat de la validation : "incomplete", "wrong" (au moins un mot
   /// faux), ou "solved".
   String validate() {
-    markActivity();
-    final allFilled = List.generate(slots.length,
-        (i) => slots[i].isSpace || slots[i].isAuto || guess[i] != null).every((v) => v);
+    final allFilled =
+        List.generate(slots.length, (i) => slots[i].isSpace || slots[i].isAuto || guess[i] != null).every((v) => v);
     if (!allFilled) return 'incomplete';
 
     for (var w = 0; w < wordRanges.length; w++) {
@@ -672,7 +684,6 @@ class GameState extends ChangeNotifier {
     final correctChar = slots[target].char;
     final tileIdx = pool.indexWhere((t) => t.letter == correctChar && !t.used && !t.eliminated);
     if (tileIdx == -1) return;
-    markActivity(); // un joueur qui ne joue que via jokers reste actif
     guess[target] = tileIdx;
     pool[tileIdx].used = true;
     lockedSlots.add(target);
@@ -689,7 +700,6 @@ class GameState extends ChangeNotifier {
       if (!correctChars.contains(t.letter) && !t.eliminated && !t.used) wrongTiles.add(i);
     }
     if (wrongTiles.isEmpty) return; // rien à éliminer : le joker n'est pas consommé
-    markActivity(); // un joueur qui ne joue que via jokers reste actif
     wrongTiles.shuffle(_rng);
     for (final i in wrongTiles.take(3)) {
       pool[i].eliminated = true;
@@ -701,13 +711,14 @@ class GameState extends ChangeNotifier {
   /// Retourne le texte de l'indice si utilisable, sinon null.
   String? useHintJoker() {
     if (hintCount <= 0 || hintRevealed) return null;
-    markActivity(); // un joueur qui ne joue que via jokers reste actif
     hintCount--;
     hintRevealed = true;
     final hint = currentPuzzle.extraHintFor(locale);
     revealedHintText = hint.isNotEmpty
         ? hint
-        : (locale == 'en' ? 'No extra hint available for this puzzle.' : 'Pas de complément disponible pour cette devinette.');
+        : (locale == 'en'
+            ? 'No extra hint available for this puzzle.'
+            : 'Pas de complément disponible pour cette devinette.');
     notifyListeners();
     return revealedHintText;
   }
@@ -749,7 +760,6 @@ class GameState extends ChangeNotifier {
         uneLettreRevelee = true;
       }
       if (uneLettreRevelee) {
-        markActivity(); // un joueur qui ne joue que via jokers reste actif
         revealWordCount--;
       }
       notifyListeners();
@@ -765,7 +775,10 @@ class GameState extends ChangeNotifier {
     if (eligible.isNotEmpty) {
       targetWord = eligible[_rng.nextInt(eligible.length)];
     } else {
-      final unlocked = [for (var w = 0; w < wordRanges.length; w++) if (!lockedWords.contains(w)) w];
+      final unlocked = [
+        for (var w = 0; w < wordRanges.length; w++)
+          if (!lockedWords.contains(w)) w
+      ];
       if (unlocked.isEmpty) return;
       unlocked.sort((a, b) => wordRanges[a].length.compareTo(wordRanges[b].length));
       targetWord = unlocked.first;
@@ -792,7 +805,6 @@ class GameState extends ChangeNotifier {
       pool[tileIdx].consumed = true;
     }
     if (motEntierementRevele) {
-      markActivity(); // un joueur qui ne joue que via jokers reste actif
       lockedWords.add(targetWord);
       revealWordCount--;
     }
@@ -804,9 +816,15 @@ class GameState extends ChangeNotifier {
     final rotation = ['Révéler', 'Éliminer', 'Personnage'];
     final label = rotation[minorMilestoneCount % 3];
     switch (label) {
-      case 'Révéler': revealCount++; break;
-      case 'Éliminer': eliminateCount++; break;
-      case 'Personnage': characterCount++; break;
+      case 'Révéler':
+        revealCount++;
+        break;
+      case 'Éliminer':
+        eliminateCount++;
+        break;
+      case 'Personnage':
+        characterCount++;
+        break;
     }
     minorMilestoneCount++;
     return label;
@@ -816,9 +834,15 @@ class GameState extends ChangeNotifier {
     final rotation = ['Acteur', 'Indice', 'Révéler un mot'];
     final label = rotation[majorMilestoneCount % 3];
     switch (label) {
-      case 'Acteur': actorCount++; break;
-      case 'Indice': hintCount++; break;
-      case 'Révéler un mot': revealWordCount++; break;
+      case 'Acteur':
+        actorCount++;
+        break;
+      case 'Indice':
+        hintCount++;
+        break;
+      case 'Révéler un mot':
+        revealWordCount++;
+        break;
     }
     majorMilestoneCount++;
     return label;
@@ -847,14 +871,28 @@ class GameState extends ChangeNotifier {
     String label;
     if (isMinor) {
       final pick = _rng.nextInt(3);
-      if (pick == 0) { revealCount++; label = 'Révéler'; }
-      else if (pick == 1) { eliminateCount++; label = 'Éliminer'; }
-      else { characterCount++; label = 'Personnage'; }
+      if (pick == 0) {
+        revealCount++;
+        label = 'Révéler';
+      } else if (pick == 1) {
+        eliminateCount++;
+        label = 'Éliminer';
+      } else {
+        characterCount++;
+        label = 'Personnage';
+      }
     } else {
       final pick = _rng.nextInt(3);
-      if (pick == 0) { actorCount++; label = 'Acteur'; }
-      else if (pick == 1) { hintCount++; label = 'Indice'; }
-      else { revealWordCount++; label = 'Révéler un mot'; }
+      if (pick == 0) {
+        actorCount++;
+        label = 'Acteur';
+      } else if (pick == 1) {
+        hintCount++;
+        label = 'Indice';
+      } else {
+        revealWordCount++;
+        label = 'Révéler un mot';
+      }
     }
     notifyListeners();
     return label;
@@ -865,8 +903,7 @@ class GameState extends ChangeNotifier {
   /// stock, et n'a pas déjà utilisé cette pub garantie sur ce niveau (limite
   /// d'une fois par niveau concerné — les autres façons d'en obtenir sont le
   /// top 10% mondial de L'énigme de la semaine et la boutique).
-  bool get peutRegarderPubJokerRouge =>
-      currentPuzzleHasOrange && redJokerCount <= 0 && !redJokerAdWatchedThisLevel;
+  bool get peutRegarderPubJokerRouge => currentPuzzleHasOrange && redJokerCount <= 0 && !redJokerAdWatchedThisLevel;
 
   /// Pub garantie (100% de chances) pour 1 joker rouge — jamais aléatoire,
   /// contrairement à [grantWeightedRandomJoker].
@@ -957,11 +994,30 @@ class GameState extends ChangeNotifier {
     return 'next-level';
   }
 
+  /// Vrai si "passer, revenir plus tard" a un sens : hors tutoriel (parcours
+  /// guidé à ordre fixe) et s'il reste au moins un autre niveau dans le monde.
+  bool get canPostponeLevel => !inTutorial && remainingLevels.length > 1;
+
   /// Le joueur choisit de laisser ce niveau de côté ; il repasse en fin de file.
   void skipCurrentLevel() {
+    if (!canPostponeLevel) return;
     remainingLevels.add(remainingLevels.removeAt(0));
     currentLevelNumber = remainingLevels.first;
     loadPuzzle();
+  }
+
+  /// Joker "Passer définitivement" : le niveau est résolu exactement comme
+  /// par une bonne réponse (l'écran enchaîne ensuite surbrillance verte,
+  /// révélation et niveau suivant). Faux si aucun joker en stock.
+  bool solveWithSkipJoker() {
+    if (skipJokerCount <= 0 || inTutorial) return false;
+    skipJokerCount--;
+    lockedWords = {for (var w = 0; w < wordRanges.length; w++) w};
+    failStreak = 0;
+    lastSolveDuration = DateTime.now().difference(levelStartTime);
+    notifyListeners();
+    analytics.logSkipJokerUsed(world: currentWorld.number, level: currentLevelNumber);
+    return true;
   }
 
   @override

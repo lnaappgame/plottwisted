@@ -133,9 +133,10 @@ L'Éditeur ne sélectionne pas et ne contrôle pas le contenu précis des public
 |---|---|
 | Retirer les pubs | Suppression définitive des publicités interstitielles |
 | Pack 10 jokers mixtes | 10 jokers d'aide de types variés |
-| Pack 30 jokers + 24h sans pub | 30 jokers d'aide + suppression temporaire des publicités pendant 24 heures |
+| Pack 30 jokers + sans pub | 30 jokers d'aide + suppression définitive des publicités |
 | Pack 100 jokers + sans pub | 100 jokers d'aide + suppression définitive des publicités |
 | Pack 3 jokers rouges | 3 jokers permettant de débloquer un nom orange |
+| Joker « Passer définitivement » | 1 joker permettant de résoudre automatiquement le niveau en cours du jeu principal |
 
 Il s'agit exclusivement d'achats uniques (aucun abonnement n'est proposé à ce jour). Si l'Éditeur venait à proposer un abonnement à l'avenir, les présentes CGU seraient mises à jour en conséquence pour en préciser les conditions de reconduction et de résiliation.
 

@@ -34,61 +34,70 @@ class ShopScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
             ],
-            ...kShopItems.map((item) {
-              final purchasable = purchase.available && purchase.products.containsKey(item.productId);
-              return Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: BoxDecoration(
-                  color: colors.bgPanel,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.gold.withOpacity(0.25)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            Flexible(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: kShopItems.map((item) {
+                    final purchasable = purchase.available && purchase.products.containsKey(item.productId);
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: colors.bgPanel,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: AppColors.gold.withOpacity(0.25)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(item.labelFor(settings.locale),
-                              style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: colors.cream)),
-                          if (item.subtitleFor(settings.locale) != null)
-                            Text(item.subtitleFor(settings.locale)!, style: AppTextStyles.body(size: 11, color: colors.muted)),
-                        ],
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: purchasable ? () => purchase.buy(item) : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.gold,
-                        foregroundColor: const Color(0xFF1A1410),
-                        disabledBackgroundColor: AppColors.gold.withOpacity(0.25),
-                      ),
-                      child: item.strikethroughPrice == null
-                          ? Text(purchase.priceFor(item), style: AppTextStyles.body(size: 12, weight: FontWeight.w700))
-                          : Row(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  item.strikethroughPrice!,
-                                  style: AppTextStyles.body(size: 12, weight: FontWeight.w700).copyWith(
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationThickness: 2,
-                                    decorationColor: AppColors.crimson,
-                                    color: const Color(0xFF1A1410).withOpacity(0.6),
-                                  ),
-                                ),
-                                const SizedBox(width: 6),
-                                Text(purchase.priceFor(item), style: AppTextStyles.body(size: 12, weight: FontWeight.w700)),
+                                Text(item.labelFor(settings.locale),
+                                    style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: colors.cream)),
+                                if (item.subtitleFor(settings.locale) != null)
+                                  Text(item.subtitleFor(settings.locale)!,
+                                      style: AppTextStyles.body(size: 11, color: colors.muted)),
                               ],
                             ),
-                    ),
-                  ],
+                          ),
+                          ElevatedButton(
+                            onPressed: purchasable ? () => purchase.buy(item) : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.gold,
+                              foregroundColor: const Color(0xFF1A1410),
+                              disabledBackgroundColor: AppColors.gold.withOpacity(0.25),
+                            ),
+                            child: item.strikethroughPrice == null
+                                ? Text(purchase.priceFor(item),
+                                    style: AppTextStyles.body(size: 12, weight: FontWeight.w700))
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        item.strikethroughPrice!,
+                                        style: AppTextStyles.body(size: 12, weight: FontWeight.w700).copyWith(
+                                          decoration: TextDecoration.lineThrough,
+                                          decorationThickness: 2,
+                                          decorationColor: AppColors.crimson,
+                                          color: const Color(0xFF1A1410).withOpacity(0.6),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(purchase.priceFor(item),
+                                          style: AppTextStyles.body(size: 12, weight: FontWeight.w700)),
+                                    ],
+                                  ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
-              );
-            }),
+              ),
+            ),
             const SizedBox(height: 6),
             OutlinedButton(
               onPressed: () => Navigator.of(context).pop(),

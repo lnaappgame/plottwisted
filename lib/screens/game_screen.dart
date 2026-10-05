@@ -11,12 +11,14 @@ import '../services/sound_service.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/answer_row.dart';
+import '../widgets/clapper_transition.dart';
 import '../widgets/joker_bar.dart';
 import '../widgets/letter_pool.dart';
 import '../widgets/mini_popup.dart';
 import '../widgets/pitch_card.dart';
 import '../widgets/result_overlay.dart';
 import '../widgets/world_intro_overlay.dart';
+import 'shop_screen.dart';
 
 class _MiniPopupSpec {
   final String text;
@@ -24,14 +26,12 @@ class _MiniPopupSpec {
   final VoidCallback onPrimary;
   final String secondaryLabel;
   final VoidCallback onSecondary;
-  final bool isIdleType; // popup d'inactivité 60s : se ferme sur un tap lettre
   _MiniPopupSpec({
     required this.text,
     required this.primaryLabel,
     required this.onPrimary,
     required this.secondaryLabel,
     required this.onSecondary,
-    this.isIdleType = false,
   });
 }
 
@@ -48,30 +48,25 @@ class _GameScreenState extends State<GameScreen> {
   // COMMENCER) ou 2 numéros (choix du prochain monde).
   late List<int>? _pendingWorldChoice;
   bool _showResult = false;
-  bool _tutorialDialogOpen = false;
   _MiniPopupSpec? _miniPopup;
 
-  Timer? _idleTimer;
-  Timer? _idleRecheckTimer;
-  bool _adShowing = false;
+  // Bonne réponse : le titre reste 1 s en surbrillance verte avant la
+  // révélation (saisie bloquée pendant ce temps).
+  bool _revealingAnswer = false;
+  Timer? _revealTimer;
 
   @override
   void initState() {
     super.initState();
     final game = context.read<GameState>();
     _pendingWorldChoice = game.puzzleLoaded ? null : [game.currentWorld.number];
-    _idleTimer = Timer.periodic(const Duration(seconds: 5), (_) => _checkIdle());
   }
 
   @override
   void dispose() {
-    _idleTimer?.cancel();
-    _idleRecheckTimer?.cancel();
+    _revealTimer?.cancel();
     super.dispose();
   }
-
-  bool get _anyOverlayOpen =>
-      _showResult || _pendingWorldChoice != null || _tutorialDialogOpen || _miniPopup != null || _adShowing;
 
   /// Confirme l'écran de monde imposé (COMMENCER) ou le choix fait par le
   /// joueur, puis charge le premier puzzle du monde retenu.
@@ -80,7 +75,7 @@ class _GameScreenState extends State<GameScreen> {
     // ci-dessous ne fasse disparaître l'écran) appellerait chooseNextWorld()
     // deux fois de suite pour un seul choix réel, désynchronisant la
     // réserve/frontière de mondes — on l'ignore explicitement.
-    if (_pendingWorldChoice == null) return;
+    if (!mounted || _pendingWorldChoice == null) return;
     final game = context.read<GameState>();
     // En mode "choix" (2 options), il faut appliquer le choix ; en mode
     // "imposé" (1 seule option), le monde a déjà été entré par l'appelant.
@@ -112,7 +107,8 @@ class _GameScreenState extends State<GameScreen> {
     if (game.consumeOrangeIntroPending()) {
       _showTutorialDialog('', richSpans: [
         TextSpan(text: t.gameOrangeIntro1),
-        TextSpan(text: t.colorOrange, style: const TextStyle(color: AppColors.orangeBright, fontWeight: FontWeight.w600)),
+        TextSpan(
+            text: t.colorOrange, style: const TextStyle(color: AppColors.orangeBright, fontWeight: FontWeight.w600)),
         TextSpan(text: t.gameOrangeIntro2),
         TextSpan(text: t.colorRed, style: const TextStyle(color: AppColors.crimsonBright, fontWeight: FontWeight.w600)),
         TextSpan(text: t.gameOrangeIntro3),
@@ -122,7 +118,8 @@ class _GameScreenState extends State<GameScreen> {
     if (game.consumeVioletIntroPending()) {
       _showTutorialDialog('', richSpans: [
         TextSpan(text: t.gameVioletIntro1),
-        TextSpan(text: t.colorPurple, style: const TextStyle(color: AppColors.violetBright, fontWeight: FontWeight.w600)),
+        TextSpan(
+            text: t.colorPurple, style: const TextStyle(color: AppColors.violetBright, fontWeight: FontWeight.w600)),
         TextSpan(text: t.gameVioletIntro2),
       ]);
       return;
@@ -143,35 +140,10 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  /// Un tap sur une lettre ferme la popup d'inactivité si elle est affichée,
-  /// et arme une nouvelle vérification 30s plus tard (au lieu de 60s).
-  void _onLetterInteraction() {
-    if (_miniPopup != null && _miniPopup!.isIdleType) {
-      setState(() => _miniPopup = null);
-      _armIdleRecheck();
-    }
-  }
-
-  void _armIdleRecheck() {
-    _idleRecheckTimer?.cancel();
-    final game = context.read<GameState>();
-    final lockedAtStart = game.lockedWords.length;
-    _idleRecheckTimer = Timer(const Duration(seconds: 30), () {
-      if (!mounted) return;
-      final gameNow = context.read<GameState>();
-      if (_anyOverlayOpen) return;
-      if (gameNow.lockedWords.length <= lockedAtStart) {
-        gameNow.idlePopupShown = true;
-        _offerSkipLevel();
-      }
-    });
-  }
-
   void _showTutorialDialog(String message, {VoidCallback? onClose, List<InlineSpan>? richSpans}) {
     final colors = AppColors(context.read<AppSettings>().isLightTheme);
     final t = AppLocalizations.of(context);
     final textStyle = AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5);
-    _tutorialDialogOpen = true;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -183,7 +155,8 @@ class _GameScreenState extends State<GameScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(t.gameDirectorLabel, style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)),
+              Text(t.gameDirectorLabel,
+                  style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)),
               const SizedBox(height: 10),
               richSpans != null
                   ? RichText(text: TextSpan(style: textStyle, children: richSpans))
@@ -195,7 +168,6 @@ class _GameScreenState extends State<GameScreen> {
                   style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    _tutorialDialogOpen = false;
                     onClose?.call();
                   },
                   child: Text(t.gameUnderstood, style: AppTextStyles.display(size: 15, color: colors.cream)),
@@ -216,14 +188,22 @@ class _GameScreenState extends State<GameScreen> {
 
   static String _jokerIcon(String label) {
     switch (label) {
-      case 'Révéler': return '💡';
-      case 'Éliminer': return '✂️';
-      case 'Acteur': return '🔵';
-      case 'Personnage': return '🟢';
-      case 'Personnage (rouge)': return '🔴';
-      case 'Indice': return '🎬';
-      case 'Révéler un mot': return '📖';
-      default: return '🎁';
+      case 'Révéler':
+        return '💡';
+      case 'Éliminer':
+        return '✂️';
+      case 'Acteur':
+        return '🔵';
+      case 'Personnage':
+        return '🟢';
+      case 'Personnage (rouge)':
+        return '🔴';
+      case 'Indice':
+        return '🎬';
+      case 'Révéler un mot':
+        return '📖';
+      default:
+        return '🎁';
     }
   }
 
@@ -246,7 +226,8 @@ class _GameScreenState extends State<GameScreen> {
               Text(_jokerIcon(label), style: const TextStyle(fontSize: 40)),
               const SizedBox(height: 10),
               Text(t.gameJokerWon,
-                  style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold).copyWith(letterSpacing: 2)),
+                  style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)
+                      .copyWith(letterSpacing: 2)),
               const SizedBox(height: 6),
               Text(displayLabel, textAlign: TextAlign.center, style: AppTextStyles.display(size: 22)),
               const SizedBox(height: 18),
@@ -270,15 +251,8 @@ class _GameScreenState extends State<GameScreen> {
   Future<void> _onWatchAdForJoker() async {
     final game = context.read<GameState>();
     if (game.inTutorial) return;
-    setState(() => _adShowing = true); // évite un faux popup "inactif" pendant que la pub charge/joue
-    bool earned;
-    try {
-      earned = await game.adService.showRewardedAdForJoker();
-    } finally {
-      if (mounted) setState(() => _adShowing = false);
-    }
+    final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
-    game.markActivity();
     if (earned) {
       final label = game.grantWeightedRandomJoker();
       _showJokerWonDialog(label);
@@ -292,15 +266,8 @@ class _GameScreenState extends State<GameScreen> {
   Future<void> _onWatchAdForRedJoker() async {
     final game = context.read<GameState>();
     if (game.inTutorial || !game.peutRegarderPubJokerRouge) return;
-    setState(() => _adShowing = true);
-    bool earned;
-    try {
-      earned = await game.adService.showRewardedAdForJoker();
-    } finally {
-      if (mounted) setState(() => _adShowing = false);
-    }
+    final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
-    game.markActivity();
     if (earned) {
       game.grantRedJokerFromAd();
       _showJokerWonDialog('Personnage (rouge)');
@@ -309,18 +276,7 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
-  // ─── Mini-popups (3 échecs / inactivité) ───
-  void _checkIdle() {
-    if (!mounted) return;
-    final game = context.read<GameState>();
-    if (game.inTutorial || game.idlePopupShown) return;
-    if (_anyOverlayOpen) return;
-    if (DateTime.now().difference(game.lastActivityTime).inMilliseconds >= 60000) {
-      game.idlePopupShown = true;
-      _offerSkipLevel();
-    }
-  }
-
+  // ─── Mini-popup (3 échecs) ───
   void _offerAdForMinorBonus() {
     final t = AppLocalizations.of(context);
     setState(() {
@@ -339,40 +295,74 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _watchAdForMinorBonus() async {
     final game = context.read<GameState>();
-    setState(() => _adShowing = true);
-    bool earned;
-    try {
-      earned = await game.adService.showRewardedAdForJoker();
-    } finally {
-      if (mounted) setState(() => _adShowing = false);
-    }
+    final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
-    game.markActivity();
     if (earned) {
       final label = game.grantWeightedRandomJoker();
       _showJokerWonDialog(label);
     }
   }
 
-  void _offerSkipLevel() {
-    _idleRecheckTimer?.cancel();
+  // ─── Passer le niveau ───
+  void _onPostponeLevel() {
+    final game = context.read<GameState>();
+    if (!game.canPostponeLevel) {
+      _toast(AppLocalizations.of(context).gameSkipLastLevel);
+      return;
+    }
+    game.skipCurrentLevel();
+    setState(() {});
+    _checkIntroDialogsAfterLoad();
+  }
+
+  /// Joker "Passer définitivement" : renvoie vers la boutique s'il n'y en a
+  /// plus en stock, sinon demande confirmation (achat payant) avant de
+  /// résoudre le niveau comme une bonne réponse.
+  Future<void> _onSkipForGood() async {
+    final game = context.read<GameState>();
+    if (game.skipJokerCount <= 0) {
+      showDialog(context: context, builder: (_) => const ShopScreen());
+      return;
+    }
+    final colors = AppColors(context.read<AppSettings>().isLightTheme);
     final t = AppLocalizations.of(context);
-    setState(() {
-      _miniPopup = _MiniPopupSpec(
-        text: t.gameSkipOffer,
-        primaryLabel: t.gameComeBackLater,
-        isIdleType: true,
-        onPrimary: () {
-          setState(() => _miniPopup = null);
-          context.read<GameState>().skipCurrentLevel();
-          setState(() {});
-        },
-        secondaryLabel: t.gameKeepSearching,
-        onSecondary: () {
-          setState(() => _miniPopup = null);
-          context.read<GameState>().markActivity();
-        },
-      );
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: colors.bgPanel2,
+        content: Text(t.gameSkipForGoodConfirm,
+            style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(t.commonCancel, style: AppTextStyles.body(size: 13, color: colors.muted)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(t.gameSkipForGoodUse, style: AppTextStyles.display(size: 15, color: colors.cream)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    if (game.solveWithSkipJoker()) _showSolvedThenReveal();
+  }
+
+  /// Bonne réponse (trouvée ou via joker) : son, série du jour, puis 1 s de
+  /// surbrillance verte du titre avant l'écran de révélation.
+  void _showSolvedThenReveal() {
+    final settings = context.read<AppSettings>();
+    if (settings.sfxOn) context.read<SoundService>().playCorrect();
+    context.read<StreakState>().recordAction();
+    setState(() => _revealingAnswer = true);
+    _revealTimer?.cancel();
+    _revealTimer = Timer(const Duration(seconds: 1), () {
+      if (!mounted) return;
+      setState(() {
+        _revealingAnswer = false;
+        _showResult = true;
+      });
     });
   }
 
@@ -396,9 +386,7 @@ class _GameScreenState extends State<GameScreen> {
         }
         break;
       case 'solved':
-        if (settings.sfxOn) sound.playCorrect();
-        context.read<StreakState>().recordAction();
-        setState(() => _showResult = true);
+        _showSolvedThenReveal();
         break;
     }
   }
@@ -450,7 +438,6 @@ class _GameScreenState extends State<GameScreen> {
     if (mustAd) {
       await game.adService.showForcedAd();
       if (!mounted) return;
-      game.markActivity();
     }
 
     if (status.startsWith('world-choice') || status.startsWith('all-content-complete')) {
@@ -496,7 +483,8 @@ class _GameScreenState extends State<GameScreen> {
                 InkWell(
                   onTap: widget.onBackToMenu,
                   child: Container(
-                    width: 36, height: 36,
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(color: colors.bgPanel, borderRadius: BorderRadius.circular(10)),
                     child: const Icon(Icons.menu, color: AppColors.goldBright, size: 18),
                   ),
@@ -524,19 +512,26 @@ class _GameScreenState extends State<GameScreen> {
     if (_pendingWorldChoice != null) {
       final worlds = _pendingWorldChoice!.map((n) {
         return n == 0
-            ? GameWorld(number: 0, categoryLabel: AppLocalizations.of(context).gameTutorialCategory, puzzles: kTutorialPuzzles)
+            ? GameWorld(
+                number: 0, categoryLabel: AppLocalizations.of(context).gameTutorialCategory, puzzles: kTutorialPuzzles)
             : kWorlds.firstWhere((w) => w.number == n);
       }).toList();
       return Scaffold(
-        body: WorldIntroOverlay(worlds: worlds, colors: colors, onChoose: _resolveWorldChoice),
+        body: WorldIntroOverlay(
+          worlds: worlds,
+          colors: colors,
+          onChoose: (n) => ClapperTransition.play(context, () => _resolveWorldChoice(n)),
+        ),
       );
     }
 
     return Scaffold(
       body: SafeArea(
         child: Stack(
-            children: [
-              SingleChildScrollView(
+          children: [
+            AbsorbPointer(
+              absorbing: _revealingAnswer,
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -546,7 +541,8 @@ class _GameScreenState extends State<GameScreen> {
                         InkWell(
                           onTap: widget.onBackToMenu,
                           child: Container(
-                            width: 36, height: 36,
+                            width: 36,
+                            height: 36,
                             decoration: BoxDecoration(color: colors.bgPanel, borderRadius: BorderRadius.circular(10)),
                             child: const Icon(Icons.menu, color: AppColors.goldBright, size: 18),
                           ),
@@ -560,7 +556,9 @@ class _GameScreenState extends State<GameScreen> {
                                 text: TextSpan(
                                   style: AppTextStyles.body(size: 11, color: colors.muted),
                                   children: [
-                                    TextSpan(text: '${game.levelTitleFor(game.locale)} · ${game.currentWorld.categoryLabelFor(game.locale)} · '),
+                                    TextSpan(
+                                        text:
+                                            '${game.levelTitleFor(game.locale)} · ${game.currentWorld.categoryLabelFor(game.locale)} · '),
                                     TextSpan(
                                       text: game.difficultyLabelFor(game.locale),
                                       style: TextStyle(
@@ -579,9 +577,9 @@ class _GameScreenState extends State<GameScreen> {
                     const SizedBox(height: 14),
                     const PitchCard(),
                     const SizedBox(height: 18),
-                    const AnswerRow(),
+                    AnswerRow(highlightSolved: _revealingAnswer),
                     const SizedBox(height: 18),
-                    LetterPool(onLetterTapped: _onLetterInteraction),
+                    const LetterPool(),
                     const SizedBox(height: 18),
                     JokerBar(
                       onToast: _toast,
@@ -594,7 +592,8 @@ class _GameScreenState extends State<GameScreen> {
                         Expanded(
                           child: OutlinedButton(
                             onPressed: () => game.clearLastLetter(),
-                            child: Text(AppLocalizations.of(context).commonClear, style: AppTextStyles.display(size: 15, color: AppColors.gold)),
+                            child: Text(AppLocalizations.of(context).commonClear,
+                                style: AppTextStyles.display(size: 15, color: AppColors.gold)),
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -602,30 +601,63 @@ class _GameScreenState extends State<GameScreen> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
                             onPressed: _onValidate,
-                            child: Text(AppLocalizations.of(context).commonValidate, style: AppTextStyles.display(size: 15, color: colors.cream)),
+                            child: Text(AppLocalizations.of(context).commonValidate,
+                                style: AppTextStyles.display(size: 15, color: colors.cream)),
                           ),
                         ),
                       ],
                     ),
+                    if (!game.inTutorial) ...[
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: _onPostponeLevel,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(AppLocalizations.of(context).gameSkipLater,
+                                    style:
+                                        AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: _onSkipForGood,
+                              style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.goldBright)),
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  '⏭️ ${AppLocalizations.of(context).gameSkipForGood}'
+                                  '${game.skipJokerCount > 0 ? ' (${game.skipJokerCount})' : ' 🛒'}',
+                                  style: AppTextStyles.body(
+                                      size: 12, weight: FontWeight.w700, color: AppColors.goldBright),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
-              if (_showResult) Positioned.fill(child: ResultOverlay(onNext: _onNextLevel)),
-              if (_miniPopup != null)
-                MiniPopup(
-                  text: _miniPopup!.text,
-                  primaryLabel: _miniPopup!.primaryLabel,
-                  onPrimary: _miniPopup!.onPrimary,
-                  secondaryLabel: _miniPopup!.secondaryLabel,
-                  onSecondary: _miniPopup!.onSecondary,
-                  colors: colors,
-                ),
-            ],
-          ),
+            ),
+            if (_showResult) Positioned.fill(child: ResultOverlay(onNext: _onNextLevel)),
+            if (_miniPopup != null)
+              MiniPopup(
+                text: _miniPopup!.text,
+                primaryLabel: _miniPopup!.primaryLabel,
+                onPrimary: _miniPopup!.onPrimary,
+                secondaryLabel: _miniPopup!.secondaryLabel,
+                onSecondary: _miniPopup!.onSecondary,
+                colors: colors,
+              ),
+          ],
+        ),
       ),
     );
   }
 }
-
-
-

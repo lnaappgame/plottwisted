@@ -18,6 +18,9 @@ class AnalyticsService {
   Future<void> logLevelCompleted({required int world, required int level, required String difficulty}) =>
       _log('level_completed', {'world': world, 'level': level, 'difficulty': difficulty});
 
+  Future<void> logSkipJokerUsed({required int world, required int level}) =>
+      _log('skip_joker_used', {'world': world, 'level': level});
+
   Future<void> logDefiCompleted({required bool bonus, required int seconds}) =>
       _log('defi_completed', {'bonus': bonus, 'seconds': seconds});
 

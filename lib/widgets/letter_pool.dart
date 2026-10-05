@@ -7,8 +7,7 @@ import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
 
 class LetterPool extends StatelessWidget {
-  final VoidCallback? onLetterTapped;
-  const LetterPool({super.key, this.onLetterTapped});
+  const LetterPool({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,8 @@ class LetterPool extends StatelessWidget {
 
     return Wrap(
       alignment: WrapAlignment.center,
-      spacing: 8, runSpacing: 8,
+      spacing: 8,
+      runSpacing: 8,
       children: game.pool.map((tile) {
         final disabled = tile.used || tile.eliminated;
         return GestureDetector(
@@ -29,13 +29,13 @@ class LetterPool extends StatelessWidget {
                   if (settings.vibrationsOn) HapticFeedback.lightImpact();
                   if (settings.sfxOn) sound.playTap();
                   game.onLetterTap(tile);
-                  onLetterTapped?.call();
                 },
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 200),
             opacity: tile.used ? 0 : (tile.eliminated ? 0.15 : 1),
             child: Container(
-              width: 38, height: 44,
+              width: 38,
+              height: 44,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: colors.bgPanel,

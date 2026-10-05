@@ -451,14 +451,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameNoThanks => 'No thanks';
 
   @override
-  String get gameSkipOffer =>
-      'Still stuck on this level? You can set it aside and come back to it later — it\'ll return at the end of the world.';
+  String get gameSkipLater => 'Skip, come back later';
 
   @override
-  String get gameComeBackLater => 'Come back later';
+  String get gameSkipLastLevel =>
+      'This is the last level of this world, so it can\'t be saved for later.';
 
   @override
-  String get gameKeepSearching => 'Keep searching';
+  String get gameSkipForGood => 'Skip for good';
+
+  @override
+  String get gameSkipForGoodConfirm =>
+      'Use 1 \"Skip for good\" joker? The level will be solved and its answer revealed.';
+
+  @override
+  String get gameSkipForGoodUse => 'USE';
+
+  @override
+  String get commonCancel => 'Cancel';
 
   @override
   String gameJokerEarnedToast(String label) {

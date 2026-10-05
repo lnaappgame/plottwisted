@@ -5,7 +5,10 @@ import '../services/game_state.dart';
 import '../theme/app_theme.dart';
 
 class AnswerRow extends StatelessWidget {
-  const AnswerRow({super.key});
+  /// Affiche le titre complet en surbrillance verte (bonne réponse, avant la
+  /// révélation), quelles que soient les lettres placées par le joueur.
+  final bool highlightSolved;
+  const AnswerRow({super.key, this.highlightSolved = false});
 
   bool _isLocked(GameState game, int i) {
     if (game.lockedSlots.contains(i)) return true;
@@ -35,9 +38,17 @@ class AnswerRow extends StatelessWidget {
 
     for (var i = 0; i < game.slots.length; i++) {
       final slot = game.slots[i];
-      if (slot.isSpace) { flushWord(); continue; }
+      if (slot.isSpace) {
+        flushWord();
+        continue;
+      }
       if (slot.isAuto) {
-        currentWord.add(_Blank(text: slot.char, colors: colors, style: _BlankStyle.auto));
+        currentWord.add(
+            _Blank(text: slot.char, colors: colors, style: highlightSolved ? _BlankStyle.solved : _BlankStyle.auto));
+        continue;
+      }
+      if (highlightSolved) {
+        currentWord.add(_Blank(text: slot.char, colors: colors, style: _BlankStyle.solved));
         continue;
       }
       final locked = _isLocked(game, i);
@@ -50,7 +61,9 @@ class AnswerRow extends StatelessWidget {
           colors: colors,
           style: locked
               ? _BlankStyle.locked
-              : (i == game.cursorIndex ? _BlankStyle.cursor : (letter != null ? _BlankStyle.filled : _BlankStyle.empty)),
+              : (i == game.cursorIndex
+                  ? _BlankStyle.cursor
+                  : (letter != null ? _BlankStyle.filled : _BlankStyle.empty)),
         ),
       ));
     }
@@ -65,7 +78,8 @@ class AnswerRow extends StatelessWidget {
         const tileSpan = 36.0;
         return Wrap(
           alignment: WrapAlignment.center,
-          spacing: 14, runSpacing: 10,
+          spacing: 14,
+          runSpacing: 10,
           children: [
             for (var w = 0; w < wordWidgets.length; w++)
               if (wordTileCounts[w] * tileSpan > constraints.maxWidth)
@@ -82,7 +96,7 @@ class AnswerRow extends StatelessWidget {
   }
 }
 
-enum _BlankStyle { empty, filled, cursor, locked, auto }
+enum _BlankStyle { empty, filled, cursor, locked, auto, solved }
 
 class _Blank extends StatelessWidget {
   final String text;
@@ -103,6 +117,11 @@ class _Blank extends StatelessWidget {
         borderColor = AppColors.green;
         textColor = AppColors.greenBright;
         break;
+      case _BlankStyle.solved:
+        borderColor = AppColors.greenBright;
+        textColor = AppColors.greenBright;
+        bg = AppColors.greenBright.withOpacity(0.18);
+        break;
       case _BlankStyle.auto:
         borderColor = colors.muted;
         textColor = AppColors.goldBright;
@@ -114,7 +133,8 @@ class _Blank extends StatelessWidget {
         break;
     }
     return Container(
-      width: 30, height: 38,
+      width: 30,
+      height: 38,
       margin: const EdgeInsets.only(right: 6),
       alignment: Alignment.center,
       decoration: BoxDecoration(

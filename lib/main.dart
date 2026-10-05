@@ -109,6 +109,7 @@ Future<void> main() async {
         character: item.jokers.character,
         hint: item.jokers.hint,
         redJoker: item.jokers.redJoker,
+        skip: item.jokers.skip,
       );
     }
     if (item.removesAdsForever) {

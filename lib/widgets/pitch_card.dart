@@ -8,11 +8,16 @@ import '../theme/app_theme.dart';
 
 Color _difficultyBorderColor(String label) {
   switch (label) {
-    case 'Facile': return AppColors.greenBright;
-    case 'Moyen': return AppColors.orangeBright;
-    case 'Difficile': return AppColors.redBright;
-    case 'Extrême': return AppColors.redBright;
-    default: return AppColors.gold; // Tutoriel : neutre
+    case 'Facile':
+      return AppColors.greenBright;
+    case 'Moyen':
+      return AppColors.orangeBright;
+    case 'Difficile':
+      return AppColors.redBright;
+    case 'Extrême':
+      return AppColors.redBright;
+    default:
+      return AppColors.gold; // Tutoriel : neutre
   }
 }
 
@@ -31,10 +36,13 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
+    // Cycle en boucle : pulsation de 0,7 s (210 ms montée, 490 ms descente)
+    // puis 3 s de repos — les poids sont ces durées en millisecondes.
+    _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 3700));
     _pulseAnim = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: Curves.easeOut)), weight: 30),
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0).chain(CurveTween(curve: Curves.easeIn)), weight: 70),
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: Curves.easeOut)), weight: 210),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0).chain(CurveTween(curve: Curves.easeIn)), weight: 490),
+      TweenSequenceItem(tween: ConstantTween(0.0), weight: 3000),
     ]).animate(_pulseController);
   }
 
@@ -48,13 +56,17 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     final game = context.watch<GameState>();
 
-    // Un flash lumineux unique sur le cadre à chaque nouveau niveau (pas à
-    // chaque interaction du joueur), pour signaler rapidement sa difficulté.
+    // Le cycle de pulsation repart de zéro à chaque nouveau niveau, pour que
+    // la première pulsation tombe dès l'arrivée sur le pitch.
     final levelKey = '${game.currentWorld.number}-${game.currentLevelNumber}';
     if (levelKey != _lastLevelKey) {
       _lastLevelKey = levelKey;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _pulseController.forward(from: 0);
+        if (mounted) {
+          _pulseController
+            ..value = 0
+            ..repeat();
+        }
       });
     }
 
@@ -65,35 +77,22 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
     final spans = <InlineSpan>[];
     var remaining = puzzle.pitchTemplateFor(game.locale);
     final tokens = [
-      ('{p1}', 'p1', game.p1State),
-      if (puzzle.hasP2) ('{p2}', 'p2', game.p2State),
+      ('{p1}', 'p1'),
+      if (puzzle.hasP2) ('{p2}', 'p2'),
     ];
 
-    while (remaining.isNotEmpty) {
-      int? nextIdx;
-      String? matchToken, matchSlot;
-      NameColor? matchColor;
-      for (final t in tokens) {
-        final idx = remaining.indexOf(t.$1);
-        if (idx != -1 && (nextIdx == null || idx < nextIdx)) {
-          nextIdx = idx; matchToken = t.$1; matchSlot = t.$2; matchColor = t.$3;
-        }
-      }
-      if (nextIdx == null) { spans.add(TextSpan(text: remaining)); break; }
-      if (nextIdx > 0) spans.add(TextSpan(text: remaining.substring(0, nextIdx)));
-      final text = game.displayFor(matchSlot!);
-      final color = colors.forNameColor(matchColor!);
-      final armed = game.activeNameJoker != null && game.activeNameJoker != matchColor;
-      final label = settings.colorblindMode
-          ? '${AppColors.symbolForNameColor(matchColor)} $text'
-          : text;
-      spans.add(WidgetSpan(
+    WidgetSpan nameSpan(String slot, NameColor nameColor, bool armed) {
+      final text = game.displayFor(slot, nameColor);
+      final color = colors.forNameColor(nameColor);
+      final label = settings.colorblindMode ? '${AppColors.symbolForNameColor(nameColor)} $text' : text;
+      return WidgetSpan(
         alignment: PlaceholderAlignment.middle,
         child: GestureDetector(
           onTap: () {
-            final err = game.onNameTap(matchSlot!);
+            final err = game.onNameTap(slot);
             if (err != null && context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err), duration: const Duration(seconds: 2)));
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(err), duration: const Duration(seconds: 2)));
             }
           },
           child: Container(
@@ -117,7 +116,31 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
             ),
           ),
         ),
-      ));
+      );
+    }
+
+    while (remaining.isNotEmpty) {
+      int? nextIdx;
+      String? matchToken, matchSlot;
+      for (final t in tokens) {
+        final idx = remaining.indexOf(t.$1);
+        if (idx != -1 && (nextIdx == null || idx < nextIdx)) {
+          nextIdx = idx;
+          matchToken = t.$1;
+          matchSlot = t.$2;
+        }
+      }
+      if (nextIdx == null) {
+        spans.add(TextSpan(text: remaining));
+        break;
+      }
+      if (nextIdx > 0) spans.add(TextSpan(text: remaining.substring(0, nextIdx)));
+      final shown = game.displayedColors(matchSlot!);
+      final armed = game.activeNameJoker != null && game.activeNameJoker != shown.first;
+      for (var k = 0; k < shown.length; k++) {
+        if (k > 0) spans.add(TextSpan(text: ' / ', style: TextStyle(color: colors.muted)));
+        spans.add(nameSpan(matchSlot, shown[k], armed));
+      }
       remaining = remaining.substring(nextIdx + matchToken!.length);
     }
 
@@ -133,13 +156,18 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
           decoration: BoxDecoration(
-            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
-                colors: [colors.bgPanel2, colors.bgPanel]),
+            gradient: LinearGradient(
+                begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [colors.bgPanel2, colors.bgPanel]),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: borderColor.withOpacity(0.7 + 0.3 * pulse), width: 1.5 + 1.5 * pulse),
             boxShadow: pulse == 0
                 ? null
-                : [BoxShadow(color: borderColor.withOpacity(0.55 * pulse), blurRadius: 6 + 18 * pulse, spreadRadius: 1 + 2 * pulse)],
+                : [
+                    BoxShadow(
+                        color: borderColor.withOpacity(0.55 * pulse),
+                        blurRadius: 6 + 18 * pulse,
+                        spreadRadius: 1 + 2 * pulse)
+                  ],
           ),
           child: child,
         );
@@ -155,7 +183,9 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
             ],
           ),
           const SizedBox(height: 8),
-          RichText(text: TextSpan(style: AppTextStyles.body(size: 16, color: colors.cream).copyWith(height: 1.55), children: spans)),
+          RichText(
+              text: TextSpan(
+                  style: AppTextStyles.body(size: 16, color: colors.cream).copyWith(height: 1.55), children: spans)),
           if (game.activeNameJoker != null) ...[
             const SizedBox(height: 8),
             Text(AppLocalizations.of(context).pitchDifferentColorHint,
@@ -212,7 +242,9 @@ class _FlameBorderState extends State<_FlameBorder> with SingleTickerProviderSta
       children: [
         widget.child,
         Positioned(
-          left: 8, right: 8, bottom: -9,
+          left: 8,
+          right: 8,
+          bottom: -9,
           child: IgnorePointer(
             child: AnimatedBuilder(
               animation: _controller,

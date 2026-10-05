@@ -455,14 +455,24 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameNoThanks => 'Non merci';
 
   @override
-  String get gameSkipOffer =>
-      'Toujours sur ce niveau ? Tu peux le laisser de côté et y revenir plus tard — il reviendra en fin de monde.';
+  String get gameSkipLater => 'Passer, j\'y reviendrai';
 
   @override
-  String get gameComeBackLater => 'Revenir plus tard';
+  String get gameSkipLastLevel =>
+      'C\'est le dernier niveau de ce monde : il ne peut pas être gardé pour plus tard.';
 
   @override
-  String get gameKeepSearching => 'Continuer à chercher';
+  String get gameSkipForGood => 'Passer définitivement';
+
+  @override
+  String get gameSkipForGoodConfirm =>
+      'Utiliser 1 joker « Passer définitivement » ? Le niveau sera résolu et sa réponse révélée.';
+
+  @override
+  String get gameSkipForGoodUse => 'UTILISER';
+
+  @override
+  String get commonCancel => 'Annuler';
 
   @override
   String gameJokerEarnedToast(String label) {
