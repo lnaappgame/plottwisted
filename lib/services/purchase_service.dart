@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/shop_item.dart';
 
@@ -15,7 +16,8 @@ import '../models/shop_item.dart';
 /// [ShopItem.removesAdsForever], [ShopItem.removeAdsForHours]) est appliquée
 /// via [onPurchaseComplete] — voir le branchement dans shop_screen.dart.
 class PurchaseService {
-  final InAppPurchase _iap = InAppPurchase.instance;
+  // Accès différé : créer le service ne doit pas encore contacter le store.
+  InAppPurchase get _iap => InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
 
   bool available = false;
@@ -59,7 +61,21 @@ class PurchaseService {
     _subscription?.cancel();
   }
 
-  String priceFor(ShopItem item) => products[item.productId]?.price ?? item.fallbackPrice;
+  // Prix renvoyé par le store, déjà dans la devise du joueur ; jamais de prix
+  // codé en dur (un joueur américain ne doit pas voir d'euros).
+  String priceFor(ShopItem item) => products[item.productId]?.price ?? '…';
+
+  /// Prix barré de [item] : somme des articles équivalents achetés
+  /// séparément, null si l'un d'eux n'est pas chargé ou si les devises diffèrent.
+  String? compareAtPriceFor(ShopItem item, String locale) {
+    if (item.compareAtProductIds.isEmpty || !products.containsKey(item.productId)) return null;
+    final parts = [for (final id in item.compareAtProductIds) products[id]];
+    if (parts.any((p) => p == null)) return null;
+    final currency = parts.first!.currencyCode;
+    if (parts.any((p) => p!.currencyCode != currency)) return null;
+    final total = parts.fold<double>(0, (sum, p) => sum + p!.rawPrice);
+    return NumberFormat.simpleCurrency(locale: locale, name: currency).format(total);
+  }
 
   Future<void> buy(ShopItem item) async {
     final product = products[item.productId];
@@ -80,7 +96,10 @@ class PurchaseService {
         if (!dejaTraite) {
           ShopItem? item;
           for (final candidate in kShopItems) {
-            if (candidate.productId == purchase.productID) { item = candidate; break; }
+            if (candidate.productId == purchase.productID) {
+              item = candidate;
+              break;
+            }
           }
           if (item != null) onPurchaseComplete?.call(item);
           if (purchaseId != null) {

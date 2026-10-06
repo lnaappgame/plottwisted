@@ -71,24 +71,53 @@ class _SciFiPainter extends CustomPainter {
     _paintHorizonGrid(canvas, size, t);
     _paintRings(canvas, size, t);
     _paintStars(canvas, size, t);
+    _paintShootingStars(canvas, size, t);
   }
 
+  // Toutes les vitesses sont des nombres entiers de tours/traversées par
+  // cycle de 60 s : la boucle de l'animation repart ainsi sans saut visible.
   void _paintStars(Canvas canvas, Size size, double t) {
     final paint = Paint();
     for (final s in stars) {
-      // Dérive lente vers le bas, plus rapide pour les étoiles "proches".
-      final y = ((s.y + t * 0.35 * s.depth) % 1.0) * size.height;
+      // Dérive vers le bas, plus rapide pour les étoiles "proches".
+      final crossings = s.depth > 0.75 ? 4 : (s.depth > 0.5 ? 3 : 2);
+      final y = ((s.y + t * crossings) % 1.0) * size.height;
       final x = s.x * size.width;
-      final twinkle = 0.5 + 0.5 * sin(t * 2 * pi * 12 * s.depth + s.phase);
-      paint.color = AppColors.goldBright.withOpacity(0.08 + 0.32 * s.depth * twinkle);
-      canvas.drawCircle(Offset(x, y), 0.6 + 1.1 * s.depth, paint);
+      final twinkle = 0.5 + 0.5 * sin(t * 2 * pi * (8 + crossings * 4) + s.phase);
+      paint.color = AppColors.goldBright.withOpacity(0.18 + 0.55 * s.depth * twinkle);
+      canvas.drawCircle(Offset(x, y), 0.9 + 1.5 * s.depth, paint);
+    }
+  }
+
+  // Une étoile filante toutes les 10 s environ, qui traverse le haut de
+  // l'écran en diagonale en un peu plus d'une seconde.
+  void _paintShootingStars(Canvas canvas, Size size, double t) {
+    const count = 6;
+    const durationShare = 1.2 / 60;
+    for (var i = 0; i < count; i++) {
+      final start = (i + 0.35 * ((i * 7) % 3)) / count;
+      final p = (t - start) / durationShare;
+      if (p < 0 || p > 1) continue;
+      final from = Offset(size.width * (0.15 + 0.12 * (i % 4)), size.height * (0.05 + 0.07 * (i % 3)));
+      final dir = Offset(size.width * 0.55, size.height * 0.22);
+      final head = from + dir * p;
+      final tail = from + dir * max(0.0, p - 0.25);
+      final fade = sin(p * pi);
+      final paint = Paint()
+        ..strokeWidth = 1.6
+        ..strokeCap = StrokeCap.round
+        ..shader = LinearGradient(colors: [
+          AppColors.goldBright.withOpacity(0),
+          AppColors.goldBright.withOpacity(0.85 * fade),
+        ]).createShader(Rect.fromPoints(tail, head));
+      canvas.drawLine(tail, head, paint);
     }
   }
 
   void _paintRings(Canvas canvas, Size size, double t) {
     final center = Offset(size.width / 2, size.height * 0.36);
     final base = min(size.width, size.height);
-    const rings = [(0.30, 1.0, 0.10), (0.42, -0.6, 0.07), (0.55, 0.35, 0.05)];
+    const rings = [(0.30, 2, 0.22), (0.42, -1, 0.16), (0.55, 1, 0.11)];
     for (final (radiusFactor, speed, opacity) in rings) {
       final radius = base * radiusFactor;
       final paint = Paint()
@@ -104,11 +133,11 @@ class _SciFiPainter extends CustomPainter {
         canvas.drawArc(Rect.fromCircle(center: center, radius: radius), start, 2 * pi / dashes * 0.7, false, paint);
       }
       // Petit satellite lumineux en orbite.
-      final angle = rotation * 1.5;
+      final angle = rotation * 2;
       canvas.drawCircle(
         center + Offset(cos(angle), sin(angle)) * radius,
-        2,
-        Paint()..color = AppColors.goldBright.withOpacity(opacity * 3),
+        2.5,
+        Paint()..color = AppColors.goldBright.withOpacity(min(1.0, opacity * 3.5)),
       );
     }
   }
@@ -117,7 +146,7 @@ class _SciFiPainter extends CustomPainter {
     final horizon = size.height * 0.62;
     final paint = Paint()
       ..strokeWidth = 1
-      ..color = AppColors.gold.withOpacity(0.06);
+      ..color = AppColors.gold.withOpacity(0.10);
     // Lignes de fuite.
     final vanishing = Offset(size.width / 2, horizon);
     for (var i = -8; i <= 8; i++) {
@@ -128,7 +157,7 @@ class _SciFiPainter extends CustomPainter {
     for (var i = 0; i < lines; i++) {
       final p = ((i + (t * 30) % 1.0) / lines);
       final y = horizon + (size.height - horizon) * p * p;
-      paint.color = AppColors.gold.withOpacity(0.02 + 0.08 * p);
+      paint.color = AppColors.gold.withOpacity(0.04 + 0.16 * p);
       canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
     }
   }

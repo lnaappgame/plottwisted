@@ -35,8 +35,9 @@ class ShopItem {
   final String productId; // doit correspondre à l'ID configuré dans Play Console / App Store Connect
   final String label;
   final String? subtitle;
-  final String fallbackPrice; // affiché tant que le prix réel du store n'est pas encore chargé
-  final String? strikethroughPrice; // prix barré affiché à côté, pour un effet promo — purement visuel
+  // Prix barré affiché à côté (effet promo) : somme des prix réels de ces
+  // articles achetés séparément, donc toujours dans la devise du joueur.
+  final List<String> compareAtProductIds;
   final JokerGrant jokers;
   final bool removesAdsForever;
   final int removeAdsForHours; // 0 = pas de retrait temporaire de pub
@@ -49,8 +50,7 @@ class ShopItem {
     required this.productId,
     required this.label,
     this.subtitle,
-    required this.fallbackPrice,
-    this.strikethroughPrice,
+    this.compareAtProductIds = const [],
     this.jokers = const JokerGrant(),
     this.removesAdsForever = false,
     this.removeAdsForHours = 0,
@@ -69,7 +69,6 @@ final List<ShopItem> kShopItems = [
     productId: 'remove_ads',
     label: '🚫 Retirer les pubs',
     subtitle: 'Définitif',
-    fallbackPrice: '4,99 €',
     removesAdsForever: true,
     labelUs: '🚫 Remove ads',
     subtitleUs: 'Permanent',
@@ -77,15 +76,13 @@ final List<ShopItem> kShopItems = [
   ShopItem(
     productId: 'jokers_pack_10',
     label: '🎁 Pack 10 jokers mixtes',
-    fallbackPrice: '2,99 €',
     jokers: JokerGrant.mixed(10),
     labelUs: '🎁 10 mixed jokers pack',
   ),
   ShopItem(
     productId: 'jokers_pack_30_noads',
     label: '🎁 Pack 30 jokers + sans pub',
-    fallbackPrice: '9,99 €',
-    strikethroughPrice: '13,96 €',
+    compareAtProductIds: ['jokers_pack_10', 'jokers_pack_10', 'jokers_pack_10', 'remove_ads'],
     jokers: JokerGrant.mixed(30),
     removesAdsForever: true,
     labelUs: '🎁 30 jokers + no ads pack',
@@ -93,7 +90,6 @@ final List<ShopItem> kShopItems = [
   ShopItem(
     productId: 'jokers_pack_100_noads',
     label: '🎁 Pack 100 jokers + sans pub',
-    fallbackPrice: '14,99 €',
     jokers: JokerGrant.mixed(100),
     removesAdsForever: true,
     labelUs: '🎁 100 jokers + no ads pack',
@@ -102,7 +98,6 @@ final List<ShopItem> kShopItems = [
     productId: 'red_jokers_pack_3',
     label: '🔴 Pack 3 jokers rouges',
     subtitle: 'Débloque un nom orange',
-    fallbackPrice: '2,00 €',
     jokers: JokerGrant(redJoker: 3),
     labelUs: '🔴 3 red jokers pack',
     subtitleUs: 'Unlocks an orange name',
@@ -111,7 +106,6 @@ final List<ShopItem> kShopItems = [
     productId: 'skip_level_joker',
     label: '⏭️ Joker « Passer définitivement »',
     subtitle: 'Résout le niveau en cours à ta place',
-    fallbackPrice: '1,00 €',
     jokers: JokerGrant(skip: 1),
     labelUs: '⏭️ "Skip for good" joker',
     subtitleUs: 'Solves the current level for you',

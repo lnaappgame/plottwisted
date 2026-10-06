@@ -39,6 +39,7 @@ class ShopScreen extends StatelessWidget {
                 child: Column(
                   children: kShopItems.map((item) {
                     final purchasable = purchase.available && purchase.products.containsKey(item.productId);
+                    final compareAtPrice = purchase.compareAtPriceFor(item, settings.locale);
                     return Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -69,7 +70,7 @@ class ShopScreen extends StatelessWidget {
                               foregroundColor: const Color(0xFF1A1410),
                               disabledBackgroundColor: AppColors.gold.withOpacity(0.25),
                             ),
-                            child: item.strikethroughPrice == null
+                            child: compareAtPrice == null
                                 ? Text(purchase.priceFor(item),
                                     style: AppTextStyles.body(size: 12, weight: FontWeight.w700))
                                 : Row(
@@ -77,7 +78,7 @@ class ShopScreen extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        item.strikethroughPrice!,
+                                        compareAtPrice,
                                         style: AppTextStyles.body(size: 12, weight: FontWeight.w700).copyWith(
                                           decoration: TextDecoration.lineThrough,
                                           decorationThickness: 2,
