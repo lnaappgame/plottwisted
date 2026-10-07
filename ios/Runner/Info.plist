@@ -14,6 +14,13 @@
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
+		<!-- Langues de l'app (Flutter les gère, mais iOS doit les connaître
+	     pour localiser les textes système comme la demande de suivi). -->
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>en</string>
+			<string>fr</string>
+		</array>
 		<key>CFBundleName</key>
 		<string>Plot Twist(ed)</string>
 		<key>CFBundlePackageType</key>
@@ -22,6 +29,26 @@
 		<string>$(FLUTTER_BUILD_NAME)</string>
 		<key>CFBundleSignature</key>
 		<string>????</string>
+		<!-- Connexion Google (sauvegarde cloud) : sans ce schéma d'URL, le
+	     retour de la page de connexion Google fait planter l'app. Valeurs
+	     reprises de GoogleService-Info.plist (CLIENT_ID / REVERSED_CLIENT_ID). -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.486275850711-8k6khjrvg8vghqootrbjms5sb91tsk7k</string>
+				</array>
+			</dict>
+		</array>
+		<key>GIDClientID</key>
+		<string>486275850711-8k6khjrvg8vghqootrbjms5sb91tsk7k.apps.googleusercontent.com</string>
+		<!-- Seul du HTTPS standard (exempté) : évite la question sur le
+	     chiffrement à chaque envoi d'un build à App Store Connect. -->
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<!-- ID d'application AdMob iOS (vrai ID, comme sur Android) : ce sont les
@@ -29,10 +56,10 @@
 		<key>GADApplicationIdentifier</key>
 		<string>ca-app-pub-7543651245365030~9871855193</string>
 		<!-- Obligatoire iOS 14.5+ pour toute pub personnalisée (App Tracking
-	     Transparency) — déclenche le popup système avant toute requête
-	     publicitaire ciblée. -->
+	     Transparency). Texte par défaut (anglais) ; traductions dans
+	     en.lproj / fr.lproj/InfoPlist.strings. -->
 		<key>NSUserTrackingUsageDescription</key>
-		<string>Cette donnée nous permet de vous proposer des publicités plus pertinentes.</string>
+		<string>This lets us show you more relevant ads and keep the game free.</string>
 		<!-- Identifiant SKAdNetwork de Google, minimum requis pour l'attribution
 	     des pubs AdMob sur iOS 14+. À compléter avec la liste complète des
 	     réseaux de médiation si des SDK tiers sont ajoutés plus tard (voir

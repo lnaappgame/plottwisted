@@ -19,20 +19,76 @@ workflows:
     artifacts:
       - build/ios/iphoneos/*.app
 
-  # ios-signed:
-  #   name: iOS — build signé + TestFlight
-  #   À activer une fois l'Apple Developer Program obtenu (99$/an,
-  #   indépendant du SIRET). Nécessite de générer une clé API App Store
-  #   Connect et de la renseigner dans Codemagic (Teams > Code signing
-  #   identities), puis de décommenter ce bloc avec :
-  #     environment:
-  #       ios_signing:
-  #         distribution_type: app_store   # ou ad_hoc pour un simple test iPhone
-  #         bundle_identifier: com.lnaapp.plottwisted
-  #       vars:
-  #         APP_STORE_CONNECT_KEY_IDENTIFIER: ...
-  #     scripts:
-  #       - flutter build ipa --release
-  #     publishing:
-  #       app_store_connect:
-  #         auth: integration
+
+  # Builds signés envoyés sur TestFlight. Prérequis (une fois) dans Codemagic :
+  # clé API App Store Connect nommée "plottwisted-asc" (Team integrations >
+  # Developer Portal), certificat Apple Distribution et profil App Store de
+  # com.lnaapp.plottwisted dans Code signing identities.
+  ios-testflight:
+    name: iOS — TestFlight (pubs de test)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: plottwisted-asc
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.lnaapp.plottwisted
+      vars:
+        APP_STORE_APPLE_ID: 6820246879
+        REAL_ADS_FLAG: ""
+    scripts: &ios_signed_scripts
+      - name: Flutter pub get
+        script: flutter pub get
+      - name: Profils de signature dans le projet Xcode
+        script: xcode-project use-profiles
+      - name: Build IPA
+        script: |
+          # Numéro de build iOS : au moins celui du pubspec, et toujours
+          # au-dessus du dernier envoyé (Apple refuse un numéro déjà utilisé).
+          PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed -E 's/.*\+([0-9]+).*/\1/')
+          LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+          NEXT=$(( ${LATEST:-0} + 1 ))
+          [ "$NEXT" -lt "$PUBSPEC_BUILD" ] && NEXT=$PUBSPEC_BUILD
+          echo "Build iOS n° $NEXT"
+          flutter build ipa --release \
+            --build-number=$NEXT \
+            $REAL_ADS_FLAG \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+
+  # Même chose avec les vraies pubs AdMob : c'est CE build qu'on soumet à
+  # l'App Store. Sur TestFlight, ne jamais cliquer ses pubs (trafic invalide).
+  ios-release:
+    name: iOS — Release App Store (vraies pubs)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: plottwisted-asc
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.lnaapp.plottwisted
+      vars:
+        APP_STORE_APPLE_ID: 6820246879
+        REAL_ADS_FLAG: "--dart-define=REAL_ADS=true"
+    scripts: *ios_signed_scripts
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
