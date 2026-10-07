@@ -317,6 +317,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enigmeTitle => 'WEEKLY PUZZLE';
 
   @override
+  String get enigmeZoom => 'Enlarge';
+
+  @override
   String enigmeDayOf7(int n) {
     return 'Day $n / 7';
   }
@@ -441,6 +444,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameJokerWon => 'JOKER WON';
 
   @override
+  String get gameJokersWon => 'JOKERS WON';
+
+  @override
+  String gameWorldDone(String world) {
+    return '🏆 World $world complete!';
+  }
+
+  @override
   String get gameMinorBonusOffer =>
       '3 tries without finding it... watch a short ad to win a joker?';
 
@@ -469,11 +480,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonCancel => 'Cancel';
-
-  @override
-  String gameJokerEarnedToast(String label) {
-    return '🎁 Joker won: $label!';
-  }
 
   @override
   String get gameTutorialFinalTransition =>
@@ -573,16 +579,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jokerRedCharacter => 'CHARACTER (RED)';
 
   @override
-  String get jokerWinOne => 'WIN A JOKER';
+  String get jokerGetSubtitle => '+ get';
+
+  @override
+  String jokerEmptyBody(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n',
+      one: 'one',
+    );
+    return 'You\'re out of this joker. Watch a short ad to earn $_temp0, or visit the shop.';
+  }
+
+  @override
+  String jokerWatchAdFor(int n) {
+    return '▶ Watch an ad (+$n)';
+  }
+
+  @override
+  String get jokerGoShop => '🛒 Go to the shop';
 
   @override
   String get jokerHintUsedSubtitle => 'used · 🎬';
-
-  @override
-  String get jokerLockedSubtitle => 'locked';
-
-  @override
-  String get jokerAdUnlockSubtitle => '🎬 ad → joker';
 
   @override
   String get jokerRedLockedToast =>

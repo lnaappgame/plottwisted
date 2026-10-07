@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../models/joker.dart';
 import '../models/puzzle.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
 import '../theme/app_theme.dart';
+import 'joker_fx.dart';
+import 'joker_style.dart';
 
 Color _difficultyBorderColor(String label) {
   switch (label) {
@@ -22,7 +25,8 @@ Color _difficultyBorderColor(String label) {
 }
 
 class PitchCard extends StatefulWidget {
-  const PitchCard({super.key});
+  final JokerFx? fx;
+  const PitchCard({super.key, this.fx});
 
   @override
   State<PitchCard> createState() => _PitchCardState();
@@ -32,10 +36,14 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
   late final AnimationController _pulseController;
   late final Animation<double> _pulseAnim;
   String? _lastLevelKey;
+  // Couleurs affichées par nom : figées pendant le vol du faisceau d'un joker
+  // Acteur/Personnage (l'état du jeu a déjà changé, l'affichage suit à l'impact).
+  final Map<String, List<NameColor>> _shownNames = {};
 
   @override
   void initState() {
     super.initState();
+    widget.fx?.addListener(_onFx);
     // Cycle en boucle : pulsation de 1,4 s (420 ms montée, 980 ms descente)
     // puis 3 s de repos — les poids sont ces durées en millisecondes.
     _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 4400));
@@ -47,9 +55,35 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
   }
 
   @override
+  void didUpdateWidget(PitchCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.fx != widget.fx) {
+      oldWidget.fx?.removeListener(_onFx);
+      widget.fx?.addListener(_onFx);
+    }
+  }
+
+  @override
   void dispose() {
+    widget.fx?.removeListener(_onFx);
     _pulseController.dispose();
     super.dispose();
+  }
+
+  void _onFx() {
+    if (mounted) setState(() {});
+  }
+
+  bool _incoming(String id) => widget.fx?.isIncoming(id) ?? false;
+
+  /// Masque [child] tant que le faisceau du joker visant [id] n'est pas arrivé.
+  Widget _awaitBeam(String id, Widget child) {
+    if (widget.fx == null) return child;
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 180),
+      opacity: _incoming(id) ? 0 : 1,
+      child: child,
+    );
   }
 
   @override
@@ -81,7 +115,7 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
       if (puzzle.hasP2) ('{p2}', 'p2'),
     ];
 
-    WidgetSpan nameSpan(String slot, NameColor nameColor, bool armed) {
+    WidgetSpan nameSpan(String slot, NameColor nameColor, bool armed, {bool isTarget = false}) {
       final text = game.displayFor(slot, nameColor);
       final color = colors.forNameColor(nameColor);
       final label = settings.colorblindMode ? '${AppColors.symbolForNameColor(nameColor)} $text' : text;
@@ -89,13 +123,17 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
         alignment: PlaceholderAlignment.middle,
         child: GestureDetector(
           onTap: () {
+            final armedColor = game.activeNameJoker;
             final err = game.onNameTap(slot);
+            final kind = armedColor == null ? null : JokerKind.fromNameColor(armedColor);
+            if (err == null && kind != null) widget.fx?.beam(kind, jokerColor(kind, colors), ['name:$slot']);
             if (err != null && context.mounted) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(err), duration: const Duration(seconds: 2)));
             }
           },
           child: Container(
+            key: isTarget ? widget.fx?.key('name:$slot') : null,
             padding: const EdgeInsets.symmetric(horizontal: 2),
             decoration: BoxDecoration(
               color: armed ? color.withOpacity(0.18) : null,
@@ -135,11 +173,14 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
         break;
       }
       if (nextIdx > 0) spans.add(TextSpan(text: remaining.substring(0, nextIdx)));
-      final shown = game.displayedColors(matchSlot!);
+      final cached = _shownNames[matchSlot!];
+      final shown = _incoming('name:$matchSlot') && cached != null
+          ? cached
+          : (_shownNames[matchSlot] = game.displayedColors(matchSlot));
       final armed = game.activeNameJoker != null && game.activeNameJoker != shown.first;
       for (var k = 0; k < shown.length; k++) {
         if (k > 0) spans.add(TextSpan(text: ' / ', style: TextStyle(color: colors.muted)));
-        spans.add(nameSpan(matchSlot, shown[k], armed));
+        spans.add(nameSpan(matchSlot, shown[k], armed, isTarget: k == 0));
       }
       remaining = remaining.substring(nextIdx + matchToken!.length);
     }
@@ -197,13 +238,17 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
           ],
           if (game.revealedHintText != null) ...[
             Container(
+              key: widget.fx?.key('hint'),
               margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.only(top: 10),
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: AppColors.gold.withOpacity(0.3), width: 1)),
               ),
-              child: Text('🎬 ${game.revealedHintText}',
-                  style: AppTextStyles.body(size: 16, color: AppColors.goldBright).copyWith(height: 1.55)),
+              child: _awaitBeam(
+                'hint',
+                Text('🎬 ${game.revealedHintText}',
+                    style: AppTextStyles.body(size: 16, color: AppColors.goldBright).copyWith(height: 1.55)),
+              ),
             ),
           ],
         ],

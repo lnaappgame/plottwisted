@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../data/puzzles_data.dart';
 import '../l10n/app_localizations.dart';
+import '../models/joker.dart';
 import '../models/puzzle.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
@@ -13,6 +14,8 @@ import '../theme/app_theme.dart';
 import '../widgets/answer_row.dart';
 import '../widgets/clapper_transition.dart';
 import '../widgets/joker_bar.dart';
+import '../widgets/joker_fx.dart';
+import '../widgets/joker_style.dart';
 import '../widgets/letter_pool.dart';
 import '../widgets/mini_popup.dart';
 import '../widgets/pitch_card.dart';
@@ -55,6 +58,15 @@ class _GameScreenState extends State<GameScreen> {
   bool _revealingAnswer = false;
   Timer? _revealTimer;
 
+  // keepScrollOffset à false : un nouveau niveau repart toujours en haut,
+  // même quand le plateau est reconstruit après l'écran de choix de monde.
+  final ScrollController _scroll = ScrollController(keepScrollOffset: false);
+  final JokerFx _fx = JokerFx();
+
+  // Jokers gagnés en fin de niveau ou de monde, montrés une fois le niveau
+  // suivant affiché (leur étoile doit pouvoir rejoindre la barre de jokers).
+  ({String? eyebrow, List<RewardGrant> grants})? _queuedReward;
+
   @override
   void initState() {
     super.initState();
@@ -65,7 +77,20 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void dispose() {
     _revealTimer?.cancel();
+    _scroll.dispose();
+    _fx.dispose();
     super.dispose();
+  }
+
+  void _scrollToTop() {
+    if (_scroll.hasClients) _scroll.jumpTo(0);
+  }
+
+  void _flushQueuedReward() {
+    final reward = _queuedReward;
+    if (reward == null || !mounted) return;
+    _queuedReward = null;
+    _fx.reward(eyebrow: reward.eyebrow, grants: reward.grants);
   }
 
   /// Confirme l'écran de monde imposé (COMMENCER) ou le choix fait par le
@@ -89,7 +114,8 @@ class _GameScreenState extends State<GameScreen> {
   void _loadWithTutorialCheck() {
     context.read<GameState>().loadPuzzle();
     setState(() {});
-    _checkIntroDialogsAfterLoad();
+    _scrollToTop();
+    _checkIntroDialogsAfterLoad(then: _flushQueuedReward);
   }
 
   /// Popups d'explication (orange/violet/tutoriel numéroté) à afficher une
@@ -98,46 +124,55 @@ class _GameScreenState extends State<GameScreen> {
   /// d'afficher son dialogue (sans quoi l'en-tête montrait déjà "Monde 0-4"
   /// pendant que le pitch/la grille affichés dessous restaient ceux de
   /// l'ancien niveau, le temps que la popup soit fermée) sans le recharger
-  /// une seconde fois à la fermeture de cette popup.
-  void _checkIntroDialogsAfterLoad() {
+  /// une seconde fois à la fermeture de cette popup. [then] est appelé
+  /// une fois l'éventuelle popup fermée (ou tout de suite s'il n'y en a pas).
+  void _checkIntroDialogsAfterLoad({VoidCallback? then}) {
     final game = context.read<GameState>();
     final t = AppLocalizations.of(context);
     // Explication à la première rencontre d'un nom orange/violet en partie
     // (indépendant du tutoriel guidé, peut survenir à tout moment du jeu).
     if (game.consumeOrangeIntroPending()) {
-      _showTutorialDialog('', richSpans: [
-        TextSpan(text: t.gameOrangeIntro1),
-        TextSpan(
-            text: t.colorOrange, style: const TextStyle(color: AppColors.orangeBright, fontWeight: FontWeight.w600)),
-        TextSpan(text: t.gameOrangeIntro2),
-        TextSpan(text: t.colorRed, style: const TextStyle(color: AppColors.crimsonBright, fontWeight: FontWeight.w600)),
-        TextSpan(text: t.gameOrangeIntro3),
-      ]);
+      _showTutorialDialog('',
+          richSpans: [
+            TextSpan(text: t.gameOrangeIntro1),
+            TextSpan(
+                text: t.colorOrange,
+                style: const TextStyle(color: AppColors.orangeBright, fontWeight: FontWeight.w600)),
+            TextSpan(text: t.gameOrangeIntro2),
+            TextSpan(
+                text: t.colorRed, style: const TextStyle(color: AppColors.crimsonBright, fontWeight: FontWeight.w600)),
+            TextSpan(text: t.gameOrangeIntro3),
+          ],
+          onClose: then);
       return;
     }
     if (game.consumeVioletIntroPending()) {
-      _showTutorialDialog('', richSpans: [
-        TextSpan(text: t.gameVioletIntro1),
-        TextSpan(
-            text: t.colorPurple, style: const TextStyle(color: AppColors.violetBright, fontWeight: FontWeight.w600)),
-        TextSpan(text: t.gameVioletIntro2),
-      ]);
+      _showTutorialDialog('',
+          richSpans: [
+            TextSpan(text: t.gameVioletIntro1),
+            TextSpan(
+                text: t.colorPurple,
+                style: const TextStyle(color: AppColors.violetBright, fontWeight: FontWeight.w600)),
+            TextSpan(text: t.gameVioletIntro2),
+          ],
+          onClose: then);
       return;
     }
 
     if (game.inTutorial) {
       switch (game.currentLevelNumber) {
         case 1:
-          _showTutorialDialog(t.gameTutorial1);
-          break;
+          _showTutorialDialog(t.gameTutorial1, onClose: then);
+          return;
         case 2:
-          _showTutorialDialog(t.gameTutorial2);
-          break;
+          _showTutorialDialog(t.gameTutorial2, onClose: then);
+          return;
         case 3:
-          _showTutorialDialog(t.gameTutorial3);
-          break;
+          _showTutorialDialog(t.gameTutorial3, onClose: then);
+          return;
       }
     }
+    if (then != null) WidgetsBinding.instance.addPostFrameCallback((_) => then());
   }
 
   void _showTutorialDialog(String message, {VoidCallback? onClose, List<InlineSpan>? richSpans}) {
@@ -186,93 +221,78 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  static String _jokerIcon(String label) {
-    switch (label) {
-      case 'Révéler':
-        return '💡';
-      case 'Éliminer':
-        return '✂️';
-      case 'Acteur':
-        return '🔵';
-      case 'Personnage':
-        return '🟢';
-      case 'Personnage (rouge)':
-        return '🔴';
-      case 'Indice':
-        return '🎬';
-      case 'Révéler un mot':
-        return '📖';
-      default:
-        return '🎁';
-    }
-  }
-
-  /// Encart affiché après le visionnage d'une pub à récompense, annonçant
-  /// le joker gagné.
-  void _showJokerWonDialog(String label) {
-    final colors = AppColors(context.read<AppSettings>().isLightTheme);
+  // ─── Joker épuisé : pub pour ce joker précis, ou boutique ───
+  Future<void> _onRequestJoker(JokerKind kind) async {
+    final game = context.read<GameState>();
+    final settings = context.read<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
     final t = AppLocalizations.of(context);
-    final displayLabel = jokerLabelFor(label, context.read<AppSettings>().locale);
-    showDialog(
+    final accent = jokerColor(kind, colors);
+    final canAd = game.canWatchAdFor(kind);
+    final choice = await showDialog<String>(
       context: context,
-      builder: (_) => Dialog(
+      builder: (dialogContext) => Dialog(
         backgroundColor: colors.bgPanel2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: accent.withOpacity(0.6)),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(22, 20, 22, 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(_jokerIcon(label), style: const TextStyle(fontSize: 40)),
+              Text('${kind.icon} ${jokerName(kind, t)}',
+                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 20, color: accent)),
               const SizedBox(height: 10),
-              Text(t.gameJokerWon,
-                  style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)
-                      .copyWith(letterSpacing: 2)),
-              const SizedBox(height: 6),
-              Text(displayLabel, textAlign: TextAlign.center, style: AppTextStyles.display(size: 22)),
+              Text(
+                canAd ? t.jokerEmptyBody(kind.adReward) : t.jokerRedLockedToast,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5),
+              ),
               const SizedBox(height: 18),
+              if (canAd) ...[
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
+                    onPressed: () => Navigator.of(dialogContext).pop('ad'),
+                    child: Text(t.jokerWatchAdFor(kind.adReward),
+                        style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: colors.cream)),
+                  ),
+                ),
+                const SizedBox(height: 8),
+              ],
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('OK', style: AppTextStyles.display(size: 15, color: colors.cream)),
+                child: OutlinedButton(
+                  onPressed: () => Navigator.of(dialogContext).pop('shop'),
+                  child: Text(t.jokerGoShop,
+                      style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: AppColors.gold)),
                 ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(t.commonCancel, style: AppTextStyles.body(size: 13, color: colors.muted)),
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  // ─── Pub : AdMob affiche sa propre interface plein écran, on ne bloque
-  // jamais rien nous-mêmes — on attend juste que le SDK ait terminé. ───
-  Future<void> _onWatchAdForJoker() async {
-    final game = context.read<GameState>();
-    if (game.inTutorial) return;
-    final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
-    if (earned) {
-      final label = game.grantWeightedRandomJoker();
-      _showJokerWonDialog(label);
-    } else {
-      _toast(AppLocalizations.of(context).commonAdUnavailable);
-    }
-  }
-
-  /// Pub garantie (100% de chances) pour 1 joker rouge — limitée à une fois
-  /// par niveau concerné (voir [GameState.peutRegarderPubJokerRouge]).
-  Future<void> _onWatchAdForRedJoker() async {
-    final game = context.read<GameState>();
-    if (game.inTutorial || !game.peutRegarderPubJokerRouge) return;
-    final earned = await game.adService.showRewardedAdForJoker();
-    if (!mounted) return;
-    if (earned) {
-      game.grantRedJokerFromAd();
-      _showJokerWonDialog('Personnage (rouge)');
-    } else {
-      _toast(AppLocalizations.of(context).commonAdUnavailable);
+    if (choice == 'shop') {
+      showDialog(context: context, builder: (_) => const ShopScreen());
+    } else if (choice == 'ad') {
+      // AdMob affiche sa propre interface plein écran : on attend juste la fin.
+      final earned = await game.adService.showRewardedAdForJoker();
+      if (!mounted) return;
+      final granted = earned ? game.grantJokerFromAd(kind) : 0;
+      if (granted > 0) {
+        _fx.reward(grants: [RewardGrant(kind, granted)]);
+      } else {
+        _toast(t.commonAdUnavailable);
+      }
     }
   }
 
@@ -298,8 +318,8 @@ class _GameScreenState extends State<GameScreen> {
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned) {
-      final label = game.grantWeightedRandomJoker();
-      _showJokerWonDialog(label);
+      final kind = JokerKind.fromLabel(game.grantWeightedRandomJoker());
+      if (kind != null) _fx.reward(grants: [RewardGrant(kind, 1)]);
     }
   }
 
@@ -312,6 +332,7 @@ class _GameScreenState extends State<GameScreen> {
     }
     game.skipCurrentLevel();
     setState(() {});
+    _scrollToTop();
     _checkIntroDialogsAfterLoad();
   }
 
@@ -406,10 +427,9 @@ class _GameScreenState extends State<GameScreen> {
 
     final status = game.advanceAfterSolve();
 
-    if (game.pendingMinorJokerLabel != null) {
-      _toast(t.gameJokerEarnedToast(jokerLabelFor(game.pendingMinorJokerLabel!, game.locale)));
-      game.pendingMinorJokerLabel = null;
-    }
+    final minorKind = game.pendingMinorJokerLabel == null ? null : JokerKind.fromLabel(game.pendingMinorJokerLabel!);
+    game.pendingMinorJokerLabel = null;
+    if (minorKind != null) _queuedReward = (eyebrow: null, grants: [RewardGrant(minorKind, 1)]);
 
     if (wasTutorial && status == 'tutorial-final-transition') {
       // Charge déjà le niveau 0-4 avant d'afficher le dialogue, pour que le
@@ -418,6 +438,7 @@ class _GameScreenState extends State<GameScreen> {
       // jusqu'à sa fermeture.
       game.loadPuzzle();
       setState(() {});
+      _scrollToTop();
       _showTutorialDialog(
         t.gameTutorialFinalTransition,
         onClose: _checkIntroDialogsAfterLoad,
@@ -445,11 +466,21 @@ class _GameScreenState extends State<GameScreen> {
       final worldNumber = parts.length > 1 ? parts[1] : '';
       final majorLabel = parts.length > 2 ? parts[2] : '';
       final minorLabel = parts.length > 3 ? parts[3] : '';
-      if (majorLabel.isNotEmpty && minorLabel.isNotEmpty) {
-        _toast(t.gameWorldCompleteBoth(
-            worldNumber, jokerLabelFor(majorLabel, game.locale), jokerLabelFor(minorLabel, game.locale)));
-      } else if (majorLabel.isNotEmpty) {
-        _toast(t.gameWorldCompleteMajor(worldNumber, jokerLabelFor(majorLabel, game.locale)));
+      if (status.startsWith('all-content-complete')) {
+        // Plus de plateau de jeu ensuite (page "prochainement") : pas
+        // d'étoile possible, on garde le message simple.
+        if (majorLabel.isNotEmpty && minorLabel.isNotEmpty) {
+          _toast(t.gameWorldCompleteBoth(
+              worldNumber, jokerLabelFor(majorLabel, game.locale), jokerLabelFor(minorLabel, game.locale)));
+        } else if (majorLabel.isNotEmpty) {
+          _toast(t.gameWorldCompleteMajor(worldNumber, jokerLabelFor(majorLabel, game.locale)));
+        }
+      } else {
+        final grants = [
+          for (final label in [majorLabel, minorLabel])
+            if (JokerKind.fromLabel(label) case final kind?) RewardGrant(kind, 1),
+        ];
+        if (grants.isNotEmpty) _queuedReward = (eyebrow: t.gameWorldDone(worldNumber), grants: grants);
       }
     }
     if (status.startsWith('all-content-complete')) {
@@ -532,6 +563,7 @@ class _GameScreenState extends State<GameScreen> {
             AbsorbPointer(
               absorbing: _revealingAnswer,
               child: SingleChildScrollView(
+                controller: _scroll,
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -575,16 +607,15 @@ class _GameScreenState extends State<GameScreen> {
                       ],
                     ),
                     const SizedBox(height: 14),
-                    const PitchCard(),
+                    PitchCard(fx: _fx),
                     const SizedBox(height: 18),
-                    AnswerRow(highlightSolved: _revealingAnswer),
+                    AnswerRow(highlightSolved: _revealingAnswer, fx: _fx),
                     const SizedBox(height: 18),
-                    const LetterPool(),
+                    LetterPool(fx: _fx),
                     const SizedBox(height: 18),
                     JokerBar(
-                      onToast: _toast,
-                      onWatchAdForJoker: _onWatchAdForJoker,
-                      onWatchAdForRedJoker: _onWatchAdForRedJoker,
+                      fx: _fx,
+                      onRequestJoker: _onRequestJoker,
                     ),
                     const SizedBox(height: 10),
                     Row(
@@ -645,6 +676,7 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
             ),
+            Positioned.fill(child: JokerFxLayer(fx: _fx)),
             if (_showResult) Positioned.fill(child: ResultOverlay(onNext: _onNextLevel)),
             if (_miniPopup != null)
               MiniPopup(

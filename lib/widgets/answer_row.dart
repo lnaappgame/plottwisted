@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
 import '../theme/app_theme.dart';
+import 'joker_fx.dart';
 
 class AnswerRow extends StatelessWidget {
   /// Affiche le titre complet en surbrillance verte (bonne réponse, avant la
   /// révélation), quelles que soient les lettres placées par le joueur.
   final bool highlightSolved;
-  const AnswerRow({super.key, this.highlightSolved = false});
+  final JokerFx? fx;
+  const AnswerRow({super.key, this.highlightSolved = false, this.fx});
 
   bool _isLocked(GameState game, int i) {
     if (game.lockedSlots.contains(i)) return true;
@@ -18,6 +20,12 @@ class AnswerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fx = this.fx;
+    if (fx == null) return _build(context);
+    return ListenableBuilder(listenable: fx, builder: (context, _) => _build(context));
+  }
+
+  Widget _build(BuildContext context) {
     final game = context.watch<GameState>();
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme);
@@ -48,13 +56,17 @@ class AnswerRow extends StatelessWidget {
         continue;
       }
       if (highlightSolved) {
-        currentWord.add(_Blank(text: slot.char, colors: colors, style: _BlankStyle.solved));
+        currentWord.add(KeyedSubtree(
+            key: fx?.key('slot:$i'), child: _Blank(text: slot.char, colors: colors, style: _BlankStyle.solved)));
         continue;
       }
-      final locked = _isLocked(game, i);
-      final tileId = game.guess[i];
+      // Case visée par un faisceau de joker : reste vide jusqu'à l'impact.
+      final incoming = fx?.isIncoming('slot:$i') ?? false;
+      final locked = !incoming && _isLocked(game, i);
+      final tileId = incoming ? null : game.guess[i];
       final letter = tileId != null ? game.pool[tileId].letter : null;
       currentWord.add(GestureDetector(
+        key: fx?.key('slot:$i'),
         onTap: () => game.onBlankTap(i),
         child: _Blank(
           text: letter ?? '_',

@@ -36,10 +36,14 @@ String _ordinal(BuildContext context, int rang) {
   if (AppLocalizations.of(context).localeName == 'en') {
     if (rang % 100 >= 11 && rang % 100 <= 13) return '${rang}th';
     switch (rang % 10) {
-      case 1: return '${rang}st';
-      case 2: return '${rang}nd';
-      case 3: return '${rang}rd';
-      default: return '${rang}th';
+      case 1:
+        return '${rang}st';
+      case 2:
+        return '${rang}nd';
+      case 3:
+        return '${rang}rd';
+      default:
+        return '${rang}th';
     }
   }
   return '$rang${rang == 1 ? 'er' : 'e'}';
@@ -168,7 +172,8 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                   _RuleLine(t.enigmeRule5, colors),
                   _RuleLine(t.enigmeRule6, colors),
                   const SizedBox(height: 14),
-                  Text(t.enigmeRewardsHeader, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+                  Text(t.enigmeRewardsHeader,
+                      style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
                   const SizedBox(height: 8),
                   _RewardLine(t.enigmeRewardDayLabel(1), t.enigmeReward1, colors),
                   _RewardLine(t.enigmeRewardDayLabel(2), t.enigmeReward2, colors),
@@ -235,8 +240,7 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                     const SizedBox(height: 8),
                   ],
                   if (historique.isEmpty)
-                    Text(t.enigmeNoneSolved,
-                        style: AppTextStyles.body(size: 13, color: colors.muted))
+                    Text(t.enigmeNoneSolved, style: AppTextStyles.body(size: 13, color: colors.muted))
                   else
                     for (final e in historique) _HistoriqueRow(entry: e, colors: colors),
                   const SizedBox(height: 18),
@@ -356,7 +360,9 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter,
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                         colors: [colors.bgPanel2, colors.bgPanel]),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: AppColors.gold.withOpacity(0.35)),
@@ -382,6 +388,23 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                           ),
                         ),
                       ],
+                      // Indique que toucher le pitch l'agrandit (tout le cadre reste touchable).
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.zoom_in, size: 15, color: colors.muted),
+                              const SizedBox(width: 3),
+                              Text(t.enigmeZoom,
+                                  style: AppTextStyles.body(size: 12, color: colors.muted)
+                                      .copyWith(fontStyle: FontStyle.italic)),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -407,7 +430,8 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => context.read<EnigmeState>().clearGuess(),
-                        child: Text(t.commonClear, style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: colors.muted)),
+                        child: Text(t.commonClear,
+                            style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: colors.muted)),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -460,7 +484,8 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
     }
     return ElevatedButton(
       onPressed: null,
-      child: Text(t.enigmeComeBackTomorrow, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: colors.muted)),
+      child: Text(t.enigmeComeBackTomorrow,
+          style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: colors.muted)),
     );
   }
 }
@@ -497,7 +522,10 @@ class _RewardLine extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
         children: [
-          SizedBox(width: 60, child: Text(jour, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright))),
+          SizedBox(
+              width: 60,
+              child: Text(jour,
+                  style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright))),
           Expanded(child: Text(recompense, style: AppTextStyles.body(size: 12, color: colors.cream))),
         ],
       ),
@@ -575,9 +603,11 @@ class _SolvedPanelState extends State<_SolvedPanel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(t.enigmeSolvedTitle, textAlign: TextAlign.center, style: AppTextStyles.display(size: 22, color: AppColors.goldBright)),
+          Text(t.enigmeSolvedTitle,
+              textAlign: TextAlign.center, style: AppTextStyles.display(size: 22, color: AppColors.goldBright)),
           const SizedBox(height: 8),
-          Text(enigmeState.enigme.sujetFor(enigmeState.locale), textAlign: TextAlign.center,
+          Text(enigmeState.enigme.sujetFor(enigmeState.locale),
+              textAlign: TextAlign.center,
               style: AppTextStyles.body(size: 16, weight: FontWeight.w700, color: colors.cream)),
           const SizedBox(height: 10),
           if (enigmeState.solveSeconds != null)
@@ -588,7 +618,8 @@ class _SolvedPanelState extends State<_SolvedPanel> {
             Text(
                 t.enigmeRewardLabel(
                     enigmeState.rewardLabels.map((l) => jokerLabelFor(l, enigmeState.locale)).join(', ')),
-                textAlign: TextAlign.center, style: AppTextStyles.body(size: 12, color: AppColors.goldBright)),
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(size: 12, color: AppColors.goldBright)),
           ],
           const SizedBox(height: 14),
           Container(
@@ -609,7 +640,8 @@ class _SolvedPanelState extends State<_SolvedPanel> {
                   final r = snapshot.data!;
                   texte = '🏆 ${_formatClassement(context, r.rang, r.total)}';
                 }
-                return Text(texte, textAlign: TextAlign.center, style: AppTextStyles.body(size: 12, color: colors.muted));
+                return Text(texte,
+                    textAlign: TextAlign.center, style: AppTextStyles.body(size: 12, color: colors.muted));
               },
             ),
           ),
@@ -643,7 +675,10 @@ class _EnigmeAnswerRow extends StatelessWidget {
 
     for (var i = 0; i < enigmeState.slots.length; i++) {
       final slot = enigmeState.slots[i];
-      if (slot.isSpace) { flushWord(); continue; }
+      if (slot.isSpace) {
+        flushWord();
+        continue;
+      }
       if (slot.isAuto) {
         currentWord.add(_EnigmeBlank(text: slot.char, colors: colors, auto: true));
         continue;
@@ -691,7 +726,8 @@ class _EnigmeBlank extends StatelessWidget {
   final bool cursor;
   final bool filled;
   final bool auto;
-  const _EnigmeBlank({required this.text, required this.colors, this.cursor = false, this.filled = false, this.auto = false});
+  const _EnigmeBlank(
+      {required this.text, required this.colors, this.cursor = false, this.filled = false, this.auto = false});
 
   @override
   Widget build(BuildContext context) {
@@ -705,7 +741,8 @@ class _EnigmeBlank extends StatelessWidget {
         border: Border(bottom: BorderSide(color: auto ? colors.muted : AppColors.gold, width: 3)),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
       ),
-      child: Text(text, style: AppTextStyles.tile(size: 19, color: filled || auto ? AppColors.goldBright : Colors.transparent)),
+      child: Text(text,
+          style: AppTextStyles.tile(size: 19, color: filled || auto ? AppColors.goldBright : Colors.transparent)),
     );
   }
 }
@@ -774,8 +811,9 @@ class _HistoriqueRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
-    final classement =
-        entry.rang != null && entry.total != null ? _formatClassement(context, entry.rang!, entry.total!) : t.enigmeRankUnknown;
+    final classement = entry.rang != null && entry.total != null
+        ? _formatClassement(context, entry.rang!, entry.total!)
+        : t.enigmeRankUnknown;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -792,7 +830,9 @@ class _HistoriqueRow extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Text(classement, textAlign: TextAlign.right, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+          Text(classement,
+              textAlign: TextAlign.right,
+              style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
         ],
       ),
     );

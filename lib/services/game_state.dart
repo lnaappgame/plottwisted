@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../data/puzzles_data.dart';
+import '../models/joker.dart';
 import '../models/puzzle.dart';
 import 'ad_service.dart';
 import 'analytics_service.dart';
@@ -673,39 +674,47 @@ class GameState extends ChangeNotifier {
   }
 
   // ─── Jokers utilitaires ───
-  void useRevealJoker() {
-    if (revealCount <= 0) return;
+  // Chaque joker renvoie ce qu'il a touché (cases, lettres), pour que
+  // l'écran puisse y diriger son animation.
+
+  /// Retourne la case révélée, ou null si le joker n'a pas été utilisé.
+  int? useRevealJoker() {
+    if (revealCount <= 0) return null;
     final emptyIdx = [
       for (var i = 0; i < slots.length; i++)
         if (!slots[i].isSpace && !slots[i].isAuto && guess[i] == null) i
     ];
-    if (emptyIdx.isEmpty) return;
+    if (emptyIdx.isEmpty) return null;
     final target = emptyIdx[_rng.nextInt(emptyIdx.length)];
     final correctChar = slots[target].char;
     final tileIdx = pool.indexWhere((t) => t.letter == correctChar && !t.used && !t.eliminated);
-    if (tileIdx == -1) return;
+    if (tileIdx == -1) return null;
     guess[target] = tileIdx;
     pool[tileIdx].used = true;
     lockedSlots.add(target);
     revealCount--;
     notifyListeners();
+    return target;
   }
 
-  void useEliminateJoker() {
-    if (eliminateCount <= 0) return;
+  /// Retourne les lettres éliminées (indices dans [pool]), vide si aucune.
+  List<int> useEliminateJoker() {
+    if (eliminateCount <= 0) return const [];
     final correctChars = slots.where((s) => !s.isSpace).map((s) => s.char).toSet();
     final wrongTiles = <int>[];
     for (var i = 0; i < pool.length; i++) {
       final t = pool[i];
       if (!correctChars.contains(t.letter) && !t.eliminated && !t.used) wrongTiles.add(i);
     }
-    if (wrongTiles.isEmpty) return; // rien à éliminer : le joker n'est pas consommé
+    if (wrongTiles.isEmpty) return const []; // rien à éliminer : le joker n'est pas consommé
     wrongTiles.shuffle(_rng);
-    for (final i in wrongTiles.take(3)) {
+    final eliminated = wrongTiles.take(3).toList();
+    for (final i in eliminated) {
       pool[i].eliminated = true;
     }
     eliminateCount--;
     notifyListeners();
+    return eliminated;
   }
 
   /// Retourne le texte de l'indice si utilisable, sinon null.
@@ -727,24 +736,25 @@ class GameState extends ChangeNotifier {
   /// lettres à trouver, mot verrouillé comme s'il avait été validé). Si la
   /// réponse ne compte qu'un seul mot, révèle environ un tiers de ses
   /// lettres au hasard à la place (sans le verrouiller).
-  void useRevealWordJoker() {
-    if (revealWordCount <= 0) return;
+  /// Retourne les cases révélées, vide si le joker n'a pas été consommé.
+  List<int> useRevealWordJoker() {
+    if (revealWordCount <= 0) return const [];
     final totalLetters = slots.where((s) => !s.isSpace && !s.isAuto).length;
-    if (totalLetters == 0 || wordRanges.isEmpty) return;
+    if (totalLetters == 0 || wordRanges.isEmpty) return const [];
 
     if (wordRanges.length == 1) {
       // Éligible même si déjà rempli par le joueur (juste ou faux) : la
       // lettre du joueur doit être remplacée, pas seulement les cases vides.
       final revealable = wordRanges[0].where((i) => !slots[i].isAuto && !lockedSlots.contains(i)).toList();
-      if (revealable.isEmpty) return;
+      if (revealable.isEmpty) return const [];
       revealable.shuffle(_rng);
       final howMany = max(1, (revealable.length / 3).ceil());
-      var uneLettreRevelee = false;
+      final revealed = <int>[];
       for (final i in revealable.take(howMany)) {
         final correctChar = slots[i].char;
         if (guess[i] != null && pool[guess[i]!].letter == correctChar) {
           lockedSlots.add(i); // déjà la bonne lettre : rien à remplacer
-          uneLettreRevelee = true;
+          revealed.add(i);
           continue;
         }
         final tileIdx = pool.indexWhere((t) => t.letter == correctChar && !t.used && !t.eliminated);
@@ -757,13 +767,13 @@ class GameState extends ChangeNotifier {
         guess[i] = tileIdx;
         pool[tileIdx].used = true;
         lockedSlots.add(i);
-        uneLettreRevelee = true;
+        revealed.add(i);
       }
-      if (uneLettreRevelee) {
+      if (revealed.isNotEmpty) {
         revealWordCount--;
       }
       notifyListeners();
-      return;
+      return revealed;
     }
 
     final eligible = <int>[];
@@ -779,7 +789,7 @@ class GameState extends ChangeNotifier {
         for (var w = 0; w < wordRanges.length; w++)
           if (!lockedWords.contains(w)) w
       ];
-      if (unlocked.isEmpty) return;
+      if (unlocked.isEmpty) return const [];
       unlocked.sort((a, b) => wordRanges[a].length.compareTo(wordRanges[b].length));
       targetWord = unlocked.first;
     }
@@ -809,6 +819,12 @@ class GameState extends ChangeNotifier {
       revealWordCount--;
     }
     notifyListeners();
+    return motEntierementRevele
+        ? [
+            for (final i in wordRanges[targetWord])
+              if (!slots[i].isAuto) i
+          ]
+        : const [];
   }
 
   // ─── Paliers de récompense ───
@@ -912,6 +928,49 @@ class GameState extends ChangeNotifier {
     redJokerCount++;
     redJokerAdWatchedThisLevel = true;
     notifyListeners();
+  }
+
+  int countOf(JokerKind kind) => switch (kind) {
+        JokerKind.reveal => revealCount,
+        JokerKind.eliminate => eliminateCount,
+        JokerKind.actor => actorCount,
+        JokerKind.character => characterCount,
+        JokerKind.hint => hintCount,
+        JokerKind.revealWord => revealWordCount,
+        JokerKind.red => redJokerCount,
+      };
+
+  /// Vrai si une pub peut rapporter ce joker maintenant (le joker rouge
+  /// garde sa limite d'une pub par niveau concerné).
+  bool canWatchAdFor(JokerKind kind) => kind == JokerKind.red ? peutRegarderPubJokerRouge : !inTutorial;
+
+  /// Pub regardée depuis un joker épuisé : rapporte ce joker précis (2 pour
+  /// un joker mineur, 1 sinon). Retourne le nombre accordé (0 si refusé).
+  int grantJokerFromAd(JokerKind kind) {
+    if (!canWatchAdFor(kind)) return 0;
+    if (kind == JokerKind.red) {
+      grantRedJokerFromAd();
+      return 1;
+    }
+    final n = kind.adReward;
+    switch (kind) {
+      case JokerKind.reveal:
+        revealCount += n;
+      case JokerKind.eliminate:
+        eliminateCount += n;
+      case JokerKind.actor:
+        actorCount += n;
+      case JokerKind.character:
+        characterCount += n;
+      case JokerKind.hint:
+        hintCount += n;
+      case JokerKind.revealWord:
+        revealWordCount += n;
+      case JokerKind.red:
+        break;
+    }
+    notifyListeners();
+    return n;
   }
 
   // ─── Progression entre niveaux ───

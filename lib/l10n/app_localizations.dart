@@ -650,6 +650,12 @@ abstract class AppLocalizations {
   /// **'L\'ÉNIGME DE LA SEMAINE'**
   String get enigmeTitle;
 
+  /// No description provided for @enigmeZoom.
+  ///
+  /// In fr, this message translates to:
+  /// **'Agrandir'**
+  String get enigmeZoom;
+
   /// No description provided for @enigmeDayOf7.
   ///
   /// In fr, this message translates to:
@@ -848,6 +854,18 @@ abstract class AppLocalizations {
   /// **'JOKER GAGNÉ'**
   String get gameJokerWon;
 
+  /// No description provided for @gameJokersWon.
+  ///
+  /// In fr, this message translates to:
+  /// **'JOKERS GAGNÉS'**
+  String get gameJokersWon;
+
+  /// No description provided for @gameWorldDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'🏆 Monde {world} terminé !'**
+  String gameWorldDone(String world);
+
   /// No description provided for @gameMinorBonusOffer.
   ///
   /// In fr, this message translates to:
@@ -901,12 +919,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Annuler'**
   String get commonCancel;
-
-  /// No description provided for @gameJokerEarnedToast.
-  ///
-  /// In fr, this message translates to:
-  /// **'🎁 Joker gagné : {label} !'**
-  String gameJokerEarnedToast(String label);
 
   /// No description provided for @gameTutorialFinalTransition.
   ///
@@ -1082,29 +1094,35 @@ abstract class AppLocalizations {
   /// **'PERSONNAGE (ROUGE)'**
   String get jokerRedCharacter;
 
-  /// No description provided for @jokerWinOne.
+  /// No description provided for @jokerGetSubtitle.
   ///
   /// In fr, this message translates to:
-  /// **'GAGNER UN JOKER'**
-  String get jokerWinOne;
+  /// **'+ obtenir'**
+  String get jokerGetSubtitle;
+
+  /// No description provided for @jokerEmptyBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu n\'as plus ce joker. Regarde une courte pub pour en gagner {n, plural, =1{un} other{{n}}}, ou passe par la boutique.'**
+  String jokerEmptyBody(int n);
+
+  /// No description provided for @jokerWatchAdFor.
+  ///
+  /// In fr, this message translates to:
+  /// **'▶ Regarder une pub (+{n})'**
+  String jokerWatchAdFor(int n);
+
+  /// No description provided for @jokerGoShop.
+  ///
+  /// In fr, this message translates to:
+  /// **'🛒 Aller à la boutique'**
+  String get jokerGoShop;
 
   /// No description provided for @jokerHintUsedSubtitle.
   ///
   /// In fr, this message translates to:
   /// **'utilisé · 🎬'**
   String get jokerHintUsedSubtitle;
-
-  /// No description provided for @jokerLockedSubtitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'verrouillé'**
-  String get jokerLockedSubtitle;
-
-  /// No description provided for @jokerAdUnlockSubtitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'🎬 pub → joker'**
-  String get jokerAdUnlockSubtitle;
 
   /// No description provided for @jokerRedLockedToast.
   ///
