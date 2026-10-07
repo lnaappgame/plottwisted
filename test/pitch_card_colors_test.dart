@@ -64,6 +64,23 @@ void main() {
     await tester.pump(const Duration(seconds: 1)); // laisse partir la sauvegarde différée
   });
 
+  testWidgets('la pulsation du cadre ne déplace jamais le texte du pitch', (tester) async {
+    await _pump(tester, const PitchCard());
+    // Les flammes du niveau "Extrême" bougent volontairement : on ne mesure que le texte.
+    List<Rect> textRects() => tester
+        .widgetList<RichText>(find.descendant(of: find.byType(PitchCard), matching: find.byType(RichText)))
+        .where((w) => w.text.toPlainText() != '🔥')
+        .map((w) => tester.getRect(find.byWidget(w)))
+        .toList();
+    final atRest = textRects();
+    // Pulsation : montée sur 420 ms, puis descente ; on échantillonne tout le long.
+    for (var i = 0; i < 12; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(textRects(), atRest);
+    }
+    await tester.pump(const Duration(seconds: 1)); // laisse partir la sauvegarde différée
+  });
+
   testWidgets('la surbrillance verte affiche tout le titre, même sans lettre placée', (tester) async {
     final game = await _pump(tester, const AnswerRow(highlightSolved: true));
     for (final slot in game.slots.where((s) => !s.isSpace)) {

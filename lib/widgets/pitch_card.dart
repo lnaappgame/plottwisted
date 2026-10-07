@@ -159,10 +159,14 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
             gradient: LinearGradient(
                 begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [colors.bgPanel2, colors.bgPanel]),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: borderColor.withOpacity(0.7 + 0.3 * pulse), width: 1.5 + 1.5 * pulse),
+            // Épaisseur de bordure fixe : la faire varier rétrécit la zone de
+            // texte et fait passer des mots à la ligne à chaque pulsation.
+            // L'épaississement est dessiné par une ombre pleine, hors mise en page.
+            border: Border.all(color: borderColor.withOpacity(0.7 + 0.3 * pulse), width: 1.5),
             boxShadow: pulse == 0
                 ? null
                 : [
+                    BoxShadow(color: borderColor.withOpacity(pulse), spreadRadius: 1.5 * pulse),
                     BoxShadow(
                         color: borderColor.withOpacity(0.55 * pulse),
                         blurRadius: 6 + 18 * pulse,
