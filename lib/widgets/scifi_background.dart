@@ -46,6 +46,26 @@ class _SciFiBackgroundState extends State<SciFiBackground> with SingleTickerProv
   }
 }
 
+/// Page posée sur le fond animé de l'accueil (modes de jeu). Le Scaffold
+/// transparent garde la mise en page, le clavier et les SnackBars inchangés ;
+/// seul le fond change.
+class SciFiScaffold extends StatelessWidget {
+  final Color baseColor;
+  final Widget body;
+  const SciFiScaffold({super.key, required this.baseColor, required this.body});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        SciFiBackground(baseColor: baseColor),
+        Scaffold(backgroundColor: Colors.transparent, body: body),
+      ],
+    );
+  }
+}
+
 class _Star {
   final double x, y, depth, phase;
   const _Star(this.x, this.y, this.depth, this.phase);

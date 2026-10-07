@@ -8,6 +8,7 @@ import '../services/elo_service.dart';
 import '../services/game_state.dart';
 import '../services/multiplayer_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/scifi_background.dart';
 
 class MultiplayerScreen extends StatefulWidget {
   const MultiplayerScreen({super.key});
@@ -150,8 +151,8 @@ class _MultiplayerScreenState extends State<MultiplayerScreen> {
     final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
     final mp = context.watch<MultiplayerState>();
 
-    return Scaffold(
-      backgroundColor: colors.bgDeep,
+    return SciFiScaffold(
+      baseColor: colors.bgDeep,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),

@@ -20,7 +20,8 @@ class WorldIntroOverlay extends StatelessWidget {
     final t = AppLocalizations.of(context);
     final locale = context.watch<AppSettings>().locale;
     return Container(
-      color: Colors.black.withOpacity(0.92),
+      // Voile léger : le fond animé reste visible autour de la carte.
+      color: Colors.black.withOpacity(0.35),
       alignment: Alignment.center,
       padding: const EdgeInsets.all(20),
       child: ConstrainedBox(

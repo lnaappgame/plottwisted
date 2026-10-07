@@ -10,6 +10,7 @@ import '../services/game_state.dart';
 import '../services/leaderboard_service.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/scifi_background.dart';
 
 String _formatCountdown(Duration d) {
   final minutes = d.inMinutes;
@@ -290,8 +291,8 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
 
     final countdown = enigmeState.tempsAvantProchaineLettre;
 
-    return Scaffold(
-      backgroundColor: colors.bgDeep,
+    return SciFiScaffold(
+      baseColor: colors.bgDeep,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),

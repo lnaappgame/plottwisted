@@ -7,6 +7,7 @@ import '../services/app_settings.dart';
 import '../services/defi_state.dart';
 import '../services/game_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/scifi_background.dart';
 
 String _formatDuration(int seconds) {
   final minutes = seconds ~/ 60;
@@ -136,8 +137,8 @@ class _DefiScreenState extends State<DefiScreen> {
     final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
     final defiState = context.watch<DefiState>();
 
-    return Scaffold(
-      backgroundColor: colors.bgDeep,
+    return SciFiScaffold(
+      baseColor: colors.bgDeep,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),

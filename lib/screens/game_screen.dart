@@ -21,6 +21,7 @@ import '../widgets/mini_popup.dart';
 import '../widgets/pitch_card.dart';
 import '../widgets/result_overlay.dart';
 import '../widgets/world_intro_overlay.dart';
+import '../widgets/scifi_background.dart';
 import 'shop_screen.dart';
 
 class _MiniPopupSpec {
@@ -503,8 +504,8 @@ class _GameScreenState extends State<GameScreen> {
 
     if (game.shouldShowComingSoonPage) {
       final t = AppLocalizations.of(context);
-      return Scaffold(
-        backgroundColor: colors.bgDeep,
+      return SciFiScaffold(
+        baseColor: colors.bgDeep,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
@@ -547,7 +548,8 @@ class _GameScreenState extends State<GameScreen> {
                 number: 0, categoryLabel: AppLocalizations.of(context).gameTutorialCategory, puzzles: kTutorialPuzzles)
             : kWorlds.firstWhere((w) => w.number == n);
       }).toList();
-      return Scaffold(
+      return SciFiScaffold(
+        baseColor: colors.bgDeep,
         body: WorldIntroOverlay(
           worlds: worlds,
           colors: colors,
@@ -556,7 +558,8 @@ class _GameScreenState extends State<GameScreen> {
       );
     }
 
-    return Scaffold(
+    return SciFiScaffold(
+      baseColor: colors.bgDeep,
       body: SafeArea(
         child: Stack(
           children: [
