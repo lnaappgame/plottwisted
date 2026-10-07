@@ -62,37 +62,18 @@ Future<void> main() async {
       saveService: saveService, matchmaking: multiplayerMatchmaking, settings: appSettings, analytics: analytics);
   await multiplayerState.restore();
 
-  // Série de jours consécutifs joués (tous modes confondus) — récompense
-  // câblée ici plutôt que dans StreakState pour éviter toute dépendance
-  // croisée entre services (voir streak_state.dart).
+  // Série de jours consécutifs joués (tous modes confondus). Le calendrier
+  // de série et ses récompenses ont été retirés (à repenser) : le compteur
+  // continue en coulisse, pour la demande d'avis et la future version.
   final streakState = StreakState(saveService: saveService);
   await streakState.restore();
   final reviewService = ReviewService();
-  streakState.onMilestoneReached = (palier) {
-    switch (palier) {
-      case 3:
-        gameState.grantJokers(hint: 1);
-        // Premier moment de vraie fidélité (3 jours de suite joués) : bon
-        // point d'ancrage pour la demande d'avis native du store, une seule
-        // fois par installation (voir consumeReviewRequestPending).
-        if (appSettings.consumeReviewRequestPending()) reviewService.requestReview();
-      case 7:
-        gameState.grantJokers(redJoker: 1);
-      case 14:
-        gameState.grantJokers(reveal: 1, eliminate: 1, actor: 1, character: 1);
-      case 28:
-        // Cycle de 4 semaines complet : le bonus majeur habituel, triplé.
-        gameState.grantJokers(redJoker: 3, reveal: 3, eliminate: 3, actor: 3, character: 3);
-    }
+  streakState.onDayCounted = (streak) {
+    // Premier moment de vraie fidélité (3 jours de suite joués) : bon point
+    // d'ancrage pour la demande d'avis native du store, une seule fois par
+    // installation (voir consumeReviewRequestPending).
+    if (streak >= 3 && appSettings.consumeReviewRequestPending()) reviewService.requestReview();
   };
-  // Bonus mineur : tout jour du cycle de 28 qui n'est pas un palier
-  // ci-dessus (voir kStreakPaliers) — un joker Indice, le plus modeste des
-  // jokers existants.
-  streakState.onDailyReward = (_) => gameState.grantJokers(hint: 1);
-  // Bonus supplémentaire, cumulé avec celui du jour, quand le jour réel
-  // tombe sur un grand événement du cinéma (César, Oscars...) — voir
-  // kCinemaEvents. En jokers pour l'instant, faute de monnaie dédiée.
-  streakState.onCinemaEventReached = (_) => gameState.grantJokers(reveal: 1, eliminate: 1, actor: 1, character: 1);
   defiState.streakState = streakState;
   multiplayerState.streakState = streakState;
 

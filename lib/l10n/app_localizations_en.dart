@@ -507,27 +507,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameTutorialCategory => 'Tutorial';
 
   @override
-  String homeStreakDays(int days) {
-    return '📅 $days DAY STREAK!';
-  }
-
-  @override
-  String get homeStreakReward3 => '+1 hint 💡';
-
-  @override
-  String get homeStreakReward7 => '+1 red joker 🔴';
-
-  @override
-  String get homeStreakReward14 => '+1 of each classic joker';
-
-  @override
-  String get homeStreakReward28 =>
-      'Full cycle! +3 red jokers and +3 of each classic joker';
-
-  @override
-  String get homeGreat => 'AWESOME!';
-
-  @override
   String get homePlay => 'PLAY';
 
   @override
@@ -742,37 +721,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get instrJokerRedDesc =>
       'Turns an orange name red (the Actor/Character jokers then take over normally). Only appears on puzzles with an orange name. Obtained 3 ways: a guaranteed ad (once per level concerned), the weekly puzzle\'s global top 10%, or the shop.';
-
-  @override
-  String get streakCalendarTitle => '📅 STREAK CALENDAR';
-
-  @override
-  String streakCalendarSubtitle(int streak, int jour, int total) {
-    return '$streak day(s) in a row — day $jour of $total';
-  }
-
-  @override
-  String streakCalendarEventLine(
-      String emoji, int day, String label, String date) {
-    return '$emoji Day $day — $label ($date): extra bonus!';
-  }
-
-  @override
-  String get streakLegendMinor => 'Minor bonus — 1 Hint joker';
-
-  @override
-  String streakLegendMajor(String days) {
-    return 'Major bonus — days $days';
-  }
-
-  @override
-  String streakLegendCycle(int n) {
-    return 'Full cycle — day $n, major bonus ×3';
-  }
-
-  @override
-  String get streakLegendEvent =>
-      'Major film industry event — bonus on top of the day\'s own';
 
   @override
   String get mpTitle => 'MULTIPLAYER';

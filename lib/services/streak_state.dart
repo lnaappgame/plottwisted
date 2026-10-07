@@ -1,75 +1,24 @@
 import 'package:flutter/foundation.dart';
-import '../data/cinema_events_data.dart';
 import 'save_service.dart';
-
-/// Longueur du cycle du calendrier de série — se répète indéfiniment (jour
-/// 29 redevient jour 1 avec les mêmes récompenses, etc.).
-const int kStreakCycleLength = 28;
-
-/// Paliers "bonus majeur" (jours du cycle avec une action significative —
-/// niveau, défi, énigme ou match multijoueur terminé) et le libellé de la
-/// récompense accordée à chacun. Le dernier jour du cycle (28) marque un
-/// cycle complet et rapporte le bonus majeur habituel multiplié par 3.
-/// Tous les autres jours du cycle rapportent un bonus mineur (voir
-/// [onDailyReward]).
-const List<int> kStreakPaliers = [3, 7, 14, 28];
 
 /// Suivi de la série de jours consécutifs joués — indépendant du contenu
 /// (jeu principal, Défi du jour, L'énigme de la semaine, Multijoueur
-/// comptent tous pour la même série). Ne connaît rien des jokers : la
-/// remise de récompense se fait via [onMilestoneReached] (jours palier),
-/// [onDailyReward] (tous les autres jours) et [onCinemaEventReached] (bonus
-/// cumulé les jours de grands événements du cinéma), câblés une fois au
-/// démarrage (main.dart) vers `GameState.grantJokers`, pour éviter toute dépendance
-/// croisée entre les services.
+/// comptent tous pour la même série).
+///
+/// Le calendrier de série et ses récompenses ont été retirés pour être
+/// repensés : seul le compteur reste, invisible pour le joueur, afin que la
+/// future version puisse repartir des séries en cours. [onDayCounted] est
+/// câblé au démarrage (main.dart) pour la demande d'avis du store.
 class StreakState extends ChangeNotifier {
   final SaveService saveService;
   StreakState({required this.saveService});
 
-  /// Appelé avec le palier atteint (3, 7, 14 ou 28) juste après
-  /// [recordAction] quand la série vient d'atteindre l'un de [kStreakPaliers]
-  /// (position dans le cycle courant — voir [jourDuCycle]).
-  void Function(int palier)? onMilestoneReached;
-
-  /// Appelé avec le jour du cycle (1 à 28) juste après [recordAction], pour
-  /// tout jour qui N'est PAS un palier de [kStreakPaliers] — le bonus
-  /// mineur du jour, distinct du bonus majeur des paliers.
-  void Function(int jourDuCycle)? onDailyReward;
-
-  /// Appelé en plus (jamais à la place) de [onMilestoneReached]/[onDailyReward]
-  /// quand le jour réel du calendrier tombe sur un grand événement du
-  /// cinéma (voir [kCinemaEvents]) — un bonus supplémentaire, cumulé avec
-  /// celui du jour.
-  void Function(CinemaEvent event)? onCinemaEventReached;
+  /// Appelé avec la série à jour, une fois par jour, juste après le premier
+  /// [recordAction] de la journée.
+  void Function(int currentStreak)? onDayCounted;
 
   int currentStreak = 0;
   DateTime? lastActionDay;
-
-  /// Position (1 à [kStreakCycleLength]) dans le cycle courant du calendrier
-  /// — [currentStreak] continue de grimper sans fin, mais le calendrier et
-  /// les récompenses se répètent tous les 28 jours.
-  int get jourDuCycle => currentStreak == 0 ? 0 : ((currentStreak - 1) % kStreakCycleLength) + 1;
-
-  /// Jour réel (UTC) où le cycle courant a commencé (jour 1) — `null` tant
-  /// qu'aucune série n'est en cours. Sert à projeter la date réelle de
-  /// n'importe quel jour du cycle (passé ou, en supposant une série
-  /// ininterrompue, à venir) — voir [dateForJourDuCycle].
-  DateTime? get cycleStartDay =>
-      lastActionDay == null || currentStreak == 0 ? null : lastActionDay!.subtract(Duration(days: jourDuCycle - 1));
-
-  /// Date réelle (UTC) projetée pour le jour [jour] (1 à 28) du cycle
-  /// courant — en supposant que la série se poursuit sans interruption
-  /// jusque-là. `null` tant qu'aucune série n'est en cours.
-  DateTime? dateForJourDuCycle(int jour) {
-    final start = cycleStartDay;
-    if (start == null) return null;
-    return start.add(Duration(days: jour - 1));
-  }
-
-  /// Dernier palier atteint et pas encore affiché au joueur (voir
-  /// HomeScreen) — distinct de [onMilestoneReached], qui sert uniquement à
-  /// la remise de la récompense.
-  int? pendingCelebration;
 
   bool _restoring = false;
 
@@ -98,28 +47,7 @@ class StreakState extends ChangeNotifier {
     final hier = today.subtract(const Duration(days: 1));
     currentStreak = (lastActionDay != null && _sameDay(lastActionDay!, hier)) ? currentStreak + 1 : 1;
     lastActionDay = today;
-
-    final jour = jourDuCycle;
-    if (kStreakPaliers.contains(jour)) {
-      pendingCelebration = jour;
-      onMilestoneReached?.call(jour);
-    } else {
-      onDailyReward?.call(jour);
-    }
-    for (final event in kCinemaEvents) {
-      if (_sameDay(event.date, today)) {
-        onCinemaEventReached?.call(event);
-        break; // jamais deux événements le même jour dans la liste actuelle
-      }
-    }
-    notifyListeners();
-  }
-
-  /// À appeler une fois la célébration affichée côté écran, pour ne pas la
-  /// remontrer à chaque ouverture.
-  void acknowledgeCelebration() {
-    if (pendingCelebration == null) return;
-    pendingCelebration = null;
+    onDayCounted?.call(currentStreak);
     notifyListeners();
   }
 
