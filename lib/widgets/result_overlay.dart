@@ -34,11 +34,15 @@ class ResultOverlay extends StatelessWidget {
         break;
     }
     final parenColor = colors.forNameColor(initial == NameColor.green ? NameColor.blue : initial);
+    final realName = TextSpan(
+        text: person.realFor(locale), style: TextStyle(color: colors.forNameColor(NameColor.green), fontWeight: FontWeight.w700));
+    // Donnée absente (ex. acteur non renseigné) : le vrai nom seul, sans « () ».
+    if (parenText.trim().isEmpty) return [realName];
     if (colorblindMode) {
       parenText = '${AppColors.symbolForNameColor(initial == NameColor.green ? NameColor.blue : initial)} $parenText';
     }
     return [
-      TextSpan(text: person.realFor(locale), style: TextStyle(color: colors.forNameColor(NameColor.green), fontWeight: FontWeight.w700)),
+      realName,
       const TextSpan(text: ' ('),
       TextSpan(text: parenText, style: TextStyle(color: parenColor, fontStyle: FontStyle.italic)),
       if (filmNote != null)
