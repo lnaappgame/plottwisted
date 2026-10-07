@@ -956,6 +956,42 @@ abstract class AppLocalizations {
   /// **'Tutoriel'**
   String get gameTutorialCategory;
 
+  /// No description provided for @homeStreakDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'📅 {days} JOURS D\'AFFILÉE !'**
+  String homeStreakDays(int days);
+
+  /// No description provided for @homeStreakReward3.
+  ///
+  /// In fr, this message translates to:
+  /// **'+1 indice 💡'**
+  String get homeStreakReward3;
+
+  /// No description provided for @homeStreakReward7.
+  ///
+  /// In fr, this message translates to:
+  /// **'+1 joker rouge 🔴'**
+  String get homeStreakReward7;
+
+  /// No description provided for @homeStreakReward14.
+  ///
+  /// In fr, this message translates to:
+  /// **'+1 de chaque joker classique'**
+  String get homeStreakReward14;
+
+  /// No description provided for @homeStreakReward28.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cycle complet ! +3 jokers rouges et +3 de chaque joker classique'**
+  String get homeStreakReward28;
+
+  /// No description provided for @homeGreat.
+  ///
+  /// In fr, this message translates to:
+  /// **'SUPER !'**
+  String get homeGreat;
+
   /// No description provided for @homePlay.
   ///
   /// In fr, this message translates to:
@@ -1327,6 +1363,49 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Fait passer un nom orange en rouge (les jokers Acteur/Personnage prennent ensuite le relais normalement). N\'apparaît que sur les énigmes avec un nom orange. S\'obtient de 3 façons : une pub garantie (une fois par niveau concerné), le top 10% mondial de L\'énigme de la semaine, ou la boutique.'**
   String get instrJokerRedDesc;
+
+  /// No description provided for @streakCalendarTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'📅 CALENDRIER DE SÉRIE'**
+  String get streakCalendarTitle;
+
+  /// No description provided for @streakCalendarSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'{streak} jour(s) d\'affilée — jour {jour} sur {total}'**
+  String streakCalendarSubtitle(int streak, int jour, int total);
+
+  /// No description provided for @streakCalendarEventLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'{emoji} Jour {day} — {label} ({date}) : bonus supplémentaire !'**
+  String streakCalendarEventLine(
+      String emoji, int day, String label, String date);
+
+  /// No description provided for @streakLegendMinor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonus mineur — 1 joker Indice'**
+  String get streakLegendMinor;
+
+  /// No description provided for @streakLegendMajor.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonus majeur — jours {days}'**
+  String streakLegendMajor(String days);
+
+  /// No description provided for @streakLegendCycle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cycle complet — jour {n}, bonus majeur ×3'**
+  String streakLegendCycle(int n);
+
+  /// No description provided for @streakLegendEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'Grand événement du cinéma — bonus en plus de celui du jour'**
+  String get streakLegendEvent;
 
   /// No description provided for @mpTitle.
   ///

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/app_settings.dart';
+import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/clapper_transition.dart';
 import '../widgets/scifi_background.dart';
@@ -11,6 +12,14 @@ import 'multiplayer_screen.dart';
 import 'settings_screen.dart';
 import 'shop_screen.dart';
 import 'instructions_screen.dart';
+import 'streak_calendar_screen.dart';
+
+Map<int, String> _streakRecompenses(AppLocalizations t) => {
+      3: t.homeStreakReward3,
+      7: t.homeStreakReward7,
+      14: t.homeStreakReward14,
+      28: t.homeStreakReward28,
+    };
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback onPlay;
@@ -21,6 +30,54 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeShowStreakCelebration());
+  }
+
+  void _maybeShowStreakCelebration() {
+    final streak = context.read<StreakState>();
+    final palier = streak.pendingCelebration;
+    if (palier == null) return;
+    if (!kStreakCalendarEnabled) {
+      // Calendrier en refonte : on n'affiche rien, et on ne garde pas une
+      // vieille célébration pour le jour où il reviendra.
+      streak.acknowledgeCelebration();
+      return;
+    }
+    final settings = context.read<AppSettings>();
+    final colors = AppColors(settings.isLightTheme);
+    final t = AppLocalizations.of(context);
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: colors.bgPanel2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(22),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(t.homeStreakDays(streak.currentStreak),
+                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 20)),
+              const SizedBox(height: 10),
+              Text(_streakRecompenses(t)[palier] ?? '',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5)),
+              const SizedBox(height: 18),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(t.homeGreat, style: AppTextStyles.display(size: 15, color: colors.cream)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ).then((_) => streak.acknowledgeCelebration());
+  }
+
   /// Entrée dans un mode de jeu : clap de cinéma, puis [action] une fois la
   /// latte refermée.
   void _enterMode(VoidCallback action) {
@@ -33,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme);
+    final streak = context.watch<StreakState>();
     final onPlay = widget.onPlay;
     final t = AppLocalizations.of(context);
 
@@ -99,10 +157,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              _IconButton(
-                                icon: Icons.settings,
-                                colors: colors,
-                                onTap: () => showDialog(context: context, builder: (_) => const SettingsScreen()),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  _IconButton(
+                                    icon: Icons.settings,
+                                    colors: colors,
+                                    onTap: () => showDialog(context: context, builder: (_) => const SettingsScreen()),
+                                  ),
+                                  if (kStreakCalendarEnabled && streak.currentStreak > 0) ...[
+                                    const SizedBox(height: 8),
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(20),
+                                      onTap: () =>
+                                          showDialog(context: context, builder: (_) => const StreakCalendarDialog()),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: colors.bgPanel,
+                                          borderRadius: BorderRadius.circular(20),
+                                          border: Border.all(color: AppColors.gold.withOpacity(0.3)),
+                                        ),
+                                        child: Text('📅 ${streak.jourDuCycle}',
+                                            style: AppTextStyles.body(
+                                                size: 13, weight: FontWeight.w700, color: AppColors.goldBright)),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ],
                           ),
