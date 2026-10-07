@@ -24,10 +24,10 @@
 		<string>????</string>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
-		<!-- ID d'application AdMob : ID de TEST public Google, à remplacer par
-	     le vrai ID une fois le compte AdMob créé (voir README). -->
+		<!-- ID d'application AdMob iOS (vrai ID, comme sur Android) : ce sont les
+	     ID de blocs (ad_service.dart, REAL_ADS) qui choisissent pubs réelles ou de test. -->
 		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-3940256099942544~1458002511</string>
+		<string>ca-app-pub-7543651245365030~9871855193</string>
 		<!-- Obligatoire iOS 14.5+ pour toute pub personnalisée (App Tracking
 	     Transparency) — déclenche le popup système avant toute requête
 	     publicitaire ciblée. -->

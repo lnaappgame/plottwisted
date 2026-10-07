@@ -91,13 +91,17 @@ class AdService {
   static const bool _useRealAds = bool.fromEnvironment('REAL_ADS');
 
   static String get _interstitialUnitId => defaultTargetPlatform == TargetPlatform.iOS
-      ? 'ca-app-pub-3940256099942544/4411468910'
+      ? _useRealAds
+          ? 'ca-app-pub-7543651245365030/5713118339'
+          : 'ca-app-pub-3940256099942544/4411468910'
       : _useRealAds
           ? 'ca-app-pub-7543651245365030/7976627080'
           : 'ca-app-pub-3940256099942544/1033173712';
 
   static String get _rewardedUnitId => defaultTargetPlatform == TargetPlatform.iOS
-      ? 'ca-app-pub-3940256099942544/1712485313'
+      ? _useRealAds
+          ? 'ca-app-pub-7543651245365030/3306446844'
+          : 'ca-app-pub-3940256099942544/1712485313'
       : _useRealAds
           ? 'ca-app-pub-7543651245365030/7785055396'
           : 'ca-app-pub-3940256099942544/5224354917';
