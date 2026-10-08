@@ -39,7 +39,7 @@ workflows:
         bundle_identifier: com.lnaapp.plottwisted
       vars:
         APP_STORE_APPLE_ID: 6820246879
-        REAL_ADS_FLAG: ""
+        REAL_ADS_FLAG: "--dart-define=REAL_ADS=false"
     scripts: &ios_signed_scripts
       - name: Flutter pub get
         script: flutter pub get
