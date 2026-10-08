@@ -20,22 +20,22 @@ Des pitchs de films piégés, des noms trompeurs, un titre à retrouver lettre p
 quiz,cinéma,devinette,acteur,énigme,culture,blockbuster,trivia,ciné,mots,lettres,casse-tête
 ```
 
-**Description (4000)** :
+**Description (4000)** — sans emojis : App Store Connect les refuse (« caractères non autorisés ») :
 
 ```
-🎬 RETROUVE LE FILM DERRIÈRE LE PITCH
+RETROUVE LE FILM DERRIÈRE LE PITCH
 
 Plot Twist(ed) te donne le résumé d'un film... mais les noms des personnages sont piégés : un acteur à la place du rôle, un autre personnage, un nom trompeur. À toi de reconstituer le titre, lettre par lettre.
 
 Simple à comprendre, difficile à lâcher : chaque couleur de nom cache une règle. En bleu ? C'est l'acteur. En vert ? Le vrai personnage. En rouge, orange ou violet ? Méfie-toi...
 
-🧩 QUATRE FAÇONS DE JOUER
+QUATRE FAÇONS DE JOUER
 • Les mondes — des centaines de films classés par thème (blockbusters, classiques, films cultes...), du niveau facile à l'extrême
 • Le Défi du jour — un thème, 7 indices, 7 acteurs : associe chaque indice au bon nom, le plus vite possible
 • L'énigme de la semaine — la même énigme pour tous les joueurs, une nouvelle lettre dévoilée régulièrement, et un classement mondial
 • Multijoueur — affronte un autre joueur sur le même pitch et grimpe dans le classement
 
-🃏 DES JOKERS POUR T'AIDER
+DES JOKERS POUR T'AIDER
 Révèle une lettre, élimine des intrus, démasque l'acteur ou le personnage, obtiens un indice ou un mot entier — à utiliser au bon moment.
 
 Aucune connaissance encyclopédique requise : Plot Twist(ed) se joue à l'instinct, à la déduction, et avec un peu de culture ciné.
@@ -61,22 +61,22 @@ Tricky movie pitches, misleading names, and a title to rebuild letter by letter.
 trivia,quiz,cinema,actor,riddle,puzzle,word,letters,blockbuster,hollywood,brain,duel,guessing
 ```
 
-**Description (4000)** :
+**Description (4000)** — sans emojis : App Store Connect les refuse (« caractères non autorisés ») :
 
 ```
-🎬 FIND THE MOVIE BEHIND THE PITCH
+FIND THE MOVIE BEHIND THE PITCH
 
 Plot Twist(ed) gives you a movie's synopsis... but the character names are booby-trapped: an actor instead of the role, another character, a misleading name. Your job: rebuild the title, letter by letter.
 
 Easy to learn, hard to put down: every name color hides a rule. Blue? That's the actor. Green? The real character. Red, orange or purple? Watch out...
 
-🧩 FOUR WAYS TO PLAY
+FOUR WAYS TO PLAY
 • Worlds — hundreds of movies grouped by theme (blockbusters, classics, cult films...), from easy to extreme
 • Daily Challenge — one theme, 7 clues, 7 actors: match each clue to the right name, as fast as you can
 • Puzzle of the Week — the same puzzle for every player, a new letter revealed over time, and a worldwide ranking
 • Multiplayer — face another player on the same pitch and climb the ranks
 
-🃏 JOKERS TO HELP YOU
+JOKERS TO HELP YOU
 Reveal a letter, remove decoys, unmask the actor or the character, get a hint or a whole word — use them at the right moment.
 
 No encyclopedic knowledge needed: Plot Twist(ed) is all about instinct, deduction and a bit of movie culture.
@@ -100,7 +100,7 @@ Download Plot Twist(ed) and enjoy that "Oh, of course!" moment.
 ## Informations pour l'examen d'Apple (App Review)
 
 - **Compte de démonstration** : décocher « Connexion requise » — le jeu se joue entièrement sans compte.
-- **Coordonnées** : ton nom, ton téléphone, `lna.app.game@gmail.com`.
+- **Coordonnées** : ton nom, ton téléphone au format international (`+33 6 xx xx xx xx`, sans le 0), `lna.app.game@gmail.com`.
 - **Notes** (en anglais) :
 
 ```
