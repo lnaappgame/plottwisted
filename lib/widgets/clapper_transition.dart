@@ -167,15 +167,25 @@ class _Clapperboard extends StatelessWidget {
                 children: [
                   const SizedBox(height: _stickHeight + 6, width: _width, child: _Stripes()),
                   const SizedBox(height: 14),
-                  Text('PLOT TWIST(ED)',
-                      style: AppTextStyles.display(size: 26).copyWith(decoration: TextDecoration.none)),
+                  // Réduit plutôt que de passer à la ligne (et déborder de
+                  // l'ardoise) si le joueur a agrandi le texte de son téléphone.
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('PLOT TWIST(ED)',
+                        maxLines: 1,
+                        style: AppTextStyles.display(size: 26).copyWith(decoration: TextDecoration.none)),
+                  ),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(english ? "SCENE  1" : "SCÈNE  1", style: labelStyle),
-                      Text(english ? "TAKE  1" : "PRISE  1", style: labelStyle),
-                    ],
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(english ? "SCENE  1" : "SCÈNE  1", style: labelStyle),
+                        const SizedBox(width: 40),
+                        Text(english ? "TAKE  1" : "PRISE  1", style: labelStyle),
+                      ],
+                    ),
                   ),
                 ],
               ),

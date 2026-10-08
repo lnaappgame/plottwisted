@@ -104,6 +104,55 @@ void main() {
     await tester.pump(const Duration(seconds: 2));
   });
 
+  testWidgets('fin du contenu avec un seul monde en réserve : on y entre au lieu de reboucler sur le dernier niveau',
+      (tester) async {
+    // Cas d'une testeuse (bundle 8) : monde 20 = dernier monde, le 20-6 gardé
+    // pour la fin, et un monde laissé en réserve plus tôt. Le choix n'avait
+    // alors qu'une option, et la valider rechargeait le 20-6 : boucle infinie.
+    tester.view.physicalSize = const Size(412, 915);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final saveService = SaveService();
+    final seed = _newGame(saveService);
+    seed.enterWorld(20);
+    final save = seed.toJson()
+      ..['remainingLevels'] = [6]
+      ..['currentLevelNumber'] = 6
+      ..['worldChoiceReserve'] = 17
+      ..['worldChoiceFrontier'] = 21; // au-delà du dernier monde
+    await saveService.save(save);
+    final game = _newGame(saveService);
+    await game.restore();
+    expect(game.worldChoiceOptions, [17]);
+
+    await _pumpGame(tester, game);
+    await tester.tap(find.text('COMMENCER')); // intro du monde 20 en cours
+    for (var t = 0; t < 1500; t += 50) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(game.currentLevelNumber, 6);
+    _typeAnswer(game);
+    await tester.pump();
+    await tester.ensureVisible(find.text('VALIDER'));
+    await tester.tap(find.text('VALIDER'));
+    await tester.pump(const Duration(milliseconds: 1200));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.ensureVisible(find.text('SUIVANT'));
+    await tester.pump();
+    await tester.tap(find.text('SUIVANT'));
+    await tester.pump(const Duration(seconds: 3)); // bannière de fin de monde
+    // Une seule option : le monde en réserve.
+    final intro = tester.widget<WorldIntroOverlay>(find.byType(WorldIntroOverlay));
+    expect(intro.worlds.map((w) => w.number), [17]);
+    await tester.tap(find.text('COMMENCER'));
+    for (var t = 0; t < 1500; t += 50) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(game.worldIndex, 17); // on est bien entré dans le monde 17
+    expect(game.currentLevelNumber, isNot(6) );
+    await tester.pump(const Duration(seconds: 3));
+  });
+
   testWidgets('quitté sur la fin de monde : le choix du monde suivant revient', (tester) async {
     final game = _newGame(SaveService());
     game.enterWorld(1);
