@@ -300,5 +300,7 @@
   "mpQuotaReachedFull": "Daily quota reached — come back tomorrow!",
 
   "shopTitle": "SHOP",
-  "shopUnavailable": "Shop unavailable right now."
+  "shopUnavailable": "Shop unavailable right now.",
+  "shopRestore": "Restore purchases",
+  "shopRestoreDone": "Check started: if you had bought ad removal, it is back."
 }

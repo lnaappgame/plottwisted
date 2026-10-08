@@ -99,7 +99,20 @@ class ShopScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 6),
+            // Obligatoire chez Apple dès qu'on vend des non-consommables ; rend
+            // le retrait des pubs après une réinstallation ou un changement
+            // d'appareil (jamais les jokers, voir PurchaseService).
+            TextButton(
+              onPressed: purchase.available
+                  ? () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      await purchase.restore();
+                      messenger.showSnackBar(SnackBar(content: Text(t.shopRestoreDone)));
+                    }
+                  : null,
+              child: Text(t.shopRestore,
+                  style: AppTextStyles.body(size: 12, color: colors.muted).copyWith(decoration: TextDecoration.underline)),
+            ),
             OutlinedButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(t.commonClose, style: AppTextStyles.body(size: 13, color: AppColors.gold)),

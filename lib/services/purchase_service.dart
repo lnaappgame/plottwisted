@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, visibleForTesting;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +35,12 @@ class PurchaseService {
   /// Appelé pour chaque achat validé, avec l'article de boutique concerné.
   void Function(ShopItem item)? onPurchaseComplete;
 
+  /// Appelé pour un achat non consommable restauré (« Restaurer mes achats »,
+  /// réinstallation, autre appareil) : seuls ses avantages permanents
+  /// (retrait des pubs) doivent être rendus, jamais ses jokers, déjà
+  /// accordés lors de l'achat d'origine.
+  void Function(ShopItem item)? onPurchaseRestored;
+
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _processedPurchaseIds = (prefs.getStringList(_processedIdsKey) ?? []).toSet();
@@ -43,7 +49,7 @@ class PurchaseService {
       return;
     }
     available = await _iap.isAvailable();
-    _subscription = _iap.purchaseStream.listen(_onPurchaseUpdate, onError: (_) {});
+    _subscription = _iap.purchaseStream.listen(handlePurchaseUpdates, onError: (_) {});
     if (!available) {
       lastError = 'Boutique indisponible sur cet appareil.';
       return;
@@ -88,19 +94,34 @@ class PurchaseService {
     }
   }
 
-  void _onPurchaseUpdate(List<PurchaseDetails> purchases) async {
+  /// Relance la restauration des achats auprès du store (obligatoire chez
+  /// Apple dès qu'on vend des non-consommables). Les achats retrouvés
+  /// arrivent ensuite dans le flux d'achats, avec le statut `restored`.
+  Future<void> restore() async {
+    if (!available) return;
+    await _iap.restorePurchases();
+  }
+
+  @visibleForTesting
+  Future<void> handlePurchaseUpdates(List<PurchaseDetails> purchases) async {
     for (final purchase in purchases) {
       if (purchase.status == PurchaseStatus.purchased || purchase.status == PurchaseStatus.restored) {
+        ShopItem? item;
+        for (final candidate in kShopItems) {
+          if (candidate.productId == purchase.productID) {
+            item = candidate;
+            break;
+          }
+        }
         final purchaseId = purchase.purchaseID;
         final dejaTraite = purchaseId != null && _processedPurchaseIds.contains(purchaseId);
-        if (!dejaTraite) {
-          ShopItem? item;
-          for (final candidate in kShopItems) {
-            if (candidate.productId == purchase.productID) {
-              item = candidate;
-              break;
-            }
-          }
+        // Non-consommable restauré : avantages permanents seulement, sinon une
+        // réinstallation suivie d'une restauration redonnerait les jokers des
+        // packs. (Un consommable « restauré » n'existe que sur Android, s'il
+        // n'a jamais été consommé : achat jamais livré, livré ci-dessous.)
+        if (purchase.status == PurchaseStatus.restored && item != null && !item.isConsumable) {
+          onPurchaseRestored?.call(item);
+        } else if (!dejaTraite) {
           if (item != null) onPurchaseComplete?.call(item);
           if (purchaseId != null) {
             _processedPurchaseIds.add(purchaseId);

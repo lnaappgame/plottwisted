@@ -903,4 +903,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get shopUnavailable => 'Boutique indisponible pour le moment.';
+
+  @override
+  String get shopRestore => 'Restaurer mes achats';
+
+  @override
+  String get shopRestoreDone =>
+      'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.';
 }

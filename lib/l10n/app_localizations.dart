@@ -1628,6 +1628,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Boutique indisponible pour le moment.'**
   String get shopUnavailable;
+
+  /// No description provided for @shopRestore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Restaurer mes achats'**
+  String get shopRestore;
+
+  /// No description provided for @shopRestoreDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.'**
+  String get shopRestoreDone;
 }
 
 class _AppLocalizationsDelegate

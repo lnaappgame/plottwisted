@@ -126,6 +126,14 @@ Future<void> main() async {
     gameState.flushSave();
     analytics.logPurchase(productId: item.productId);
   };
+  // Achat restauré : le retrait des pubs revient, les jokers non (déjà
+  // accordés lors de l'achat d'origine).
+  purchaseService.onPurchaseRestored = (item) {
+    if (item.removesAdsForever && !adService.isAdFree) {
+      adService.isAdFree = true;
+      gameState.flushSave();
+    }
+  };
   // Comme Firebase/pubs/notifications plus bas : touche le réseau (Play
   // Billing/App Store) et peut être lent, en particulier tant que Play
   // Console n'a pas encore les produits configurés (voir PurchaseService) —

@@ -898,4 +898,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shopUnavailable => 'Shop unavailable right now.';
+
+  @override
+  String get shopRestore => 'Restore purchases';
+
+  @override
+  String get shopRestoreDone =>
+      'Check started: if you had bought ad removal, it is back.';
 }

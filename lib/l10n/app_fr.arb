@@ -302,5 +302,7 @@
   "mpQuotaReachedFull": "Quota du jour atteint — reviens demain !",
 
   "shopTitle": "BOUTIQUE",
-  "shopUnavailable": "Boutique indisponible pour le moment."
+  "shopUnavailable": "Boutique indisponible pour le moment.",
+  "shopRestore": "Restaurer mes achats",
+  "shopRestoreDone": "Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli."
 }
