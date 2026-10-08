@@ -228,9 +228,10 @@ void main() {
       expect(find.text('JOKERS GAGNÉS'), findsOneWidget);
       expect(fx.pending(JokerKind.reveal), 2);
       expect(find.text('2'), findsNothing); // pas encore arrivée
-      for (var i = 0; i < 20; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
-      }
+      await _frames(tester, 1500);
+      expect(find.text('JOKERS GAGNÉS'), findsOneWidget); // la bannière reste ~2 s
+      expect(find.text('2'), findsNothing);
+      await _frames(tester, 1000);
       expect(fx.pending(JokerKind.reveal), 0);
       expect(find.text('2'), findsOneWidget);
       expect(find.text('JOKERS GAGNÉS'), findsNothing);

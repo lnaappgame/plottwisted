@@ -72,6 +72,23 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     final game = context.read<GameState>();
+    if (game.hasPendingSolve && game.puzzleLoaded) {
+      // Niveau déjà trouvé, quitté avant « SUIVANT » (accueil ou app
+      // fermée) : on rouvre sa révélation plutôt que de le faire refaire.
+      _pendingWorldChoice = null;
+      _showResult = true;
+      return;
+    }
+    if (!game.puzzleLoaded && game.remainingLevels.isEmpty) {
+      // Quitté sur l'écran de fin de monde, avant d'avoir choisi la suite :
+      // on y revient, au lieu de recharger le dernier niveau déjà résolu.
+      if (game.inTutorial) {
+        game.enterWorld(1);
+      } else if (game.worldChoiceOptions.isNotEmpty) {
+        _pendingWorldChoice = game.worldChoiceOptions;
+        return;
+      }
+    }
     _pendingWorldChoice = game.puzzleLoaded ? null : [game.currentWorld.number];
   }
 
@@ -103,9 +120,10 @@ class _GameScreenState extends State<GameScreen> {
     // réserve/frontière de mondes — on l'ignore explicitement.
     if (!mounted || _pendingWorldChoice == null) return;
     final game = context.read<GameState>();
-    // En mode "choix" (2 options), il faut appliquer le choix ; en mode
-    // "imposé" (1 seule option), le monde a déjà été entré par l'appelant.
-    if (_pendingWorldChoice!.length > 1) {
+    // En mode "choix", il faut appliquer le choix — y compris quand il ne
+    // reste qu'un seul monde à proposer (monde terminé, file vide). En mode
+    // "imposé" (COMMENCER), le monde a déjà été entré par l'appelant.
+    if (_pendingWorldChoice!.length > 1 || game.remainingLevels.isEmpty) {
       game.chooseNextWorld(chosenWorld);
     }
     setState(() => _pendingWorldChoice = null);

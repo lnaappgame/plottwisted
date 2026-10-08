@@ -101,6 +101,7 @@ class GameState extends ChangeNotifier {
         'worldsPlayedHistory': worldsPlayedHistory.toList(),
         'allWorldsCompleted': allWorldsCompleted,
         'allWorldsCompletedAtMax': _allWorldsCompletedAtMax,
+        'solvedPending': _solvedPendingKey,
       };
 
   /// Charge la sauvegarde existante, s'il y en a une. À appeler une seule
@@ -164,6 +165,11 @@ class GameState extends ChangeNotifier {
     }
     // puzzleLoaded reste faux : le niveau en cours sera rechargé "propre" au
     // prochain lancement (la grille en cours de saisie n'est pas persistée).
+    // Sauf s'il avait déjà été trouvé sans que « SUIVANT » soit touché :
+    // on le recharge ici (avant tout affichage) pour que l'écran de jeu
+    // rouvre directement sa page de révélation (voir hasPendingSolve).
+    _solvedPendingKey = data['solvedPending'] as String?;
+    if (hasPendingSolve) loadPuzzle();
     _restoring = false;
   }
 
@@ -294,6 +300,19 @@ class GameState extends ChangeNotifier {
   bool gameStarted = false;
   bool puzzleLoaded = false;
 
+  // Niveau trouvé (bonne réponse ou joker « Passer ») dont la page de
+  // révélation n'a pas encore été quittée par « SUIVANT ». Sauvegardé tout de
+  // suite : si le joueur quitte entre-temps (accueil ou fermeture de l'app),
+  // il retrouve cette révélation au lieu de devoir refaire le niveau.
+  String? _solvedPendingKey;
+
+  bool get hasPendingSolve => _solvedPendingKey != null && _solvedPendingKey == '$worldIndex-$currentLevelNumber';
+
+  void _markSolved() {
+    _solvedPendingKey = '$worldIndex-$currentLevelNumber';
+    flushSave(); // sans attendre le délai de sauvegarde habituel
+  }
+
   void enterWorld(int number) {
     gameStarted = true;
     puzzleLoaded = false;
@@ -406,6 +425,7 @@ class GameState extends ChangeNotifier {
     violetIntroShown = false;
     gameStarted = false;
     puzzleLoaded = false;
+    _solvedPendingKey = null;
     worldChoiceReserve = null;
     _worldChoiceFrontier = 4;
     _worldChoicesExhausted = false;
@@ -651,6 +671,7 @@ class GameState extends ChangeNotifier {
       failStreak = 0;
       lastSolveDuration = DateTime.now().difference(levelStartTime);
       notifyListeners();
+      _markSolved();
       analytics.logLevelCompleted(world: currentWorld.number, level: currentLevelNumber, difficulty: difficultyLabel);
       return 'solved';
     }
@@ -1007,6 +1028,7 @@ class GameState extends ChangeNotifier {
   /// "all-content-complete:<worldNumber>:<majorLabel>:<minorLabel>",
   /// "tutorial-final-transition", "tutorial-complete".
   String advanceAfterSolve() {
+    _solvedPendingKey = null;
     final solvedLevel = currentLevelNumber;
     final wasTutorial = inTutorial;
     final completedWorldNumber = worldIndex;
@@ -1075,6 +1097,7 @@ class GameState extends ChangeNotifier {
     failStreak = 0;
     lastSolveDuration = DateTime.now().difference(levelStartTime);
     notifyListeners();
+    _markSolved();
     analytics.logSkipJokerUsed(world: currentWorld.number, level: currentLevelNumber);
     return true;
   }

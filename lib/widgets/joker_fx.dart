@@ -21,9 +21,9 @@ class JokerFx extends ChangeNotifier {
   static const beamTravelMs = 350.0;
   static const beamBurstMs = 120.0;
   static const starTravelMs = 650.0;
-  static const _starLaunchMs = 900.0;
-  static const _bannerEndMs = 1150.0;
-  static const _reducedBannerMs = 1400.0;
+  static const _starLaunchMs = 1600.0;
+  static const _bannerEndMs = 2000.0;
+  static const _reducedBannerMs = 2000.0;
 
   final GlobalKey _layerKey = GlobalKey(debugLabel: 'fx:layer');
   final Map<String, GlobalKey> _keys = {};

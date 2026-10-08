@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cine_devinette/models/puzzle.dart';
 import 'package:cine_devinette/models/shop_item.dart';
@@ -22,6 +23,9 @@ void _useNameJoker(GameState game, NameColor color, String slot) {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  setUp(() => SharedPreferences.setMockInitialValues({}));
+
   group('Couleurs des noms après jokers', () {
     test('au départ, une seule couleur affichée', () {
       final game = _gameOnLevel(1, 10); // STAR WARS : p1 rouge
