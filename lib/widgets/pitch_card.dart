@@ -267,9 +267,30 @@ class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('PITCH', style: AppTextStyles.display(size: 14, color: AppColors.gold)),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    style: AppTextStyles.body(size: 12, color: colors.muted).copyWith(height: 1.35),
+                    children: [
+                      TextSpan(
+                          text: game.levelTitleFor(game.locale),
+                          style: AppTextStyles.display(size: 14, color: AppColors.gold)),
+                      TextSpan(text: '  ·  ${game.currentWorld.categoryLabelFor(game.locale)}'),
+                      if (!game.inTutorial) ...[
+                        const TextSpan(text: '  ·  '),
+                        TextSpan(
+                          text: game.difficultyLabelFor(game.locale),
+                          style: TextStyle(
+                              color: colors.forDifficultyLabel(game.difficultyLabel), fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
               Text(puzzle.year, style: AppTextStyles.body(size: 12, color: colors.muted)),
             ],
           ),

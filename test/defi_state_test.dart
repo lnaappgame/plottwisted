@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cine_devinette/data/defis_data.dart';
 import 'package:cine_devinette/models/defi.dart';
+import 'package:cine_devinette/models/joker.dart';
 import 'package:cine_devinette/services/defi_service.dart';
 import 'package:cine_devinette/services/defi_state.dart';
 import 'package:cine_devinette/services/save_service.dart';
@@ -197,5 +198,55 @@ void main() {
 
     expect(restored.playedDefiIds, state.playedDefiIds);
     expect(restored.bestTimes, state.bestTimes);
+  });
+
+  group('Bonus de jokers', () {
+    // Partie complète avec [mistakes] erreurs (5 s de pénalité chacune) ;
+    // renvoie les jokers demandés (true = mineur).
+    Future<List<bool>> play(DefiState state, int mistakes) async {
+      final asked = <bool>[];
+      state.grantJoker = ({required bool minor}) {
+        asked.add(minor);
+        return minor ? JokerKind.reveal : JokerKind.actor;
+      };
+      final defi = state.defiDuJour;
+      final last = defi.cases.length - 1;
+      state.startDefi(defi, bonus: false);
+      for (var i = 0; i < defi.cases.length; i++) {
+        state.onCaseTapped(i < mistakes && i < last ? last : i);
+      }
+      await Future.delayed(const Duration(milliseconds: 1100)); // finalise le dernier tap
+      expect(state.solved, isTrue);
+      return asked;
+    }
+
+    DefiState fresh() => _state()..currentIndex = 0;
+
+    test('sans faute et en moins de 20 s : un mineur et un majeur', () async {
+      final state = fresh();
+      expect(await play(state, 0), [true, false]);
+      expect([for (final r in state.rewards) r.bonus], [DefiBonus.perfect, DefiBonus.under20]);
+      expect(state.rewards.last.kind, JokerKind.actor);
+    });
+
+    test('4 erreurs (20 s de pénalité) : seulement le mineur des 30 s', () async {
+      final state = fresh();
+      expect(state.defiDuJour.cases.length, greaterThan(6));
+      expect(await play(state, 4), [true]);
+      expect([for (final r in state.rewards) r.bonus], [DefiBonus.under30]);
+    });
+
+    test('6 erreurs (30 s de pénalité) : aucun bonus', () async {
+      final state = fresh();
+      expect(await play(state, 6), isEmpty);
+      expect(state.rewards, isEmpty);
+    });
+
+    test('rejouer un commun déjà joué ne rapporte rien', () async {
+      final state = fresh();
+      await play(state, 0);
+      expect(await play(state, 0), isEmpty);
+      expect(state.rewardsEligible, isFalse);
+    });
   });
 }

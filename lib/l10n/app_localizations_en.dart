@@ -180,6 +180,23 @@ class AppLocalizationsEn extends AppLocalizations {
       'An ad lets you replay the same challenge (to beat your record) or try another topic you\'ve never played.';
 
   @override
+  String get defiRule7 =>
+      'Joker bonuses the first time you play a topic: no mistakes = 1 minor joker; under 30 s (penalties included) = 1 minor, or under 20 s = 1 major instead.';
+
+  @override
+  String get defiRewardPerfect => 'No mistakes';
+
+  @override
+  String get defiRewardUnder30 => 'Under 30 s';
+
+  @override
+  String get defiRewardUnder20 => 'Under 20 s';
+
+  @override
+  String get defiRewardsReplay =>
+      'No joker bonus when replaying a topic you\'ve already played.';
+
+  @override
   String defiCasesInfo(int count) {
     return '$count answer tiles, $count clues — tap the tile that matches the clue shown.';
   }
@@ -543,7 +560,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeShop => '🛒 Shop';
 
   @override
-  String get homeHelp => '❓ Help';
+  String get homeHelp => '❓ How to play';
 
   @override
   String get homeTagline => 'GUESS THE FILM BEHIND THE PITCH';
@@ -579,26 +596,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jokerRedCharacter => 'CHARACTER (RED)';
 
   @override
-  String get jokerGetSubtitle => '+ get';
+  String get jokerWinOne => 'WIN A JOKER';
 
   @override
-  String jokerEmptyBody(int n) {
-    String _temp0 = intl.Intl.pluralLogic(
-      n,
-      locale: localeName,
-      other: '$n',
-      one: 'one',
-    );
-    return 'You\'re out of this joker. Watch a short ad to earn $_temp0, or visit the shop.';
-  }
+  String get jokerLockedSubtitle => 'locked';
 
   @override
-  String jokerWatchAdFor(int n) {
-    return '▶ Watch an ad (+$n)';
-  }
-
-  @override
-  String get jokerGoShop => '🛒 Go to the shop';
+  String get jokerAdUnlockSubtitle => '🎬 ad → joker';
 
   @override
   String get jokerHintUsedSubtitle => 'used · 🎬';
@@ -742,6 +746,69 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get instrJokerRedDesc =>
       'Turns an orange name red (the Actor/Character jokers then take over normally). Only appears on puzzles with an orange name. Obtained 3 ways: a guaranteed ad (once per level concerned), the weekly puzzle\'s global top 10%, or the shop.';
+
+  @override
+  String get instrJokerSkipLabel => 'Skip for good';
+
+  @override
+  String get instrJokerSkipDesc =>
+      'Solves the current level and reveals its answer. Available in the shop.';
+
+  @override
+  String get instructionsTabJokers => 'Jokers';
+
+  @override
+  String get instructionsTabModes => 'Game modes';
+
+  @override
+  String get instructionsEarnHeader => 'EARNING JOKERS';
+
+  @override
+  String get instrEarnAd =>
+      '\"Win a joker\": one ad = one random joker, usually a minor one. A joker you already hold 5 or more of comes up half as often.';
+
+  @override
+  String get instrEarnLevels =>
+      'Main game: a minor joker at level 5 of each world, then a minor and a major one when you finish the world.';
+
+  @override
+  String get instrEarnModes =>
+      'The Weekly Puzzle (the sooner you solve it, the more you win) and the Daily Challenge (no mistakes, fast time) give jokers too.';
+
+  @override
+  String get instrEarnShop => 'The shop sells joker packs.';
+
+  @override
+  String get instrEarnEmpty =>
+      'A joker at 0 stays on screen, dimmed, until you win another one.';
+
+  @override
+  String get instrModeMainTitle => '🎬 Main game';
+
+  @override
+  String get instrModeMainDesc =>
+      'Find the film from its pitch, where the characters appear as colored names. Rebuild the title from the letters provided. Each world has 10 levels, from Easy to Extreme; you can set a level aside for later.';
+
+  @override
+  String get instrModeEnigmeTitle => '🧩 Weekly Puzzle';
+
+  @override
+  String get instrModeEnigmeDesc =>
+      'One puzzle a week, the same for everyone. The text reveals one letter per hour: guess the subject (film, actor or character) as early as you can, with one free try per day. The sooner you solve it, the bigger the joker reward; the global top 10% wins a red joker.';
+
+  @override
+  String get instrModeDefiTitle => '🎯 Daily Challenge';
+
+  @override
+  String get instrModeDefiDesc =>
+      'One theme a day (a \"topic\") with all its answers on screen. For each clue, tap the right answer as fast as you can: each mistake adds 5 seconds. A flawless run and a fast time earn jokers.';
+
+  @override
+  String get instrModeMpTitle => '⚔️ Multiplayer';
+
+  @override
+  String get instrModeMpDesc =>
+      'Face an opponent of your level over 3 rounds: the first to find the answer scores the point. Your Elo rating changes after each match; 5 games a day.';
 
   @override
   String get streakCalendarTitle => '📅 STREAK CALENDAR';

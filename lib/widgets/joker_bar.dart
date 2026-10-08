@@ -10,10 +10,14 @@ import 'joker_fx.dart';
 import 'joker_style.dart';
 
 class JokerBar extends StatelessWidget {
-  /// Appelé quand le joueur touche un joker épuisé (pub ou boutique).
-  final void Function(JokerKind kind) onRequestJoker;
+  /// Bouton « Gagner un joker » : une pub pour un joker tiré au hasard.
+  final VoidCallback onWatchAdForJoker;
+
+  /// Joker rouge épuisé touché (nom orange à débloquer) : pub garantie si
+  /// elle est encore disponible sur ce niveau, sinon explication.
+  final VoidCallback onRedJokerEmpty;
   final JokerFx? fx;
-  const JokerBar({super.key, required this.onRequestJoker, this.fx});
+  const JokerBar({super.key, required this.onWatchAdForJoker, required this.onRedJokerEmpty, this.fx});
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +41,20 @@ class JokerBar extends StatelessWidget {
       if (game.currentPuzzleHasOrange) JokerKind.red,
     ];
 
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 8,
-      runSpacing: 14,
+    return Column(
       children: [
-        for (final kind in kinds) _button(context, game, colors, t, kind),
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 8,
+          runSpacing: 14,
+          children: [
+            for (final kind in kinds) _button(context, game, colors, t, kind),
+          ],
+        ),
+        if (!game.inTutorial) ...[
+          const SizedBox(height: 14),
+          _WinJokerButton(label: t.jokerWinOne, colors: colors, onTap: onWatchAdForJoker),
+        ],
       ],
     );
   }
@@ -51,6 +63,15 @@ class JokerBar extends StatelessWidget {
     final shown = max(0, game.countOf(kind) - (fx?.pending(kind) ?? 0));
     final color = jokerColor(kind, colors);
     final hintUsed = kind == JokerKind.hint && game.hintRevealed;
+    // Joker rouge épuisé : reste touchable pour sa pub garantie (ou pour
+    // expliquer comment en obtenir) ; les autres jokers à 0 sont éteints.
+    final redEmpty = kind == JokerKind.red && shown == 0;
+    String? subtitle;
+    if (hintUsed) {
+      subtitle = t.jokerHintUsedSubtitle;
+    } else if (redEmpty) {
+      subtitle = game.peutRegarderPubJokerRouge && !game.inTutorial ? t.jokerAdUnlockSubtitle : t.jokerLockedSubtitle;
+    }
     return _JokerButton(
       key: fx?.key('joker:${kind.name}'),
       label: jokerName(kind, t),
@@ -59,15 +80,16 @@ class JokerBar extends StatelessWidget {
       color: color,
       colors: colors,
       active: kind.nameColor != null && game.activeNameJoker == kind.nameColor,
-      disabled: hintUsed || (shown == 0 && game.inTutorial),
-      subtitle: hintUsed ? t.jokerHintUsedSubtitle : (shown == 0 ? t.jokerGetSubtitle : null),
+      disabled: hintUsed,
+      tappable: shown > 0 || redEmpty,
+      subtitle: subtitle,
       onTap: () => _onTap(game, kind, shown, color),
     );
   }
 
   void _onTap(GameState game, JokerKind kind, int shown, Color color) {
     if (shown <= 0) {
-      onRequestJoker(kind);
+      if (kind == JokerKind.red) onRedJokerEmpty();
       return;
     }
     switch (kind) {
@@ -92,6 +114,41 @@ class JokerBar extends StatelessWidget {
   }
 }
 
+class _WinJokerButton extends StatelessWidget {
+  final String label;
+  final AppColors colors;
+  final VoidCallback onTap;
+  const _WinJokerButton({required this.label, required this.colors, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: label,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 324),
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+          decoration: BoxDecoration(
+            color: AppColors.gold.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.gold.withOpacity(0.7), width: 1.4),
+          ),
+          child: Column(
+            children: [
+              Text(label, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+              const SizedBox(height: 2),
+              Text('🎬▶️', style: AppTextStyles.body(size: 10, color: colors.muted)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _JokerButton extends StatefulWidget {
   final String label;
   final String icon;
@@ -100,6 +157,7 @@ class _JokerButton extends StatefulWidget {
   final AppColors colors;
   final bool active;
   final bool disabled;
+  final bool tappable;
   final String? subtitle;
   final VoidCallback onTap;
 
@@ -112,6 +170,7 @@ class _JokerButton extends StatefulWidget {
     required this.colors,
     required this.active,
     required this.disabled,
+    required this.tappable,
     required this.subtitle,
     required this.onTap,
   });
@@ -147,17 +206,21 @@ class _JokerButtonState extends State<_JokerButton> with TickerProviderStateMixi
     final colors = widget.colors;
     final accent = widget.color;
     final owned = widget.count > 0 && !widget.disabled;
-    final background = widget.active ? accent : (owned ? accent.withOpacity(0.14) : colors.bgPanel);
-    final border = widget.active || owned ? accent.withOpacity(0.85) : colors.muted.withOpacity(0.3);
-    final labelColor = widget.active ? onJokerColor(accent) : (owned ? accent : colors.muted);
+    // À 0, le joker garde sa couleur (le joueur y retrouve celle du nom qu'il
+    // donne), en plus pâle et sans la bordure épaisse d'un joker en stock.
+    final background = widget.active ? accent : accent.withOpacity(owned ? 0.14 : 0.05);
+    final border = accent.withOpacity(widget.active || owned ? 0.85 : 0.25);
+    final labelColor = widget.active ? onJokerColor(accent) : accent.withOpacity(owned ? 1 : 0.5);
+    final enabled = widget.tappable && !widget.disabled;
 
     return Semantics(
-      button: true,
+      button: enabled,
+      enabled: enabled,
       label: '${widget.label}, ${widget.count}',
       child: Opacity(
         opacity: widget.disabled ? 0.35 : 1,
         child: GestureDetector(
-          onTap: widget.disabled ? null : _handleTap,
+          onTap: enabled ? _handleTap : null,
           child: AnimatedBuilder(
             animation: Listenable.merge([_flash, _bump]),
             builder: (context, _) {
@@ -189,12 +252,15 @@ class _JokerButtonState extends State<_JokerButton> with TickerProviderStateMixi
                               style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: labelColor)),
                         ),
                         const SizedBox(height: 2),
-                        Text(
-                          widget.subtitle ?? widget.icon,
-                          style: AppTextStyles.body(
-                            size: 10,
-                            weight: widget.subtitle != null && widget.count == 0 ? FontWeight.w600 : FontWeight.w400,
-                            color: widget.active ? onJokerColor(accent) : colors.muted,
+                        Opacity(
+                          opacity: owned || widget.active || widget.subtitle != null ? 1 : 0.5,
+                          child: Text(
+                            widget.subtitle ?? widget.icon,
+                            style: AppTextStyles.body(
+                              size: 10,
+                              weight: widget.subtitle != null && widget.count == 0 ? FontWeight.w600 : FontWeight.w400,
+                              color: widget.active ? onJokerColor(accent) : colors.muted,
+                            ),
                           ),
                         ),
                       ],

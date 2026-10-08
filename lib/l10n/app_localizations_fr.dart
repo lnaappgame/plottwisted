@@ -181,6 +181,23 @@ class AppLocalizationsFr extends AppLocalizations {
       'Une pub permet de rejouer le même défi (pour battre ton record) ou de tenter un autre commun jamais joué.';
 
   @override
+  String get defiRule7 =>
+      'Bonus de jokers à ta première partie d\'un commun : sans faute = 1 joker mineur ; moins de 30 s (pénalités comprises) = 1 mineur, ou moins de 20 s = 1 majeur à la place.';
+
+  @override
+  String get defiRewardPerfect => 'Sans faute';
+
+  @override
+  String get defiRewardUnder30 => 'Moins de 30 s';
+
+  @override
+  String get defiRewardUnder20 => 'Moins de 20 s';
+
+  @override
+  String get defiRewardsReplay =>
+      'Pas de bonus de jokers en rejouant un commun déjà joué.';
+
+  @override
   String defiCasesInfo(int count) {
     return '$count cases-réponses, $count indices — tape la bonne case pour chaque indice.';
   }
@@ -547,7 +564,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeShop => '🛒 Boutique';
 
   @override
-  String get homeHelp => '❓ Aide';
+  String get homeHelp => '❓ Comment jouer';
 
   @override
   String get homeTagline => 'RETROUVE LE FILM DERRIÈRE LE PITCH';
@@ -583,26 +600,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get jokerRedCharacter => 'PERSONNAGE (ROUGE)';
 
   @override
-  String get jokerGetSubtitle => '+ obtenir';
+  String get jokerWinOne => 'GAGNER UN JOKER';
 
   @override
-  String jokerEmptyBody(int n) {
-    String _temp0 = intl.Intl.pluralLogic(
-      n,
-      locale: localeName,
-      other: '$n',
-      one: 'un',
-    );
-    return 'Tu n\'as plus ce joker. Regarde une courte pub pour en gagner $_temp0, ou passe par la boutique.';
-  }
+  String get jokerLockedSubtitle => 'verrouillé';
 
   @override
-  String jokerWatchAdFor(int n) {
-    return '▶ Regarder une pub (+$n)';
-  }
-
-  @override
-  String get jokerGoShop => '🛒 Aller à la boutique';
+  String get jokerAdUnlockSubtitle => '🎬 pub → joker';
 
   @override
   String get jokerHintUsedSubtitle => 'utilisé · 🎬';
@@ -746,6 +750,69 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get instrJokerRedDesc =>
       'Fait passer un nom orange en rouge (les jokers Acteur/Personnage prennent ensuite le relais normalement). N\'apparaît que sur les énigmes avec un nom orange. S\'obtient de 3 façons : une pub garantie (une fois par niveau concerné), le top 10% mondial de L\'énigme de la semaine, ou la boutique.';
+
+  @override
+  String get instrJokerSkipLabel => 'Passer définitivement';
+
+  @override
+  String get instrJokerSkipDesc =>
+      'Résout le niveau en cours et révèle sa réponse. S\'obtient en boutique.';
+
+  @override
+  String get instructionsTabJokers => 'Jokers';
+
+  @override
+  String get instructionsTabModes => 'Modes de jeu';
+
+  @override
+  String get instructionsEarnHeader => 'OBTENIR DES JOKERS';
+
+  @override
+  String get instrEarnAd =>
+      '« Gagner un joker » : une pub = un joker au hasard, mineur le plus souvent. Un joker que tu possèdes déjà en 5 exemplaires ou plus sort deux fois moins souvent.';
+
+  @override
+  String get instrEarnLevels =>
+      'Jeu principal : un joker mineur au niveau 5 de chaque monde, puis un mineur et un majeur à la fin du monde.';
+
+  @override
+  String get instrEarnModes =>
+      'L\'énigme de la semaine (plus tu trouves tôt, plus tu gagnes) et le Défi du jour (sans faute et chrono rapide) en rapportent aussi.';
+
+  @override
+  String get instrEarnShop => 'La boutique propose des packs de jokers.';
+
+  @override
+  String get instrEarnEmpty =>
+      'Un joker à 0 reste affiché, éteint, jusqu\'à ce que tu en regagnes un.';
+
+  @override
+  String get instrModeMainTitle => '🎬 Jeu principal';
+
+  @override
+  String get instrModeMainDesc =>
+      'Retrouve le film à partir de son pitch, où les personnages sont désignés par des noms de couleur. Reconstitue le titre avec les lettres proposées. Chaque monde compte 10 niveaux, de Facile à Extrême ; un niveau peut être gardé pour plus tard.';
+
+  @override
+  String get instrModeEnigmeTitle => '🧩 L\'énigme de la semaine';
+
+  @override
+  String get instrModeEnigmeDesc =>
+      'Une énigme par semaine, la même pour tous. Le texte se dévoile d\'une lettre par heure : devine le sujet (film, acteur ou personnage) le plus tôt possible, avec une tentative gratuite par jour. Plus tu trouves tôt, plus la récompense en jokers est grande ; le top 10 % mondial gagne un joker rouge.';
+
+  @override
+  String get instrModeDefiTitle => '🎯 Défi du jour';
+
+  @override
+  String get instrModeDefiDesc =>
+      'Un thème par jour (un « commun ») et toutes ses réponses affichées. Pour chaque indice, touche la bonne réponse le plus vite possible : chaque erreur ajoute 5 secondes. Un sans-faute et un chrono rapide rapportent des jokers.';
+
+  @override
+  String get instrModeMpTitle => '⚔️ Multijoueur';
+
+  @override
+  String get instrModeMpDesc =>
+      'Affronte un adversaire de ton niveau en 3 manches : le premier à trouver la réponse marque le point. Ton classement Elo évolue à chaque match ; 5 parties par jour.';
 
   @override
   String get streakCalendarTitle => '📅 CALENDRIER DE SÉRIE';

@@ -16,13 +16,11 @@ enum JokerKind {
   final String frLabel;
   final String icon;
 
-  /// Joker "mineur" : une pub en rapporte 2 au lieu d'1.
+  /// Joker "mineur" (Révéler, Éliminer, Personnage), le plus souvent gagné.
   final bool isMinor;
 
   /// Couleur que ce joker donne à un nom du pitch (jokers à deux touches).
   final NameColor? nameColor;
-
-  int get adReward => isMinor ? 2 : 1;
 
   static JokerKind? fromLabel(String label) {
     for (final k in values) {

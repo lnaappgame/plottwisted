@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/defi.dart';
+import '../models/joker.dart';
 import '../services/app_settings.dart';
 import '../services/defi_state.dart';
 import '../services/game_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/joker_style.dart';
 import '../widgets/scifi_background.dart';
 
 String _formatDuration(int seconds) {
@@ -116,6 +118,7 @@ class _DefiScreenState extends State<DefiScreen> {
                   _RuleLine(t.defiRule4, colors),
                   _RuleLine(t.defiRule5, colors),
                   _RuleLine(t.defiRule6, colors),
+                  _RuleLine(t.defiRule7, colors),
                   const SizedBox(height: 18),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
@@ -464,6 +467,30 @@ class _ResultView extends StatelessWidget {
           textAlign: TextAlign.center,
           style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.goldBright),
         ),
+        if (defiState.rewards.isNotEmpty) ...[
+          const SizedBox(height: 18),
+          Text(t.gameJokersWon,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)
+                  .copyWith(letterSpacing: 2)),
+          const SizedBox(height: 4),
+          for (final reward in defiState.rewards)
+            if (reward.kind case final JokerKind kind)
+              _TimeRow(
+                switch (reward.bonus) {
+                  DefiBonus.perfect => t.defiRewardPerfect,
+                  DefiBonus.under30 => t.defiRewardUnder30,
+                  DefiBonus.under20 => t.defiRewardUnder20,
+                },
+                '${kind.icon} +1 ${jokerName(kind, t)}',
+                jokerColor(kind, colors),
+                colors,
+              ),
+        ] else if (!defiState.rewardsEligible) ...[
+          const SizedBox(height: 10),
+          Text(t.defiRewardsReplay,
+              textAlign: TextAlign.center, style: AppTextStyles.body(size: 11, color: colors.muted)),
+        ],
         const SizedBox(height: 22),
         OutlinedButton(
           onPressed: busy ? null : onReplaySame,

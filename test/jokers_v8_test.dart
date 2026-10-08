@@ -11,11 +11,32 @@ import 'package:cine_devinette/services/app_settings.dart';
 import 'package:cine_devinette/services/game_state.dart';
 import 'package:cine_devinette/services/save_service.dart';
 import 'package:cine_devinette/services/sound_service.dart';
+import 'package:cine_devinette/theme/app_theme.dart';
 import 'package:cine_devinette/widgets/answer_row.dart';
 import 'package:cine_devinette/widgets/joker_bar.dart';
 import 'package:cine_devinette/widgets/joker_fx.dart';
+import 'package:cine_devinette/widgets/joker_style.dart';
 import 'package:cine_devinette/widgets/letter_pool.dart';
 import 'package:cine_devinette/widgets/pitch_card.dart';
+
+void _setCount(GameState game, JokerKind kind, int n) {
+  switch (kind) {
+    case JokerKind.reveal:
+      game.revealCount = n;
+    case JokerKind.eliminate:
+      game.eliminateCount = n;
+    case JokerKind.actor:
+      game.actorCount = n;
+    case JokerKind.character:
+      game.characterCount = n;
+    case JokerKind.hint:
+      game.hintCount = n;
+    case JokerKind.revealWord:
+      game.revealWordCount = n;
+    case JokerKind.red:
+      game.redJokerCount = n;
+  }
+}
 
 GameState _gameOnLevel(int world, int level) {
   final saveService = SaveService();
@@ -26,7 +47,8 @@ GameState _gameOnLevel(int world, int level) {
   return game;
 }
 
-Future<void> _pumpBar(WidgetTester tester, GameState game, JokerFx fx, void Function(JokerKind) onRequest,
+/// [onEvent] reçoit "ad" (bouton Gagner un joker) ou "red" (joker rouge épuisé touché).
+Future<void> _pumpBar(WidgetTester tester, GameState game, JokerFx fx, void Function(String) onEvent,
     {Widget? above}) async {
   await tester.pumpWidget(
     MultiProvider(
@@ -43,7 +65,10 @@ Future<void> _pumpBar(WidgetTester tester, GameState game, JokerFx fx, void Func
           body: Stack(
             children: [
               if (above != null) Align(alignment: Alignment.topCenter, child: above),
-              Align(alignment: Alignment.bottomCenter, child: JokerBar(fx: fx, onRequestJoker: onRequest)),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: JokerBar(
+                      fx: fx, onWatchAdForJoker: () => onEvent('ad'), onRedJokerEmpty: () => onEvent('red'))),
               Positioned.fill(child: JokerFxLayer(fx: fx)),
             ],
           ),
@@ -70,33 +95,77 @@ void main() {
     }
   });
 
-  group('Pub depuis un joker épuisé', () {
-    test('joker mineur : +2, joker majeur : +1', () {
+  group('Pub « Gagner un joker » : tirage', () {
+    void resetCounts(GameState game) {
+      for (final kind in [...GameState.kMinorJokers, ...GameState.kMajorJokers]) {
+        _setCount(game, kind, 0);
+      }
+    }
+
+    test('1/3 chacun au sein de sa catégorie', () {
       final game = _gameOnLevel(1, 1);
-      expect(game.grantJokerFromAd(JokerKind.reveal), 2);
-      expect(game.grantJokerFromAd(JokerKind.eliminate), 2);
-      expect(game.grantJokerFromAd(JokerKind.character), 2);
-      expect(game.grantJokerFromAd(JokerKind.actor), 1);
-      expect(game.grantJokerFromAd(JokerKind.hint), 1);
-      expect(game.grantJokerFromAd(JokerKind.revealWord), 1);
-      expect(game.revealCount, 2);
-      expect(game.characterCount, 2);
-      expect(game.actorCount, 1);
-      expect(game.revealWordCount, 1);
+      for (final odds in [game.jokerOddsWithin(GameState.kMinorJokers), game.jokerOddsWithin(GameState.kMajorJokers)]) {
+        expect(odds.values, everyElement(closeTo(1 / 3, 1e-9)));
+      }
     });
 
-    test('joker rouge : seulement sur un nom orange, une fois par niveau', () {
-      final game = _gameOnLevel(1, 10); // STAR WARS : un nom orange
-      expect(game.grantJokerFromAd(JokerKind.red), 1);
-      expect(game.redJokerCount, 1);
-      game.redJokerCount = 0;
-      expect(game.grantJokerFromAd(JokerKind.red), 0);
+    test('5 exemplaires ou plus : chance divisée par 2, reportée sur les autres de la catégorie', () {
+      final game = _gameOnLevel(1, 1);
+      game.characterCount = 5;
+      var odds = game.jokerOddsWithin(GameState.kMinorJokers);
+      expect(odds[JokerKind.character], closeTo(1 / 6, 1e-9));
+      expect(odds[JokerKind.reveal], closeTo(5 / 12, 1e-9));
+      expect(odds[JokerKind.eliminate], closeTo(5 / 12, 1e-9));
+      // Les majeurs ne bougent pas.
+      expect(game.jokerOddsWithin(GameState.kMajorJokers).values, everyElement(closeTo(1 / 3, 1e-9)));
+
+      game.revealCount = 7;
+      odds = game.jokerOddsWithin(GameState.kMinorJokers);
+      expect(odds[JokerKind.character], closeTo(1 / 6, 1e-9));
+      expect(odds[JokerKind.reveal], closeTo(1 / 6, 1e-9));
+      expect(odds[JokerKind.eliminate], closeTo(2 / 3, 1e-9));
+
+      game.eliminateCount = 5; // tous abondants : retour à l'égalité
+      expect(game.jokerOddsWithin(GameState.kMinorJokers).values, everyElement(closeTo(1 / 3, 1e-9)));
     });
 
-    test('pas de pub pendant le tutoriel', () {
-      final game = _gameOnLevel(0, 1);
-      expect(game.grantJokerFromAd(JokerKind.reveal), 0);
-      expect(game.revealCount, 0);
+    test('1re pub du niveau : 80 % mineurs, puis 60 %', () {
+      final game = _gameOnLevel(1, 1);
+      const draws = 4000;
+      var firstMinor = 0, laterMinor = 0;
+      for (var i = 0; i < draws; i++) {
+        resetCounts(game);
+        game.adsWatchedThisLevel = 0;
+        if (game.grantWeightedRandomJoker().isMinor) firstMinor++;
+        resetCounts(game);
+        if (game.grantWeightedRandomJoker().isMinor) laterMinor++;
+      }
+      expect(firstMinor / draws, closeTo(0.8, 0.04));
+      expect(laterMinor / draws, closeTo(0.6, 0.04));
+      expect(game.adsWatchedThisLevel, 2);
+    });
+
+    test('exemple : 5 Personnage, 2e pub : Personnage tombe à 10 % au total', () {
+      final game = _gameOnLevel(1, 1);
+      const draws = 6000;
+      final hits = <JokerKind, int>{};
+      for (var i = 0; i < draws; i++) {
+        resetCounts(game);
+        game.characterCount = 5;
+        game.adsWatchedThisLevel = 1;
+        final kind = game.grantWeightedRandomJoker();
+        hits[kind] = (hits[kind] ?? 0) + 1;
+      }
+      expect((hits[JokerKind.character] ?? 0) / draws, closeTo(0.10, 0.03));
+      expect((hits[JokerKind.reveal] ?? 0) / draws, closeTo(0.25, 0.03));
+      expect((hits[JokerKind.actor] ?? 0) / draws, closeTo(0.40 / 3, 0.03));
+    });
+
+    test('le joker tiré est bien ajouté au stock', () {
+      final game = _gameOnLevel(1, 1);
+      final kind = game.grantRandomJoker(minor: false);
+      expect(GameState.kMajorJokers, contains(kind));
+      expect(game.countOf(kind), 1);
     });
   });
 
@@ -129,25 +198,64 @@ void main() {
   });
 
   group('Barre de jokers', () {
-    testWidgets('joker épuisé : le toucher demande pub ou boutique', (tester) async {
+    testWidgets('joker à 0 : éteint, le toucher ne fait rien ; un seul bouton pour la pub', (tester) async {
       final game = _gameOnLevel(1, 1);
-      JokerKind? requested;
-      await _pumpBar(tester, game, JokerFx(), (k) => requested = k);
-      expect(find.text('+ obtenir'), findsWidgets);
+      final events = <String>[];
+      await _pumpBar(tester, game, JokerFx(), events.add);
       await tester.tap(find.text('RÉVÉLER'));
-      expect(requested, JokerKind.reveal);
+      await tester.pump();
+      expect(events, isEmpty);
+      expect(game.revealCount, 0);
+      await tester.tap(find.text('GAGNER UN JOKER'));
+      expect(events, ['ad']);
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('joker à 0 : garde sa couleur, plus pâle, avec une bordure fine', (tester) async {
+      final game = _gameOnLevel(1, 1);
+      game.actorCount = 1;
+      await _pumpBar(tester, game, JokerFx(), (_) {});
+      BoxDecoration boxOf(String label) => tester
+          .widget<Container>(find.ancestor(of: find.text(label), matching: find.byType(Container)).first)
+          .decoration! as BoxDecoration;
+      final owned = boxOf('ACTEUR'), empty = boxOf('PERSONNAGE');
+      expect(owned.border!.top.width, greaterThan(empty.border!.top.width));
+      expect(empty.color!.opacity, greaterThan(0));
+      expect(empty.color!.opacity, lessThan(owned.color!.opacity));
+      final emptyLabel = tester.widget<Text>(find.text('PERSONNAGE'));
+      expect(emptyLabel.style!.color!.opacity, lessThan(1));
+      final expected = jokerColor(
+          JokerKind.character, AppColors(game.settings.isLightTheme, colorblind: game.settings.colorblindMode));
+      expect(emptyLabel.style!.color!.withOpacity(1), expected.withOpacity(1));
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('joker rouge épuisé sur un nom orange : reste touchable (pub garantie)', (tester) async {
+      final game = _gameOnLevel(1, 10); // STAR WARS : un nom orange
+      final events = <String>[];
+      await _pumpBar(tester, game, JokerFx(), events.add);
+      expect(find.text('🎬 pub → joker'), findsOneWidget);
+      await tester.tap(find.text('PERSONNAGE (ROUGE)'));
+      expect(events, ['red']);
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('tutoriel : pas de bouton de pub', (tester) async {
+      final game = _gameOnLevel(0, 1);
+      await _pumpBar(tester, game, JokerFx(), (_) {});
+      expect(find.text('GAGNER UN JOKER'), findsNothing);
       await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('joker possédé : badge de quantité, et le toucher l\'utilise', (tester) async {
       final game = _gameOnLevel(1, 1);
       game.revealCount = 2;
-      JokerKind? requested;
-      await _pumpBar(tester, game, JokerFx(), (k) => requested = k);
+      final events = <String>[];
+      await _pumpBar(tester, game, JokerFx(), events.add);
       expect(find.text('2'), findsOneWidget);
       await tester.tap(find.text('RÉVÉLER'));
       await tester.pump();
-      expect(requested, isNull);
+      expect(events, isEmpty);
       expect(game.revealCount, 1);
       expect(find.text('1'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
@@ -232,14 +340,14 @@ void main() {
       final game = _gameOnLevel(1, 1);
       final fx = JokerFx();
       await _pumpBar(tester, game, fx, (_) {});
-      game.grantJokerFromAd(JokerKind.reveal);
+      game.revealCount += 2;
       fx.reward(grants: const [RewardGrant(JokerKind.reveal, 2)]);
       await tester.pump();
       expect(find.text('JOKERS GAGNÉS'), findsOneWidget);
       expect(fx.pending(JokerKind.reveal), 2);
       expect(find.text('2'), findsNothing); // pas encore arrivée
-      await _frames(tester, 1500);
-      expect(find.text('JOKERS GAGNÉS'), findsOneWidget); // la bannière reste ~2 s
+      await _frames(tester, 2400);
+      expect(find.text('JOKERS GAGNÉS'), findsOneWidget); // la bannière reste ~3 s
       expect(find.text('2'), findsNothing);
       await _frames(tester, 1000);
       expect(fx.pending(JokerKind.reveal), 0);

@@ -97,6 +97,7 @@ Future<void> main() async {
     streakState.onCinemaEventReached = (_) => gameState.grantJokers(reveal: 1, eliminate: 1, actor: 1, character: 1);
   }
   defiState.streakState = streakState;
+  defiState.grantJoker = ({required bool minor}) => gameState.grantRandomJoker(minor: minor);
   multiplayerState.streakState = streakState;
 
   final notificationService = NotificationService();

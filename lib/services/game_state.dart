@@ -134,7 +134,82 @@ class GameState extends ChangeNotifier {
         'allWorldsCompleted': allWorldsCompleted,
         'allWorldsCompletedAtMax': _allWorldsCompletedAtMax,
         'solvedPending': _solvedPendingKey,
+        'level': _levelJson(),
       };
+
+  // ─── Niveau en cours ───
+  // Sauvegardé avec le reste : rouvrir l'app en plein niveau retrouve la
+  // grille, les lettres éliminées, les noms recolorés et l'indice. Sans ça,
+  // les jokers joués sur le niveau étaient perdus à la fermeture de l'app.
+  // Lu au démarrage, appliqué au premier chargement de ce même niveau.
+  Map<String, dynamic>? _savedLevel;
+
+  Map<String, dynamic>? _levelJson() {
+    if (!puzzleLoaded) return _savedLevel; // pas encore rechargé : on garde l'état lu au démarrage
+    if (hasPendingSolve) return null;
+    return {
+      'key': '$worldIndex-$currentLevelNumber',
+      'answer': slots.map((s) => s.char).join(),
+      'pool': [
+        for (final t in pool) [t.letter, t.used, t.eliminated, t.consumed]
+      ],
+      'guess': guess,
+      'lockedSlots': lockedSlots.toList(),
+      'lockedWords': lockedWords.toList(),
+      'p1Colors': [for (final c in p1Colors) c.name],
+      'p2Colors': [for (final c in p2Colors) c.name],
+      'hintRevealed': hintRevealed,
+      'failStreak': failStreak,
+      'adsWatched': adsWatchedThisLevel,
+      'redAdWatched': redJokerAdWatchedThisLevel,
+    };
+  }
+
+  void _applySavedLevel(Map<String, dynamic> saved) {
+    List<NameColor>? colorsOf(Object? value) {
+      final names = (value as List?)?.whereType<String>().toList();
+      if (names == null || names.isEmpty) return null;
+      final byName = NameColor.values.asNameMap();
+      if (names.any((n) => !byName.containsKey(n))) return null;
+      return [for (final n in names) byName[n]!];
+    }
+
+    p1Colors = colorsOf(saved['p1Colors']) ?? p1Colors;
+    p2Colors = colorsOf(saved['p2Colors']) ?? p2Colors;
+    if (saved['hintRevealed'] == true) {
+      hintRevealed = true;
+      revealedHintText = _hintText();
+    }
+    failStreak = saved['failStreak'] as int? ?? failStreak;
+    adsWatchedThisLevel = saved['adsWatched'] as int? ?? adsWatchedThisLevel;
+    redJokerAdWatchedThisLevel = saved['redAdWatched'] as bool? ?? redJokerAdWatchedThisLevel;
+
+    // La grille n'est reprise que si la réponse n'a pas changé entre-temps
+    // (autre langue, contenu corrigé par une mise à jour).
+    if (saved['answer'] != slots.map((s) => s.char).join()) return;
+    try {
+      final savedPool = [
+        for (final t in saved['pool'] as List)
+          LetterTile(
+              letter: (t as List)[0] as String,
+              used: t[1] as bool,
+              eliminated: t[2] as bool,
+              consumed: t[3] as bool)
+      ];
+      final savedGuess = [for (final g in saved['guess'] as List) g as int?];
+      if (savedGuess.length != slots.length) return;
+      if (savedGuess.any((g) => g != null && (g < 0 || g >= savedPool.length))) return;
+      final savedLockedSlots = (saved['lockedSlots'] as List).cast<int>().toSet();
+      final savedLockedWords = (saved['lockedWords'] as List).cast<int>().toSet();
+      pool = savedPool;
+      guess = savedGuess;
+      lockedSlots = savedLockedSlots;
+      lockedWords = savedLockedWords;
+      cursorIndex = _firstEmptySlotFrom(0);
+    } catch (_) {
+      // Sauvegarde illisible : on garde la grille neuve.
+    }
+  }
 
   /// Charge la sauvegarde existante, s'il y en a une. À appeler une seule
   /// fois au démarrage, avant que l'UI ne soit affichée.
@@ -195,12 +270,14 @@ class GameState extends ChangeNotifier {
       currentLevelNumber = 1;
       remainingLevels = List.generate(kTutorialPuzzles.length, (i) => i + 1);
     }
-    // puzzleLoaded reste faux : le niveau en cours sera rechargé "propre" au
-    // prochain lancement (la grille en cours de saisie n'est pas persistée).
+    // puzzleLoaded reste faux : le niveau en cours sera rechargé à l'entrée
+    // dans le jeu, puis complété par son état sauvegardé (voir _savedLevel).
     // Sauf s'il avait déjà été trouvé sans que « SUIVANT » soit touché :
     // on le recharge ici (avant tout affichage) pour que l'écran de jeu
     // rouvre directement sa page de révélation (voir hasPendingSolve).
     _solvedPendingKey = data['solvedPending'] as String?;
+    final savedLevel = data['level'];
+    _savedLevel = savedLevel is Map ? savedLevel.cast<String, dynamic>() : null;
     if (hasPendingSolve) loadPuzzle();
     _restoring = false;
   }
@@ -458,6 +535,7 @@ class GameState extends ChangeNotifier {
     gameStarted = false;
     puzzleLoaded = false;
     _solvedPendingKey = null;
+    _savedLevel = null;
     worldChoiceReserve = null;
     _worldChoiceFrontier = 4;
     _worldChoicesExhausted = false;
@@ -546,6 +624,9 @@ class GameState extends ChangeNotifier {
     pool = all.map((l) => LetterTile(letter: l)).toList();
 
     cursorIndex = _firstEmptySlotFrom(0);
+    final saved = _savedLevel;
+    _savedLevel = null;
+    if (saved != null && saved['key'] == '$worldIndex-$currentLevelNumber') _applySavedLevel(saved);
     notifyListeners();
   }
 
@@ -934,41 +1015,69 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 80% de chances de gagner un joker mineur, 20% un joker majeur pour la
-  /// 1ère pub à récompense regardée sur ce niveau — 60%/40% à partir de la
-  /// 2e (voir [adsWatchedThisLevel], remis à zéro à chaque nouveau niveau).
-  String grantWeightedRandomJoker() {
+  static const kMinorJokers = [JokerKind.reveal, JokerKind.eliminate, JokerKind.character];
+  static const kMajorJokers = [JokerKind.actor, JokerKind.hint, JokerKind.revealWord];
+
+  /// À partir de ce stock, un joker devient deux fois moins probable au tirage.
+  static const kJokerAbundantStock = 5;
+
+  /// Chances de chaque joker au sein de sa catégorie (mineurs ou majeurs) :
+  /// 1/3 chacun ; un joker déjà possédé en [kJokerAbundantStock] exemplaires
+  /// ou plus tombe à 1/6, la part libérée revenant aux autres jokers de la
+  /// même catégorie (la répartition mineurs/majeurs ne bouge pas). Ex. 5
+  /// Personnage : Personnage 1/6, Révéler et Éliminer 5/12 chacun.
+  Map<JokerKind, double> jokerOddsWithin(List<JokerKind> kinds) {
+    final abundant = {for (final k in kinds) if (countOf(k) >= kJokerAbundantStock) k};
+    final base = 1 / kinds.length;
+    if (abundant.isEmpty || abundant.length == kinds.length) return {for (final k in kinds) k: base};
+    final halved = base / 2;
+    final others = (1 - halved * abundant.length) / (kinds.length - abundant.length);
+    return {for (final k in kinds) k: abundant.contains(k) ? halved : others};
+  }
+
+  /// Tire et accorde un joker mineur ou majeur selon [jokerOddsWithin].
+  JokerKind grantRandomJoker({required bool minor}) {
+    final odds = jokerOddsWithin(minor ? kMinorJokers : kMajorJokers);
+    var roll = _rng.nextDouble();
+    var kind = odds.keys.last;
+    for (final entry in odds.entries) {
+      if (roll < entry.value) {
+        kind = entry.key;
+        break;
+      }
+      roll -= entry.value;
+    }
+    _addJoker(kind, 1);
+    notifyListeners();
+    return kind;
+  }
+
+  /// Pub du bouton « Gagner un joker » : 80 % de chances de gagner un joker
+  /// mineur, 20 % un majeur pour la 1re pub regardée sur ce niveau, puis
+  /// 60 %/40 % (voir [adsWatchedThisLevel], remis à zéro à chaque niveau).
+  JokerKind grantWeightedRandomJoker() {
     final minorChance = adsWatchedThisLevel == 0 ? 0.8 : 0.6;
     adsWatchedThisLevel++;
-    final isMinor = _rng.nextDouble() < minorChance;
-    String label;
-    if (isMinor) {
-      final pick = _rng.nextInt(3);
-      if (pick == 0) {
-        revealCount++;
-        label = 'Révéler';
-      } else if (pick == 1) {
-        eliminateCount++;
-        label = 'Éliminer';
-      } else {
-        characterCount++;
-        label = 'Personnage';
-      }
-    } else {
-      final pick = _rng.nextInt(3);
-      if (pick == 0) {
-        actorCount++;
-        label = 'Acteur';
-      } else if (pick == 1) {
-        hintCount++;
-        label = 'Indice';
-      } else {
-        revealWordCount++;
-        label = 'Révéler un mot';
-      }
+    return grantRandomJoker(minor: _rng.nextDouble() < minorChance);
+  }
+
+  void _addJoker(JokerKind kind, int n) {
+    switch (kind) {
+      case JokerKind.reveal:
+        revealCount += n;
+      case JokerKind.eliminate:
+        eliminateCount += n;
+      case JokerKind.actor:
+        actorCount += n;
+      case JokerKind.character:
+        characterCount += n;
+      case JokerKind.hint:
+        hintCount += n;
+      case JokerKind.revealWord:
+        revealWordCount += n;
+      case JokerKind.red:
+        redJokerCount += n;
     }
-    notifyListeners();
-    return label;
   }
 
   /// true si le bouton "regarder une pub pour un joker rouge" doit être
@@ -996,39 +1105,6 @@ class GameState extends ChangeNotifier {
         JokerKind.revealWord => revealWordCount,
         JokerKind.red => redJokerCount,
       };
-
-  /// Vrai si une pub peut rapporter ce joker maintenant (le joker rouge
-  /// garde sa limite d'une pub par niveau concerné).
-  bool canWatchAdFor(JokerKind kind) => kind == JokerKind.red ? peutRegarderPubJokerRouge : !inTutorial;
-
-  /// Pub regardée depuis un joker épuisé : rapporte ce joker précis (2 pour
-  /// un joker mineur, 1 sinon). Retourne le nombre accordé (0 si refusé).
-  int grantJokerFromAd(JokerKind kind) {
-    if (!canWatchAdFor(kind)) return 0;
-    if (kind == JokerKind.red) {
-      grantRedJokerFromAd();
-      return 1;
-    }
-    final n = kind.adReward;
-    switch (kind) {
-      case JokerKind.reveal:
-        revealCount += n;
-      case JokerKind.eliminate:
-        eliminateCount += n;
-      case JokerKind.actor:
-        actorCount += n;
-      case JokerKind.character:
-        characterCount += n;
-      case JokerKind.hint:
-        hintCount += n;
-      case JokerKind.revealWord:
-        revealWordCount += n;
-      case JokerKind.red:
-        break;
-    }
-    notifyListeners();
-    return n;
-  }
 
   // ─── Progression entre niveaux ───
   /// true si une pub forcée doit être montrée avant le niveau suivant.

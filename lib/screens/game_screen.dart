@@ -15,7 +15,6 @@ import '../widgets/answer_row.dart';
 import '../widgets/clapper_transition.dart';
 import '../widgets/joker_bar.dart';
 import '../widgets/joker_fx.dart';
-import '../widgets/joker_style.dart';
 import '../widgets/letter_pool.dart';
 import '../widgets/mini_popup.dart';
 import '../widgets/pitch_card.dart';
@@ -240,78 +239,40 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
-  // ─── Joker épuisé : pub pour ce joker précis, ou boutique ───
-  Future<void> _onRequestJoker(JokerKind kind) async {
+  // ─── Pub : AdMob affiche sa propre interface plein écran, on ne bloque
+  // jamais rien nous-mêmes — on attend juste que le SDK ait terminé. ───
+
+  /// Bouton « Gagner un joker » : un joker tiré au hasard (voir
+  /// [GameState.grantWeightedRandomJoker]).
+  Future<void> _onWatchAdForJoker() async {
     final game = context.read<GameState>();
-    final settings = context.read<AppSettings>();
-    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
-    final t = AppLocalizations.of(context);
-    final accent = jokerColor(kind, colors);
-    final canAd = game.canWatchAdFor(kind);
-    final choice = await showDialog<String>(
-      context: context,
-      builder: (dialogContext) => Dialog(
-        backgroundColor: colors.bgPanel2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: accent.withOpacity(0.6)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(22, 20, 22, 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('${kind.icon} ${jokerName(kind, t)}',
-                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 20, color: accent)),
-              const SizedBox(height: 10),
-              Text(
-                canAd ? t.jokerEmptyBody(kind.adReward) : t.jokerRedLockedToast,
-                textAlign: TextAlign.center,
-                style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5),
-              ),
-              const SizedBox(height: 18),
-              if (canAd) ...[
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
-                    onPressed: () => Navigator.of(dialogContext).pop('ad'),
-                    child: Text(t.jokerWatchAdFor(kind.adReward),
-                        style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: colors.cream)),
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(dialogContext).pop('shop'),
-                  child: Text(t.jokerGoShop,
-                      style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: AppColors.gold)),
-                ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(dialogContext).pop(),
-                child: Text(t.commonCancel, style: AppTextStyles.body(size: 13, color: colors.muted)),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    if (game.inTutorial) return;
+    final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
-    if (choice == 'shop') {
-      showDialog(context: context, builder: (_) => const ShopScreen());
-    } else if (choice == 'ad') {
-      // AdMob affiche sa propre interface plein écran : on attend juste la fin.
-      final earned = await game.adService.showRewardedAdForJoker();
-      if (!mounted) return;
-      final granted = earned ? game.grantJokerFromAd(kind) : 0;
-      if (granted > 0) {
-        _fx.reward(grants: [RewardGrant(kind, granted)]);
-      } else {
-        _toast(t.commonAdUnavailable);
-      }
+    if (earned) {
+      _fx.reward(grants: [RewardGrant(game.grantWeightedRandomJoker(), 1)]);
+    } else {
+      _toast(AppLocalizations.of(context).commonAdUnavailable);
+    }
+  }
+
+  /// Joker rouge épuisé : pub garantie pour 1 joker rouge, limitée à une
+  /// fois par niveau concerné (voir [GameState.peutRegarderPubJokerRouge]) ;
+  /// sinon, rappel des autres façons d'en obtenir.
+  Future<void> _onRedJokerEmpty() async {
+    final game = context.read<GameState>();
+    final t = AppLocalizations.of(context);
+    if (game.inTutorial || !game.peutRegarderPubJokerRouge) {
+      _toast(t.jokerRedLockedToast);
+      return;
+    }
+    final earned = await game.adService.showRewardedAdForJoker();
+    if (!mounted) return;
+    if (earned && game.peutRegarderPubJokerRouge) {
+      game.grantRedJokerFromAd();
+      _fx.reward(grants: const [RewardGrant(JokerKind.red, 1)]);
+    } else if (!earned) {
+      _toast(t.commonAdUnavailable);
     }
   }
 
@@ -337,8 +298,7 @@ class _GameScreenState extends State<GameScreen> {
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned) {
-      final kind = JokerKind.fromLabel(game.grantWeightedRandomJoker());
-      if (kind != null) _fx.reward(grants: [RewardGrant(kind, 1)]);
+      _fx.reward(grants: [RewardGrant(game.grantWeightedRandomJoker(), 1)]);
     }
   }
 
@@ -601,28 +561,10 @@ class _GameScreenState extends State<GameScreen> {
                           ),
                         ),
                         Expanded(
-                          child: Column(
-                            children: [
-                              Text('PLOT TWIST(ED)', style: AppTextStyles.display(size: 28)),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: AppTextStyles.body(size: 11, color: colors.muted),
-                                  children: [
-                                    TextSpan(
-                                        text:
-                                            '${game.levelTitleFor(game.locale)} · ${game.currentWorld.categoryLabelFor(game.locale)} · '),
-                                    TextSpan(
-                                      text: game.difficultyLabelFor(game.locale),
-                                      style: TextStyle(
-                                          color: colors.forDifficultyLabel(game.difficultyLabel),
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Monde, niveau et difficulté : en tête du pitch
+                          // (voir PitchCard), là où le joueur les voit.
+                          child: Text('PLOT TWIST(ED)',
+                              textAlign: TextAlign.center, style: AppTextStyles.display(size: 28)),
                         ),
                         const SizedBox(width: 36),
                       ],
@@ -636,7 +578,8 @@ class _GameScreenState extends State<GameScreen> {
                     const SizedBox(height: 18),
                     JokerBar(
                       fx: _fx,
-                      onRequestJoker: _onRequestJoker,
+                      onWatchAdForJoker: _onWatchAdForJoker,
+                      onRedJokerEmpty: _onRedJokerEmpty,
                     ),
                     const SizedBox(height: 10),
                     Row(

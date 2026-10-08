@@ -3,10 +3,21 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../data/defis_data.dart';
 import '../models/defi.dart';
+import '../models/joker.dart';
 import 'analytics_service.dart';
 import 'defi_service.dart';
 import 'save_service.dart';
 import 'streak_state.dart';
+
+/// Bonus de jokers à la première partie d'un commun : un mineur pour un
+/// sans-faute, plus un mineur sous 30 s ou un majeur sous 20 s (pénalités
+/// comprises, un seul bonus de temps). Rejouer un commun déjà joué n'en
+/// rapporte pas : sinon, avec les réponses connues, chaque pub de rejeu
+/// rapporterait deux jokers.
+enum DefiBonus { perfect, under30, under20 }
+
+const kDefiBonusUnder30Seconds = 30;
+const kDefiBonusUnder20Seconds = 20;
 
 /// État du mode "Défi du jour" : un "commun" officiel par jour (ancré GMT,
 /// propre au parcours de ce joueur — voir defiIndexFor()), des
@@ -18,13 +29,17 @@ import 'streak_state.dart';
 /// peut, via une pub, rejouer le même défi (le meilleur temps est conservé)
 /// ou piocher un autre commun au hasard parmi ceux jamais encore joués.
 /// Aucun classement : juste le meilleur temps personnel par commun, stocké
-/// localement.
+/// localement, et des bonus de jokers (voir [DefiBonus]).
 class DefiState extends ChangeNotifier {
   final SaveService saveService;
   final AnalyticsService analytics;
   // Optionnel (contrairement à saveService/analytics) : câblé depuis
   // main.dart, jamais depuis les tests, qui n'ont pas besoin de la série.
   StreakState? streakState;
+
+  /// Accorde un joker mineur ou majeur tiré au hasard et renvoie lequel —
+  /// câblé vers GameState depuis main.dart (les jokers y sont stockés).
+  JokerKind Function({required bool minor})? grantJoker;
   final Random _rng = Random();
   DefiState({required this.saveService, AnalyticsService? analytics}) : analytics = analytics ?? AnalyticsService();
 
@@ -102,6 +117,12 @@ class DefiState extends ChangeNotifier {
   int? totalSeconds;
   bool? isNewBest;
 
+  /// Bonus gagnés à la fin de la partie, vide sinon (voir [DefiBonus]).
+  List<({DefiBonus bonus, JokerKind? kind})> rewards = [];
+
+  /// Faux quand le commun avait déjà été joué : pas de bonus de jokers.
+  bool rewardsEligible = true;
+
   // ─── Retour visuel après un tap (1 seconde) : la case tapée passe en
   // vert (bonne réponse) ou rouge (mauvaise réponse) ; en cas d'erreur, la
   // vraie bonne réponse clignote ailleurs sur le plateau pour la montrer au
@@ -138,6 +159,8 @@ class DefiState extends ChangeNotifier {
     realSeconds = null;
     totalSeconds = null;
     isNewBest = null;
+    rewards = [];
+    rewardsEligible = !playedDefiIds.contains(defi.id);
     feedbackCaseIndex = null;
     feedbackCorrect = null;
     revealCaseIndex = null;
@@ -199,6 +222,16 @@ class DefiState extends ChangeNotifier {
     isNewBest = prevBest == null || totalSeconds! < prevBest;
     if (isNewBest!) bestTimes[id] = totalSeconds!;
     if (!playedDefiIds.contains(id)) playedDefiIds = [...playedDefiIds, id];
+    if (rewardsEligible) {
+      final earned = [
+        if (penaltySeconds == 0) (DefiBonus.perfect, true),
+        if (totalSeconds! < kDefiBonusUnder20Seconds)
+          (DefiBonus.under20, false)
+        else if (totalSeconds! < kDefiBonusUnder30Seconds)
+          (DefiBonus.under30, true),
+      ];
+      rewards = [for (final (bonus, minor) in earned) (bonus: bonus, kind: grantJoker?.call(minor: minor))];
+    }
     analytics.logDefiCompleted(bonus: isBonus, seconds: totalSeconds!);
     streakState?.recordAction();
   }

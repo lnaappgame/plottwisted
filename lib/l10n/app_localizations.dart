@@ -410,6 +410,36 @@ abstract class AppLocalizations {
   /// **'Une pub permet de rejouer le même défi (pour battre ton record) ou de tenter un autre commun jamais joué.'**
   String get defiRule6;
 
+  /// No description provided for @defiRule7.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonus de jokers à ta première partie d\'un commun : sans faute = 1 joker mineur ; moins de 30 s (pénalités comprises) = 1 mineur, ou moins de 20 s = 1 majeur à la place.'**
+  String get defiRule7;
+
+  /// No description provided for @defiRewardPerfect.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans faute'**
+  String get defiRewardPerfect;
+
+  /// No description provided for @defiRewardUnder30.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins de 30 s'**
+  String get defiRewardUnder30;
+
+  /// No description provided for @defiRewardUnder20.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins de 20 s'**
+  String get defiRewardUnder20;
+
+  /// No description provided for @defiRewardsReplay.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de bonus de jokers en rejouant un commun déjà joué.'**
+  String get defiRewardsReplay;
+
   /// No description provided for @defiCasesInfo.
   ///
   /// In fr, this message translates to:
@@ -1025,7 +1055,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeHelp.
   ///
   /// In fr, this message translates to:
-  /// **'❓ Aide'**
+  /// **'❓ Comment jouer'**
   String get homeHelp;
 
   /// No description provided for @homeTagline.
@@ -1094,29 +1124,23 @@ abstract class AppLocalizations {
   /// **'PERSONNAGE (ROUGE)'**
   String get jokerRedCharacter;
 
-  /// No description provided for @jokerGetSubtitle.
+  /// No description provided for @jokerWinOne.
   ///
   /// In fr, this message translates to:
-  /// **'+ obtenir'**
-  String get jokerGetSubtitle;
+  /// **'GAGNER UN JOKER'**
+  String get jokerWinOne;
 
-  /// No description provided for @jokerEmptyBody.
+  /// No description provided for @jokerLockedSubtitle.
   ///
   /// In fr, this message translates to:
-  /// **'Tu n\'as plus ce joker. Regarde une courte pub pour en gagner {n, plural, =1{un} other{{n}}}, ou passe par la boutique.'**
-  String jokerEmptyBody(int n);
+  /// **'verrouillé'**
+  String get jokerLockedSubtitle;
 
-  /// No description provided for @jokerWatchAdFor.
+  /// No description provided for @jokerAdUnlockSubtitle.
   ///
   /// In fr, this message translates to:
-  /// **'▶ Regarder une pub (+{n})'**
-  String jokerWatchAdFor(int n);
-
-  /// No description provided for @jokerGoShop.
-  ///
-  /// In fr, this message translates to:
-  /// **'🛒 Aller à la boutique'**
-  String get jokerGoShop;
+  /// **'🎬 pub → joker'**
+  String get jokerAdUnlockSubtitle;
 
   /// No description provided for @jokerHintUsedSubtitle.
   ///
@@ -1363,6 +1387,114 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Fait passer un nom orange en rouge (les jokers Acteur/Personnage prennent ensuite le relais normalement). N\'apparaît que sur les énigmes avec un nom orange. S\'obtient de 3 façons : une pub garantie (une fois par niveau concerné), le top 10% mondial de L\'énigme de la semaine, ou la boutique.'**
   String get instrJokerRedDesc;
+
+  /// No description provided for @instrJokerSkipLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Passer définitivement'**
+  String get instrJokerSkipLabel;
+
+  /// No description provided for @instrJokerSkipDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résout le niveau en cours et révèle sa réponse. S\'obtient en boutique.'**
+  String get instrJokerSkipDesc;
+
+  /// No description provided for @instructionsTabJokers.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jokers'**
+  String get instructionsTabJokers;
+
+  /// No description provided for @instructionsTabModes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Modes de jeu'**
+  String get instructionsTabModes;
+
+  /// No description provided for @instructionsEarnHeader.
+  ///
+  /// In fr, this message translates to:
+  /// **'OBTENIR DES JOKERS'**
+  String get instructionsEarnHeader;
+
+  /// No description provided for @instrEarnAd.
+  ///
+  /// In fr, this message translates to:
+  /// **'« Gagner un joker » : une pub = un joker au hasard, mineur le plus souvent. Un joker que tu possèdes déjà en 5 exemplaires ou plus sort deux fois moins souvent.'**
+  String get instrEarnAd;
+
+  /// No description provided for @instrEarnLevels.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu principal : un joker mineur au niveau 5 de chaque monde, puis un mineur et un majeur à la fin du monde.'**
+  String get instrEarnLevels;
+
+  /// No description provided for @instrEarnModes.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'énigme de la semaine (plus tu trouves tôt, plus tu gagnes) et le Défi du jour (sans faute et chrono rapide) en rapportent aussi.'**
+  String get instrEarnModes;
+
+  /// No description provided for @instrEarnShop.
+  ///
+  /// In fr, this message translates to:
+  /// **'La boutique propose des packs de jokers.'**
+  String get instrEarnShop;
+
+  /// No description provided for @instrEarnEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un joker à 0 reste affiché, éteint, jusqu\'à ce que tu en regagnes un.'**
+  String get instrEarnEmpty;
+
+  /// No description provided for @instrModeMainTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎬 Jeu principal'**
+  String get instrModeMainTitle;
+
+  /// No description provided for @instrModeMainDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retrouve le film à partir de son pitch, où les personnages sont désignés par des noms de couleur. Reconstitue le titre avec les lettres proposées. Chaque monde compte 10 niveaux, de Facile à Extrême ; un niveau peut être gardé pour plus tard.'**
+  String get instrModeMainDesc;
+
+  /// No description provided for @instrModeEnigmeTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'🧩 L\'énigme de la semaine'**
+  String get instrModeEnigmeTitle;
+
+  /// No description provided for @instrModeEnigmeDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une énigme par semaine, la même pour tous. Le texte se dévoile d\'une lettre par heure : devine le sujet (film, acteur ou personnage) le plus tôt possible, avec une tentative gratuite par jour. Plus tu trouves tôt, plus la récompense en jokers est grande ; le top 10 % mondial gagne un joker rouge.'**
+  String get instrModeEnigmeDesc;
+
+  /// No description provided for @instrModeDefiTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎯 Défi du jour'**
+  String get instrModeDefiTitle;
+
+  /// No description provided for @instrModeDefiDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un thème par jour (un « commun ») et toutes ses réponses affichées. Pour chaque indice, touche la bonne réponse le plus vite possible : chaque erreur ajoute 5 secondes. Un sans-faute et un chrono rapide rapportent des jokers.'**
+  String get instrModeDefiDesc;
+
+  /// No description provided for @instrModeMpTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚔️ Multijoueur'**
+  String get instrModeMpTitle;
+
+  /// No description provided for @instrModeMpDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Affronte un adversaire de ton niveau en 3 manches : le premier à trouver la réponse marque le point. Ton classement Elo évolue à chaque match ; 5 parties par jour.'**
+  String get instrModeMpDesc;
 
   /// No description provided for @streakCalendarTitle.
   ///
