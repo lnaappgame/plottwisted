@@ -46,13 +46,45 @@ class GameState extends ChangeNotifier {
   final Random _rng = Random();
 
   GameState({required this.adService, required this.saveService, required this.settings, AnalyticsService? analytics})
-      : analytics = analytics ?? AnalyticsService();
+      : analytics = analytics ?? AnalyticsService() {
+    settings.addListener(_onSettingsChanged);
+  }
 
-  // Langue figée au chargement de la devinette (voir loadPuzzle()) plutôt que
-  // lue en direct depuis settings à chaque affichage : un changement de
-  // langue en cours de niveau ne doit pas faire basculer une grille de
-  // lettres déjà en cours de résolution.
+  // Langue du contenu affiché (pitch, en-tête, noms, réponse). Elle suit le
+  // réglage dès qu'il change (voir _onSettingsChanged) : laisser le niveau en
+  // cours dans l'ancienne langue donnait un écran mi-français mi-anglais.
   String locale = 'fr';
+
+  void _onSettingsChanged() {
+    final next = settings.locale;
+    if (next == locale) return;
+    if (!puzzleLoaded) {
+      locale = next;
+      return;
+    }
+    // Même réponse dans les deux langues (ou niveau déjà trouvé, grille plus
+    // affichée) : on garde la grille commencée et on ne change que les textes.
+    if (hasPendingSolve || normalize(currentPuzzle.titleFor(locale)) == normalize(currentPuzzle.titleFor(next))) {
+      locale = next;
+      if (hintRevealed) revealedHintText = _hintText();
+      notifyListeners();
+      return;
+    }
+    // Sinon, nouvelle grille dans la nouvelle langue. Les jokers joués sur les
+    // noms et l'indice restent acquis ; ceux joués sur les lettres de
+    // l'ancienne réponse ne peuvent pas être reportés.
+    final keptP1 = p1Colors, keptP2 = p2Colors, keptHint = hintRevealed;
+    final keptStart = levelStartTime, keptAds = adsWatchedThisLevel, keptRedAd = redJokerAdWatchedThisLevel;
+    loadPuzzle();
+    p1Colors = keptP1;
+    p2Colors = keptP2;
+    hintRevealed = keptHint;
+    if (keptHint) revealedHintText = _hintText();
+    levelStartTime = keptStart;
+    adsWatchedThisLevel = keptAds;
+    redJokerAdWatchedThisLevel = keptRedAd;
+    notifyListeners();
+  }
 
   // ─── Sauvegarde ───
   // Toute mutation d'état passe par notifyListeners() : on en profite pour
@@ -743,14 +775,18 @@ class GameState extends ChangeNotifier {
     if (hintCount <= 0 || hintRevealed) return null;
     hintCount--;
     hintRevealed = true;
+    revealedHintText = _hintText();
+    notifyListeners();
+    return revealedHintText;
+  }
+
+  String _hintText() {
     final hint = currentPuzzle.extraHintFor(locale);
-    revealedHintText = hint.isNotEmpty
+    return hint.isNotEmpty
         ? hint
         : (locale == 'en'
             ? 'No extra hint available for this puzzle.'
             : 'Pas de complément disponible pour cette devinette.');
-    notifyListeners();
-    return revealedHintText;
   }
 
   /// Révèle un mot entier de la réponse (jusqu'à 40% du nombre total de
@@ -1104,6 +1140,7 @@ class GameState extends ChangeNotifier {
 
   @override
   void dispose() {
+    settings.removeListener(_onSettingsChanged);
     _saveDebounce?.cancel();
     super.dispose();
   }

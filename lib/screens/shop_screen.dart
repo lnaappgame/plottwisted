@@ -39,7 +39,7 @@ class ShopScreen extends StatelessWidget {
                 child: Column(
                   children: kShopItems.map((item) {
                     final purchasable = purchase.available && purchase.products.containsKey(item.productId);
-                    final compareAtPrice = purchase.compareAtPriceFor(item, settings.locale);
+                    final compareAtPrice = purchase.compareAtPriceFor(item);
                     return Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),

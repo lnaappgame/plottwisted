@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb, visibleForTesting;
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/shop_item.dart';
 
@@ -73,14 +72,33 @@ class PurchaseService {
 
   /// Prix barré de [item] : somme des articles équivalents achetés
   /// séparément, null si l'un d'eux n'est pas chargé ou si les devises diffèrent.
-  String? compareAtPriceFor(ShopItem item, String locale) {
+  /// Écrit au même format que les prix du store (symbole, position,
+  /// séparateur) : formaté selon la langue du jeu, il donnait « 12,96 $ » à
+  /// côté de « $8.99 » quand le compte du joueur est américain.
+  String? compareAtPriceFor(ShopItem item) {
     if (item.compareAtProductIds.isEmpty || !products.containsKey(item.productId)) return null;
     final parts = [for (final id in item.compareAtProductIds) products[id]];
     if (parts.any((p) => p == null)) return null;
     final currency = parts.first!.currencyCode;
-    if (parts.any((p) => p!.currencyCode != currency)) return null;
+    if (parts.any((p) => p!.currencyCode != currency) || products[item.productId]!.currencyCode != currency) {
+      return null;
+    }
     final total = parts.fold<double>(0, (sum, p) => sum + p!.rawPrice);
-    return NumberFormat.simpleCurrency(locale: locale, name: currency).format(total);
+    return formatLikeStorePrice(products[item.productId]!.price, total);
+  }
+
+  /// Écrit [amount] en reprenant la forme d'un prix déjà formaté par le store
+  /// ([template], ex. « $8.99 » ou « 9,99 € ») : seul le nombre change.
+  @visibleForTesting
+  static String? formatLikeStorePrice(String template, double amount) {
+    final match = RegExp(r'\d(?:[\d\s  .,]*\d)?').firstMatch(template);
+    if (match == null) return null;
+    final number = match.group(0)!;
+    final lastSep = number.lastIndexOf(RegExp(r'[.,]'));
+    final withCents = lastSep != -1 && number.length - lastSep - 1 == 2;
+    var text = amount.toStringAsFixed(withCents ? 2 : 0);
+    if (withCents) text = text.replaceFirst('.', number[lastSep]);
+    return template.replaceRange(match.start, match.end, text);
   }
 
   Future<void> buy(ShopItem item) async {

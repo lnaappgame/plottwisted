@@ -29,12 +29,35 @@ class EnigmeState extends ChangeNotifier {
   final AppSettings settings;
   final Random _rng = Random();
   EnigmeState({required this.saveService, required this.settings, AnalyticsService? analytics})
-      : analytics = analytics ?? AnalyticsService();
+      : analytics = analytics ?? AnalyticsService() {
+    settings.addListener(_onSettingsChanged);
+  }
 
-  // Langue figée au chargement de la grille (voir rebuildTiles()), comme pour
-  // GameState — un changement de langue en cours de semaine ne doit pas
-  // changer la longueur du texte à révéler en cours de route.
+  // Langue de l'énigme affichée. Elle suit le réglage dès qu'il change : la
+  // garder figée donnait un écran anglais avec une énigme en français. Le
+  // nombre de lettres dévoilées dépend du temps écoulé, pas de la langue.
   String locale = 'fr';
+
+  void _onSettingsChanged() {
+    if (settings.locale == locale) return;
+    if (slots.isEmpty) {
+      locale = settings.locale;
+      return;
+    }
+    final memeReponse = normalize(enigme.sujetFor(locale)) == normalize(enigme.sujetFor(settings.locale));
+    if (memeReponse) {
+      locale = settings.locale; // grille commencée conservée
+    } else {
+      rebuildTiles(); // réponse différente : nouvelle grille dans la nouvelle langue
+    }
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    settings.removeListener(_onSettingsChanged);
+    super.dispose();
+  }
 
   Timer? _saveDebounce;
   bool _restoring = false;
