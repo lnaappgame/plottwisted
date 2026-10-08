@@ -214,6 +214,16 @@ void main() {
       await _frames(tester, 250);
       expect(find.text(after), findsOneWidget);
       expect(find.text(before), findsOneWidget); // ancienne couleur toujours affichée après le " / "
+      // À l'impact, le nouveau nom s'illumine (pulsation de 0,5 s), puis s'éteint.
+      double flash() {
+        final box = find.byKey(const ValueKey('nameFlash:p2'));
+        if (box.evaluate().isEmpty) return 0;
+        return ((tester.widget<DecoratedBox>(box).decoration as BoxDecoration).color?.opacity) ?? 0;
+      }
+      expect(find.descendant(of: find.byKey(const ValueKey('nameFlash:p2')), matching: find.text(after)), findsOneWidget);
+      expect(flash(), greaterThan(0.05));
+      await _frames(tester, 600);
+      expect(flash(), lessThan(0.01));
       await tester.pump(const Duration(seconds: 1));
       expect(tester.takeException(), isNull);
     });

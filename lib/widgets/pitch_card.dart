@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
@@ -32,13 +33,19 @@ class PitchCard extends StatefulWidget {
   State<PitchCard> createState() => _PitchCardState();
 }
 
-class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMixin {
+class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
   late final AnimationController _pulseController;
   late final Animation<double> _pulseAnim;
   String? _lastLevelKey;
   // Couleurs affichées par nom : figées pendant le vol du faisceau d'un joker
   // Acteur/Personnage (l'état du jeu a déjà changé, l'affichage suit à l'impact).
   final Map<String, List<NameColor>> _shownNames = {};
+  // À l'impact du faisceau, le nouveau nom s'illumine le temps d'une
+  // pulsation de 0,5 s, pour montrer au joueur ce qui vient d'apparaître.
+  late final AnimationController _landFlash =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+  String? _flashSlot;
+  final Set<String> _wasIncoming = {};
 
   @override
   void initState() {
@@ -67,11 +74,46 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
   void dispose() {
     widget.fx?.removeListener(_onFx);
     _pulseController.dispose();
+    _landFlash.dispose();
     super.dispose();
   }
 
   void _onFx() {
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    for (final slot in const ['p1', 'p2']) {
+      final incoming = _incoming('name:$slot');
+      if (_wasIncoming.contains(slot) && !incoming) {
+        _flashSlot = slot; // le faisceau vient d'arriver sur ce nom
+        _landFlash.forward(from: 0);
+      }
+      incoming ? _wasIncoming.add(slot) : _wasIncoming.remove(slot);
+    }
+    setState(() {});
+  }
+
+  /// Surbrillance d'impact autour du nouveau nom : fond et halo de sa couleur
+  /// plus léger grossissement, en dessin seulement (le texte ne bouge pas).
+  Widget _landingFlash(String slot, Color color, Widget child) {
+    if (slot != _flashSlot) return child;
+    return AnimatedBuilder(
+      animation: _landFlash,
+      builder: (context, child) {
+        final v = sin(pi * _landFlash.value).clamp(0.0, 1.0);
+        return Transform.scale(
+          scale: 1 + 0.08 * v,
+          child: DecoratedBox(
+            key: ValueKey('nameFlash:$slot'),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.35 * v),
+              borderRadius: BorderRadius.circular(4),
+              boxShadow: v > 0 ? [BoxShadow(color: color.withOpacity(0.6 * v), blurRadius: 12 * v)] : null,
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: child,
+    );
   }
 
   bool _incoming(String id) => widget.fx?.isIncoming(id) ?? false;
@@ -132,24 +174,28 @@ class _PitchCardState extends State<PitchCard> with SingleTickerProviderStateMix
                   .showSnackBar(SnackBar(content: Text(err), duration: const Duration(seconds: 2)));
             }
           },
-          child: Container(
-            key: isTarget ? widget.fx?.key('name:$slot') : null,
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            decoration: BoxDecoration(
-              color: armed ? color.withOpacity(0.18) : null,
-              borderRadius: BorderRadius.circular(3),
-            ),
-            // Vrai soulignement de texte plutôt qu'une bordure de Container :
-            // une bordure peut s'étirer jusqu'au bout de la ligne quand ce
-            // span tombe en fin de ligne (constaté sur OnePlus) — la
-            // décoration de texte, elle, colle toujours exactement à la
-            // largeur réelle du mot.
-            child: Text(
-              label,
-              style: AppTextStyles.body(size: 16, weight: FontWeight.w700, color: color).copyWith(
-                decoration: TextDecoration.underline,
-                decorationColor: color,
-                decorationThickness: 2,
+          child: _landingFlash(
+            isTarget ? slot : '',
+            color,
+            Container(
+              key: isTarget ? widget.fx?.key('name:$slot') : null,
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              decoration: BoxDecoration(
+                color: armed ? color.withOpacity(0.18) : null,
+                borderRadius: BorderRadius.circular(3),
+              ),
+              // Vrai soulignement de texte plutôt qu'une bordure de Container :
+              // une bordure peut s'étirer jusqu'au bout de la ligne quand ce
+              // span tombe en fin de ligne (constaté sur OnePlus) — la
+              // décoration de texte, elle, colle toujours exactement à la
+              // largeur réelle du mot.
+              child: Text(
+                label,
+                style: AppTextStyles.body(size: 16, weight: FontWeight.w700, color: color).copyWith(
+                  decoration: TextDecoration.underline,
+                  decorationColor: color,
+                  decorationThickness: 2,
+                ),
               ),
             ),
           ),
