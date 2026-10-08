@@ -34,11 +34,12 @@ Un nom en bleu ? C'est l'acteur. En vert ? Le vrai personnage. En rouge
 ou en orange ? Attention, ce n'est pas si simple...
 
 🧩 DES MODES POUR CHAQUE ENVIE
-• Mode Histoire — des dizaines de films organisés par thème, du plus
-  facile au plus retors
-• Défi du jour — une énigme éclair chronométrée, un seul essai
-• L'énigme de la semaine — un défi commun à tous les joueurs, avec
-  classement
+• Les mondes — des centaines de films organisés par thème, du niveau
+  facile à l'extrême
+• Défi du jour — un thème, 7 indices, 7 acteurs : associe chaque indice
+  au bon nom, le plus vite possible
+• L'énigme de la semaine — la même énigme pour tous les joueurs, une
+  nouvelle lettre dévoilée régulièrement, et un classement mondial
 • Multijoueur — affronte un autre joueur sur le même pitch et gagne la
   course au titre
 
@@ -46,10 +47,6 @@ ou en orange ? Attention, ce n'est pas si simple...
 Révèle une lettre, élimine des intrus, découvre l'acteur ou le
 personnage, ou récupère un indice sur le film — à utiliser au bon
 moment.
-
-🔥 REVIENS CHAQUE JOUR
-Construis ta série de jours joués et débloque des récompenses aux
-paliers (indices, jokers).
 
 🏆 GRIMPE LE CLASSEMENT
 En multijoueur, chaque victoire fait progresser ton rang, du stagiaire
@@ -63,7 +60,7 @@ Télécharge Plot Twist(ed) et retrouve le plaisir de dire "Ah mais oui,
 bien sûr !"
 ```
 
-(1076 caractères — large marge sous la limite de 4000, volontairement concis pour rester lisible)
+(environ 1000 caractères — large marge sous la limite de 4000. Mise à jour le 08/10/2026 : paragraphe sur la série de jours retiré, le calendrier étant désactivé, et Défi du jour décrit tel qu'il est.)
 
 ## Mots-clés à tisser dans le texte (Google Play n'a pas de champ dédié, contrairement à l'App Store)
 
