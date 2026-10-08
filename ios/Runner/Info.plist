@@ -110,5 +110,9 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<!-- Portrait uniquement : sans cette clé, Apple refuse le build (erreur
+	     90474, le multitâche iPad exigerait toutes les orientations). -->
+		<key>UIRequiresFullScreen</key>
+		<true/>
 	</dict>
 </plist>
