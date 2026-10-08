@@ -64,7 +64,7 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
+        submit_to_testflight: false # envoi seul : les testeurs internes y ont accès sans examen d'Apple
 
   # Même chose avec les vraies pubs AdMob : c'est CE build qu'on soumet à
   # l'App Store. Sur TestFlight, ne jamais cliquer ses pubs (trafic invalide).
@@ -91,4 +91,4 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
+        submit_to_testflight: false # envoi seul : les testeurs internes y ont accès sans examen d'Apple
