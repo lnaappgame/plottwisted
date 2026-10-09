@@ -49,6 +49,8 @@
 	     chiffrement à chaque envoi d'un build à App Store Connect. -->
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false/>
+		<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+		<false/>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<!-- ID d'application AdMob iOS (vrai ID, comme sur Android) : ce sont les

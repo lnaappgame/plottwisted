@@ -35,6 +35,11 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-7543651245365030~8487014546"/>
+        <!-- RGPD : Analytics coupé dès le lancement, réactivé par l'app
+             seulement après le consentement (voir main.dart). -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
