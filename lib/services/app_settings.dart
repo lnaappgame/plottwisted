@@ -36,6 +36,11 @@ class AppSettings extends ChangeNotifier {
   String avatar = kAvatarEmojis.first;
   bool reviewRequested = false; // demande d'avis store : une seule fois par installation
 
+  // Saisie des lettres dans le jeu principal, l'énigme et le multijoueur :
+  // 'tiles' (tuiles mélangées, par défaut), 'azerty' ou 'qwerty' (clavier
+  // à l'écran, lettres proposées en surbrillance).
+  String inputMode = 'tiles';
+
   /// [playerName] tel qu'affiché à l'écran : si le joueur n'a jamais
   /// personnalisé son pseudo (toujours la valeur par défaut FR d'origine),
   /// on l'affiche dans la langue courante plutôt que de rester figé en
@@ -79,6 +84,7 @@ class AppSettings extends ChangeNotifier {
   void toggleDyslexicMode() { dyslexicMode = !dyslexicMode; notifyListeners(); }
   void setAvatar(String emoji) { avatar = emoji; notifyListeners(); }
   void setLocale(String value) { locale = value; notifyListeners(); }
+  void setInputMode(String value) { inputMode = value; notifyListeners(); }
 
   void setPlayerId(String value) {
     final trimmed = value.trim();
@@ -108,11 +114,20 @@ class AppSettings extends ChangeNotifier {
         'playerId': playerId,
         'avatar': avatar,
         'reviewRequested': reviewRequested,
+        'inputMode': inputMode,
         'firstLaunchDay': firstLaunchDay.toIso8601String(),
       };
 
   /// Charge les préférences sauvegardées, s'il y en a. À appeler une seule
   /// fois au démarrage, avant que l'UI ne soit affichée.
+  /// Recharge l'état depuis la sauvegarde locale, après une restauration
+  /// cloud : sans ça, la sauvegarde automatique à la fermeture de l'app
+  /// réécrivait l'ancien état encore en mémoire par-dessus les données restaurées.
+  Future<void> reloadFromSave() async {
+    await restore();
+    notifyListeners();
+  }
+
   Future<void> restore() async {
     final data = await saveService.loadSettings();
     if (data == null) return;
@@ -124,6 +139,8 @@ class AppSettings extends ChangeNotifier {
     largeText = data['largeText'] as bool? ?? largeText;
     dyslexicMode = data['dyslexicMode'] as bool? ?? dyslexicMode;
     locale = data['locale'] as String? ?? locale;
+    final mode = data['inputMode'] as String?;
+    inputMode = const ['tiles', 'azerty', 'qwerty'].contains(mode) ? mode! : 'tiles';
     playerName = data['playerName'] as String? ?? playerName;
     playerId = data['playerId'] as String? ?? playerId;
     avatar = data['avatar'] as String? ?? avatar;

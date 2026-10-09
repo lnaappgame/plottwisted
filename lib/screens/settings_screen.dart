@@ -4,8 +4,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../services/app_settings.dart';
 import '../services/cloud_sync_service.dart';
+import '../services/defi_state.dart';
+import '../services/enigme_state.dart';
 import '../services/game_state.dart';
+import '../services/multiplayer_state.dart';
 import '../services/save_service.dart';
+import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
 
 // Page légale hébergée sur GitHub Pages (brouillon non relu par un juriste,
@@ -82,6 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onChanged: (large) => context.read<AppSettings>().setLargeText(large),
             ),
             _LanguageRow(colors: colors, settings: settings, t: t),
+            _InputModeRow(colors: colors, settings: settings, t: t),
             const SizedBox(height: 10),
             OutlinedButton(
               onPressed: () => _onShowPrivacyOptions(context),
@@ -195,6 +200,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
         if (!context.mounted) return;
         if (backup != null) {
           await saveService.writeAllFromBackup(backup);
+          if (!context.mounted) return;
+          // Tout l'état en mémoire reprend les données restaurées tout de
+          // suite : la sauvegarde automatique (fermeture de l'app, puis
+          // sauvegarde cloud) ne peut plus réécrire l'ancien état par-dessus.
+          await context.read<AppSettings>().reloadFromSave();
+          if (!context.mounted) return;
+          await Future.wait([
+            context.read<GameState>().reloadFromSave(),
+            context.read<EnigmeState>().reloadFromSave(),
+            context.read<DefiState>().reloadFromSave(),
+            context.read<MultiplayerState>().reloadFromSave(),
+            context.read<StreakState>().reloadFromSave(),
+          ]);
           if (!context.mounted) return;
           await _showRestoreDialog(context);
         } else {
@@ -384,6 +402,43 @@ class _LanguageRow extends StatelessWidget {
             colors: colors,
             onTap: () => context.read<AppSettings>().setLocale('en'),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Tuiles mélangées ou clavier AZERTY/QWERTY pour placer les lettres (jeu
+/// principal, énigme de la semaine, multijoueur).
+class _InputModeRow extends StatelessWidget {
+  final AppColors colors;
+  final AppSettings settings;
+  final AppLocalizations t;
+  const _InputModeRow({required this.colors, required this.settings, required this.t});
+
+  @override
+  Widget build(BuildContext context) {
+    final modes = [
+      ('tiles', t.settingsInputTiles),
+      ('azerty', t.settingsInputAzerty),
+      ('qwerty', t.settingsInputQwerty),
+    ];
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(child: Text(t.settingsInputMode, style: AppTextStyles.body(size: 13, color: colors.cream))),
+          const SizedBox(width: 8),
+          for (final (i, (mode, label)) in modes.indexed) ...[
+            if (i > 0) const SizedBox(width: 6),
+            _SizeChip(
+              label: label,
+              selected: settings.inputMode == mode,
+              colors: colors,
+              onTap: () => context.read<AppSettings>().setInputMode(mode),
+            ),
+          ],
         ],
       ),
     );

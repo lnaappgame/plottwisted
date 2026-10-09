@@ -133,6 +133,14 @@ class StreakState extends ChangeNotifier {
         'lastActionDay': lastActionDay?.toIso8601String(),
       };
 
+  /// Recharge l'état depuis la sauvegarde locale, après une restauration
+  /// cloud : sans ça, la sauvegarde automatique à la fermeture de l'app
+  /// réécrivait l'ancien état encore en mémoire par-dessus les données restaurées.
+  Future<void> reloadFromSave() async {
+    await restore();
+    notifyListeners();
+  }
+
   Future<void> restore() async {
     final data = await saveService.loadStreak();
     if (data == null) return;

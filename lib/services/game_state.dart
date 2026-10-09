@@ -211,8 +211,19 @@ class GameState extends ChangeNotifier {
     }
   }
 
-  /// Charge la sauvegarde existante, s'il y en a une. À appeler une seule
-  /// fois au démarrage, avant que l'UI ne soit affichée.
+  /// Recharge l'état depuis la sauvegarde locale, après une restauration
+  /// cloud : sans ça, la sauvegarde automatique à la fermeture de l'app
+  /// réécrivait l'ancien état encore en mémoire par-dessus les données
+  /// restaurées. Le niveau en cours est rechargé à l'entrée dans le jeu.
+  Future<void> reloadFromSave() async {
+    _saveDebounce?.cancel(); // une sauvegarde déjà programmée écrirait l'ancien état
+    puzzleLoaded = false;
+    await restore();
+    notifyListeners();
+  }
+
+  /// Charge la sauvegarde existante, s'il y en a une. À appeler au
+  /// démarrage, avant que l'UI ne soit affichée (ou via [reloadFromSave]).
   Future<void> restore() async {
     final data = await saveService.load();
     if (data == null) return;

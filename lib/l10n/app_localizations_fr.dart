@@ -48,6 +48,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLanguageEnglish => 'English';
 
   @override
+  String get settingsInputMode => '⌨️ Saisie des lettres';
+
+  @override
+  String get settingsInputTiles => 'Tuiles';
+
+  @override
+  String get settingsInputAzerty => 'AZERTY';
+
+  @override
+  String get settingsInputQwerty => 'QWERTY';
+
+  @override
   String get settingsAdPrivacy => '🔒 Options de confidentialité des pubs';
 
   @override
@@ -101,7 +113,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsRestoreBody =>
-      'Ta sauvegarde a été retrouvée ! Ferme complètement l\'application puis rouvre-la pour la voir apparaître.';
+      'Ta sauvegarde a été retrouvée : ta progression est de retour !';
 
   @override
   String get settingsUnderstood => 'COMPRIS';
@@ -398,6 +410,49 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String enigmeRankingLine(String rank, int total) {
     return '$rank sur $total joueur(s)';
+  }
+
+  @override
+  String enigmeRewardNextWeek(String reward) {
+    return '🎁 À recevoir la semaine prochaine : $reward';
+  }
+
+  @override
+  String get enigmeRewardsWhen =>
+      'Les jokers sont remis la semaine suivante, à ta première visite de L\'énigme de la semaine (classement final, top 10 % mondial = 1 joker rouge en plus). Sans visite cette semaine-là, ils sont perdus.';
+
+  @override
+  String get enigmeBilanTitle => '🏆 BILAN DE LA SEMAINE';
+
+  @override
+  String enigmeBilanCongrats(String classement) {
+    return 'Félicitations ! Tu as terminé $classement.';
+  }
+
+  @override
+  String enigmeBilanTop(int percent) {
+    return 'Tu es dans le top $percent % des joueurs de la semaine.';
+  }
+
+  @override
+  String get enigmeBilanOnlyOne =>
+      'Tu es le seul joueur à l\'avoir trouvée cette semaine !';
+
+  @override
+  String get enigmeBilanAlreadyGranted =>
+      'Tes jokers t\'ont déjà été remis quand tu l\'as trouvée.';
+
+  @override
+  String get enigmeBilanMissed =>
+      'Tu ne l\'as pas trouvée cette fois. La réponse était :';
+
+  @override
+  String get enigmeBilanMissedNext =>
+      'Pas de jokers cette semaine… la nouvelle énigme t\'attend !';
+
+  @override
+  String enigmeHistoryTop(int percent) {
+    return 'top $percent %';
   }
 
   @override
@@ -798,7 +853,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get instrModeEnigmeDesc =>
-      'Une énigme par semaine, la même pour tous. Le texte se dévoile d\'une lettre par heure : devine le sujet (film, acteur ou personnage) le plus tôt possible, avec une tentative gratuite par jour. Plus tu trouves tôt, plus la récompense en jokers est grande ; le top 10 % mondial gagne un joker rouge.';
+      'Une énigme par semaine, la même pour tous. Le texte se dévoile d\'une lettre par heure : devine le sujet (film, acteur ou personnage) le plus tôt possible, avec une tentative gratuite par jour. Les jokers sont remis la semaine suivante, à ta première visite : plus tu as trouvé tôt, plus ils sont nombreux, et le top 10 % mondial gagne un joker rouge.';
 
   @override
   String get instrModeDefiTitle => '🎯 Défi du jour';

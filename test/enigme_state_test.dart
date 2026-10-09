@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cine_devinette/data/enigmes_data.dart';
 import 'package:cine_devinette/models/enigme.dart';
@@ -7,6 +8,7 @@ import 'package:cine_devinette/services/app_settings.dart';
 import 'package:cine_devinette/services/enigme_service.dart';
 import 'package:cine_devinette/services/enigme_state.dart';
 import 'package:cine_devinette/services/game_state.dart';
+import 'package:cine_devinette/services/leaderboard_service.dart' show weekIdFor;
 import 'package:cine_devinette/services/save_service.dart';
 
 EnigmeState _state({int heuresEcoulees = 0, int index = 0}) {
@@ -219,5 +221,98 @@ void main() {
     final totalMajeurs = game.actorCount + game.hintCount + game.revealWordCount;
     expect(totalMineurs, 1);
     expect(totalMajeurs, 0);
+  });
+
+  group('Bilan de fin de semaine', () {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    setUp(() => SharedPreferences.setMockInitialValues({}));
+
+    // État d'une semaine passée ([semainesAvant] semaines avant la semaine en cours).
+    EnigmeState semainePassee({int semainesAvant = 1, bool trouvee = true, bool participe = true}) {
+      final now = DateTime.now();
+      final debut = enigmeWeekStart(now).subtract(Duration(days: 7 * semainesAvant));
+      final saveService = SaveService();
+      final state = EnigmeState(saveService: saveService, settings: AppSettings(saveService: saveService))
+        ..currentIndex = enigmeIndexFor(debut)
+        ..currentWeekStart = debut
+        ..participated = participe
+        ..solved = trouvee
+        ..solvedDay = trouvee ? 2 : null
+        ..solveSeconds = trouvee ? 100000 : null;
+      return state;
+    }
+
+    test('première entrée de la semaine suivante : bilan de la semaine écoulée', () {
+      final state = semainePassee();
+      final ancienne = state.currentWeekStart!;
+      state.ensureFresh();
+      final bilan = state.pendingBilan!;
+      expect(bilan.weekId, weekIdFor(ancienne));
+      expect(bilan.solved, isTrue);
+      expect(bilan.solvedDay, 2);
+      expect(bilan.rewardsAlreadyGranted, isFalse);
+      // La nouvelle semaine repart de zéro.
+      expect(state.solved, isFalse);
+      expect(state.participated, isFalse);
+    });
+
+    test('participé sans trouver : bilan sans résolution', () {
+      final state = semainePassee(trouvee: false);
+      state.ensureFresh();
+      expect(state.pendingBilan!.solved, isFalse);
+    });
+
+    test('pas participé : pas de bilan', () {
+      final state = semainePassee(trouvee: false, participe: false);
+      state.ensureFresh();
+      expect(state.pendingBilan, isNull);
+    });
+
+    test('une semaine sautée : pas de bilan, les jokers sont perdus', () {
+      final state = semainePassee(semainesAvant: 2);
+      state.ensureFresh();
+      expect(state.pendingBilan, isNull);
+    });
+
+    test('résolue avec une ancienne version : les jokers ne sont pas redonnés', () {
+      final state = semainePassee()
+        ..rewardLabels = ['Révéler']
+        ..topTenRedJokerGranted = true;
+      state.ensureFresh();
+      expect(state.pendingBilan!.rewardsAlreadyGranted, isTrue);
+      expect(state.pendingBilan!.redJokerAlreadyGranted, isTrue);
+    });
+
+    test('bilan terminé : effacé, et le classement final remplace le provisoire', () {
+      final state = semainePassee();
+      state.ensureFresh(); // archive la semaine écoulée puis crée le bilan
+      final weekId = state.pendingBilan!.weekId;
+      state.historique.insert(0, EnigmeHistoryEntry(weekId: weekId, sujet: 'X', solveSeconds: 100000, solvedDay: 2, rang: 3, total: 4));
+      state.completeBilan(rang: 7, total: 40);
+      expect(state.pendingBilan, isNull);
+      final entry = state.historique.firstWhere((e) => e.weekId == weekId);
+      expect(entry.rang, 7);
+      expect(entry.total, 40);
+    });
+
+    test('le bilan survit à une sauvegarde et un rechargement', () async {
+      SharedPreferences.setMockInitialValues({});
+      final state = semainePassee();
+      state.ensureFresh();
+      await state.flushSave();
+      final reloaded = EnigmeState(saveService: state.saveService, settings: state.settings);
+      await reloaded.restore();
+      expect(reloaded.pendingBilan!.weekId, state.pendingBilan!.weekId);
+      expect(reloaded.pendingBilan!.solved, isTrue);
+    });
+
+    test('top % et top 10 %', () {
+      expect(EnigmeState.topPercent(1, 50), 2);
+      expect(EnigmeState.topPercent(7, 40), 18);
+      expect(EnigmeState.topPercent(40, 40), 100);
+      expect(EnigmeState.isTopTen(4, 40), isTrue);
+      expect(EnigmeState.isTopTen(5, 40), isFalse);
+      expect(EnigmeState.isTopTen(1, 1), isTrue);
+    });
   });
 }

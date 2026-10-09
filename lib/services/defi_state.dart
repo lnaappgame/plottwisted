@@ -246,6 +246,15 @@ class DefiState extends ChangeNotifier {
         'bestTimes': bestTimes,
       };
 
+  /// Recharge l'état depuis la sauvegarde locale, après une restauration
+  /// cloud : sans ça, la sauvegarde automatique à la fermeture de l'app
+  /// réécrivait l'ancien état encore en mémoire par-dessus les données restaurées.
+  Future<void> reloadFromSave() async {
+    _saveDebounce?.cancel(); // une sauvegarde déjà programmée écrirait l'ancien état
+    await restore();
+    notifyListeners();
+  }
+
   Future<void> restore() async {
     final data = await saveService.loadDefi();
     if (data == null) return;

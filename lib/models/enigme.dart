@@ -114,3 +114,54 @@ class EnigmeHistoryEntry {
         total: json['total'] as int?,
       );
 }
+
+/// Résultat de la semaine écoulée, en attente du bilan affiché à la
+/// première entrée de la semaine suivante dans L'énigme de la semaine : les
+/// jokers et le joker rouge du top 10 % ne sont remis qu'à ce moment-là, sur
+/// le classement final. Perdu si le joueur ne revient pas pendant la semaine
+/// suivante.
+class EnigmeBilan {
+  final String weekId;
+  final int enigmeIndex;
+  final bool solved;
+  final int? solveSeconds;
+  final int? solvedDay;
+  final bool scoreSubmitted;
+  // Semaine résolue avec une version qui donnait les jokers à la résolution :
+  // le bilan ne doit pas les redonner.
+  final bool rewardsAlreadyGranted;
+  final bool redJokerAlreadyGranted;
+
+  const EnigmeBilan({
+    required this.weekId,
+    required this.enigmeIndex,
+    required this.solved,
+    this.solveSeconds,
+    this.solvedDay,
+    this.scoreSubmitted = false,
+    this.rewardsAlreadyGranted = false,
+    this.redJokerAlreadyGranted = false,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'weekId': weekId,
+        'enigmeIndex': enigmeIndex,
+        'solved': solved,
+        'solveSeconds': solveSeconds,
+        'solvedDay': solvedDay,
+        'scoreSubmitted': scoreSubmitted,
+        'rewardsAlreadyGranted': rewardsAlreadyGranted,
+        'redJokerAlreadyGranted': redJokerAlreadyGranted,
+      };
+
+  factory EnigmeBilan.fromJson(Map<String, dynamic> json) => EnigmeBilan(
+        weekId: json['weekId'] as String,
+        enigmeIndex: json['enigmeIndex'] as int,
+        solved: json['solved'] as bool? ?? false,
+        solveSeconds: json['solveSeconds'] as int?,
+        solvedDay: json['solvedDay'] as int?,
+        scoreSubmitted: json['scoreSubmitted'] as bool? ?? false,
+        rewardsAlreadyGranted: json['rewardsAlreadyGranted'] as bool? ?? false,
+        redJokerAlreadyGranted: json['redJokerAlreadyGranted'] as bool? ?? false,
+      );
+}

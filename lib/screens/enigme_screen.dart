@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../data/enigmes_data.dart';
 import '../models/enigme.dart';
+import '../models/joker.dart';
 import '../services/app_settings.dart';
 import '../services/enigme_service.dart';
 import '../services/enigme_state.dart';
@@ -10,6 +12,8 @@ import '../services/game_state.dart';
 import '../services/leaderboard_service.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/joker_style.dart';
+import '../widgets/letter_keyboard.dart';
 import '../widgets/scifi_background.dart';
 
 String _formatCountdown(Duration d) {
@@ -53,6 +57,142 @@ String _ordinal(BuildContext context, int rang) {
 String _formatClassement(BuildContext context, int rang, int total) =>
     AppLocalizations.of(context).enigmeRankingLine(_ordinal(context, rang), total);
 
+/// Classement suivi du « top X % » quand il y a au moins deux joueurs.
+String _formatClassementPct(BuildContext context, int rang, int total) {
+  final base = _formatClassement(context, rang, total);
+  if (total < 2) return base;
+  return '$base · ${AppLocalizations.of(context).enigmeHistoryTop(EnigmeState.topPercent(rang, total))}';
+}
+
+/// Barème de jokers selon le jour de résolution (1 à 7).
+String _rewardText(AppLocalizations t, int day) => switch (day) {
+      1 => t.enigmeReward1,
+      2 => t.enigmeReward2,
+      3 => t.enigmeReward3,
+      4 => t.enigmeReward4,
+      5 => t.enigmeReward5,
+      6 => t.enigmeReward6,
+      _ => t.enigmeReward7,
+    };
+
+/// Gros pop-up du bilan de la semaine écoulée, à la première entrée de la
+/// semaine suivante : classement final et jokers remis, ou la réponse si le
+/// joueur ne l'a pas trouvée.
+class _BilanDialog extends StatelessWidget {
+  final EnigmeBilan bilan;
+  final LeaderboardResult? result;
+  final List<JokerKind> gagnes;
+  final String sujet;
+  final AppColors colors;
+  const _BilanDialog(
+      {required this.bilan, required this.result, required this.gagnes, required this.sujet, required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    final result = this.result;
+    final trouve = bilan.solved && result != null;
+    return Dialog(
+      backgroundColor: colors.bgPanel2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide(color: AppColors.gold.withOpacity(0.6), width: 1.5),
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.85),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(22, 24, 22, 18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(t.enigmeBilanTitle,
+                    textAlign: TextAlign.center, style: AppTextStyles.display(size: 24, color: AppColors.goldBright)),
+                const SizedBox(height: 16),
+                if (trouve) ...[
+                  Text(sujet,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.body(size: 16, weight: FontWeight.w700, color: colors.cream)),
+                  const SizedBox(height: 12),
+                  Text(t.enigmeBilanCongrats(_formatClassement(context, result.rang, result.total)),
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.body(size: 15, color: colors.cream).copyWith(height: 1.4)),
+                  const SizedBox(height: 6),
+                  Text(
+                    result.total >= 2
+                        ? t.enigmeBilanTop(EnigmeState.topPercent(result.rang, result.total))
+                        : t.enigmeBilanOnlyOne,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.body(size: 15, weight: FontWeight.w700, color: AppColors.goldBright)
+                        .copyWith(height: 1.4),
+                  ),
+                  const SizedBox(height: 18),
+                  Text(t.gameJokersWon,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)
+                          .copyWith(letterSpacing: 2)),
+                  const SizedBox(height: 8),
+                  if (gagnes.isEmpty)
+                    Text(t.enigmeBilanAlreadyGranted,
+                        textAlign: TextAlign.center, style: AppTextStyles.body(size: 12, color: colors.muted))
+                  else
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final kind in gagnes) _JokerChip(kind: kind, colors: colors),
+                      ],
+                    ),
+                ] else ...[
+                  Text(t.enigmeBilanMissed,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.body(size: 15, color: colors.cream).copyWith(height: 1.4)),
+                  const SizedBox(height: 10),
+                  Text(sujet,
+                      textAlign: TextAlign.center, style: AppTextStyles.display(size: 22, color: AppColors.goldBright)),
+                  const SizedBox(height: 12),
+                  Text(t.enigmeBilanMissedNext,
+                      textAlign: TextAlign.center, style: AppTextStyles.body(size: 13, color: colors.muted)),
+                ],
+                const SizedBox(height: 22),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(trouve ? t.homeGreat : t.gameUnderstood,
+                      style: AppTextStyles.display(size: 15, color: colors.cream)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _JokerChip extends StatelessWidget {
+  final JokerKind kind;
+  final AppColors colors;
+  const _JokerChip({required this.kind, required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = jokerColor(kind, colors);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: accent.withOpacity(0.14),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: accent.withOpacity(0.85), width: 1.2),
+      ),
+      child: Text('${kind.icon} ${jokerName(kind, AppLocalizations.of(context))}',
+          style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: accent)),
+    );
+  }
+}
+
 class EnigmeScreen extends StatefulWidget {
   const EnigmeScreen({super.key});
 
@@ -71,6 +211,7 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<EnigmeState>().ensureFresh();
+      _maybeShowBilan();
     });
     // Le texte se révèle avec le temps et le compte à rebours affiche les
     // secondes : on rafraîchit l'affichage chaque seconde.
@@ -101,21 +242,70 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
         _toast(t.enigmeWrong(enigmeState.tentativesRestantes));
         break;
       case 'solved':
+        // Les jokers sont remis au bilan de la semaine suivante ; le score
+        // part depuis le panneau « résolu » (voir _SolvedPanel).
         context.read<StreakState>().recordAction();
-        final game = context.read<GameState>();
-        final labels = appliquerRecompenseEnigme(enigmeState.solvedDay!, game);
-        enigmeState.setRewardLabels(labels);
-        final weekStart = enigmeState.currentWeekStart;
-        if (weekStart != null) {
-          // Envoi en arrière-plan : le classement n'a jamais à bloquer l'UI.
-          context.read<LeaderboardService>().submitScore(
-                weekId: weekIdFor(weekStart),
-                solveSeconds: enigmeState.solveSeconds!,
-                solvedDay: enigmeState.solvedDay!,
-              );
-        }
         break;
     }
+  }
+
+  // ─── Bilan de la semaine précédente (première entrée de la semaine) ───
+  bool _bilanEnCours = false;
+
+  Future<void> _maybeShowBilan() async {
+    final enigmeState = context.read<EnigmeState>();
+    final bilan = enigmeState.pendingBilan;
+    if (bilan == null || _bilanEnCours) return;
+    _bilanEnCours = true;
+    final leaderboard = context.read<LeaderboardService>();
+    LeaderboardResult? result;
+    if (bilan.solved && bilan.solveSeconds != null) {
+      if (!bilan.scoreSubmitted) {
+        final ok = await leaderboard.submitScore(
+            weekId: bilan.weekId, solveSeconds: bilan.solveSeconds!, solvedDay: bilan.solvedDay ?? 7);
+        if (ok) enigmeState.markBilanScoreSubmitted();
+      }
+      result = await leaderboard.fetchRank(weekId: bilan.weekId, solveSeconds: bilan.solveSeconds!);
+      // Hors ligne : pas de classement final, le bilan attend la prochaine visite.
+      if (result == null || !mounted) {
+        _bilanEnCours = false;
+        return;
+      }
+    }
+    if (!mounted) return;
+
+    // Jokers remis maintenant, une seule fois (completeBilan efface le bilan
+    // et sauvegarde aussitôt).
+    final game = context.read<GameState>();
+    final gagnes = <JokerKind>[];
+    if (bilan.solved && result != null) {
+      if (!bilan.rewardsAlreadyGranted) {
+        for (final label in appliquerRecompenseEnigme(EnigmeState.rewardDayFor(bilan.solvedDay), game)) {
+          if (JokerKind.fromLabel(label) case final kind?) gagnes.add(kind);
+        }
+      }
+      if (EnigmeState.isTopTen(result.rang, result.total) && !bilan.redJokerAlreadyGranted) {
+        game.grantJokers(redJoker: 1);
+        gagnes.add(JokerKind.red);
+      }
+    }
+    enigmeState.completeBilan(rang: result?.rang, total: result?.total);
+    game.flushSave();
+
+    final settings = context.read<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => _BilanDialog(
+        bilan: bilan,
+        result: result,
+        gagnes: gagnes,
+        sujet: kEnigmes[bilan.enigmeIndex.clamp(0, kEnigmes.length - 1)].sujetFor(enigmeState.locale),
+        colors: colors,
+      ),
+    );
+    _bilanEnCours = false;
   }
 
   Future<void> _onWatchAdLettre() async {
@@ -183,6 +373,9 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                   _RewardLine(t.enigmeRewardDayLabel(5), t.enigmeReward5, colors),
                   _RewardLine(t.enigmeRewardDayLabel(6), t.enigmeReward6, colors),
                   _RewardLine(t.enigmeRewardDayLabel(7), t.enigmeReward7, colors),
+                  const SizedBox(height: 8),
+                  Text(t.enigmeRewardsWhen,
+                      style: AppTextStyles.body(size: 12, color: colors.muted).copyWith(height: 1.4)),
                   const SizedBox(height: 18),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
@@ -227,7 +420,7 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                     if (meilleurClassement != null)
                       _HistoriqueBest(
                         t.enigmeBestRanking,
-                        '${_formatClassement(context, meilleurClassement.rang!, meilleurClassement.total!)} — ${meilleurClassement.sujet}',
+                        '${_formatClassementPct(context, meilleurClassement.rang!, meilleurClassement.total!)} — ${meilleurClassement.sujet}',
                         colors,
                       ),
                     if (meilleurTemps != null)
@@ -553,39 +746,24 @@ class _SolvedPanelState extends State<_SolvedPanel> {
     _rangFuture ??= _fetchRang();
   }
 
+  /// Envoie d'abord le score s'il n'est pas encore parti (hors ligne au
+  /// moment de la résolution, par exemple), puis lit le classement provisoire.
+  /// Le joker rouge du top 10 % est remis au bilan, sur le classement final.
   Future<LeaderboardResult?> _fetchRang() async {
     final enigmeState = context.read<EnigmeState>();
+    final leaderboard = context.read<LeaderboardService>();
     final weekStart = enigmeState.currentWeekStart;
     final seconds = enigmeState.solveSeconds;
     if (weekStart == null || seconds == null) return null;
-    final result =
-        await context.read<LeaderboardService>().fetchRank(weekId: weekIdFor(weekStart), solveSeconds: seconds);
-    if (result != null) {
-      enigmeState.recordRang(rang: result.rang, total: result.total);
-      _maybeGrantTopTenRedJoker(enigmeState, result);
+    final weekId = weekIdFor(weekStart);
+    if (!enigmeState.scoreSubmitted) {
+      final ok = await leaderboard.submitScore(
+          weekId: weekId, solveSeconds: seconds, solvedDay: enigmeState.solvedDay ?? 7);
+      if (ok) enigmeState.markScoreSubmitted();
     }
+    final result = await leaderboard.fetchRank(weekId: weekId, solveSeconds: seconds);
+    if (result != null) enigmeState.recordRang(rang: result.rang, total: result.total);
     return result;
-  }
-
-  /// Top 10% mondial de la semaine → 1 Joker Rouge, une seule fois par
-  /// semaine (voir [EnigmeState.topTenRedJokerGranted]). L'une des 3 façons
-  /// d'obtenir ce joker, avec la pub garantie et la boutique.
-  void _maybeGrantTopTenRedJoker(EnigmeState enigmeState, LeaderboardResult result) {
-    if (enigmeState.topTenRedJokerGranted) return;
-    if (result.total <= 0) return;
-    final seuil = (result.total * 0.10).ceil();
-    if (result.rang > seuil) return;
-    enigmeState.markTopTenRedJokerGranted();
-    context.read<GameState>().grantJokers(redJoker: 1);
-    if (!mounted) return;
-    final t = AppLocalizations.of(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(t.enigmeTopTenSnack),
-        duration: const Duration(seconds: 3),
-      ));
-    });
   }
 
   @override
@@ -614,14 +792,15 @@ class _SolvedPanelState extends State<_SolvedPanel> {
           if (enigmeState.solveSeconds != null)
             Text(t.enigmeFoundIn(_formatDuration(context, enigmeState.solveSeconds!), enigmeState.solvedDay!),
                 textAlign: TextAlign.center, style: AppTextStyles.body(size: 12, color: colors.muted)),
-          if (enigmeState.rewardLabels.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Text(
-                t.enigmeRewardLabel(
-                    enigmeState.rewardLabels.map((l) => jokerLabelFor(l, enigmeState.locale)).join(', ')),
-                textAlign: TextAlign.center,
-                style: AppTextStyles.body(size: 12, color: AppColors.goldBright)),
-          ],
+          const SizedBox(height: 12),
+          Text(
+              // Résolue avec une ancienne version : jokers déjà remis.
+              enigmeState.rewardLabels.isNotEmpty
+                  ? t.enigmeRewardLabel(
+                      enigmeState.rewardLabels.map((l) => jokerLabelFor(l, enigmeState.locale)).join(', '))
+                  : t.enigmeRewardNextWeek(_rewardText(t, EnigmeState.rewardDayFor(enigmeState.solvedDay))),
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body(size: 12, color: AppColors.goldBright)),
           const SizedBox(height: 14),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -755,6 +934,15 @@ class _EnigmeLetterPool extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enigmeState = context.watch<EnigmeState>();
+    final inputMode = context.select<AppSettings, String>((s) => s.inputMode);
+    if (inputMode != 'tiles') {
+      return LetterKeyboard(
+        pool: enigmeState.pool,
+        layout: inputMode,
+        colors: colors,
+        onTap: (tile) => context.read<EnigmeState>().onLetterTap(tile),
+      );
+    }
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 8,
@@ -813,7 +1001,7 @@ class _HistoriqueRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final classement = entry.rang != null && entry.total != null
-        ? _formatClassement(context, entry.rang!, entry.total!)
+        ? _formatClassementPct(context, entry.rang!, entry.total!)
         : t.enigmeRankUnknown;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),

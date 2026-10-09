@@ -176,6 +176,30 @@ abstract class AppLocalizations {
   /// **'English'**
   String get settingsLanguageEnglish;
 
+  /// No description provided for @settingsInputMode.
+  ///
+  /// In fr, this message translates to:
+  /// **'⌨️ Saisie des lettres'**
+  String get settingsInputMode;
+
+  /// No description provided for @settingsInputTiles.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tuiles'**
+  String get settingsInputTiles;
+
+  /// No description provided for @settingsInputAzerty.
+  ///
+  /// In fr, this message translates to:
+  /// **'AZERTY'**
+  String get settingsInputAzerty;
+
+  /// No description provided for @settingsInputQwerty.
+  ///
+  /// In fr, this message translates to:
+  /// **'QWERTY'**
+  String get settingsInputQwerty;
+
   /// No description provided for @settingsAdPrivacy.
   ///
   /// In fr, this message translates to:
@@ -269,7 +293,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsRestoreBody.
   ///
   /// In fr, this message translates to:
-  /// **'Ta sauvegarde a été retrouvée ! Ferme complètement l\'application puis rouvre-la pour la voir apparaître.'**
+  /// **'Ta sauvegarde a été retrouvée : ta progression est de retour !'**
   String get settingsRestoreBody;
 
   /// No description provided for @settingsUnderstood.
@@ -775,6 +799,66 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'{rank} sur {total} joueur(s)'**
   String enigmeRankingLine(String rank, int total);
+
+  /// No description provided for @enigmeRewardNextWeek.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎁 À recevoir la semaine prochaine : {reward}'**
+  String enigmeRewardNextWeek(String reward);
+
+  /// No description provided for @enigmeRewardsWhen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les jokers sont remis la semaine suivante, à ta première visite de L\'énigme de la semaine (classement final, top 10 % mondial = 1 joker rouge en plus). Sans visite cette semaine-là, ils sont perdus.'**
+  String get enigmeRewardsWhen;
+
+  /// No description provided for @enigmeBilanTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'🏆 BILAN DE LA SEMAINE'**
+  String get enigmeBilanTitle;
+
+  /// No description provided for @enigmeBilanCongrats.
+  ///
+  /// In fr, this message translates to:
+  /// **'Félicitations ! Tu as terminé {classement}.'**
+  String enigmeBilanCongrats(String classement);
+
+  /// No description provided for @enigmeBilanTop.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu es dans le top {percent} % des joueurs de la semaine.'**
+  String enigmeBilanTop(int percent);
+
+  /// No description provided for @enigmeBilanOnlyOne.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu es le seul joueur à l\'avoir trouvée cette semaine !'**
+  String get enigmeBilanOnlyOne;
+
+  /// No description provided for @enigmeBilanAlreadyGranted.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes jokers t\'ont déjà été remis quand tu l\'as trouvée.'**
+  String get enigmeBilanAlreadyGranted;
+
+  /// No description provided for @enigmeBilanMissed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu ne l\'as pas trouvée cette fois. La réponse était :'**
+  String get enigmeBilanMissed;
+
+  /// No description provided for @enigmeBilanMissedNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de jokers cette semaine… la nouvelle énigme t\'attend !'**
+  String get enigmeBilanMissedNext;
+
+  /// No description provided for @enigmeHistoryTop.
+  ///
+  /// In fr, this message translates to:
+  /// **'top {percent} %'**
+  String enigmeHistoryTop(int percent);
 
   /// No description provided for @enigmeRankUnknown.
   ///
@@ -1469,7 +1553,7 @@ abstract class AppLocalizations {
   /// No description provided for @instrModeEnigmeDesc.
   ///
   /// In fr, this message translates to:
-  /// **'Une énigme par semaine, la même pour tous. Le texte se dévoile d\'une lettre par heure : devine le sujet (film, acteur ou personnage) le plus tôt possible, avec une tentative gratuite par jour. Plus tu trouves tôt, plus la récompense en jokers est grande ; le top 10 % mondial gagne un joker rouge.'**
+  /// **'Une énigme par semaine, la même pour tous. Le texte se dévoile d\'une lettre par heure : devine le sujet (film, acteur ou personnage) le plus tôt possible, avec une tentative gratuite par jour. Les jokers sont remis la semaine suivante, à ta première visite : plus tu as trouvé tôt, plus ils sont nombreux, et le top 10 % mondial gagne un joker rouge.'**
   String get instrModeEnigmeDesc;
 
   /// No description provided for @instrModeDefiTitle.

@@ -103,6 +103,27 @@ class EnigmeState extends ChangeNotifier {
   // du panneau "résolu" tant que la semaine n'a pas changé.
   bool topTenRedJokerGranted = false;
 
+  // Au moins une tentative cette semaine (trouvée ou non) : donne droit au
+  // bilan de fin de semaine.
+  bool participated = false;
+
+  // Temps de résolution bien enregistré dans le classement en ligne. Sinon
+  // (hors ligne, panne), il est renvoyé à la prochaine ouverture de l'écran.
+  bool scoreSubmitted = false;
+
+  /// Bilan de la semaine précédente, à afficher (puis remettre les jokers)
+  /// à la première entrée de la semaine. Null s'il n'y en a pas.
+  EnigmeBilan? pendingBilan;
+
+  /// Jokers à recevoir au bilan selon le jour de résolution (1 à 7).
+  static int rewardDayFor(int? day) => (day ?? 7).clamp(1, 7);
+
+  /// Rang qualifiant pour le joker rouge : top 10 % du classement final.
+  static bool isTopTen(int rang, int total) => total > 0 && rang <= (total * 0.10).ceil();
+
+  /// Pourcentage affiché (« top X % ») : jamais 0, arrondi au supérieur.
+  static int topPercent(int rang, int total) => total <= 0 ? 100 : max(1, (rang * 100 / total).ceil());
+
   // ─── Historique local ("Hall of Fame" personnel) — une entrée par semaine
   // résolue, la plus récente en premier. Conservé même après le changement
   // de semaine (contrairement au reste de l'état, remis à zéro par
@@ -110,11 +131,13 @@ class EnigmeState extends ChangeNotifier {
   static const int _historiqueMax = 52; // ~1 an
   List<EnigmeHistoryEntry> historique = [];
 
+  /// Meilleur classement en proportion du nombre de joueurs (« top X % »),
+  /// plus parlant qu'un rang brut d'une semaine à l'autre.
   EnigmeHistoryEntry? get meilleurClassement {
     EnigmeHistoryEntry? best;
     for (final e in historique) {
-      if (e.rang == null) continue;
-      if (best == null || e.rang! < best.rang!) best = e;
+      if (e.rang == null || e.total == null || e.total! <= 0) continue;
+      if (best == null || e.rang! / e.total! < best.rang! / best.total!) best = e;
     }
     return best;
   }
@@ -181,6 +204,24 @@ class EnigmeState extends ChangeNotifier {
     final idx = enigmeIndexFor(now);
     final weekChanged = currentIndex != idx || currentWeekStart != weekStart;
     if (weekChanged) {
+      // Bilan de la semaine qui se termine, seulement si le joueur revient
+      // pendant la semaine qui suit (sinon les jokers sont perdus).
+      final previousStart = currentWeekStart;
+      final followingWeek = previousStart != null && weekStart.difference(previousStart).inDays == 7;
+      pendingBilan = followingWeek && (participated || solved)
+          ? EnigmeBilan(
+              weekId: weekIdFor(previousStart),
+              enigmeIndex: currentIndex,
+              solved: solved,
+              solveSeconds: solveSeconds,
+              solvedDay: solvedDay,
+              scoreSubmitted: scoreSubmitted,
+              rewardsAlreadyGranted: rewardLabels.isNotEmpty,
+              redJokerAlreadyGranted: topTenRedJokerGranted,
+            )
+          : null;
+      participated = false;
+      scoreSubmitted = false;
       currentIndex = idx;
       currentWeekStart = weekStart;
       extraLettersFromAds = 0;
@@ -437,6 +478,7 @@ class EnigmeState extends ChangeNotifier {
     if (!allFilled) return 'incomplete';
 
     attemptsUsedToday++;
+    participated = true;
     lastAttemptDay = _utcDate(now);
 
     final attempt = List.generate(slots.length, (i) {
@@ -472,6 +514,34 @@ class EnigmeState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void markScoreSubmitted() {
+    if (scoreSubmitted) return;
+    scoreSubmitted = true;
+    notifyListeners();
+  }
+
+  /// Score de la semaine écoulée enfin parti (renvoyé au moment du bilan).
+  void markBilanScoreSubmitted() {
+    final bilan = pendingBilan;
+    if (bilan == null || bilan.scoreSubmitted) return;
+    pendingBilan = EnigmeBilan.fromJson({...bilan.toJson(), 'scoreSubmitted': true});
+    notifyListeners();
+  }
+
+  /// Bilan affiché et jokers remis : on l'efface (une seule fois), et le
+  /// classement final remplace le classement provisoire dans l'historique.
+  void completeBilan({int? rang, int? total}) {
+    final bilan = pendingBilan;
+    if (bilan == null) return;
+    pendingBilan = null;
+    if (rang != null && total != null) {
+      final i = historique.indexWhere((e) => e.weekId == bilan.weekId);
+      if (i != -1) historique[i] = historique[i].copyWith(rang: rang, total: total);
+    }
+    notifyListeners();
+    flushSave(); // tout de suite : les jokers ne doivent jamais être remis deux fois
+  }
+
   // ─── Persistance (uniquement l'état "méta" : la grille en cours n'est
   // pas conservée, comme pour le jeu principal) ───
 
@@ -490,8 +560,20 @@ class EnigmeState extends ChangeNotifier {
         'solveSeconds': solveSeconds,
         'rewardLabels': rewardLabels,
         'topTenRedJokerGranted': topTenRedJokerGranted,
+        'participated': participated,
+        'scoreSubmitted': scoreSubmitted,
+        'pendingBilan': pendingBilan?.toJson(),
         'historique': historique.map((e) => e.toJson()).toList(),
       };
+
+  /// Recharge l'état depuis la sauvegarde locale, après une restauration
+  /// cloud : sans ça, la sauvegarde automatique à la fermeture de l'app
+  /// réécrivait l'ancien état encore en mémoire par-dessus les données restaurées.
+  Future<void> reloadFromSave() async {
+    _saveDebounce?.cancel(); // une sauvegarde déjà programmée écrirait l'ancien état
+    await restore();
+    notifyListeners();
+  }
 
   Future<void> restore() async {
     final data = await saveService.loadEnigme();
@@ -515,6 +597,10 @@ class EnigmeState extends ChangeNotifier {
     solveSeconds = data['solveSeconds'] as int?;
     rewardLabels = (data['rewardLabels'] as List?)?.cast<String>() ?? [];
     topTenRedJokerGranted = data['topTenRedJokerGranted'] as bool? ?? false;
+    participated = data['participated'] as bool? ?? false;
+    scoreSubmitted = data['scoreSubmitted'] as bool? ?? false;
+    final bilan = data['pendingBilan'];
+    pendingBilan = bilan is Map ? EnigmeBilan.fromJson(Map<String, dynamic>.from(bilan)) : null;
     historique = (data['historique'] as List?)
             ?.map((e) => EnigmeHistoryEntry.fromJson(Map<String, dynamic>.from(e as Map)))
             .toList() ??

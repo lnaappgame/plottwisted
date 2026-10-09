@@ -48,6 +48,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageEnglish => 'English';
 
   @override
+  String get settingsInputMode => '⌨️ Letter input';
+
+  @override
+  String get settingsInputTiles => 'Tiles';
+
+  @override
+  String get settingsInputAzerty => 'AZERTY';
+
+  @override
+  String get settingsInputQwerty => 'QWERTY';
+
+  @override
   String get settingsAdPrivacy => '🔒 Ad privacy options';
 
   @override
@@ -100,7 +112,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsRestoreBody =>
-      'Your backup was found! Fully close the app then reopen it to see it appear.';
+      'Your backup was found: your progress is back!';
 
   @override
   String get settingsUnderstood => 'GOT IT';
@@ -395,6 +407,49 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String enigmeRankingLine(String rank, int total) {
     return '$rank of $total player(s)';
+  }
+
+  @override
+  String enigmeRewardNextWeek(String reward) {
+    return '🎁 Coming next week: $reward';
+  }
+
+  @override
+  String get enigmeRewardsWhen =>
+      'Jokers are handed out the following week, on your first visit to the Weekly Puzzle (final ranking, global top 10% = 1 extra red joker). If you don\'t visit that week, they\'re lost.';
+
+  @override
+  String get enigmeBilanTitle => '🏆 LAST WEEK\'S RESULTS';
+
+  @override
+  String enigmeBilanCongrats(String classement) {
+    return 'Congratulations! You finished $classement.';
+  }
+
+  @override
+  String enigmeBilanTop(int percent) {
+    return 'You\'re in the top $percent% of this week\'s players.';
+  }
+
+  @override
+  String get enigmeBilanOnlyOne =>
+      'You\'re the only player who solved it this week!';
+
+  @override
+  String get enigmeBilanAlreadyGranted =>
+      'Your jokers were already handed out when you solved it.';
+
+  @override
+  String get enigmeBilanMissed =>
+      'You didn\'t solve it this time. The answer was:';
+
+  @override
+  String get enigmeBilanMissedNext =>
+      'No jokers this week… the new puzzle awaits!';
+
+  @override
+  String enigmeHistoryTop(int percent) {
+    return 'top $percent%';
   }
 
   @override
@@ -794,7 +849,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instrModeEnigmeDesc =>
-      'One puzzle a week, the same for everyone. The text reveals one letter per hour: guess the subject (film, actor or character) as early as you can, with one free try per day. The sooner you solve it, the bigger the joker reward; the global top 10% wins a red joker.';
+      'One puzzle a week, the same for everyone. The text reveals one letter per hour: guess the subject (film, actor or character) as early as you can, with one free try per day. Jokers are handed out the following week, on your first visit: the sooner you solved it, the more you get, and the global top 10% wins a red joker.';
 
   @override
   String get instrModeDefiTitle => '🎯 Daily Challenge';

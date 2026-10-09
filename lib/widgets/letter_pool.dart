@@ -7,6 +7,7 @@ import '../services/game_state.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
 import 'joker_fx.dart';
+import 'letter_keyboard.dart';
 
 class LetterPool extends StatelessWidget {
   final JokerFx? fx;
@@ -24,6 +25,20 @@ class LetterPool extends StatelessWidget {
     final settings = context.watch<AppSettings>();
     final sound = context.read<SoundService>();
     final colors = AppColors(settings.isLightTheme);
+
+    if (settings.inputMode != 'tiles') {
+      return LetterKeyboard(
+        pool: game.pool,
+        layout: settings.inputMode,
+        colors: colors,
+        fx: fx,
+        onTap: (tile) {
+          if (settings.vibrationsOn) HapticFeedback.lightImpact();
+          if (settings.sfxOn) sound.playTap();
+          game.onLetterTap(tile);
+        },
+      );
+    }
 
     return Wrap(
       alignment: WrapAlignment.center,

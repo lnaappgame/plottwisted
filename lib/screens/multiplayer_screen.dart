@@ -8,6 +8,7 @@ import '../services/elo_service.dart';
 import '../services/game_state.dart';
 import '../services/multiplayer_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/letter_keyboard.dart';
 import '../widgets/scifi_background.dart';
 
 class MultiplayerScreen extends StatefulWidget {
@@ -804,6 +805,15 @@ class _LetterPool extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final inputMode = context.select<AppSettings, String>((s) => s.inputMode);
+    if (inputMode != 'tiles') {
+      return LetterKeyboard(
+        pool: mp.pool,
+        layout: inputMode,
+        colors: colors,
+        onTap: (tile) => context.read<MultiplayerState>().onLetterTap(tile),
+      );
+    }
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 8,

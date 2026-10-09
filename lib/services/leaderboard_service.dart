@@ -34,29 +34,37 @@ class LeaderboardService {
 
   /// Enregistre le temps de résolution du joueur pour la semaine [weekId].
   /// Un joueur ne peut écrire que son propre document (voir règles de
-  /// sécurité Firestore), identifié par son UID anonyme.
-  Future<void> submitScore({
+  /// sécurité Firestore), identifié par son UID anonyme. Retourne `true` si
+  /// le score est bien dans le classement (envoyé maintenant ou déjà là),
+  /// `false` s'il faudra réessayer (hors ligne, panne).
+  Future<bool> submitScore({
     required String weekId,
     required int solveSeconds,
     required int solvedDay,
   }) async {
+    const delai = Duration(seconds: 10);
     try {
       await _ensureReady();
       final db = _db;
       final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (db == null || uid == null) return;
-      await db
-          .collection('enigme_leaderboard')
-          .doc(weekId)
-          .collection('scores')
-          .doc(uid)
-          .set({
+      if (db == null || uid == null) return false;
+      final ref = db.collection('enigme_leaderboard').doc(weekId).collection('scores').doc(uid);
+      // Déjà enregistré (envoi précédent dont la confirmation s'est perdue) :
+      // les règles interdisent de le réécrire. Lecture serveur uniquement :
+      // hors ligne, elle échoue tout de suite au lieu de lire le cache.
+      final existing = await ref.get(const GetOptions(source: Source.server)).timeout(delai);
+      if (existing.exists) return true;
+      // Hors ligne, Firestore garde l'écriture en attente sans jamais
+      // répondre : le délai évite d'attendre indéfiniment.
+      await ref.set({
         'solveSeconds': solveSeconds,
         'solvedDay': solvedDay,
         'timestamp': FieldValue.serverTimestamp(),
-      });
+      }).timeout(delai);
+      return true;
     } catch (_) {
-      // Le classement n'est jamais bloquant : on ignore silencieusement.
+      // Le classement n'est jamais bloquant : on réessaiera plus tard.
+      return false;
     }
   }
 
