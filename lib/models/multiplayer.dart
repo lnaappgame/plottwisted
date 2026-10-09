@@ -1,10 +1,15 @@
 /// Catégorie d'une énigme du mode Multijoueur.
-enum MultiplayerType { film, personnage, acteur, realisateur, personnalite, serie }
+enum MultiplayerType { film, personnage, acteur, actrice, realisateur, realisatrice, personnalite, serie }
 
 MultiplayerType multiplayerTypeFromLabel(String label) {
   switch (label.trim().toLowerCase()) {
     case 'film':
       return MultiplayerType.film;
+    case 'actrice':
+      return MultiplayerType.actrice;
+    case 'réalisatrice':
+    case 'realisatrice':
+      return MultiplayerType.realisatrice;
     case 'acteur':
       return MultiplayerType.acteur;
     case 'réalisateur':
@@ -28,7 +33,9 @@ String multiplayerTypeLabel(MultiplayerType t, [String locale = 'fr']) => locale
         MultiplayerType.film => 'Movie',
         MultiplayerType.personnage => 'Character',
         MultiplayerType.acteur => 'Actor',
+        MultiplayerType.actrice => 'Actress',
         MultiplayerType.realisateur => 'Director',
+        MultiplayerType.realisatrice => 'Director',
         MultiplayerType.personnalite => 'Public figure',
         MultiplayerType.serie => 'TV Show',
       }
@@ -36,7 +43,9 @@ String multiplayerTypeLabel(MultiplayerType t, [String locale = 'fr']) => locale
         MultiplayerType.film => 'Film',
         MultiplayerType.personnage => 'Personnage',
         MultiplayerType.acteur => 'Acteur',
+        MultiplayerType.actrice => 'Actrice',
         MultiplayerType.realisateur => 'Réalisateur',
+        MultiplayerType.realisatrice => 'Réalisatrice',
         MultiplayerType.personnalite => 'Personnalité',
         MultiplayerType.serie => 'Série',
       };

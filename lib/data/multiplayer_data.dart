@@ -16,7 +16,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-002',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Araignée qui grimpe aux buildings new-yorkais',
     pitchUs: 'Spider who climbs New York City buildings',
     reponse: 'SPIDER-MAN',
@@ -40,7 +40,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-005',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Sorcier à cicatrice entre à l\'école de magie',
     pitchUs: 'Scarred wizard enrolls in magic school',
     reponse: 'HARRY POTTER',
@@ -88,7 +88,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-011',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Pirate excentrique cherche un trésor perdu',
     pitchUs: 'Eccentric pirate seeks a lost treasure',
     reponse: 'JACK SPARROW',
@@ -120,7 +120,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-015',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Espion zéro zéro sept boit son cocktail favori',
     pitchUs: 'Double-oh-seven spy sips his favorite cocktail',
     reponse: 'JAMES BOND',
@@ -136,7 +136,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-017',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Chevalier masqué protège une ville sombre',
     pitchUs: 'Masked knight protects a dark city',
     reponse: 'BATMAN',
@@ -888,7 +888,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-111',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur a coulé avec un paquebot puis dompté Mars.',
     pitchUs: 'This actor sank with a liner, then tamed Mars',
     reponse: 'Leonardo DiCaprio',
@@ -896,7 +896,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-112',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur a couru dans l\'histoire, chocolats en main.',
     pitchUs: 'This actor ran through history, chocolates in hand',
     reponse: 'Tom Hanks',
@@ -904,7 +904,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-113',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce chauffeur de taxi insomniaque devint un boxeur violent.',
     pitchUs: 'This insomniac cab driver later became a violent boxer',
     reponse: 'Robert De Niro',
@@ -912,7 +912,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-114',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce fils cadet d\'un parrain mafieux dit bonjour à son ami.',
     pitchUs: 'This mob boss\'s youngest son says hello to his little friend',
     reponse: 'Al Pacino',
@@ -920,7 +920,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-115',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce pilote alcoolique fut aussi un flic corrompu récompensé.',
     pitchUs: 'This alcoholic pilot was also a rewarded corrupt cop',
     reponse: 'Denzel Washington',
@@ -928,7 +928,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-116',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce séducteur de motel devint fondateur d\'un club clandestin.',
     pitchUs: 'This motel seducer went on to found an underground club',
     reponse: 'Brad Pitt',
@@ -936,7 +936,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-117',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce capitaine pirate titube et porte des lames en mains.',
     pitchUs: 'This pirate captain staggers around with blades for hands',
     reponse: 'Johnny Depp',
@@ -944,7 +944,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-118',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette rédactrice de mode tyrannique a aussi été Dame de fer.',
     pitchUs: 'This tyrannical fashion editor also played an Iron Lady',
     reponse: 'Meryl Streep',
@@ -952,7 +952,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-119',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Australienne a régné sur l\'Angleterre et sur Gotham.',
     pitchUs: 'This Australian ruled over England and over Gotham',
     reponse: 'Cate Blanchett',
@@ -960,7 +960,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-120',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Australienne a chanté au Moulin Rouge sous faux nez.',
     pitchUs: 'This Australian sang at the Moulin Rouge under a fake name',
     reponse: 'Nicole Kidman',
@@ -968,7 +968,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-121',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette espionne en combinaison noire hante un hôtel de Tokyo.',
     pitchUs: 'This spy in a black suit haunts a Tokyo hotel',
     reponse: 'Scarlett Johansson',
@@ -976,7 +976,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-122',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette prostituée du Sunset Boulevard dénonça une pollution.',
     pitchUs: 'This Sunset Boulevard sex worker exposed a pollution case',
     reponse: 'Julia Roberts',
@@ -984,7 +984,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-123',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice a désamorcé un bus et flotté dans l\'espace.',
     pitchUs: 'This actress defused a bus and drifted in space',
     reponse: 'Sandra Bullock',
@@ -992,7 +992,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-124',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette aventurière aux formes iconiques devint une fée cornue',
     pitchUs: 'This iconic adventurer later became a horned fairy',
     reponse: 'Angelina Jolie',
@@ -1000,7 +1000,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-125',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce pilote de chasse a aussi coaché deux futures championnes.',
     pitchUs: 'This fighter pilot also coached two future champions',
     reponse: 'Will Smith',
@@ -1008,7 +1008,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-126',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cette voix grave a guidé un détenu et un chef d\'État.',
     pitchUs: 'This deep voice guided an inmate and a head of state',
     reponse: 'Morgan Freeman',
@@ -1016,7 +1016,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-127',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce psychiatre cannibale a régné sur un royaume céleste.',
     pitchUs: 'This cannibal psychiatrist also ruled over a heavenly realm',
     reponse: 'Anthony Hopkins',
@@ -1024,7 +1024,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-128',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce clown au sourire figé a aussi simulé la folie en asile.',
     pitchUs: 'This frozen-smile clown also faked madness in an asylum',
     reponse: 'Jack Nicholson',
@@ -1032,7 +1032,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-129',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce contrebandier galactique porte aussi chapeau et fouet.',
     pitchUs: 'This galactic smuggler also wears a hat and a whip',
     reponse: 'Harrison Ford',
@@ -1040,7 +1040,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-130',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet agent impossible a aussi survolé le ciel en pilote.',
     pitchUs: 'This impossible agent also flew high as a fighter pilot',
     reponse: 'Tom Cruise',
@@ -1048,7 +1048,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-131',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce tueur vengeant son chiot avale aussi une pilule rouge.',
     pitchUs: 'This puppy-avenging killer also swallows a red pill',
     reponse: 'Keanu Reeves',
@@ -1056,7 +1056,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-132',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce directeur borgne cite aussi la Bible avant de tirer.',
     pitchUs: 'This one-eyed director also quotes the Bible before shooting',
     reponse: 'Samuel L. Jackson',
@@ -1064,7 +1064,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-133',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce milliardaire orphelin a aussi maigri pour un insomniaque.',
     pitchUs: 'This orphaned billionaire also starved for an insomniac role',
     reponse: 'Christian Bale',
@@ -1072,7 +1072,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-134',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet agent amnésique a aussi cultivé des patates sur Mars.',
     pitchUs: 'This amnesiac agent also grew potatoes on Mars',
     reponse: 'Matt Damon',
@@ -1080,7 +1080,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-135',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce meneur de onze escrocs a aussi flotté dans l\'espace.',
     pitchUs: 'This eleven-man crew leader also drifted through space',
     reponse: 'George Clooney',
@@ -1088,7 +1088,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-136',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette danseuse paranoïaque a aussi régné sur une planète.',
     pitchUs: 'This paranoid dancer also ruled over a planet',
     reponse: 'Natalie Portman',
@@ -1096,7 +1096,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-137',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice en devenir tombe amoureuse d\'un pianiste de jazz idéaliste, dans une comédie musicale aux couleurs éclatantes qui rend hommage au Hollywood d\'antan.',
     pitchUs: 'This aspiring actress falls for an idealistic jazz pianist in a vividly colored musical paying tribute to old Hollywood.',
     reponse: 'Emma Stone',
@@ -1104,7 +1104,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-138',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette archère se porte volontaire pour sauver sa sœur.',
     pitchUs: 'This archer volunteers to save her sister',
     reponse: 'Jennifer Lawrence',
@@ -1112,7 +1112,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-139',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette conductrice manchote a tué en Floride, méconnaissable.',
     pitchUs: 'This one-armed driver killed in Florida, unrecognizable',
     reponse: 'Charlize Theron',
@@ -1120,7 +1120,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-140',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette passagère de première classe a coulé avec un paquebot.',
     pitchUs: 'This first-class passenger sank with an ocean liner',
     reponse: 'Kate Winslet',
@@ -1128,7 +1128,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-141',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce mutant aux griffes rétractables chante sous un chapiteau.',
     pitchUs: 'This clawed mutant also sings under a circus tent',
     reponse: 'Hugh Jackman',
@@ -1136,7 +1136,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-142',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce pianiste de jazz est aussi cascadeur silencieux le jour.',
     pitchUs: 'This jazz pianist is also a silent daytime stunt driver',
     reponse: 'Ryan Gosling',
@@ -1144,7 +1144,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-143',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce prospecteur pétrolier n\'a qu\'un pied gauche valide.',
     pitchUs: 'This oil prospector has only one working leg',
     reponse: 'Daniel Day-Lewis',
@@ -1152,7 +1152,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-144',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce vampire centenaire a aussi joué un Premier ministre.',
     pitchUs: 'This centuries-old vampire also played a prime minister',
     reponse: 'Gary Oldman',
@@ -1160,7 +1160,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-145',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette générale africaine dirige aussi des super-criminels.',
     pitchUs: 'This African general also leads a team of super-criminals',
     reponse: 'Viola Davis',
@@ -1168,7 +1168,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-146',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce détective londonien maîtrise aussi les arts mystiques.',
     pitchUs: 'This London detective also masters the mystic arts',
     reponse: 'Benedict Cumberbatch',
@@ -1176,7 +1176,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-147',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce gardien doré veille aussi sur des robots géants marins.',
     pitchUs: 'This golden guardian also watches over giant sea robots',
     reponse: 'Idris Elba',
@@ -1184,7 +1184,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-148',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet Espagnol tue à pile ou face et dompte des vers de sable.',
     pitchUs: 'This Spaniard kills on a coin flip and tames sandworms',
     reponse: 'Javier Bardem',
@@ -1192,7 +1192,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-149',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Espagnole peint sa jalousie puis navigue en pirate.',
     pitchUs: 'This Spaniard paints her jealousy, then sails as a pirate',
     reponse: 'Penélope Cruz',
@@ -1200,7 +1200,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-150',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Française chanta puis hanta les rêves d\'un voleur.',
     pitchUs: 'This Frenchwoman sang, then haunted a thief\'s dreams',
     reponse: 'Marion Cotillard',
@@ -1208,7 +1208,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-151',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Française réprimée enseigne le piano à Vienne.',
     pitchUs: 'This repressed Frenchwoman teaches piano in Vienna',
     reponse: 'Isabelle Huppert',
@@ -1216,7 +1216,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-152',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur français livrait des menhirs à mains nues.',
     pitchUs: 'This French actor delivered standing stones bare-handed',
     reponse: 'Gérard Depardieu',
@@ -1224,7 +1224,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-153',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Française veille un patient brûlé dans un monastère.',
     pitchUs: 'This Frenchwoman tends a burned patient in a monastery',
     reponse: 'Juliette Binoche',
@@ -1232,7 +1232,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-154',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce Français devient aide de vie d\'un riche tétraplégique.',
     pitchUs: 'This Frenchman becomes caregiver to a wealthy quadriplegic',
     reponse: 'Omar Sy',
@@ -1240,7 +1240,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-155',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette serveuse parisienne facétieuse aide son quartier.',
     pitchUs: 'This whimsical Parisian waitress helps her neighborhood',
     reponse: 'Audrey Tautou',
@@ -1248,7 +1248,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-156',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette icône blonde chanta l\'anniversaire d\'un président.',
     pitchUs: 'This blonde icon sang happy birthday to a president',
     reponse: 'Marilyn Monroe',
@@ -1256,7 +1256,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-157',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice élégante déjeunait devant un joaillier réputé.',
     pitchUs: 'This elegant actress ate breakfast outside a famous jeweler',
     reponse: 'Audrey Hepburn',
@@ -1264,7 +1264,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-158',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur au poncho est aussi devenu réalisateur oscarisé.',
     pitchUs: 'This poncho-clad actor also became an Oscar-winning director',
     reponse: 'Clint Eastwood',
@@ -1272,7 +1272,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-159',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce vagabond muet à la canne dénonçait aussi les dictateurs.',
     pitchUs: 'This silent tramp with a cane also called out dictators',
     reponse: 'Charlie Chaplin',
@@ -1280,7 +1280,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-160',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur murmure une offre qu\'on ne peut refuser.',
     pitchUs: 'This actor whispers an offer no one can refuse',
     reponse: 'Marlon Brando',
@@ -1288,7 +1288,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-161',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet exilé américain regardait partir un avion au Maroc.',
     pitchUs: 'This American exile watched a plane leave in Morocco',
     reponse: 'Humphrey Bogart',
@@ -1296,7 +1296,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-162',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette princesse de cinéma épousa un vrai prince monégasque.',
     pitchUs: 'This screen princess married an actual Monaco prince',
     reponse: 'Grace Kelly',
@@ -1304,7 +1304,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-163',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet Écossais fut le premier sous le matricule 007.',
     pitchUs: 'This Scotsman was the first to hold agent number 007',
     reponse: 'Sean Connery',
@@ -1312,7 +1312,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-164',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur français cascadeur imitait Bogart en cavale.',
     pitchUs: 'This French stuntman-actor mimicked Bogart on the run',
     reponse: 'Jean-Paul Belmondo',
@@ -1320,7 +1320,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-165',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce comédien gesticulait derrière un comptoir de voyages.',
     pitchUs: 'This comedian gestured wildly behind a travel agency counter',
     reponse: 'Louis de Funès',
@@ -1328,7 +1328,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-166',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce comique au long visage chevalin jouait un curé rural.',
     pitchUs: 'This long-faced comic actor played a rural priest',
     reponse: 'Fernandel',
@@ -1336,7 +1336,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-167',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette icône française du cinéma incarna une belle de jour.',
     pitchUs: 'This French screen icon played a daytime call girl',
     reponse: 'Catherine Deneuve',
@@ -1344,7 +1344,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-168',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur français a aussi menacé un banquier au pistolet.',
     pitchUs: 'This French actor also held a banker at gunpoint',
     reponse: 'Vincent Cassel',
@@ -1352,7 +1352,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-169',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur français arrêta la boxe pour toucher un piano.',
     pitchUs: 'This French actor quit boxing to play the piano',
     reponse: 'Romain Duris',
@@ -1360,7 +1360,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-170',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice chevauche des vers géants sur Arrakis.',
     pitchUs: 'This actress rides giant worms across a desert planet',
     reponse: 'Zendaya',
@@ -1688,7 +1688,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-211',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a fait voler des vélos face à la lune.',
     pitchUs: 'This filmmaker made bicycles fly across the moon',
     reponse: 'Steven Spielberg',
@@ -1696,7 +1696,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-212',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste new-yorkais filme gangsters et rédemption.',
     pitchUs: 'This New York filmmaker shoots gangsters and redemption',
     reponse: 'Martin Scorsese',
@@ -1704,7 +1704,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-213',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste aime dialogues bavards et valises mystères.',
     pitchUs: 'This filmmaker loves talky dialogue and mystery briefcases',
     reponse: 'Quentin Tarantino',
@@ -1712,7 +1712,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-214',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste aime les récits à la chronologie brisée.',
     pitchUs: 'This filmmaker loves stories with broken timelines',
     reponse: 'Christopher Nolan',
@@ -1720,7 +1720,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-215',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste apparaissait brièvement dans ses propres films.',
     pitchUs: 'This filmmaker briefly appeared in his own films',
     reponse: 'Alfred Hitchcock',
@@ -1728,7 +1728,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-216',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste perfectionniste a filmé un hôtel hanté en hiver.',
     pitchUs: 'This perfectionist filmmaker shot a haunted winter hotel',
     reponse: 'Stanley Kubrick',
@@ -1736,7 +1736,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-217',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a coulé un paquebot puis peuplé une lune bleue.',
     pitchUs: 'This filmmaker sank a liner, then populated a blue moon',
     reponse: 'James Cameron',
@@ -1744,7 +1744,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-218',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a fait naître un monstre dans un cargo spatial.',
     pitchUs: 'This filmmaker birthed a monster aboard a cargo spaceship',
     reponse: 'Ridley Scott',
@@ -1752,7 +1752,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-219',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste affectionne mains ciseaux et univers gothiques.',
     pitchUs: 'This filmmaker loves scissor hands and gothic worlds',
     reponse: 'Tim Burton',
@@ -1760,7 +1760,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-220',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste filme des tueurs en série et thrillers glacés.',
     pitchUs: 'This filmmaker shoots serial killers and icy thrillers',
     reponse: 'David Fincher',
@@ -1768,7 +1768,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-221',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste compose des cadres parfaitement symétriques.',
     pitchUs: 'This filmmaker composes perfectly symmetrical frames',
     reponse: 'Wes Anderson',
@@ -1776,7 +1776,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-222',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste espagnol filme des femmes hautes en couleur.',
     pitchUs: 'This Spanish filmmaker shoots colorful, larger-than-life women',
     reponse: 'Pedro Almodóvar',
@@ -1784,7 +1784,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-223',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste japonais a réuni sept samouraïs pour un village.',
     pitchUs: 'This Japanese filmmaker gathered seven samurai for a village',
     reponse: 'Akira Kurosawa',
@@ -1792,7 +1792,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-224',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste fit recueillir une orpheline par un tueur pro.',
     pitchUs: 'This filmmaker had an orphan taken in by a professional killer',
     reponse: 'Luc Besson',
@@ -1800,7 +1800,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-225',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste rendit une serveuse parisienne facétieuse.',
     pitchUs: 'This filmmaker brought a whimsical Parisian waitress to life',
     reponse: 'Jean-Pierre Jeunet',
@@ -1808,7 +1808,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-226',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Cet acteur devenu cinéaste tourne encore à un âge avancé.',
     pitchUs: 'This actor turned filmmaker still directs at an advanced age',
     reponse: 'Clint Eastwood',
@@ -1816,7 +1816,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-227',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste new-yorkais névrosé filme sa ville et lui-même.',
     pitchUs: 'This neurotic New York filmmaker shoots his city and himself',
     reponse: 'Woody Allen',
@@ -1824,7 +1824,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-228',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste filma l\'ascension d\'une famille mafieuse.',
     pitchUs: 'This filmmaker chronicled the rise of a mafia family',
     reponse: 'Francis Ford Coppola',
@@ -1832,7 +1832,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-229',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a imaginé une guerre des étoiles lointaine.',
     pitchUs: 'This filmmaker imagined a war among distant stars',
     reponse: 'George Lucas',
@@ -1840,7 +1840,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-230',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a filmé la destruction d\'un anneau maléfique.',
     pitchUs: 'This filmmaker shot the destruction of an evil ring',
     reponse: 'Peter Jackson',
@@ -1848,7 +1848,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-231',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste mexicain aime créatures et contes noirs.',
     pitchUs: 'This Mexican filmmaker loves creatures and dark fairy tales',
     reponse: 'Guillermo del Toro',
@@ -1856,7 +1856,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-232',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste québécois a filmé des vers géants sur Dune.',
     pitchUs: 'This Quebecois filmmaker shot giant worms on Dune',
     reponse: 'Denis Villeneuve',
@@ -1864,7 +1864,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-233',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste coréen infiltre des pauvres chez des riches.',
     pitchUs: 'This Korean filmmaker infiltrates the poor into a rich home',
     reponse: 'Bong Joon-ho',
@@ -1872,7 +1872,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-234',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste anime forêts, esprits et enfants volants.',
     pitchUs: 'This filmmaker animates forests, spirits, and flying children',
     reponse: 'Hayao Miyazaki',
@@ -1880,7 +1880,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-235',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisatrice,
     pitch: 'Cette cinéaste a filmé une unité de déminage en Irak.',
     pitchUs: 'This filmmaker shot a bomb disposal unit in Iraq',
     reponse: 'Kathryn Bigelow',
@@ -1888,7 +1888,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-236',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisatrice,
     pitch: 'Cette cinéaste a fait sortir une poupée de son monde rose.',
     pitchUs: 'This filmmaker sent a doll out of her pink world',
     reponse: 'Greta Gerwig',
@@ -1896,7 +1896,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-237',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisatrice,
     pitch: 'Cette cinéaste a filmé un rancher dur du Montana en 1925.',
     pitchUs: 'This filmmaker shot a harsh Montana rancher in 1925',
     reponse: 'Jane Campion',
@@ -1904,7 +1904,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-238',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisatrice,
     pitch: 'Cette cinéaste française a filmé une peintre et son modèle.',
     pitchUs: 'This French filmmaker shot a painter and her subject',
     reponse: 'Céline Sciamma',
@@ -1912,7 +1912,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-239',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisatrice,
     pitch: 'Cette pionnière française filmait la Nouvelle Vague.',
     pitchUs: 'This French pioneer filmed the New Wave',
     reponse: 'Agnès Varda',
@@ -1920,7 +1920,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-240',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisatrice,
     pitch: 'Cette cinéaste française a filmé le procès d\'une romancière.',
     pitchUs: 'This French filmmaker shot the trial of a novelist',
     reponse: 'Justine Triet',
@@ -3048,7 +3048,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-381',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un copilote poilu et hurlant pilote un vaisseau volé.',
     pitchUs: 'A furry, howling co-pilot flies a stolen ship',
     reponse: 'Chewbacca',
@@ -3056,7 +3056,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-382',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un petit maître vert enseigne la Force depuis des siècles.',
     pitchUs: 'A small green master has taught the Force for centuries',
     reponse: 'Yoda',
@@ -3064,7 +3064,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-383',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un droïde astromécanique bipe et cache des plans secrets.',
     pitchUs: 'An astromech droid beeps and hides secret plans',
     reponse: 'R2-D2',
@@ -3072,7 +3072,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-384',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un droïde doré maîtrise des millions de formes de langage.',
     pitchUs: 'A golden droid is fluent in millions of forms of language',
     reponse: 'C-3PO',
@@ -3080,7 +3080,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-385',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un chasseur casqué traque Han Solo pour un gangster.',
     pitchUs: 'A helmeted hunter tracks Han Solo for a gangster',
     reponse: 'Boba Fett',
@@ -3088,7 +3088,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-386',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un bébé vert aux grandes oreilles voyage avec un chasseur.',
     pitchUs: 'A big-eared green baby travels with a bounty hunter',
     reponse: 'Grogu',
@@ -3096,7 +3096,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-387',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un chevalier noir au souffle mécanique sert un empire.',
     pitchUs: 'A dark knight with mechanical breathing serves an empire',
     reponse: 'Dark Vador',
@@ -3104,7 +3104,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-388',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Une créature squelettique convoite un anneau qui l\'a rongé.',
     pitchUs: 'A skeletal creature covets a ring that consumed him',
     reponse: 'Gollum',
@@ -3112,7 +3112,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-389',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un archer elfe aux flèches infaillibles rejoint la troupe.',
     pitchUs: 'An elf archer with unerring arrows joins the fellowship',
     reponse: 'Legolas',
@@ -3120,7 +3120,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-390',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un nain hachereau rivalise d\'exploits avec un archer elfe.',
     pitchUs: 'An axe-wielding dwarf competes for kills with an elf archer',
     reponse: 'Gimli',
@@ -3128,7 +3128,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-391',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un guerrier gondorien tente de s\'emparer d\'un anneau maudit.',
     pitchUs: 'A warrior from Gondor tries to seize a cursed ring',
     reponse: 'Boromir',
@@ -3136,7 +3136,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-392',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un magicien blanc corrompu lève une armée d\'orcs hybrides.',
     pitchUs: 'A corrupted white wizard raises an army of hybrid orcs',
     reponse: 'Saroumane',
@@ -3144,7 +3144,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-393',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un seigneur elfe réunit un conseil pour détruire un anneau.',
     pitchUs: 'An elf lord gathers a council to destroy a ring',
     reponse: 'Elrond',
@@ -3152,7 +3152,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-394',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un elfe de maison libéré protège un sorcier à lunettes.',
     pitchUs: 'A freed house-elf protects a bespectacled wizard',
     reponse: 'Dobby',
@@ -3160,7 +3160,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-395',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un demi-géant garde-chasse élève des créatures interdites.',
     pitchUs: 'A half-giant gamekeeper raises forbidden creatures',
     reponse: 'Hagrid',
@@ -3168,7 +3168,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-396',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un professeur de potions insondable protège un secret amer.',
     pitchUs: 'An unreadable potions teacher guards a bitter secret',
     reponse: 'Severus Rogue',
@@ -3176,7 +3176,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-397',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un mage noir sans nez cherche l\'immortalité éternelle.',
     pitchUs: 'A noseless dark wizard seeks eternal immortality',
     reponse: 'Voldemort',
@@ -3184,7 +3184,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-398',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Une sorcière surdouée résout les énigmes de son école.',
     pitchUs: 'A gifted witch solves her school\'s toughest riddles',
     reponse: 'Hermione Granger',
@@ -3192,7 +3192,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-399',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Le cadet roux d\'une fratrie sorcière craint les araignées.',
     pitchUs: 'The redheaded youngest son of a wizarding family fears spiders',
     reponse: 'Ron Weasley',
@@ -3200,7 +3200,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-400',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un dieu facétieux change sans cesse de camp et d\'apparence.',
     pitchUs: 'A mischievous god keeps switching sides and shapes',
     reponse: 'Loki',
@@ -3208,7 +3208,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-401',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un être végétal ne répétant que son nom protège ses amis.',
     pitchUs: 'A plant-based being who repeats only his name protects his friends',
     reponse: 'Groot',
@@ -3216,7 +3216,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-402',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un raton laveur bricoleur et bagarreur pilote un vaisseau.',
     pitchUs: 'A scrappy, quarrelsome raccoon pilots a spaceship',
     reponse: 'Rocket Raccoon',
@@ -3224,7 +3224,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-403',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un soldat au bras métallique fut manipulé par des espions.',
     pitchUs: 'A soldier with a metal arm was manipulated by spies',
     reponse: 'Bucky Barnes',
@@ -3232,7 +3232,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-404',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un directeur borgne réunit des héros dispersés en équipe.',
     pitchUs: 'A one-eyed director assembles scattered heroes into a team',
     reponse: 'Nick Fury',
@@ -3240,7 +3240,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-405',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un gardien doré voit tout depuis un pont arc-en-ciel.',
     pitchUs: 'A golden guardian sees all from a rainbow bridge',
     reponse: 'Heimdall',
@@ -3248,7 +3248,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-406',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un titan violet veut effacer la moitié de l\'univers.',
     pitchUs: 'A purple titan wants to erase half the universe',
     reponse: 'Thanos',
@@ -3256,7 +3256,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-407',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un majordome loyal soigne un justicier masqué.',
     pitchUs: 'A loyal butler tends to a masked vigilante',
     reponse: 'Alfred Pennyworth',
@@ -3264,7 +3264,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-408',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un jeune acolyte en cape combat le crime à Gotham.',
     pitchUs: 'A young caped sidekick fights crime in Gotham',
     reponse: 'Robin',
@@ -3272,7 +3272,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-409',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Une cambrioleuse féline défie un justicier de Gotham.',
     pitchUs: 'A feline burglar challenges a Gotham vigilante',
     reponse: 'Catwoman',
@@ -3280,7 +3280,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-410',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un géant doux ne prononce qu\'un mot en portant les autres.',
     pitchUs: 'A gentle giant speaks only one word while carrying others',
     reponse: 'Hodor',
@@ -3288,7 +3288,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-411',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un nain érudit et buveur navigue les intrigues d\'un royaume.',
     pitchUs: 'A scholarly, drinking dwarf navigates a kingdom\'s intrigues',
     reponse: 'Tyrion Lannister',
@@ -3296,7 +3296,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-412',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un garde brûlé au visage protège puis lâche une princesse.',
     pitchUs: 'A burn-scarred guard protects, then abandons, a princess',
     reponse: 'Le Limier',
@@ -3304,7 +3304,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-413',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un bâtard sadique traque des proies humaines par plaisir.',
     pitchUs: 'A sadistic bastard hunts human prey for pleasure',
     reponse: 'Ramsay Bolton',
@@ -3312,7 +3312,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-414',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un bonhomme de neige naïf rêve de l\'été sans voir le danger.',
     pitchUs: 'A naive snowman dreams of summer, oblivious to the danger',
     reponse: 'Olaf',
@@ -3320,7 +3320,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-415',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un esprit bleu enfermé dans une lampe exauce trois vœux.',
     pitchUs: 'A blue spirit trapped in a lamp grants three wishes',
     reponse: 'Le Génie',
@@ -3328,7 +3328,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-416',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un suricate et un phacochère élèvent un lionceau sans souci.',
     pitchUs: 'A meerkat and a warthog raise a lion cub worry-free',
     reponse: 'Timon et Pumbaa',
@@ -3336,7 +3336,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-417',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un lion à la crinière sombre complote pour voler un trône.',
     pitchUs: 'A dark-maned lion plots to steal a throne',
     reponse: 'Scar',
@@ -3344,7 +3344,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-418',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Une pieuvre des mers vole la voix d\'une princesse.',
     pitchUs: 'A sea octopus steals a princess\'s voice',
     reponse: 'Ursula',
@@ -3352,7 +3352,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-419',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un vizir avide de pouvoir manipule un sultan naïf.',
     pitchUs: 'A power-hungry vizier manipulates a naive sultan',
     reponse: 'Jafar',
@@ -3360,7 +3360,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-420',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un perroquet moqueur sert d\'espion à un vizir machiavélique.',
     pitchUs: 'A mocking parrot serves as spy for a scheming vizier',
     reponse: 'Iago',
@@ -3368,7 +3368,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-421',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un roi lion tombe d\'une falaise sous les yeux de son fils.',
     pitchUs: 'A lion king falls from a cliff before his son\'s eyes',
     reponse: 'Mufasa',
@@ -3376,7 +3376,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-422',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un crabe des Caraïbes chante et surveille une princesse.',
     pitchUs: 'A Caribbean crab sings and watches over a princess',
     reponse: 'Sébastien',
@@ -3384,7 +3384,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-423',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un robot gonflable soigneur réconforte un jeune inventeur.',
     pitchUs: 'An inflatable healthcare robot comforts a young inventor',
     reponse: 'Baymax',
@@ -3392,7 +3392,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-424',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un compagnon bavard et têtu accompagne un ogre solitaire.',
     pitchUs: 'A chatty, stubborn companion tags along with a lonely ogre',
     reponse: 'L\'Âne',
@@ -3400,7 +3400,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-425',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un félin séducteur au chapeau manie l\'épée avec panache.',
     pitchUs: 'A charming, hat-wearing feline wields a sword with flair',
     reponse: 'Le Chat Potté',
@@ -3408,7 +3408,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-426',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un hôte excentrique sert un thé perpétuel à une fillette.',
     pitchUs: 'An eccentric host serves endless tea to a little girl',
     reponse: 'Le Chapelier Toqué',
@@ -3416,7 +3416,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-427',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un félin violet disparaît en laissant flotter son sourire.',
     pitchUs: 'A purple feline vanishes, leaving only its floating grin',
     reponse: 'Le Chat du Cheshire',
@@ -3424,7 +3424,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-428',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un avocat véreux blanchit l\'argent d\'un ex-prof de chimie.',
     pitchUs: 'A crooked lawyer launders money for an ex-chemistry teacher',
     reponse: 'Saul Goodman',
@@ -3432,7 +3432,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-429',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un ancien flic taciturne nettoie les traces d\'un trafic.',
     pitchUs: 'A quiet former cop cleans up traces of a drug operation',
     reponse: 'Mike Ehrmantraut',
@@ -3440,7 +3440,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-430',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un ancien élève dealer s\'associe à son ex-professeur.',
     pitchUs: 'A former student dealer partners with his old teacher',
     reponse: 'Jesse Pinkman',
@@ -3448,7 +3448,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-431',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un médecin blessé colocataire d\'un détective excentrique.',
     pitchUs: 'A wounded doctor rooms with an eccentric detective',
     reponse: 'Dr Watson',
@@ -3456,7 +3456,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-432',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un terroriste raffiné prend en otage une tour à Los Angeles.',
     pitchUs: 'A refined terrorist takes hostages in a Los Angeles tower',
     reponse: 'Hans Gruber',
@@ -3464,7 +3464,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-433',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un programme aux lunettes noires traque un hacker.',
     pitchUs: 'A sunglasses-wearing program hunts a hacker',
     reponse: 'Agent Smith',
@@ -3472,7 +3472,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-434',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un métal liquide imite n\'importe qui pour traquer un ado.',
     pitchUs: 'A liquid metal shapeshifter impersonates anyone to hunt a teen',
     reponse: 'T-1000',
@@ -3480,7 +3480,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-435',
-    type: MultiplayerType.film,
+    type: MultiplayerType.personnage,
     pitch: 'Un collégien à l\'appareil dentaire déchiffre des codes.',
     pitchUs: 'A braces-wearing middle schooler decodes secret messages',
     reponse: 'Dustin',
@@ -3488,7 +3488,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-436',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur a régné sur une planète d\'épice et chanté Dylan.',
     pitchUs: 'This actor ruled a spice planet and sang Bob Dylan songs',
     reponse: 'Timothée Chalamet',
@@ -3496,7 +3496,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-437',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Britannique a hurlé dans une secte suédoise en fleurs.',
     pitchUs: 'This Brit screamed inside a flower-filled Swedish cult',
     reponse: 'Florence Pugh',
@@ -3504,7 +3504,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-438',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Australienne a enfilé le rose puis un costume clown.',
     pitchUs: 'This Australian wore pink, then a clown\'s costume',
     reponse: 'Margot Robbie',
@@ -3512,7 +3512,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-439',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur brise le quatrième mur en costume rouge.',
     pitchUs: 'This actor breaks the fourth wall in a red suit',
     reponse: 'Ryan Reynolds',
@@ -3520,7 +3520,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-440',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice a lu des livres dans une bibliothèque magique.',
     pitchUs: 'This actress read books in a magical library',
     reponse: 'Emma Watson',
@@ -3528,7 +3528,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-441',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur porte lunettes rondes et cicatrice en éclair.',
     pitchUs: 'This actor wears round glasses and a lightning scar',
     reponse: 'Daniel Radcliffe',
@@ -3536,7 +3536,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-442',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet Australien musclé brandit un marteau enchanté nordique.',
     pitchUs: 'This muscular Australian wields an enchanted Norse hammer',
     reponse: 'Chris Hemsworth',
@@ -3544,7 +3544,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-443',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur porte un bouclier étoilé après un sérum.',
     pitchUs: 'This actor carries a star-spangled shield after a serum',
     reponse: 'Chris Evans',
@@ -3552,7 +3552,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-444',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur a construit une armure rouge et or.',
     pitchUs: 'This actor built a suit of red and gold armor',
     reponse: 'Robert Downey Jr.',
@@ -3560,7 +3560,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-445',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur devient un géant vert sous l\'effet de la colère.',
     pitchUs: 'This actor turns into a green giant when angry',
     reponse: 'Mark Ruffalo',
@@ -3568,7 +3568,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-446',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice manipule la réalité grâce à un chaos écarlate.',
     pitchUs: 'This actress bends reality through scarlet chaos',
     reponse: 'Elizabeth Olsen',
@@ -3576,7 +3576,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-447',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Ce jeune Britannique tisse des toiles entre les gratte-ciel.',
     pitchUs: 'This young Brit swings webs between skyscrapers',
     reponse: 'Tom Holland',
@@ -3584,7 +3584,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-448',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur a régné sous un masque de panthère puis boxé.',
     pitchUs: 'This actor ruled behind a panther mask, then took up boxing',
     reponse: 'Michael B. Jordan',
@@ -3592,7 +3592,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-449',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur incarnait un roi africain masqué de vibranium.',
     pitchUs: 'This actor played a masked African king of vibranium',
     reponse: 'Chadwick Boseman',
@@ -3600,7 +3600,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-450',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet Irlandais a joué des mutants et des androïdes froids.',
     pitchUs: 'This Irishman has played mutants and cold androids',
     reponse: 'Michael Fassbender',
@@ -3608,7 +3608,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-451',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur bègue a dû prononcer un discours royal.',
     pitchUs: 'This actor with a stammer had to deliver a royal speech',
     reponse: 'Colin Firth',
@@ -3616,7 +3616,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-452',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice adapta un roman de Jane Austen à l\'écran.',
     pitchUs: 'This actress adapted a Jane Austen novel for the screen',
     reponse: 'Emma Thompson',
@@ -3624,7 +3624,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-453',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Canadienne oublie chaque matin l\'homme qu\'elle aime.',
     pitchUs: 'This Canadian forgets each morning the man she loves',
     reponse: 'Rachel McAdams',
@@ -3632,7 +3632,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-454',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice débute stagiaire dans un magazine de mode.',
     pitchUs: 'This actress starts out as an intern at a fashion magazine',
     reponse: 'Anne Hathaway',
@@ -3640,7 +3640,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-455',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice débarque en rose à la fac de droit d\'Harvard.',
     pitchUs: 'This actress arrives in pink at Harvard Law School',
     reponse: 'Reese Witherspoon',
@@ -3648,7 +3648,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-456',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice décrypte le langage d\'extraterrestres.',
     pitchUs: 'This actress decodes the language of aliens',
     reponse: 'Amy Adams',
@@ -3656,7 +3656,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-457',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice traque un terroriste pendant dix ans.',
     pitchUs: 'This actress hunts a terrorist for ten years',
     reponse: 'Jessica Chastain',
@@ -3664,7 +3664,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-458',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice a incarné une reine acariâtre et gouteuse.',
     pitchUs: 'This actress played a cranky, gluttonous queen',
     reponse: 'Olivia Colman',
@@ -3672,7 +3672,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-459',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette actrice a incarné une reine d\'Angleterre austère.',
     pitchUs: 'This actress played an austere Queen of England',
     reponse: 'Helen Mirren',
@@ -3680,7 +3680,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-460',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur guide une communauté avec un bâton de bois.',
     pitchUs: 'This actor guides a fellowship with a wooden staff',
     reponse: 'Ian McKellen',
@@ -3688,7 +3688,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-461',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur anguleux a incarné un bouffon vert menaçant.',
     pitchUs: 'This angular-faced actor played a menacing green goblin',
     reponse: 'Willem Dafoe',
@@ -3696,7 +3696,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-462',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur peint son visage en clown désabusé.',
     pitchUs: 'This actor paints his face as a disillusioned clown',
     reponse: 'Joaquin Phoenix',
@@ -3704,7 +3704,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-463',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur au sabre rouge trahit sa famille.',
     pitchUs: 'This actor with a red lightsaber betrays his own family',
     reponse: 'Adam Driver',
@@ -3712,7 +3712,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-464',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur pilote un chasseur dans une guerre stellaire.',
     pitchUs: 'This actor pilots a fighter in a war among the stars',
     reponse: 'Oscar Isaac',
@@ -3720,7 +3720,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-465',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur a survécu seul sur Mars puis chassé au désert.',
     pitchUs: 'This actor survived alone on Mars, then hunted in the desert',
     reponse: 'Jake Gyllenhaal',
@@ -3728,7 +3728,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-466',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet Autrichien chasse des Juifs avec politesse glaciale.',
     pitchUs: 'This Austrian hunts Jews with icy politeness',
     reponse: 'Christoph Waltz',
@@ -3736,7 +3736,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-467',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur a incarné un dealer puis un père pudique.',
     pitchUs: 'This actor played a drug dealer, then a reserved father',
     reponse: 'Mahershala Ali',
@@ -3744,7 +3744,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-468',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Kényane a joué une esclave puis une reine guerrière.',
     pitchUs: 'This Kenyan actress played a slave, then a warrior queen',
     reponse: 'Lupita Nyong\'o',
@@ -3752,7 +3752,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-469',
-    type: MultiplayerType.film,
+    type: MultiplayerType.actrice,
     pitch: 'Cette Française a défié un espion britannique matricule 007.',
     pitchUs: 'This Frenchwoman faced off against agent 007',
     reponse: 'Léa Seydoux',
@@ -3760,7 +3760,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-470',
-    type: MultiplayerType.film,
+    type: MultiplayerType.acteur,
     pitch: 'Cet acteur muet séduit le public à l\'ère du parlant.',
     pitchUs: 'This silent actor charms audiences in the era of talkies',
     reponse: 'Jean Dujardin',
@@ -3768,7 +3768,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-471',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce Taïwanais a filmé un tigre et un naufragé en mer.',
     pitchUs: 'This Taiwanese director filmed a tiger and a castaway at sea',
     reponse: 'Ang Lee',
@@ -3776,7 +3776,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-472',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce Mexicain a filmé un trappeur laissé pour mort.',
     pitchUs: 'This Mexican director filmed a trapper left for dead',
     reponse: 'Alejandro González Iñárritu',
@@ -3784,7 +3784,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-473',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce Mexicain a filmé une bonne en noir et blanc.',
     pitchUs: 'This Mexican director filmed a housekeeper in black and white',
     reponse: 'Alfonso Cuarón',
@@ -3792,7 +3792,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-474',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce Grec filme des mondes absurdes aux dialogues glacés.',
     pitchUs: 'This Greek director films absurd worlds with icy dialogue',
     reponse: 'Yórgos Lánthimos',
@@ -3800,7 +3800,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-475',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a filmé un prospecteur pétrolier impitoyable.',
     pitchUs: 'This filmmaker shot a ruthless oil prospector',
     reponse: 'Paul Thomas Anderson',
@@ -3808,7 +3808,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-476',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ces frères filment des kidnappings ratés dans la neige.',
     pitchUs: 'These brothers film botched kidnappings in the snow',
     reponse: 'Joel et Ethan Coen',
@@ -3816,7 +3816,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-477',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce Britannique a filmé deux soldats en un plan continu.',
     pitchUs: 'This Brit filmed two soldiers in one continuous shot',
     reponse: 'Sam Mendes',
@@ -3824,7 +3824,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-478',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a filmé un génie mathématique schizophrène.',
     pitchUs: 'This filmmaker shot a schizophrenic math genius',
     reponse: 'Ron Howard',
@@ -3832,7 +3832,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-479',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a envoyé un ado dans le passé en DeLorean.',
     pitchUs: 'This filmmaker sent a teen back in time in a DeLorean',
     reponse: 'Robert Zemeckis',
@@ -3840,7 +3840,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-480',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste filme des robots géants et des explosions.',
     pitchUs: 'This filmmaker shoots giant robots and explosions',
     reponse: 'Michael Bay',
@@ -3848,7 +3848,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-481',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste filme des super-héros en ralenti stylisé.',
     pitchUs: 'This filmmaker shoots superheroes in stylized slow motion',
     reponse: 'Zack Snyder',
@@ -3856,7 +3856,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-482',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a réveillé une force dans une lointaine galaxie.',
     pitchUs: 'This filmmaker awakened a force in a galaxy far away',
     reponse: 'J.J. Abrams',
@@ -3864,7 +3864,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-483',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce Néo-Zélandais a rendu comique un dieu du tonnerre.',
     pitchUs: 'This New Zealander made a thunder god genuinely funny',
     reponse: 'Taika Waititi',
@@ -3872,7 +3872,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-484',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisatrice,
     pitch: 'Cette Chinoise filme des nomades américains sans domicile.',
     pitchUs: 'This Chinese filmmaker films homeless American nomads',
     reponse: 'Chloé Zhao',
@@ -3880,7 +3880,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-485',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a filmé un batteur tyrannisé par son professeur.',
     pitchUs: 'This filmmaker shot a drummer tormented by his teacher',
     reponse: 'Damien Chazelle',
@@ -3888,7 +3888,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-486',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a créé un tueur griffu hantant les rêves.',
     pitchUs: 'This filmmaker created a clawed killer haunting dreams',
     reponse: 'Wes Craven',
@@ -3896,7 +3896,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-487',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a filmé un tueur masqué la nuit d\'Halloween.',
     pitchUs: 'This filmmaker shot a masked killer on Halloween night',
     reponse: 'John Carpenter',
@@ -3904,7 +3904,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-488',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste filme des univers oniriques et dérangeants.',
     pitchUs: 'This filmmaker shoots dreamlike, unsettling worlds',
     reponse: 'David Lynch',
@@ -3912,7 +3912,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-489',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Cet ex-Monty Python filme des univers rétro-futuristes.',
     pitchUs: 'This ex-Monty Python member films retro-futuristic worlds',
     reponse: 'Terry Gilliam',
@@ -3920,7 +3920,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-490',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce Tchèque a filmé un rebelle dans un asile psychiatrique.',
     pitchUs: 'This Czech director filmed a rebel in a psychiatric ward',
     reponse: 'Milos Forman',
@@ -3928,7 +3928,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-491',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a filmé un pianiste juif à Varsovie.',
     pitchUs: 'This filmmaker shot a Jewish pianist in Warsaw',
     reponse: 'Roman Polanski',
@@ -3936,7 +3936,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-492',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Cet Italien a inventé le western spaghetti musical.',
     pitchUs: 'This Italian invented the musical spaghetti western',
     reponse: 'Sergio Leone',
@@ -3944,7 +3944,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-493',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Cet Italien filme les excès nocturnes de la Dolce Vita.',
     pitchUs: 'This Italian films the nightly excess of la dolce vita',
     reponse: 'Federico Fellini',
@@ -3952,7 +3952,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-494',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce pionnier de la Nouvelle Vague filmait à bout de souffle.',
     pitchUs: 'This New Wave pioneer filmed characters out of breath',
     reponse: 'Jean-Luc Godard',
@@ -3960,7 +3960,7 @@ final List<MultiplayerEnigme> kMultiplayerEnigmes = [
   ),
   MultiplayerEnigme(
     id: 'mp-495',
-    type: MultiplayerType.film,
+    type: MultiplayerType.realisateur,
     pitch: 'Ce cinéaste a filmé les 400 coups d\'un gamin parisien.',
     pitchUs: 'This filmmaker shot the 400 blows of a Parisian kid',
     reponse: 'François Truffaut',

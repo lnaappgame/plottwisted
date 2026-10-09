@@ -119,7 +119,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'michael-bay',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'Michael Bay',
     communUs: 'Michael Bay',
     consigne: 'Trouve le film correspondant à chaque indice de la filmographie de Michael Bay.',
@@ -177,7 +177,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'clint-eastwood',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'Clint Eastwood',
     communUs: 'Clint Eastwood',
     consigne: 'Trouve le film correspondant à chaque indice de la filmographie de Clint Eastwood en tant que réalisateur.',
@@ -397,7 +397,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'penelope-cruz',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Penélope Cruz',
     communUs: 'Penélope Cruz',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Penélope Cruz.',
@@ -541,7 +541,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'ingrid-bergman',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Ingrid Bergman',
     communUs: 'Ingrid Bergman',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Ingrid Bergman.',
@@ -645,7 +645,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'halle-berry',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Halle Berry',
     communUs: 'Halle Berry',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Halle Berry.',
@@ -755,7 +755,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'ingmar-bergman',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'Ingmar Bergman',
     communUs: 'Ingmar Bergman',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Ingmar Bergman.',
@@ -813,7 +813,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'diane-keaton',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Diane Keaton',
     communUs: 'Diane Keaton',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Diane Keaton.',
@@ -917,7 +917,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'baz-luhrmann',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'Baz Luhrmann',
     communUs: 'Baz Luhrmann',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Baz Luhrmann.',
@@ -1021,7 +1021,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'angelina-jolie',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Angelina Jolie',
     communUs: 'Angelina Jolie',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Angelina Jolie.',
@@ -1113,7 +1113,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'ava-duvernay',
-    type: DefiType.personnage,
+    type: DefiType.realisatrice,
     commun: 'Ava DuVernay',
     communUs: 'Ava DuVernay',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Ava DuVernay.',
@@ -1217,7 +1217,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'viola-davis',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Viola Davis',
     communUs: 'Viola Davis',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Viola Davis.',
@@ -1263,7 +1263,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'steven-spielberg',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'Steven Spielberg',
     communUs: 'Steven Spielberg',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Steven Spielberg.',
@@ -1355,7 +1355,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'quentin-tarantino',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'Quentin Tarantino',
     communUs: 'Quentin Tarantino',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Quentin Tarantino.',
@@ -1493,7 +1493,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'j-j-abrams',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'J.J. Abrams',
     communUs: 'J.J. Abrams',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de J.J. Abrams.',
@@ -1539,7 +1539,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'sandra-bullock',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Sandra Bullock',
     communUs: 'Sandra Bullock',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Sandra Bullock.',
@@ -1793,7 +1793,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'audrey-tautou',
-    type: DefiType.personnage,
+    type: DefiType.actrice,
     commun: 'Audrey Tautou',
     communUs: 'Audrey Tautou',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Audrey Tautou.',
@@ -1885,7 +1885,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'george-miller',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'George Miller',
     communUs: 'George Miller',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de George Miller.',
@@ -2035,7 +2035,7 @@ final List<Defi> kDefis = [
   ),
   Defi(
     id: 'robert-zemeckis',
-    type: DefiType.personnage,
+    type: DefiType.realisateur,
     commun: 'Robert Zemeckis',
     communUs: 'Robert Zemeckis',
     consigne: 'Trouve le film correspondant à chaque indice dans la filmographie de Robert Zemeckis.',

@@ -285,10 +285,14 @@ void _regenerateDefis() {
     blocks.last.add(row);
   }
 
+  // « Actrice » et « Réalisatrice » tombaient dans le cas par défaut
+  // (personnage) : toutes les actrices s'affichaient « PERSONNAGE ».
   String typeEnumFromLabel(String label) => switch (label.trim().toLowerCase()) {
         'personnage' => 'personnage',
         'acteur' => 'acteur',
-        'realisateur' => 'realisateur',
+        'actrice' => 'actrice',
+        'realisateur' || 'réalisateur' => 'realisateur',
+        'realisatrice' || 'réalisatrice' => 'realisatrice',
         'film' => 'film',
         _ => 'personnage',
       };

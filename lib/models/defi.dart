@@ -1,17 +1,21 @@
 /// Catégorie d'un "commun" du mode Défi du jour.
-enum DefiType { personnage, acteur, realisateur, film }
+enum DefiType { personnage, acteur, actrice, realisateur, realisatrice, film }
 
 String defiTypeLabel(DefiType t, [String locale = 'fr']) => locale == 'en'
     ? switch (t) {
         DefiType.personnage => 'Character',
         DefiType.acteur => 'Actor',
+        DefiType.actrice => 'Actress',
         DefiType.realisateur => 'Director',
+        DefiType.realisatrice => 'Director',
         DefiType.film => 'Movie',
       }
     : switch (t) {
         DefiType.personnage => 'Personnage',
         DefiType.acteur => 'Acteur',
+        DefiType.actrice => 'Actrice',
         DefiType.realisateur => 'Réalisateur',
+        DefiType.realisatrice => 'Réalisatrice',
         DefiType.film => 'Film',
       };
 
