@@ -111,8 +111,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            _buildAccountSection(context, colors, cloudSync, t),
+            if (cloudBackupAvailable) ...[
+              const SizedBox(height: 12),
+              _buildAccountSection(context, colors, cloudSync, t),
+            ],
             const SizedBox(height: 18),
             OutlinedButton(
               style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.crimsonBright)),
@@ -423,22 +425,29 @@ class _InputModeRow extends StatelessWidget {
       ('azerty', t.settingsInputAzerty),
       ('qwerty', t.settingsInputQwerty),
     ];
+    // Titre au-dessus, trois choix en dessous : sur une seule ligne, les
+    // trois boutons débordaient sur les écrans étroits.
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Text(t.settingsInputMode, style: AppTextStyles.body(size: 13, color: colors.cream))),
-          const SizedBox(width: 8),
-          for (final (i, (mode, label)) in modes.indexed) ...[
-            if (i > 0) const SizedBox(width: 6),
-            _SizeChip(
-              label: label,
-              selected: settings.inputMode == mode,
-              colors: colors,
-              onTap: () => context.read<AppSettings>().setInputMode(mode),
-            ),
-          ],
+          Text(t.settingsInputMode, style: AppTextStyles.body(size: 13, color: colors.cream)),
+          const SizedBox(height: 6),
+          Wrap(
+            alignment: WrapAlignment.end,
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              for (final (mode, label) in modes)
+                _SizeChip(
+                  label: label,
+                  selected: settings.inputMode == mode,
+                  colors: colors,
+                  onTap: () => context.read<AppSettings>().setInputMode(mode),
+                ),
+            ],
+          ),
         ],
       ),
     );
@@ -538,7 +547,7 @@ class _SettingsRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: AppTextStyles.body(size: 13, color: colors.cream)),
+          Expanded(child: Text(label, style: AppTextStyles.body(size: 13, color: colors.cream))),
           Switch(value: value, onChanged: onChanged, activeColor: AppColors.crimson),
         ],
       ),

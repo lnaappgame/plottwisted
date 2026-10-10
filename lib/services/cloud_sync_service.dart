@@ -21,6 +21,12 @@ enum AccountLinkResult {
   error,
 }
 
+/// Sauvegarde en ligne avec un compte Google proposée dans les Paramètres :
+/// Android seulement pour la sortie. Sur iPhone, la règle 4.8 d'Apple
+/// imposerait de proposer aussi « Se connecter avec Apple » à côté de
+/// Google : masquée en attendant que ce soit ajouté.
+bool get cloudBackupAvailable => !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
 /// Sauvegarde/restauration de la progression via un compte Google lié à
 /// l'identifiant Firebase anonyme existant — pour ne pas perdre sa
 /// progression en changeant de téléphone ou en réinstallant l'app. Jamais

@@ -104,7 +104,7 @@ Download Plot Twist(ed) and enjoy that "Oh, of course!" moment.
 - **Notes** (en anglais) :
 
 ```
-No account is needed: the whole game is playable right away. Google Sign-In (Settings) is optional and only backs up progress to the cloud.
+No account and no sign-in of any kind: the whole game is playable right away.
 In-app purchases are in the Shop (home screen): jokers and ad removal. "Restore purchases" is at the bottom of the Shop.
 Ads are served by Google AdMob. The App Tracking Transparency prompt is shown after a short explainer screen, and ads keep working (non-personalized) if tracking is declined.
 ```
@@ -115,7 +115,7 @@ App Store Connect → Plot Twist(ed) → Confidentialité de l'app → **« Oui,
 
 | Type de données (catégorie Apple) | Finalités | Liées à l'utilisateur | Suivi |
 |---|---|---|---|
-| Coordonnées → Adresse e-mail *(seulement si connexion Google)* | Fonctionnalités de l'app | Oui | Non |
+| Coordonnées → Adresse e-mail *(connexion Google, Android seulement pour l'instant — à garder pour « Se connecter avec Apple » plus tard)* | Fonctionnalités de l'app | Oui | Non |
 | Identifiants → Identifiant utilisateur *(identifiant de joueur, pseudo)* | Fonctionnalités de l'app, Analyses | Oui | Non |
 | Identifiants → Identifiant de l'appareil *(IDFA, si le joueur autorise le suivi)* | Publicité tierce, Analyses | Non | **Oui** |
 | Contenu utilisateur → Contenu de jeu *(scores, temps des classements et du multijoueur)* | Fonctionnalités de l'app | Oui | Non |
