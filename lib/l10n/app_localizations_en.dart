@@ -667,6 +667,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'No more red jokers for today on this level — earn one via the weekly puzzle\'s global top 10%, or in the shop.';
 
   @override
+  String get tipInputTitle => '⌨️ Tiles or keyboard?';
+
+  @override
+  String get tipInputBody =>
+      'You can place letters with the shuffled tiles, or with an AZERTY or QWERTY keyboard where the offered letters light up. Pick your mode: you can change it anytime in Settings.';
+
+  @override
+  String get nerfRevealWordTitle => '📖 One-word title';
+
+  @override
+  String nerfRevealWordBody(int count) {
+    return 'This title is a single word: “Reveal a word” will only uncover about a third of its letters ($count here), not the whole word.';
+  }
+
+  @override
+  String get nerfRevealWordUse => 'USE ANYWAY';
+
+  @override
   String get pitchDifferentColorHint =>
       'Tap a name whose color is different from the joker you selected.';
 
@@ -793,7 +811,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get instrJokerRevealWordDesc =>
-      'Reveals a whole word of the answer (or a third of the letters if the title is a single word).';
+      'Reveals a whole word of the answer, at most 40% of the letters to find (otherwise the shortest one). If the title is a single word, it only uncovers about a third of its letters.';
 
   @override
   String get instrJokerRedLabel => 'Character (red)';

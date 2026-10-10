@@ -671,6 +671,24 @@ class AppLocalizationsFr extends AppLocalizations {
       'Plus de joker rouge pour aujourd\'hui sur ce niveau — obtiens-en via le top 10% mondial de L\'énigme de la semaine ou dans la boutique.';
 
   @override
+  String get tipInputTitle => '⌨️ Tuiles ou clavier ?';
+
+  @override
+  String get tipInputBody =>
+      'Tu peux placer les lettres avec les tuiles mélangées, ou avec un clavier AZERTY ou QWERTY où les lettres proposées s\'allument. Choisis ton mode : tu pourras le changer à tout moment dans les Paramètres.';
+
+  @override
+  String get nerfRevealWordTitle => '📖 Titre en un seul mot';
+
+  @override
+  String nerfRevealWordBody(int count) {
+    return 'Ce titre ne compte qu\'un seul mot : « Révéler un mot » ne dévoilera qu\'environ un tiers de ses lettres ($count ici), pas le mot entier.';
+  }
+
+  @override
+  String get nerfRevealWordUse => 'UTILISER QUAND MÊME';
+
+  @override
   String get pitchDifferentColorHint =>
       'Touche un nom dont la couleur est différente du joker choisi.';
 
@@ -797,7 +815,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get instrJokerRevealWordDesc =>
-      'Révèle un mot entier de la réponse (ou un tiers des lettres si le titre n\'a qu\'un seul mot).';
+      'Révèle un mot entier de la réponse, au plus 40 % des lettres à trouver (sinon le plus court). Si le titre n\'a qu\'un seul mot, il n\'en dévoile qu\'environ un tiers des lettres.';
 
   @override
   String get instrJokerRedLabel => 'Personnage (rouge)';

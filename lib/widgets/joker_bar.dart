@@ -16,8 +16,13 @@ class JokerBar extends StatelessWidget {
   /// Joker rouge épuisé touché (nom orange à débloquer) : pub garantie si
   /// elle est encore disponible sur ce niveau, sinon explication.
   final VoidCallback onRedJokerEmpty;
+
+  /// Titre d'un seul mot, première fois : demande au joueur s'il veut quand
+  /// même utiliser « Révéler un mot », qui n'y dévoile qu'un tiers des lettres.
+  final Future<bool> Function()? confirmRevealWordNerf;
   final JokerFx? fx;
-  const JokerBar({super.key, required this.onWatchAdForJoker, required this.onRedJokerEmpty, this.fx});
+  const JokerBar(
+      {super.key, required this.onWatchAdForJoker, required this.onRedJokerEmpty, this.confirmRevealWordNerf, this.fx});
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +92,11 @@ class JokerBar extends StatelessWidget {
     );
   }
 
+  void _revealWord(GameState game, JokerKind kind, Color color) {
+    final slots = game.useRevealWordJoker();
+    fx?.beam(kind, color, [for (final i in slots) 'slot:$i']);
+  }
+
   void _onTap(GameState game, JokerKind kind, int shown, Color color) {
     if (shown <= 0) {
       if (kind == JokerKind.red) onRedJokerEmpty();
@@ -102,8 +112,14 @@ class JokerBar extends StatelessWidget {
       case JokerKind.hint:
         if (game.useHintJoker() != null) fx?.beam(kind, color, ['hint']);
       case JokerKind.revealWord:
-        final slots = game.useRevealWordJoker();
-        fx?.beam(kind, color, [for (final i in slots) 'slot:$i']);
+        final confirm = confirmRevealWordNerf;
+        if (confirm != null && game.revealWordIsNerfed && !game.revealWordNerfExplained) {
+          confirm().then((use) {
+            if (use) _revealWord(game, kind, color);
+          });
+          return;
+        }
+        _revealWord(game, kind, color);
       case JokerKind.actor:
       case JokerKind.character:
       case JokerKind.red:

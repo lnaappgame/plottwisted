@@ -259,6 +259,108 @@ class _GameScreenState extends State<GameScreen> {
   /// Joker rouge épuisé : pub garantie pour 1 joker rouge, limitée à une
   /// fois par niveau concerné (voir [GameState.peutRegarderPubJokerRouge]) ;
   /// sinon, rappel des autres façons d'en obtenir.
+  /// Conseil « tuiles ou clavier », une seule fois (voir [GameState.inputModeTipDue]),
+  /// avec le choix du mode directement dans le pop-up.
+  void _maybeShowInputModeTip() {
+    final game = context.read<GameState>();
+    final settings = context.read<AppSettings>();
+    if (!game.inputModeTipDue) return;
+    settings.markInputModeTipShown();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    final modes = [('tiles', t.settingsInputTiles), ('azerty', t.settingsInputAzerty), ('qwerty', t.settingsInputQwerty)];
+    showDialog(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: colors.bgPanel2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: AppColors.gold.withOpacity(0.6)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(22, 20, 22, 18),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(t.tipInputTitle,
+                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 20, color: AppColors.goldBright)),
+              const SizedBox(height: 12),
+              Text(t.tipInputBody,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5)),
+              const SizedBox(height: 18),
+              for (final (mode, label) in modes) ...[
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: settings.inputMode == mode ? AppColors.gold.withOpacity(0.18) : null,
+                    side: BorderSide(color: AppColors.gold.withOpacity(settings.inputMode == mode ? 1 : 0.4)),
+                  ),
+                  onPressed: () {
+                    settings.setInputMode(mode);
+                    Navigator.of(dialogContext).pop();
+                  },
+                  child: Text(label,
+                      style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: AppColors.goldBright)),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// « Révéler un mot » sur un titre d'un seul mot, la première fois : le
+  /// joueur est prévenu qu'il ne dévoilera qu'un tiers des lettres et peut
+  /// garder son joker. Retourne true pour l'utiliser quand même.
+  Future<bool> _confirmRevealWordNerf() async {
+    final game = context.read<GameState>();
+    final settings = context.read<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    final use = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: colors.bgPanel2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: AppColors.gold.withOpacity(0.6)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(22, 20, 22, 14),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(t.nerfRevealWordTitle,
+                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 20, color: AppColors.goldBright)),
+              const SizedBox(height: 12),
+              Text(t.nerfRevealWordBody(game.revealWordNerfCount),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5)),
+              const SizedBox(height: 18),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                child: Text(t.nerfRevealWordUse,
+                    style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: colors.cream)),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: Text(t.commonCancel, style: AppTextStyles.body(size: 13, color: colors.muted)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    // Prévenu une fois, qu'il ait utilisé le joker ou non.
+    game.markRevealWordNerfExplained();
+    return use ?? false;
+  }
+
   Future<void> _onRedJokerEmpty() async {
     final game = context.read<GameState>();
     final t = AppLocalizations.of(context);
@@ -574,12 +676,13 @@ class _GameScreenState extends State<GameScreen> {
                     const SizedBox(height: 18),
                     AnswerRow(highlightSolved: _revealingAnswer, fx: _fx),
                     const SizedBox(height: 18),
-                    LetterPool(fx: _fx),
+                    LetterPool(fx: _fx, onTileTapped: _maybeShowInputModeTip),
                     const SizedBox(height: 18),
                     JokerBar(
                       fx: _fx,
                       onWatchAdForJoker: _onWatchAdForJoker,
                       onRedJokerEmpty: _onRedJokerEmpty,
+                      confirmRevealWordNerf: _confirmRevealWordNerf,
                     ),
                     const SizedBox(height: 10),
                     Row(

@@ -134,6 +134,7 @@ class GameState extends ChangeNotifier {
         'allWorldsCompleted': allWorldsCompleted,
         'allWorldsCompletedAtMax': _allWorldsCompletedAtMax,
         'solvedPending': _solvedPendingKey,
+        'revealWordNerfExplained': revealWordNerfExplained,
         'level': _levelJson(),
       };
 
@@ -287,6 +288,7 @@ class GameState extends ChangeNotifier {
     // on le recharge ici (avant tout affichage) pour que l'écran de jeu
     // rouvre directement sa page de révélation (voir hasPendingSolve).
     _solvedPendingKey = data['solvedPending'] as String?;
+    revealWordNerfExplained = data['revealWordNerfExplained'] as bool? ?? revealWordNerfExplained;
     final savedLevel = data['level'];
     _savedLevel = savedLevel is Map ? savedLevel.cast<String, dynamic>() : null;
     if (hasPendingSolve) loadPuzzle();
@@ -410,6 +412,31 @@ class GameState extends ChangeNotifier {
   // ─── Échecs ───
   int failStreak = 0;
   bool adCloseExplained = false; // affiche le toast d'explication une seule fois
+
+  // « Révéler un mot » sur un titre d'un seul mot ne dévoile qu'un tiers des
+  // lettres : le joueur en est prévenu (avec possibilité d'annuler) la
+  // première fois seulement.
+  bool revealWordNerfExplained = false;
+
+  /// Titre d'un seul mot : « Révéler un mot » n'en dévoile qu'environ un tiers.
+  bool get revealWordIsNerfed => wordRanges.length == 1;
+
+  /// Nombre de lettres que « Révéler un mot » dévoilerait sur un titre d'un seul mot.
+  int get revealWordNerfCount {
+    if (wordRanges.length != 1) return 0;
+    final n = wordRanges[0].where((i) => !slots[i].isAuto && !lockedSlots.contains(i)).length;
+    return n == 0 ? 0 : max(1, (n / 3).ceil());
+  }
+
+  void markRevealWordNerfExplained() {
+    revealWordNerfExplained = true;
+    notifyListeners();
+  }
+
+  /// Conseil sur le mode de saisie (tuiles ou clavier) : une seule fois, à la
+  /// première tuile touchée à partir du niveau 4 du tutoriel (ou du 1-1 si
+  /// le tutoriel a été sauté ; tout de suite pour un joueur déjà plus loin).
+  bool get inputModeTipDue => !settings.inputModeTipShown && !(inTutorial && currentLevelNumber < 4);
 
   // ─── Reprise de partie ───
   // gameStarted : une partie a déjà été lancée au moins une fois (permet à

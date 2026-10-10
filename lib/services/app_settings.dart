@@ -40,6 +40,7 @@ class AppSettings extends ChangeNotifier {
   // 'tiles' (tuiles mélangées, par défaut), 'azerty' ou 'qwerty' (clavier
   // à l'écran, lettres proposées en surbrillance).
   String inputMode = 'tiles';
+  bool inputModeTipShown = false; // conseil « tuiles ou clavier » déjà montré (une seule fois)
 
   /// [playerName] tel qu'affiché à l'écran : si le joueur n'a jamais
   /// personnalisé son pseudo (toujours la valeur par défaut FR d'origine),
@@ -85,6 +86,7 @@ class AppSettings extends ChangeNotifier {
   void setAvatar(String emoji) { avatar = emoji; notifyListeners(); }
   void setLocale(String value) { locale = value; notifyListeners(); }
   void setInputMode(String value) { inputMode = value; notifyListeners(); }
+  void markInputModeTipShown() { inputModeTipShown = true; notifyListeners(); }
 
   void setPlayerId(String value) {
     final trimmed = value.trim();
@@ -115,6 +117,7 @@ class AppSettings extends ChangeNotifier {
         'avatar': avatar,
         'reviewRequested': reviewRequested,
         'inputMode': inputMode,
+        'inputModeTipShown': inputModeTipShown,
         'firstLaunchDay': firstLaunchDay.toIso8601String(),
       };
 
@@ -141,6 +144,7 @@ class AppSettings extends ChangeNotifier {
     locale = data['locale'] as String? ?? locale;
     final mode = data['inputMode'] as String?;
     inputMode = const ['tiles', 'azerty', 'qwerty'].contains(mode) ? mode! : 'tiles';
+    inputModeTipShown = data['inputModeTipShown'] as bool? ?? false;
     playerName = data['playerName'] as String? ?? playerName;
     playerId = data['playerId'] as String? ?? playerId;
     avatar = data['avatar'] as String? ?? avatar;

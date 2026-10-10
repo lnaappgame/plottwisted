@@ -219,6 +219,12 @@
   "jokerAdUnlockSubtitle": "🎬 ad → joker",
   "jokerHintUsedSubtitle": "used · 🎬",
   "jokerRedLockedToast": "No more red jokers for today on this level — earn one via the weekly puzzle's global top 10%, or in the shop.",
+  "tipInputTitle": "⌨️ Tiles or keyboard?",
+  "tipInputBody": "You can place letters with the shuffled tiles, or with an AZERTY or QWERTY keyboard where the offered letters light up. Pick your mode: you can change it anytime in Settings.",
+  "nerfRevealWordTitle": "📖 One-word title",
+  "nerfRevealWordBody": "This title is a single word: “Reveal a word” will only uncover about a third of its letters ({count} here), not the whole word.",
+  "@nerfRevealWordBody": {"placeholders": {"count": {"type": "int"}}},
+  "nerfRevealWordUse": "USE ANYWAY",
 
   "pitchDifferentColorHint": "Tap a name whose color is different from the joker you selected.",
 
@@ -262,7 +268,7 @@
   "instrJokerHintLabel": "Hint",
   "instrJokerHintDesc": "Reveals an extra clue about the film, shown below the pitch.",
   "instrJokerRevealWordLabel": "Reveal a word",
-  "instrJokerRevealWordDesc": "Reveals a whole word of the answer (or a third of the letters if the title is a single word).",
+  "instrJokerRevealWordDesc": "Reveals a whole word of the answer, at most 40% of the letters to find (otherwise the shortest one). If the title is a single word, it only uncovers about a third of its letters.",
   "instrJokerRedLabel": "Character (red)",
   "instrJokerRedDesc": "Turns an orange name red (the Actor/Character jokers then take over normally). Only appears on puzzles with an orange name. Obtained 3 ways: a guaranteed ad (once per level concerned), the weekly puzzle's global top 10%, or the shop.",
   "instrJokerSkipLabel": "Skip for good",

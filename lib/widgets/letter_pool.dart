@@ -11,7 +11,9 @@ import 'letter_keyboard.dart';
 
 class LetterPool extends StatelessWidget {
   final JokerFx? fx;
-  const LetterPool({super.key, this.fx});
+  /// Appelé après chaque lettre placée (conseil sur le mode de saisie, voir GameScreen).
+  final VoidCallback? onTileTapped;
+  const LetterPool({super.key, this.fx, this.onTileTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class LetterPool extends StatelessWidget {
           if (settings.vibrationsOn) HapticFeedback.lightImpact();
           if (settings.sfxOn) sound.playTap();
           game.onLetterTap(tile);
+          onTileTapped?.call();
         },
       );
     }
@@ -63,6 +66,7 @@ class LetterPool extends StatelessWidget {
               if (settings.vibrationsOn) HapticFeedback.lightImpact();
               if (settings.sfxOn) sound.playTap();
               game.onLetterTap(tile);
+              onTileTapped?.call();
             },
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 200),

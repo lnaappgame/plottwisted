@@ -221,6 +221,12 @@
   "jokerAdUnlockSubtitle": "🎬 pub → joker",
   "jokerHintUsedSubtitle": "utilisé · 🎬",
   "jokerRedLockedToast": "Plus de joker rouge pour aujourd'hui sur ce niveau — obtiens-en via le top 10% mondial de L'énigme de la semaine ou dans la boutique.",
+  "tipInputTitle": "⌨️ Tuiles ou clavier ?",
+  "tipInputBody": "Tu peux placer les lettres avec les tuiles mélangées, ou avec un clavier AZERTY ou QWERTY où les lettres proposées s'allument. Choisis ton mode : tu pourras le changer à tout moment dans les Paramètres.",
+  "nerfRevealWordTitle": "📖 Titre en un seul mot",
+  "nerfRevealWordBody": "Ce titre ne compte qu'un seul mot : « Révéler un mot » ne dévoilera qu'environ un tiers de ses lettres ({count} ici), pas le mot entier.",
+  "@nerfRevealWordBody": {"placeholders": {"count": {"type": "int"}}},
+  "nerfRevealWordUse": "UTILISER QUAND MÊME",
 
   "pitchDifferentColorHint": "Touche un nom dont la couleur est différente du joker choisi.",
 
@@ -264,7 +270,7 @@
   "instrJokerHintLabel": "Indice",
   "instrJokerHintDesc": "Révèle un indice supplémentaire sur le film, affiché sous le pitch.",
   "instrJokerRevealWordLabel": "Révéler un mot",
-  "instrJokerRevealWordDesc": "Révèle un mot entier de la réponse (ou un tiers des lettres si le titre n'a qu'un seul mot).",
+  "instrJokerRevealWordDesc": "Révèle un mot entier de la réponse, au plus 40 % des lettres à trouver (sinon le plus court). Si le titre n'a qu'un seul mot, il n'en dévoile qu'environ un tiers des lettres.",
   "instrJokerRedLabel": "Personnage (rouge)",
   "instrJokerRedDesc": "Fait passer un nom orange en rouge (les jokers Acteur/Personnage prennent ensuite le relais normalement). N'apparaît que sur les énigmes avec un nom orange. S'obtient de 3 façons : une pub garantie (une fois par niveau concerné), le top 10% mondial de L'énigme de la semaine, ou la boutique.",
   "instrJokerSkipLabel": "Passer définitivement",
