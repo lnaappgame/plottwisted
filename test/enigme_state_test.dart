@@ -106,6 +106,16 @@ void main() {
     expect(state.tempsAvantProchaineLettre, Duration.zero);
   });
 
+  test('tout révélé : le pitch est complet dans les deux langues, même après un changement de langue', () {
+    for (var index = 0; index < kEnigmes.length; index++) {
+      final state = _state(heuresEcoulees: 24 * 7, index: index);
+      for (final locale in ['fr', 'en', 'fr']) {
+        state.locale = locale;
+        expect(state.texteRevele, state.enigme.texteFor(locale), reason: 'énigme $index ($locale)');
+      }
+    }
+  });
+
   test('le badge (année) ne se révèle qu\'une fois le texte épuisé', () {
     // APOCALYPSE NOW : 138 caractères alphanumériques + badge "1979" (4
     // chiffres), avec 10 lettres déjà acquises au départ (kEnigmeLettresDepart).

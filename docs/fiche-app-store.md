@@ -31,7 +31,7 @@ Simple à comprendre, difficile à lâcher : chaque couleur de nom cache une rè
 
 QUATRE FAÇONS DE JOUER
 • Les mondes — des centaines de films classés par thème (blockbusters, classiques, films cultes...), du niveau facile à l'extrême
-• Le Défi du jour — un thème, 7 indices, 7 acteurs : associe chaque indice au bon nom, le plus vite possible
+• Le Défi du jour — un thème, une série d'indices : associe chaque indice à la bonne réponse, le plus vite possible
 • L'énigme de la semaine — la même énigme pour tous les joueurs, une nouvelle lettre dévoilée régulièrement, et un classement mondial
 • Multijoueur — affronte un autre joueur sur le même pitch et grimpe dans le classement
 
@@ -72,7 +72,7 @@ Easy to learn, hard to put down: every name color hides a rule. Blue? That's the
 
 FOUR WAYS TO PLAY
 • Worlds — hundreds of movies grouped by theme (blockbusters, classics, cult films...), from easy to extreme
-• Daily Challenge — one theme, 7 clues, 7 actors: match each clue to the right name, as fast as you can
+• Daily Challenge — one theme, a series of clues: match each clue to the right answer, as fast as you can
 • Puzzle of the Week — the same puzzle for every player, a new letter revealed over time, and a worldwide ranking
 • Multiplayer — face another player on the same pitch and climb the ranks
 

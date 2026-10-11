@@ -331,11 +331,15 @@ class EnigmeState extends ChangeNotifier {
   // révéler — figé par énigme via un seed basé sur son index dans la liste
   // (jamais sur l'horloge ni sur hashCode, pour rester identique à tout
   // jamais pour tous les joueurs, quelle que soit la plateforme).
+  // Le cache dépend aussi de la langue : les positions du texte français ne
+  // tombent pas sur les lettres du texte anglais (après un changement de
+  // langue, le pitch restait troué même entièrement révélé).
   List<int> _ordreRevelationCache = [];
   int _ordreRevelationForIndex = -1;
+  String? _ordreRevelationForLocale;
 
   List<int> get _ordreRevelation {
-    if (_ordreRevelationForIndex != currentIndex) {
+    if (_ordreRevelationForIndex != currentIndex || _ordreRevelationForLocale != locale) {
       final positions = <int>[];
       final chars = enigme.texteFor(locale).split('');
       for (var i = 0; i < chars.length; i++) {
@@ -344,6 +348,7 @@ class EnigmeState extends ChangeNotifier {
       positions.shuffle(Random(currentIndex * 7919 + 11));
       _ordreRevelationCache = positions;
       _ordreRevelationForIndex = currentIndex;
+      _ordreRevelationForLocale = locale;
     }
     return _ordreRevelationCache;
   }

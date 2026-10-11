@@ -36,8 +36,8 @@ ou en orange ? Attention, ce n'est pas si simple...
 🧩 DES MODES POUR CHAQUE ENVIE
 • Les mondes — des centaines de films organisés par thème, du niveau
   facile à l'extrême
-• Défi du jour — un thème, 7 indices, 7 acteurs : associe chaque indice
-  au bon nom, le plus vite possible
+• Défi du jour — un thème, une série d'indices : associe chaque indice
+  à la bonne réponse, le plus vite possible
 • L'énigme de la semaine — la même énigme pour tous les joueurs, une
   nouvelle lettre dévoilée régulièrement, et un classement mondial
 • Multijoueur — affronte un autre joueur sur le même pitch et gagne la
