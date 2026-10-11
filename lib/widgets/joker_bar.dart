@@ -51,13 +51,13 @@ class JokerBar extends StatelessWidget {
         Wrap(
           alignment: WrapAlignment.center,
           spacing: 8,
-          runSpacing: 14,
+          runSpacing: 12,
           children: [
             for (final kind in kinds) _button(context, game, colors, t, kind),
           ],
         ),
         if (!game.inTutorial) ...[
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           _WinJokerButton(label: t.jokerWinOne, colors: colors, onTap: onWatchAdForJoker),
         ],
       ],
@@ -146,16 +146,18 @@ class _WinJokerButton extends StatelessWidget {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 324),
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 6),
           decoration: BoxDecoration(
             color: AppColors.gold.withOpacity(0.12),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: AppColors.gold.withOpacity(0.7), width: 1.4),
           ),
-          child: Column(
+          // Sur une seule ligne : la barre de jokers prend moins de hauteur.
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(label, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
-              const SizedBox(height: 2),
+              const SizedBox(width: 8),
               Text('🎬▶️', style: AppTextStyles.body(size: 10, color: colors.muted)),
             ],
           ),
@@ -246,7 +248,7 @@ class _JokerButtonState extends State<_JokerButton> with TickerProviderStateMixi
                 children: [
                   Container(
                     width: 100,
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 6),
                     decoration: BoxDecoration(
                       color: Color.lerp(background, accent.withOpacity(0.45), glow),
                       borderRadius: BorderRadius.circular(10),

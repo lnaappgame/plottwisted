@@ -51,7 +51,10 @@ workflows:
           # au-dessus du dernier envoyé (Apple refuse un numéro déjà utilisé).
           PUBSPEC_BUILD=$(grep '^version:' pubspec.yaml | sed -E 's/.*\+([0-9]+).*/\1/')
           LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
-          NEXT=$(( ${LATEST:-0} + 1 ))
+          # BUILD_OFFSET (workflow « vraies pubs ») : lancé juste après un build
+          # de test, il ne doit pas reprendre le même numéro si Apple n'a pas
+          # encore enregistré ce dernier.
+          NEXT=$(( ${LATEST:-0} + 1 + ${BUILD_OFFSET:-0} ))
           [ "$NEXT" -lt "$PUBSPEC_BUILD" ] && NEXT=$PUBSPEC_BUILD
           echo "Build iOS n° $NEXT"
           flutter build ipa --release \
@@ -84,6 +87,7 @@ workflows:
       vars:
         APP_STORE_APPLE_ID: 6820246879
         REAL_ADS_FLAG: "--dart-define=REAL_ADS=true"
+        BUILD_OFFSET: 1
     scripts: *ios_signed_scripts
     artifacts:
       - build/ios/ipa/*.ipa

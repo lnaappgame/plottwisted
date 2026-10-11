@@ -103,6 +103,26 @@ class _GameScreenState extends State<GameScreen> {
     if (_scroll.hasClients) _scroll.jumpTo(0);
   }
 
+  // Dernière lettre posée : la page défile jusqu'à VALIDER s'il est sous le
+  // bord de l'écran (titres sur deux lignes, petits téléphones).
+  final GlobalKey _validateKey = GlobalKey();
+  bool _gridWasFull = false;
+
+  void _watchGridFull(GameState game) {
+    final full = game.gridFull && !_revealingAnswer;
+    if (full && !_gridWasFull) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final target = _validateKey.currentContext;
+        if (!mounted || target == null) return;
+        Scrollable.ensureVisible(target,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOut,
+            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd);
+      });
+    }
+    _gridWasFull = full;
+  }
+
   void _flushQueuedReward() {
     final reward = _queuedReward;
     if (reward == null || !mounted) return;
@@ -581,6 +601,7 @@ class _GameScreenState extends State<GameScreen> {
     final game = context.watch<GameState>();
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    _watchGridFull(game);
 
     if (game.shouldShowComingSoonPage) {
       final t = AppLocalizations.of(context);
@@ -671,13 +692,13 @@ class _GameScreenState extends State<GameScreen> {
                         const SizedBox(width: 36),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 10),
                     PitchCard(fx: _fx),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
                     AnswerRow(highlightSolved: _revealingAnswer, fx: _fx),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
                     LetterPool(fx: _fx, onTileTapped: _maybeShowInputModeTip),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
                     JokerBar(
                       fx: _fx,
                       onWatchAdForJoker: _onWatchAdForJoker,
@@ -686,6 +707,7 @@ class _GameScreenState extends State<GameScreen> {
                     ),
                     const SizedBox(height: 10),
                     Row(
+                      key: _validateKey,
                       children: [
                         Expanded(
                           child: OutlinedButton(

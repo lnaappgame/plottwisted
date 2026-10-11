@@ -797,12 +797,16 @@ class GameState extends ChangeNotifier {
     }
   }
 
+  /// Toutes les cases de la réponse sont remplies (prête à valider).
+  bool get gridFull => puzzleLoaded && slots.isNotEmpty && _allFilled;
+
+  bool get _allFilled =>
+      List.generate(slots.length, (i) => slots[i].isSpace || slots[i].isAuto || guess[i] != null).every((v) => v);
+
   /// Résultat de la validation : "incomplete", "wrong" (au moins un mot
   /// faux), ou "solved".
   String validate() {
-    final allFilled =
-        List.generate(slots.length, (i) => slots[i].isSpace || slots[i].isAuto || guess[i] != null).every((v) => v);
-    if (!allFilled) return 'incomplete';
+    if (!_allFilled) return 'incomplete';
 
     for (var w = 0; w < wordRanges.length; w++) {
       if (lockedWords.contains(w)) continue;

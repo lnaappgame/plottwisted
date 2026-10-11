@@ -74,4 +74,54 @@ void main() {
     expect(offset(), 0);
     await tester.pump(const Duration(seconds: 2));
   });
+
+  testWidgets('dernière lettre posée : la page descend jusqu\'à VALIDER', (tester) async {
+    tester.view.physicalSize = const Size(360, 560);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final saveService = SaveService();
+    final settings = AppSettings(saveService: saveService)
+      ..sfxOn = false
+      ..vibrationsOn = false;
+    final game = GameState(adService: AdService(), saveService: saveService, settings: settings);
+    game.enterWorld(1);
+    game.currentLevelNumber = 1;
+    game.loadPuzzle();
+
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: settings),
+          ChangeNotifierProvider.value(value: game),
+          ChangeNotifierProvider(create: (_) => StreakState(saveService: saveService)),
+          Provider(create: (_) => SoundService()),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('fr'),
+          home: GameScreen(onBackToMenu: () {}),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(tester.getRect(find.text('VALIDER')).top, greaterThan(560)); // sous le bord au départ
+
+    final lettres = game.slots.where((s) => !s.isSpace && !s.isAuto).toList();
+    for (final s in lettres.take(lettres.length - 1)) {
+      game.onLetterTap(game.pool.firstWhere((t) => t.letter == s.char && !t.used && !t.eliminated));
+    }
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(tester.getRect(find.text('VALIDER')).top, greaterThan(560)); // pas encore : grille incomplète
+
+    final derniere = lettres.last;
+    game.onLetterTap(game.pool.firstWhere((t) => t.letter == derniere.char && !t.used && !t.eliminated));
+    await tester.pump();
+    for (var i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    expect(tester.getRect(find.text('VALIDER')).bottom, lessThanOrEqualTo(560));
+    await tester.pump(const Duration(seconds: 2));
+  });
 }
