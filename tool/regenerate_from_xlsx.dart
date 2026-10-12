@@ -12,7 +12,7 @@ import '../lib/data/defis_data.dart';
 import '../lib/data/enigmes_data.dart';
 import '../lib/data/multiplayer_data.dart';
 
-const _xlsxPath = r'C:\Users\Neophilis\Downloads\cine_devinette_CORRIGE_v2.xlsx';
+const _xlsxPath = r'C:\Users\Neophilis\Documents\cine-devinette\exports\Base-de-donnees-PlotTwisted-2026-10-13.xlsx';
 const _extractDir = r'C:\Users\NEOPHI~1\AppData\Local\Temp\claude\C--Users-Neophilis-Documents-cine-devinette\ff928cde-e881-4c2d-9efa-ad7518acd640\scratchpad\xlsx_extract_verified';
 
 void _extractXlsx() {
@@ -33,19 +33,34 @@ String _unescapeXml(String s) {
   return out;
 }
 
+// Chaînes partagées : un fichier enregistré par Excel range ses textes dans
+// xl/sharedStrings.xml et les cellules n'en donnent que l'index (t="s").
+List<String>? _shared;
+List<String> _sharedStrings() => _shared ??= () {
+      final file = File('$_extractDir/xl/sharedStrings.xml');
+      if (!file.existsSync()) return <String>[];
+      return [
+        for (final si in RegExp(r'<si>(.*?)</si>', dotAll: true).allMatches(file.readAsStringSync()))
+          _unescapeXml(RegExp(r'<t[^>]*>(.*?)</t>', dotAll: true).allMatches(si.group(1)!).map((m) => m.group(1)!).join()),
+      ];
+    }();
+
 Map<String, String> _parseRowCells(String rowXml) {
   final out = <String, String>{};
-  final cellMatches = RegExp(r'<c r="([A-Z]+)\d+"([^>]*)>(.*?)</c>', dotAll: true).allMatches(rowXml);
+  // Les cellules vides écrites en abrégé (<c .../>) ne doivent pas avaler la
+  // cellule suivante.
+  final cellMatches = RegExp(r'<c r="([A-Z]+)\d+"([^>]*?)(?:/>|>(.*?)</c>)', dotAll: true).allMatches(rowXml);
   for (final cm in cellMatches) {
     final col = cm.group(1)!;
-    final cellXml = cm.group(3)!;
-    final isMatch = RegExp(r'<is><t[^>]*>(.*?)</t></is>', dotAll: true).firstMatch(cellXml);
+    final cellXml = cm.group(3) ?? '';
+    final isMatch = RegExp(r'<is>(.*?)</is>', dotAll: true).firstMatch(cellXml);
     if (isMatch != null) {
-      out[col] = _unescapeXml(isMatch.group(1)!);
+      out[col] = _unescapeXml(RegExp(r'<t[^>]*>(.*?)</t>', dotAll: true).allMatches(isMatch.group(1)!).map((m) => m.group(1)!).join());
       continue;
     }
     final vMatch = RegExp(r'<v>(.*?)</v>', dotAll: true).firstMatch(cellXml);
-    if (vMatch != null) out[col] = _unescapeXml(vMatch.group(1)!);
+    if (vMatch == null) continue;
+    out[col] = cm.group(2)!.contains('t="s"') ? _sharedStrings()[int.parse(vMatch.group(1)!)] : _unescapeXml(vMatch.group(1)!);
   }
   return out;
 }
@@ -114,12 +129,12 @@ void _regeneratePuzzles() {
     dataRows.add(row);
   }
   // Les lignes Monde=0 sont le tutoriel ; le reste, groupe par Monde, sont
-  // les mondes en jeu (1..20 dans le perimetre V1 actuel). Lecture brute de
+  // les mondes en jeu (tous ceux places avant la ligne LIMITE). Lecture brute de
   // la colonne A (pas via _cell, qui traite "0" comme "vide" — a raison pour
   // les champs optionnels, a tort ici ou 0 est une valeur de monde valide).
   String worldNum(Map<String, String> r) => (r['A'] ?? '').trim();
   final tutorialRows = dataRows.where((r) => worldNum(r) == '0').toList();
-  final worldNumbers = dataRows.map((r) => int.tryParse(worldNum(r)) ?? -1).toSet().where((n) => n >= 1 && n <= 20).toList()..sort();
+  final worldNumbers = dataRows.map((r) => int.tryParse(worldNum(r)) ?? -1).toSet().where((n) => n >= 1).toList()..sort();
 
   String personRefLit(Map<String, String> row, String colColor, String colReal, String colRealUs, String colActor,
       String colActorUs, String colDecoy, String colDecoyUs, String colSame, String colSameUs, String colViolet, String colVioletUs) {
@@ -165,8 +180,8 @@ void _regeneratePuzzles() {
   final buf = StringBuffer();
   buf.writeln("import '../models/puzzle.dart';");
   buf.writeln();
-  buf.writeln('// Fichier regenere automatiquement depuis cine_devinette_CORRIGE_v2.xlsx');
-  buf.writeln('// (derniere MAJ V1, 2026-09-15). Perimetre inchange : tutoriel + mondes 1 a 20.');
+  buf.writeln('// Fichier regenere automatiquement depuis le tableur de la base de donnees.');
+  buf.writeln('// Perimetre : tutoriel + tous les mondes places avant la ligne LIMITE (1 a 25 au 13/10/2026).');
   buf.writeln('// Pour regenerer, relancer tool/regenerate_from_xlsx.dart.');
   buf.writeln();
   buf.writeln('final List<Puzzle> kTutorialPuzzles = [');
@@ -390,6 +405,11 @@ void _regenerateMultiplayer() {
 
   String typeEnumFromLabel(String label) => switch (label.trim().toLowerCase()) {
         'film' => 'film',
+        'personnage' => 'personnage',
+        'acteur' => 'acteur',
+        'actrice' => 'actrice',
+        'realisateur' || 'réalisateur' => 'realisateur',
+        'realisatrice' || 'réalisatrice' => 'realisatrice',
         'personnalite' => 'personnalite',
         'personnalité' => 'personnalite',
         'serie' => 'serie',

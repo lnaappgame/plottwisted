@@ -1,10 +1,7 @@
 import '../models/puzzle.dart';
 
-// Fichier regenere automatiquement depuis cine_devinette_CORRIGE_v2.xlsx
-// (derniere MAJ V1, 2026-09-15). Tutoriel + mondes 1 a 20 regeneres par l'outil.
-// Mondes 21 a 25 ajoutes le 13/10/2026 depuis Base-de-donnees-PlotTwisted-bundle10.xlsx
-// (anciens mondes 24, 32, 38, 43, 47, renumerotes). Tant que le tableur les garde
-// apres la ligne LIMITE sous leurs anciens numeros, une regeneration les effacerait.
+// Fichier regenere automatiquement depuis le tableur de la base de donnees.
+// Perimetre : tutoriel + tous les mondes places avant la ligne LIMITE (1 a 25 au 13/10/2026).
 // Pour regenerer, relancer tool/regenerate_from_xlsx.dart.
 
 final List<Puzzle> kTutorialPuzzles = [
@@ -9639,7 +9636,6 @@ final List<GameWorld> kWorlds = [
     ),
   ),
   ]),
-  // Monde 21 : ancien monde 24 du tableur (ajouté le 13/10/2026).
   GameWorld(number: 21, categoryLabel: 'Séries cultes', categoryLabelUs: 'Cult TV Shows', puzzles: [
     Puzzle(
     title: 'DR HOUSE',
@@ -10112,7 +10108,6 @@ final List<GameWorld> kWorlds = [
     ),
   ),
   ]),
-  // Monde 22 : ancien monde 32 du tableur (ajouté le 13/10/2026).
   GameWorld(number: 22, categoryLabel: 'Fantastique & Magie', categoryLabelUs: 'Fantasy & Magic', puzzles: [
     Puzzle(
     title: 'LE MAGICIEN D\'OZ',
@@ -10585,7 +10580,6 @@ final List<GameWorld> kWorlds = [
     ),
   ),
   ]),
-  // Monde 23 : ancien monde 38 du tableur (ajouté le 13/10/2026).
   GameWorld(number: 23, categoryLabel: 'Père de...', categoryLabelUs: 'Father of...', puzzles: [
     Puzzle(
     title: 'DOUZE HOMMES EN COLÈRE',
@@ -11058,7 +11052,6 @@ final List<GameWorld> kWorlds = [
     ),
   ),
   ]),
-  // Monde 24 : ancien monde 43 du tableur (ajouté le 13/10/2026).
   GameWorld(number: 24, categoryLabel: 'Animation', categoryLabelUs: 'Animation', puzzles: [
     Puzzle(
     title: 'TOY STORY',
@@ -11531,7 +11524,6 @@ final List<GameWorld> kWorlds = [
     ),
   ),
   ]),
-  // Monde 25 : ancien monde 47 du tableur (ajouté le 13/10/2026).
   GameWorld(number: 25, categoryLabel: 'Sport', categoryLabelUs: 'Sports', puzzles: [
     Puzzle(
     title: 'MILLION DOLLAR BABY',
