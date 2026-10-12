@@ -2,8 +2,6 @@
 
 *Dernière mise à jour : [à compléter à la publication]*
 
-> **Brouillon de travail — non relu par un juriste.** Version étoffée pour couvrir l'ensemble des fonctionnalités réelles de l'application (achats intégrés, classements en ligne, connexion Google optionnelle, multijoueur). À faire valider par un professionnel du droit avant publication sur les stores. Les mentions entre crochets `[ ]` sont à compléter ou à confirmer.
-
 ## Sommaire
 
 1. Objet et acceptation

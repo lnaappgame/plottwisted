@@ -2,8 +2,6 @@
 
 *Dernière mise à jour : [à compléter à la publication]*
 
-> **Brouillon de travail — non relu par un juriste.** Version corrigée pour refléter fidèlement les traitements de données réellement effectués par l'application, y compris la sauvegarde cloud liée à un compte Google et les services Firebase (classements, mesure d'audience, diagnostic technique), absents de la version précédente. À faire valider par un professionnel du droit avant publication sur les stores.
-
 ## 1. Éditeur de l'application
 
 L'application mobile **Plot Twist(ed)** est éditée par :
