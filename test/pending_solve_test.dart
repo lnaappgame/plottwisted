@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:cine_devinette/data/puzzles_data.dart';
 import 'package:cine_devinette/l10n/app_localizations.dart';
 import 'package:cine_devinette/screens/game_screen.dart';
 import 'package:cine_devinette/services/ad_service.dart';
@@ -106,27 +107,28 @@ void main() {
 
   testWidgets('fin du contenu avec un seul monde en réserve : on y entre au lieu de reboucler sur le dernier niveau',
       (tester) async {
-    // Cas d'une testeuse (bundle 8) : monde 20 = dernier monde, le 20-6 gardé
-    // pour la fin, et un monde laissé en réserve plus tôt. Le choix n'avait
+    // Cas d'une testeuse (bundle 8) : dernier monde (alors le 20), son niveau 6
+    // gardé pour la fin, et un monde laissé en réserve plus tôt. Le choix n'avait
     // alors qu'une option, et la valider rechargeait le 20-6 : boucle infinie.
     tester.view.physicalSize = const Size(412, 915);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     final saveService = SaveService();
     final seed = _newGame(saveService);
-    seed.enterWorld(20);
+    final last = kWorlds.last.number;
+    seed.enterWorld(last);
     final save = seed.toJson()
       ..['remainingLevels'] = [6]
       ..['currentLevelNumber'] = 6
       ..['worldChoiceReserve'] = 17
-      ..['worldChoiceFrontier'] = 21; // au-delà du dernier monde
+      ..['worldChoiceFrontier'] = last + 1; // au-delà du dernier monde
     await saveService.save(save);
     final game = _newGame(saveService);
     await game.restore();
     expect(game.worldChoiceOptions, [17]);
 
     await _pumpGame(tester, game);
-    await tester.tap(find.text('COMMENCER')); // intro du monde 20 en cours
+    await tester.tap(find.text('COMMENCER')); // intro du dernier monde, en cours
     for (var t = 0; t < 1500; t += 50) {
       await tester.pump(const Duration(milliseconds: 50));
     }
