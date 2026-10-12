@@ -402,8 +402,9 @@ class MultiplayerState extends ChangeNotifier {
     final ordre = _pitchOrdreRevelation;
     final totalAlnum = ordre.length;
     if (totalAlnum == 0) return pitchLoc;
-    final revealMsParChar = kMultiplayerPitchRevealMs / totalAlnum;
-    final unitesRevelees = (tempsEcoule.inMilliseconds / revealMsParChar).floor().clamp(0, totalAlnum);
+    // Calcul en entiers : avec une division décimale, 35000 / (35000 / 30)
+    // donnait 29,999… et la dernière lettre manquait pile à 35 s.
+    final unitesRevelees = (tempsEcoule.inMilliseconds * totalAlnum ~/ kMultiplayerPitchRevealMs).clamp(0, totalAlnum);
     final revealedPositions = ordre.take(unitesRevelees).toSet();
 
     final buffer = StringBuffer();

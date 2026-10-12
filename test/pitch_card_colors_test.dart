@@ -112,4 +112,14 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pump(const Duration(seconds: 1)); // laisse partir la sauvegarde différée
   });
+
+  testWidgets('la ponctuation qui suit un nom reste collée à lui (pas seule en début de ligne)', (tester) async {
+    // 2-1 IRON MAN : « … piéger par {p2}. Son seul moyen… »
+    await _pump(tester, const PitchCard(), world: 2, level: 1);
+    final point = find.text('.');
+    expect(point, findsOneWidget);
+    expect(find.ancestor(of: point, matching: find.byType(Row)), findsOneWidget);
+    expect(find.ancestor(of: find.text('The Dude'), matching: find.byType(Row)), findsOneWidget);
+    await tester.pump(const Duration(seconds: 1)); // laisse partir la sauvegarde différée
+  });
 }

@@ -248,7 +248,9 @@ class _JokerButtonState extends State<_JokerButton> with TickerProviderStateMixi
                 children: [
                   Container(
                     width: 100,
-                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 6),
+                    // Marge du haut gardée pour que la pastille du nombre ne
+                    // morde pas sur un long nom (« RÉVÉLER UN MOT »).
+                    padding: const EdgeInsets.fromLTRB(6, 10, 6, 4),
                     decoration: BoxDecoration(
                       color: Color.lerp(background, accent.withOpacity(0.45), glow),
                       borderRadius: BorderRadius.circular(10),
