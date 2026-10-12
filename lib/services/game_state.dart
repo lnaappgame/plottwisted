@@ -66,6 +66,8 @@ class GameState extends ChangeNotifier {
     // affichée) : on garde la grille commencée et on ne change que les textes.
     if (hasPendingSolve || normalize(currentPuzzle.titleFor(locale)) == normalize(currentPuzzle.titleFor(next))) {
       locale = next;
+      p1Colors = _shownColors('p1', p1Colors);
+      p2Colors = _shownColors('p2', p2Colors);
       if (hintRevealed) revealedHintText = _hintText();
       notifyListeners();
       return;
@@ -76,8 +78,8 @@ class GameState extends ChangeNotifier {
     final keptP1 = p1Colors, keptP2 = p2Colors, keptHint = hintRevealed;
     final keptStart = levelStartTime, keptAds = adsWatchedThisLevel, keptRedAd = redJokerAdWatchedThisLevel;
     loadPuzzle();
-    p1Colors = keptP1;
-    p2Colors = keptP2;
+    p1Colors = _shownColors('p1', keptP1);
+    p2Colors = _shownColors('p2', keptP2);
     hintRevealed = keptHint;
     if (keptHint) revealedHintText = _hintText();
     levelStartTime = keptStart;
@@ -175,8 +177,8 @@ class GameState extends ChangeNotifier {
       return [for (final n in names) byName[n]!];
     }
 
-    p1Colors = colorsOf(saved['p1Colors']) ?? p1Colors;
-    p2Colors = colorsOf(saved['p2Colors']) ?? p2Colors;
+    p1Colors = _shownColors('p1', colorsOf(saved['p1Colors']) ?? p1Colors);
+    p2Colors = _shownColors('p2', colorsOf(saved['p2Colors']) ?? p2Colors);
     if (saved['hintRevealed'] == true) {
       hintRevealed = true;
       revealedHintText = _hintText();
@@ -585,13 +587,27 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Filet de sécurité : un nom vide dans la langue du joueur (contenu pas
+  /// encore traduit) laisserait un trou dans le pitch ; il est alors montré
+  /// en bleu, l'acteur, toujours renseigné.
+  List<NameColor> _shownColors(String slot, List<NameColor> colors) {
+    final person = slot == 'p1' ? currentPuzzle.p1 : currentPuzzle.p2;
+    if (slot == 'p2' && !currentPuzzle.hasP2) return colors;
+    final shown = <NameColor>[];
+    for (final c in colors) {
+      final visible = person.displayFor(c, locale).trim().isEmpty ? NameColor.blue : c;
+      if (!shown.contains(visible)) shown.add(visible);
+    }
+    return shown;
+  }
+
   void loadPuzzle() {
     puzzleLoaded = true;
     locale = settings.locale;
     final world = currentWorld;
     currentPuzzle = world.puzzles[currentLevelNumber - 1];
-    p1Colors = [currentPuzzle.p1InitialColor];
-    p2Colors = [currentPuzzle.p2InitialColor];
+    p1Colors = _shownColors('p1', [currentPuzzle.p1InitialColor]);
+    p2Colors = _shownColors('p2', [currentPuzzle.p2InitialColor]);
     activeNameJoker = null;
     lockedWords = {};
     lockedSlots = {};
