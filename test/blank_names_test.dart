@@ -42,11 +42,11 @@ void main() {
     game.enterWorld(17);
     game.currentLevelNumber = 6;
     game.loadPuzzle();
-    final redFr = game.p1State;
+    final redFr = game.p2State; // la petite Maggie : pas d'autre rôle connu en anglais
     // Changement de langue en plein niveau : la couleur gardée n'a pas de nom
     // en anglais, elle passe en bleu.
     game.settings.setLocale('en');
     _expectNoBlank(game, '17-6 après passage en anglais');
-    expect(game.p1State, isNot(redFr));
+    expect(game.p2State, isNot(redFr));
   });
 }
