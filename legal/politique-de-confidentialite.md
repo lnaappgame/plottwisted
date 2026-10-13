@@ -1,6 +1,6 @@
 # Politique de confidentialité — Plot Twist(ed)
 
-*Dernière mise à jour : [à compléter à la publication]*
+*Dernière mise à jour : 25 septembre 2026*
 
 ## 1. Éditeur de l'application
 
