@@ -21,7 +21,7 @@ const int kMultiplayerTopPercentMinJoueurs = 20;
 /// Chaque énigme réellement jouée par un joueur s'enregistre indépendamment
 /// dans
 /// `multiplayer_runs/{enigmeId}/runs/{autoId}` — le matching se fait manche
-/// par manche, jamais au niveau du match entier (voir docs/multijoueur-elo-spec.md).
+/// par manche, jamais au niveau du match entier (voir notes/multijoueur-elo-spec.md).
 /// Aucune vérification serveur du temps de réponse : comme L'énigme de la
 /// semaine et Défi du jour, on fait confiance au joueur.
 class MultiplayerMatchmakingService {

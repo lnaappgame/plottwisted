@@ -32,7 +32,7 @@ const int kMultiplayerRoundMaxSeconds = 75;
 /// État du mode Multijoueur : match au meilleur des 3 manches (45 à 75s selon
 /// la longueur de la réponse — voir [kMultiplayerRoundBaseSeconds]) contre
 /// des parties fantômes (jamais en temps réel — voir
-/// docs/multijoueur-elo-spec.md). Un fantôme différent est piochée
+/// notes/multijoueur-elo-spec.md). Un fantôme différent est piochée
 /// indépendamment à chaque manche, à un Elo proche du joueur. Toute manche
 /// dont l'énigme piochée n'a pas encore [kMultiplayerCalibrationMinRuns]
 /// vraies parties enregistrées (pour CETTE énigme précisément, quel que
@@ -270,7 +270,7 @@ class MultiplayerState extends ChangeNotifier {
       ghostSolveSeconds = calibrationFallbackSeconds;
       // Pas assez de vraies parties pour cette énigme précise pour un
       // matching Elo fiable : pas de vrai Elo associé non plus, on présume
-      // un niveau égal au joueur (voir docs/multijoueur-elo-spec.md).
+      // un niveau égal au joueur (voir notes/multijoueur-elo-spec.md).
       // Présenté sous un nom fixe plutôt que de laisser deviner qu'il
       // s'agit d'un robot.
       _ghostElosThisMatch.add(eloRating.toDouble());
