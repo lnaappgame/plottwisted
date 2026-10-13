@@ -65,6 +65,16 @@ void main() {
     expect(find.text('0'), findsOneWidget);
   });
 
+  testWidgets('iPhone 6,1" (390 px) : touches pleine largeur, assez grandes pour le doigt', (tester) async {
+    await _pump(tester, _pool(), width: 390);
+    final touche = tester.getSize(find.ancestor(of: find.text('P'), matching: find.byType(AnimatedContainer)));
+    expect(touche.width, greaterThan(31));
+    expect(touche.height, greaterThan(42));
+    // La rangée de 10 touches occupe toute la largeur (marges de 16 px).
+    expect(tester.getTopLeft(find.ancestor(of: find.text('A'), matching: find.byType(AnimatedContainer))).dx,
+        closeTo(16, 1));
+  });
+
   testWidgets('petit écran (320 px) : pas de débordement', (tester) async {
     await _pump(tester, [..._pool(), LetterTile(letter: '1')], width: 320);
     expect(tester.takeException(), isNull);

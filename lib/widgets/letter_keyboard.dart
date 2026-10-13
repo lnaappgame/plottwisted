@@ -42,9 +42,11 @@ class LetterKeyboard extends StatelessWidget {
     ];
     return LayoutBuilder(builder: (context, constraints) {
       const gap = 4.0;
-      // Environ 25 % plus petit que la largeur disponible (demande du 09/10).
-      final keyWidth = ((constraints.maxWidth - 9 * gap) / 10 * 0.75).clamp(18.0, 33.0);
-      final keyHeight = (keyWidth * 1.3).clamp(28.0, 42.0);
+      // Toute la largeur disponible, comme un clavier de téléphone : la
+      // version réduite de 25 % (09/10) était trop petite sous le doigt
+      // (retour du test sur iPhone, 13/10).
+      final keyWidth = ((constraints.maxWidth - 9 * gap) / 10).clamp(22.0, 44.0);
+      final keyHeight = (keyWidth * 1.35).clamp(38.0, 58.0);
       return Column(
         children: [
           for (final (i, row) in rows.indexed) ...[
@@ -105,7 +107,7 @@ class LetterKeyboard extends StatelessWidget {
               Center(
                 child: Text(letter,
                     style: AppTextStyles.tile(
-                        size: (width * 0.5).clamp(11.0, 16.0),
+                        size: (width * 0.52).clamp(13.0, 21.0),
                         color: lit ? colors.cream : colors.muted.withOpacity(0.35))),
               ),
               if (shown.length > 1)
@@ -113,7 +115,7 @@ class LetterKeyboard extends StatelessWidget {
                   top: 2,
                   right: 4,
                   child: Text('${shown.length}',
-                      style: AppTextStyles.body(size: 9, weight: FontWeight.w800, color: AppColors.goldBright)),
+                      style: AppTextStyles.body(size: 10, weight: FontWeight.w800, color: AppColors.goldBright)),
                 ),
             ],
           ),
