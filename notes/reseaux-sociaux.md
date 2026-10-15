@@ -12,8 +12,19 @@ Kit de lancement : noms de comptes, bios, 10 posts « Devine le film », 5 idée
 | **Page Facebook** | Public plus âgé, amateur de quiz ; indispensable pour faire de la pub Meta plus tard | 2 |
 | **X** | Communauté cinéphile, annonces | 3 |
 
-**Nom :** le même partout si possible. À tester dans l'ordre : `@plottwisted.game` → `@plottwistedgame` → `@plottwisted_app` (X refuse les points : `@plottwistedgame`).
-**Nom affiché :** `Plot Twist(ed)`.
+**Comptes créés le 15/10/2026 :**
+
+| Réseau | Identifiant | Adresse |
+|---|---|---|
+| Instagram | `@plottwisted.game` | https://www.instagram.com/plottwisted.game/ |
+| TikTok | `@plottwisted.game` | https://www.tiktok.com/@plottwisted.game |
+| YouTube | `@plottwistedgame` (`@plottwisted.game` était déjà pris) | https://www.youtube.com/@plottwistedgame |
+| X | `@plottwistedgame` (pas de point possible) | https://x.com/plottwistedgame |
+| Facebook | page « Plot Twist-ed » | gérée depuis le profil Facebook de Damien |
+
+Le studio a aussi un Instagram, `@lna.app.game`, et une page Facebook « Lna ». Chaque page Facebook est reliée à l'Instagram correspondant.
+
+**Nom affiché :** `Plot Twist(ed)`, sauf sur Facebook, qui refuse les parenthèses : `Plot Twist-ed`.
 **Inscription :** avec `lna.app.game@gmail.com`, double authentification activée partout.
 **Photo de profil :** l'icône du jeu (`assets/icon/icon.png`).
 **Lien :** `https://lnaappgame.github.io/plottwisted/` jusqu'au lancement, puis les liens des stores (ou une page de liens).
@@ -31,9 +42,13 @@ Kit de lancement : noms de comptes, bios, 10 posts « Devine le film », 5 idée
 **X (160 car.)**
 - FR : `Le quiz ciné où les noms mentent. Un pitch, des noms piégés, un titre à retrouver lettre par lettre. Gratuit sur iPhone et Android.`
 - EN : `The movie quiz where names lie. One pitch, booby-trapped names, a title to rebuild letter by letter. Free on iPhone & Android.`
+- Avant la sortie : `Bientôt gratuit sur iPhone et Android.` / `Coming soon, free on iPhone & Android.` à la fin.
 
 **Page Facebook (« Intro », 101 car.)**
 - FR : `Le quiz ciné où les noms des personnages sont piégés. Gratuit sur iPhone et Android.`
+- Avant la sortie : `Le quiz ciné où les noms des personnages sont piégés. Bientôt gratuit sur iPhone et Android.`
+
+Les versions « avant la sortie » d'Instagram et de TikTok sont dans `exports/bios-reseaux-sociaux-PlotTwisted.md`, le fichier partagé avec la personne qui gère les comptes.
 
 **YouTube (description de la chaîne)**
 ```
