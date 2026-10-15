@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plot Twist(ed)</title>
+<meta name="description" content="Le quiz ciné où les noms mentent. Gratuit sur iPhone et Android.">
+<meta property="og:title" content="Plot Twist(ed)">
+<meta property="og:description" content="Le quiz ciné où les noms mentent : un pitch, des noms piégés, un titre à retrouver lettre par lettre.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Franklin:wght@400;600;700&display=swap">
+<style>
+  :root { --bg: #0C0906; --panel: #1A1410; --fg: #ECE3D2; --muted: #9C8D78; --gold: #C9A24B; --gold-hi: #F0CF7A; --red: #C8536A; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body { background: var(--bg); color: var(--fg); font-family: "Libre Franklin", Arial, sans-serif; display: grid; place-items: center; min-height: 100vh;
+    padding: max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background-image: radial-gradient(ellipse at 50% 120%, rgba(201,162,75,0.16), transparent 60%); }
+  main { width: min(440px, 100%); text-align: center; display: grid; gap: 18px; }
+  h1 { font-family: "Bebas Neue", Impact, sans-serif; font-weight: 400; font-size: clamp(56px, 16vw, 84px); letter-spacing: 0.06em; color: var(--gold-hi); margin: 0; line-height: 0.9; }
+  .tag { font-size: 18px; line-height: 1.45; margin: 0; }
+  .tag b { color: var(--red); text-decoration: underline; text-underline-offset: 4px; }
+  .stores { display: grid; gap: 10px; }
+  .store { display: block; border: 1px solid rgba(201,162,75,0.45); border-radius: 14px; padding: 14px 16px; text-decoration: none; color: var(--fg); background: var(--panel); }
+  .store strong { display: block; font-family: "Bebas Neue", Impact, sans-serif; font-weight: 400; font-size: 28px; letter-spacing: 0.05em; color: var(--gold-hi); }
+  .store span { font-size: 14px; color: var(--muted); }
+  a.store:hover, a.store:focus-visible { border-color: var(--gold-hi); outline: none; }
+  .soon { opacity: 0.75; }
+  .socials { font-size: 14px; color: var(--muted); line-height: 1.8; }
+  .socials a { color: var(--gold); }
+  footer { font-size: 12px; color: var(--muted); }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Plot Twist(ed)</h1>
+  <p class="tag" id="tag">Un pitch de film, des <b>noms qui mentent</b>, un titre à retrouver lettre par lettre.</p>
+  <div class="stores" id="stores"></div>
+  <p class="socials" id="socials">
+    <a href="https://www.instagram.com/plottwisted.game/">Instagram</a> ·
+    <a href="https://www.tiktok.com/@plottwisted.game">TikTok</a> ·
+    <a href="https://www.youtube.com/@plottwistedgame">YouTube</a> ·
+    <a href="https://x.com/plottwistedgame">X</a>
+  </p>
+  <footer><a href="../" id="legal">Mentions légales et confidentialité</a> · LNA App</footer>
+</main>
+<script>
+  // À passer à true le jour où chaque version est en ligne : la page redirige alors directement vers le bon store.
+  var IOS_LIVE = false;
+  var ANDROID_LIVE = false;
+  var APP_STORE = "https://apps.apple.com/app/id6820246879";
+  var PLAY_STORE = "https://play.google.com/store/apps/details?id=com.lnaapp.plottwisted";
+
+  var params = new URLSearchParams(location.search);
+  var src = (params.get("s") || "direct").replace(/[^a-z0-9_-]/gi, "").slice(0, 20) || "direct";
+  // Google Play compte les installations par source (Play Console, Acquisition).
+  var play = PLAY_STORE + "&referrer=" + encodeURIComponent("utm_source=" + src + "&utm_medium=social&utm_campaign=lancement");
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/i.test(ua);
+  if (isIOS && IOS_LIVE) location.replace(APP_STORE);
+  else if (isAndroid && ANDROID_LIVE) location.replace(play);
+
+  var en = !/^fr/i.test(navigator.language || "fr");
+  var t = en ? {
+    tag: 'One movie pitch, <b>names that lie</b>, a title to rebuild letter by letter.',
+    ios: ["App Store", IOS_LIVE ? "Free on iPhone" : "Coming soon on iPhone"],
+    android: ["Google Play", ANDROID_LIVE ? "Free on Android" : "Coming soon on Android"],
+    legal: "Legal notice and privacy"
+  } : {
+    tag: 'Un pitch de film, des <b>noms qui mentent</b>, un titre à retrouver lettre par lettre.',
+    ios: ["App Store", IOS_LIVE ? "Gratuit sur iPhone" : "Bientôt sur iPhone"],
+    android: ["Google Play", ANDROID_LIVE ? "Gratuit sur Android" : "Bientôt sur Android"],
+    legal: "Mentions légales et confidentialité"
+  };
+  if (en) { document.documentElement.lang = "en"; document.getElementById("tag").innerHTML = t.tag; document.getElementById("legal").textContent = t.legal; }
+  function store(label, sub, href) {
+    return href
+      ? '<a class="store" href="' + href + '"><strong>' + label + '</strong><span>' + sub + '</span></a>'
+      : '<div class="store soon"><strong>' + label + '</strong><span>' + sub + '</span></div>';
+  }
+  var list = [store(t.ios[0], t.ios[1], IOS_LIVE ? APP_STORE : ""), store(t.android[0], t.android[1], ANDROID_LIVE ? play : "")];
+  if (isAndroid) list.reverse();
+  document.getElementById("stores").innerHTML = list.join("");
+</script>
+</body>
+</html>
