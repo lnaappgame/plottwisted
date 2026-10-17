@@ -10,14 +10,14 @@ La vidéo (point 1) doit être filmée sur un vrai iPhone, avec le dernier iOS, 
 Hello, and thank you for reviewing Plot Twist(ed). Here is the requested information.
 
 1. SCREEN RECORDING
-Attached: a screen recording made on a physical iPhone running the latest iOS. It starts with the app launch (consent screens, App Tracking Transparency prompt), then shows a typical session: playing a level with jokers, the Daily Challenge, the Puzzle of the Week, Multiplayer, and the Shop with an In-App Purchase and "Restore purchases". The app has no account creation, no login and no user-generated content.
+Attached: a screen recording made on a physical iPhone running the latest iOS (the game is shown in French, the device language). It starts in TestFlight and launches the app: intro animation, home screen, then the ad consent form. It then shows a typical session: several World 1 levels solved with jokers (including a rewarded ad), the Daily Challenge, the Puzzle of the Week, two Multiplayer rounds, and the Shop, where "Remove ads" is bought with the sandbox account; buying it a second time shows Apple's "already purchased" message, so the purchase is kept. The recording uses TestFlight build 18, which is identical to the submitted build 17 except that it shows Google test ads ("Test mode") instead of live ads. The tester's Apple ID details are blurred in the purchase sheets. The app has no account creation, no login and no user-generated content.
 
 2. PURPOSE AND AUDIENCE
 Plot Twist(ed) is a casual movie trivia word game, in English and French. Each level shows a short synopsis of a famous movie in which the character names are deliberately mixed up (an actor instead of the role, a character from another film...). The player deduces the movie and types its title letter by letter. It is aimed at anyone aged 4+ who enjoys movies and word puzzles, for short play sessions. It is free, with ads and optional In-App Purchases.
 
 3. HOW TO ACCESS THE FEATURES
 No account, no login and no setup: everything is available right after launch.
-- On first launch: an ad consent form (Google UMP, shown where required), then a short explainer and the App Tracking Transparency prompt, then a 4-level tutorial.
+- On first launch: an ad consent form (Google UMP, shown where required), then a short explainer and the App Tracking Transparency prompt, then the choice between a short tutorial and starting World 1 directly.
 - Home screen: PLAY (themed worlds of 10 levels), PUZZLE OF THE WEEK, DAILY CHALLENGE, MULTIPLAYER, Shop (bottom left), How to play (bottom right), Settings (gear icon, top right).
 - In a level: tap letters (tiles or AZERTY/QWERTY keyboard, chosen in Settings) to fill the title, then SUBMIT. Jokers (reveal a letter, remove decoys, hint...) are under the grid.
 
