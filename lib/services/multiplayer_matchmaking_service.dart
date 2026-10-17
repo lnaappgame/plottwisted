@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform, debugPrint;
 
 /// Un enregistrement de partie fantôme trouvé pour une énigme donnée.
 class GhostRun {
@@ -101,18 +101,23 @@ class MultiplayerMatchmakingService {
   }
 
   /// Nombre de vraies parties déjà enregistrées pour [enigmeId] précisément
-  /// (pas toutes énigmes confondues) — sert à décider si cette énigme a
-  /// assez de recul pour un vrai matching par Elo, ou si elle doit encore
-  /// utiliser le temps fantôme fixe de secours (voir
-  /// kMultiplayerCalibrationMinRuns dans multiplayer_state.dart).
-  Future<int> countRunsForEnigme(String enigmeId) async {
+  /// (pas toutes énigmes confondues), plafonné à [upTo] — sert à décider si
+  /// cette énigme a assez de recul pour un vrai matching par Elo, ou si elle
+  /// doit encore utiliser le temps fantôme fixe de secours (voir
+  /// kMultiplayerCalibrationMinRuns dans multiplayer_state.dart). Le plafond
+  /// garde ce comptage à une seule lecture facturée : sans lui, Firestore
+  /// facture 1 lecture par tranche de 1 000 parties, et les parties d'une
+  /// énigme s'accumulent sans fin.
+  Future<int> countRunsForEnigme(String enigmeId, {required int upTo}) async {
     try {
       await _ensureReady();
       final db = _db;
       if (db == null) return 0;
-      final snap = await db.collection('multiplayer_runs').doc(enigmeId).collection('runs').count().get();
+      final snap =
+          await db.collection('multiplayer_runs').doc(enigmeId).collection('runs').limit(upTo).count().get();
       return snap.count ?? 0;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('countRunsForEnigme: $e');
       return 0;
     }
   }
@@ -142,20 +147,36 @@ class MultiplayerMatchmakingService {
   /// pour que le chiffre soit significatif (voir
   /// [kMultiplayerTopPercentMinJoueurs]), ou en cas d'erreur/plateforme non
   /// supportée.
+  ///
+  /// Le nombre total de joueurs, qui bouge peu, est gardé [_totalPlayersTtl] :
+  /// chaque comptage coûte 1 lecture par tranche de 1 000 joueurs, et ce
+  /// pourcentage est recalculé à chaque ouverture de l'écran.
   Future<double?> fetchTopPercent({required int elo}) async {
     try {
       await _ensureReady();
       final db = _db;
       if (db == null) return null;
       final joueurs = db.collection('multiplayer_players');
-      final totalSnap = await joueurs.count().get();
-      final total = totalSnap.count ?? 0;
+      final now = DateTime.now();
+      var total = _totalPlayers;
+      if (total == null || _totalPlayersAt == null || now.difference(_totalPlayersAt!) > _totalPlayersTtl) {
+        final totalSnap = await joueurs.count().get();
+        total = totalSnap.count ?? 0;
+        _totalPlayers = total;
+        _totalPlayersAt = now;
+      }
       if (total < kMultiplayerTopPercentMinJoueurs) return null;
       final belowSnap = await joueurs.where('elo', isLessThan: elo).count().get();
       final below = belowSnap.count ?? 0;
-      return (100 - (below / total * 100)).clamp(0, 100);
-    } catch (_) {
+      // Le total gardé peut dater un peu : il compte au moins les joueurs en dessous, plus soi.
+      return (100 - (below / max(total, below + 1) * 100)).clamp(0, 100);
+    } catch (e) {
+      debugPrint('fetchTopPercent: $e');
       return null;
     }
   }
+
+  static const _totalPlayersTtl = Duration(hours: 6);
+  int? _totalPlayers;
+  DateTime? _totalPlayersAt;
 }

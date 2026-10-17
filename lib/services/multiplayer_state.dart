@@ -161,11 +161,26 @@ class MultiplayerState extends ChangeNotifier {
   double? topPercent;
   bool _topPercentLoading = false;
 
+  int? _topPercentElo;
+  DateTime? _topPercentAt;
+
+  /// Ne relit Firestore que si l'Elo a changé (après un match) ou si le
+  /// dernier calcul date de plus d'une heure : rouvrir l'écran ne coûte rien.
   Future<void> refreshTopPercent() async {
     if (_topPercentLoading) return;
+    final at = _topPercentAt;
+    if (topPercent != null && _topPercentElo == eloRating && at != null &&
+        DateTime.now().difference(at) < const Duration(hours: 1)) {
+      return;
+    }
     _topPercentLoading = true;
-    final result = await matchmaking.fetchTopPercent(elo: eloRating);
+    final elo = eloRating;
+    final result = await matchmaking.fetchTopPercent(elo: elo);
     topPercent = result;
+    if (result != null) {
+      _topPercentElo = elo;
+      _topPercentAt = DateTime.now();
+    }
     _topPercentLoading = false;
     notifyListeners();
   }
@@ -264,7 +279,7 @@ class MultiplayerState extends ChangeNotifier {
     roundMaxSeconds = (kMultiplayerRoundBaseSeconds + answerLen).clamp(kMultiplayerRoundBaseSeconds, kMultiplayerRoundMaxSeconds).toDouble();
     final calibrationFallbackSeconds = roundMaxSeconds - 5;
 
-    final runsCount = await matchmaking.countRunsForEnigme(enigme.id);
+    final runsCount = await matchmaking.countRunsForEnigme(enigme.id, upTo: kMultiplayerCalibrationMinRuns);
     if (runsCount < kMultiplayerCalibrationMinRuns) {
       anyCalibrationRoundThisMatch = true;
       ghostSolveSeconds = calibrationFallbackSeconds;

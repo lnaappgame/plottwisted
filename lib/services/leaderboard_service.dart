@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform, debugPrint;
 
 /// Identifiant de semaine stable (YYYY-MM-DD, correspondant au lundi 00h00
 /// GMT) utilisé comme clé de document dans Firestore.
@@ -80,13 +80,26 @@ class LeaderboardService {
       final db = _db;
       if (db == null) return null;
       final scores = db.collection('enigme_leaderboard').doc(weekId).collection('scores');
-      final totalSnap = await scores.count().get();
-      final total = totalSnap.count ?? 0;
+      // Le total de la semaine est gardé une heure : chaque comptage coûte
+      // 1 lecture par tranche de 1 000 joueurs, et ce rang est relu à chaque
+      // ouverture de l'énigme résolue.
+      final now = DateTime.now();
+      final cached = _totals[weekId];
+      var total = cached?.$1;
+      if (total == null || now.difference(cached!.$2) > const Duration(hours: 1)) {
+        final totalSnap = await scores.count().get();
+        total = totalSnap.count ?? 0;
+        _totals[weekId] = (total, now);
+      }
       final meilleursSnap = await scores.where('solveSeconds', isLessThan: solveSeconds).count().get();
       final rang = (meilleursSnap.count ?? 0) + 1;
-      return LeaderboardResult(rang: rang, total: total);
-    } catch (_) {
+      // Un total gardé peut dater un peu : jamais moins de joueurs que le rang.
+      return LeaderboardResult(rang: rang, total: total < rang ? rang : total);
+    } catch (e) {
+      debugPrint('fetchRank: $e');
       return null;
     }
   }
+
+  final Map<String, (int, DateTime)> _totals = {};
 }
