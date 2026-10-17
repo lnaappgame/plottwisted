@@ -1050,4 +1050,53 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get shopRestoreDone =>
       'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.';
+
+  @override
+  String get shareButton => 'Partager';
+
+  @override
+  String get shareAskFriend => 'Demander à un ami';
+
+  @override
+  String get shareInviteFriends => '📣 Inviter des amis';
+
+  @override
+  String shareLevelText(int world, int level, String time, String link) {
+    return '🎬 Plot Twist(ed) · Monde $world, niveau $level : film trouvé en $time ! Tu fais mieux ? 👉 $link';
+  }
+
+  @override
+  String shareDefiText(String theme, String time, String link) {
+    return '🎬 Défi du jour Plot Twist(ed) · $theme : terminé en $time ⏱️ Tu fais mieux ? 👉 $link';
+  }
+
+  @override
+  String shareEnigmeText(String time, int day, String link) {
+    return '🎬 Énigme de la semaine Plot Twist(ed) : trouvée en $time, le jour $day 🕵️ À ton tour ! 👉 $link';
+  }
+
+  @override
+  String shareDuelWinText(String score, String link) {
+    return '⚔️ Victoire $score en duel sur Plot Twist(ed) ! Viens m\'affronter 👉 $link';
+  }
+
+  @override
+  String shareDuelLossText(String score, String link) {
+    return '⚔️ Défaite $score en duel sur Plot Twist(ed)… Qui me venge ? 👉 $link';
+  }
+
+  @override
+  String shareDuelDrawText(String score, String link) {
+    return '⚔️ Match nul $score en duel sur Plot Twist(ed) ! À ton tour 👉 $link';
+  }
+
+  @override
+  String shareAskFriendText(String pitch, String mask, String link) {
+    return '🆘 Aide-moi à trouver ce film !\n\n$pitch\n\n🔤 $mask\n\nAttention, les noms en couleur sont piégés 😉 Joue toi aussi à Plot Twist(ed) 👉 $link';
+  }
+
+  @override
+  String shareInviteText(String link) {
+    return 'Je joue à Plot Twist(ed), le quiz ciné où les noms mentent 🎬 Un pitch de film, des noms piégés, un titre à retrouver. C\'est gratuit 👉 $link';
+  }
 }

@@ -7,6 +7,7 @@ import '../services/app_settings.dart';
 import '../services/elo_service.dart';
 import '../services/game_state.dart';
 import '../services/multiplayer_state.dart';
+import '../services/share_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/letter_keyboard.dart';
 import '../widgets/scifi_background.dart';
@@ -654,6 +655,25 @@ class _ResultView extends StatelessWidget {
         else
           Text(t.mpQuotaReachedFull, textAlign: TextAlign.center,
               style: AppTextStyles.body(size: 13, color: colors.muted)),
+        const SizedBox(height: 10),
+        Builder(
+          builder: (buttonContext) => OutlinedButton.icon(
+            onPressed: () {
+              final score = '${mp.playerScore} - ${mp.ghostScore}';
+              final link = ShareService.link(ShareService.sourceDuel);
+              ShareService.share(
+                buttonContext,
+                switch (mp.matchResult) {
+                  'victoire' => t.shareDuelWinText(score, link),
+                  'defaite' => t.shareDuelLossText(score, link),
+                  _ => t.shareDuelDrawText(score, link),
+                },
+              );
+            },
+            icon: const Icon(Icons.share, size: 16, color: AppColors.gold),
+            label: Text(t.shareButton, style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.gold)),
+          ),
+        ),
         const SizedBox(height: 10),
         OutlinedButton(
           onPressed: () => Navigator.of(context).pop(),

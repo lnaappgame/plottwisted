@@ -1886,6 +1886,72 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.'**
   String get shopRestoreDone;
+
+  /// No description provided for @shareButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get shareButton;
+
+  /// No description provided for @shareAskFriend.
+  ///
+  /// In fr, this message translates to:
+  /// **'Demander à un ami'**
+  String get shareAskFriend;
+
+  /// No description provided for @shareInviteFriends.
+  ///
+  /// In fr, this message translates to:
+  /// **'📣 Inviter des amis'**
+  String get shareInviteFriends;
+
+  /// No description provided for @shareLevelText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎬 Plot Twist(ed) · Monde {world}, niveau {level} : film trouvé en {time} ! Tu fais mieux ? 👉 {link}'**
+  String shareLevelText(int world, int level, String time, String link);
+
+  /// No description provided for @shareDefiText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎬 Défi du jour Plot Twist(ed) · {theme} : terminé en {time} ⏱️ Tu fais mieux ? 👉 {link}'**
+  String shareDefiText(String theme, String time, String link);
+
+  /// No description provided for @shareEnigmeText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎬 Énigme de la semaine Plot Twist(ed) : trouvée en {time}, le jour {day} 🕵️ À ton tour ! 👉 {link}'**
+  String shareEnigmeText(String time, int day, String link);
+
+  /// No description provided for @shareDuelWinText.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚔️ Victoire {score} en duel sur Plot Twist(ed) ! Viens m\'affronter 👉 {link}'**
+  String shareDuelWinText(String score, String link);
+
+  /// No description provided for @shareDuelLossText.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚔️ Défaite {score} en duel sur Plot Twist(ed)… Qui me venge ? 👉 {link}'**
+  String shareDuelLossText(String score, String link);
+
+  /// No description provided for @shareDuelDrawText.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚔️ Match nul {score} en duel sur Plot Twist(ed) ! À ton tour 👉 {link}'**
+  String shareDuelDrawText(String score, String link);
+
+  /// No description provided for @shareAskFriendText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🆘 Aide-moi à trouver ce film !\n\n{pitch}\n\n🔤 {mask}\n\nAttention, les noms en couleur sont piégés 😉 Joue toi aussi à Plot Twist(ed) 👉 {link}'**
+  String shareAskFriendText(String pitch, String mask, String link);
+
+  /// No description provided for @shareInviteText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Je joue à Plot Twist(ed), le quiz ciné où les noms mentent 🎬 Un pitch de film, des noms piégés, un titre à retrouver. C\'est gratuit 👉 {link}'**
+  String shareInviteText(String link);
 }
 
 class _AppLocalizationsDelegate

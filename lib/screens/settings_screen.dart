@@ -10,6 +10,7 @@ import '../services/game_state.dart';
 import '../services/multiplayer_state.dart';
 import '../services/save_service.dart';
 import '../services/streak_state.dart';
+import '../services/share_service.dart';
 import '../theme/app_theme.dart';
 
 // Page légale hébergée sur GitHub Pages (brouillon non relu par un juriste,
@@ -88,6 +89,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _LanguageRow(colors: colors, settings: settings, t: t),
             _InputModeRow(colors: colors, settings: settings, t: t),
             const SizedBox(height: 10),
+            Builder(
+              builder: (buttonContext) => OutlinedButton(
+                style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.gold)),
+                onPressed: () => ShareService.share(
+                    buttonContext, t.shareInviteText(ShareService.link(ShareService.sourceInvite))),
+                child: Text(t.shareInviteFriends,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+              ),
+            ),
+            const SizedBox(height: 6),
             OutlinedButton(
               onPressed: () => _onShowPrivacyOptions(context),
               child: Text(t.settingsAdPrivacy,

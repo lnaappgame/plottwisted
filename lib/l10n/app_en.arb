@@ -346,5 +346,17 @@
   "shopTitle": "SHOP",
   "shopUnavailable": "Shop unavailable right now.",
   "shopRestore": "Restore purchases",
-  "shopRestoreDone": "Check started: if you had bought ad removal, it is back."
+  "shopRestoreDone": "Check started: if you had bought ad removal, it is back.",
+
+  "shareButton": "Share",
+  "shareAskFriend": "Ask a friend",
+  "shareInviteFriends": "📣 Invite friends",
+  "shareLevelText": "🎬 Plot Twist(ed) · World {world}, level {level}: movie found in {time}! Can you beat that? 👉 {link}",
+  "shareDefiText": "🎬 Plot Twist(ed) Daily Challenge · {theme}: done in {time} ⏱️ Can you beat it? 👉 {link}",
+  "shareEnigmeText": "🎬 Plot Twist(ed) Puzzle of the Week: solved in {time}, on day {day} 🕵️ Your turn! 👉 {link}",
+  "shareDuelWinText": "⚔️ Won a {score} duel on Plot Twist(ed)! Come and face me 👉 {link}",
+  "shareDuelLossText": "⚔️ Lost a {score} duel on Plot Twist(ed)… Who'll avenge me? 👉 {link}",
+  "shareDuelDrawText": "⚔️ {score} draw in a Plot Twist(ed) duel! Your turn 👉 {link}",
+  "shareAskFriendText": "🆘 Help me find this movie!\n\n{pitch}\n\n🔤 {mask}\n\nCareful, the colored names are booby-trapped 😉 Play Plot Twist(ed) too 👉 {link}",
+  "shareInviteText": "I'm playing Plot Twist(ed), the movie quiz where names lie 🎬 One movie pitch, booby-trapped names, a title to find. It's free 👉 {link}"
 }

@@ -7,6 +7,7 @@ import '../models/joker.dart';
 import '../services/app_settings.dart';
 import '../services/defi_state.dart';
 import '../services/game_state.dart';
+import '../services/share_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/joker_style.dart';
 import '../widgets/scifi_background.dart';
@@ -466,6 +467,19 @@ class _ResultView extends StatelessWidget {
           defiState.isNewBest == true ? t.defiNewRecord : t.defiBestTimeResult(_formatDuration(defiState.bestTimeFor(defi.id)!)),
           textAlign: TextAlign.center,
           style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.goldBright),
+        ),
+        const SizedBox(height: 14),
+        Builder(
+          builder: (buttonContext) => OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.gold)),
+            onPressed: () => ShareService.share(
+              buttonContext,
+              t.shareDefiText(defi.communFor(locale), ShareService.formatDuration(defiState.totalSeconds!),
+                  ShareService.link(ShareService.sourceDefi)),
+            ),
+            icon: const Icon(Icons.share, size: 16, color: AppColors.gold),
+            label: Text(t.shareButton, style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.gold)),
+          ),
         ),
         if (defiState.rewards.isNotEmpty) ...[
           const SizedBox(height: 18),

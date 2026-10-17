@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../models/puzzle.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
+import '../services/share_service.dart';
 import '../theme/app_theme.dart';
 
 class ResultOverlay extends StatelessWidget {
@@ -151,6 +152,31 @@ class ResultOverlay extends StatelessWidget {
                   icon: const Icon(Icons.open_in_new, size: 14, color: AppColors.gold),
                   label: Text(t.resultSeeFilmSheet, style: AppTextStyles.body(size: 12, color: AppColors.gold)),
                 ),
+              // Résultat sans spoiler (monde, niveau, temps) : pas pour le tutoriel.
+              if (!game.inTutorial) ...[
+                SizedBox(
+                  width: double.infinity,
+                  child: Builder(
+                    builder: (buttonContext) => OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColors.gold),
+                        padding: const EdgeInsets.symmetric(vertical: 11),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () => ShareService.share(
+                        buttonContext,
+                        t.shareLevelText(game.worldIndex, game.currentLevelNumber,
+                            ShareService.formatDuration(game.lastSolveDuration.inSeconds),
+                            ShareService.link(ShareService.sourceLevel)),
+                      ),
+                      icon: const Icon(Icons.share, size: 16, color: AppColors.gold),
+                      label: Text(t.shareButton,
+                          style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.gold)),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

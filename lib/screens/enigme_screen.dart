@@ -11,6 +11,7 @@ import '../services/enigme_state.dart';
 import '../services/game_state.dart';
 import '../services/leaderboard_service.dart';
 import '../services/streak_state.dart';
+import '../services/share_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/joker_style.dart';
 import '../widgets/letter_keyboard.dart';
@@ -825,6 +826,22 @@ class _SolvedPanelState extends State<_SolvedPanel> {
               },
             ),
           ),
+          if (enigmeState.solveSeconds != null && enigmeState.solvedDay != null) ...[
+            const SizedBox(height: 12),
+            Builder(
+              builder: (buttonContext) => OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.gold)),
+                onPressed: () => ShareService.share(
+                  buttonContext,
+                  t.shareEnigmeText(_formatDuration(context, enigmeState.solveSeconds!), enigmeState.solvedDay!,
+                      ShareService.link(ShareService.sourceEnigme)),
+                ),
+                icon: const Icon(Icons.share, size: 16, color: AppColors.gold),
+                label: Text(t.shareButton,
+                    style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.gold)),
+              ),
+            ),
+          ],
         ],
       ),
     );

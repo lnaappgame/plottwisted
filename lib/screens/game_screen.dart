@@ -10,6 +10,7 @@ import '../services/app_settings.dart';
 import '../services/game_state.dart';
 import '../services/sound_service.dart';
 import '../services/streak_state.dart';
+import '../services/share_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/answer_row.dart';
 import '../widgets/clapper_transition.dart';
@@ -596,6 +597,25 @@ class _GameScreenState extends State<GameScreen> {
     _loadWithTutorialCheck();
   }
 
+  /// Partage le pitch tel qu'affiché (noms et pastilles de couleur, jokers
+  /// déjà joués compris) et la grille masquée du titre, sans la réponse.
+  void _askFriend(BuildContext buttonContext, GameState game) {
+    final t = AppLocalizations.of(context);
+    final puzzle = game.currentPuzzle;
+    final pitch = ShareService.pitchWithColors(
+      puzzle.pitchTemplateFor(game.locale),
+      game.displayFor('p1', game.p1State),
+      game.p1State,
+      p2: puzzle.hasP2 ? game.displayFor('p2', game.p2State) : null,
+      c2: puzzle.hasP2 ? game.p2State : null,
+    );
+    ShareService.share(
+      buttonContext,
+      t.shareAskFriendText(pitch, ShareService.titleMask(puzzle.titleFor(game.locale)),
+          ShareService.link(ShareService.sourceAskFriend)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final game = context.watch<GameState>();
@@ -689,7 +709,28 @@ class _GameScreenState extends State<GameScreen> {
                           child: Text('PLOT TWIST(ED)',
                               textAlign: TextAlign.center, style: AppTextStyles.display(size: 28)),
                         ),
-                        const SizedBox(width: 36),
+                        // « Demander à un ami » : partage le pitch du niveau en cours.
+                        if (game.inTutorial)
+                          const SizedBox(width: 36)
+                        else
+                          Builder(
+                            builder: (buttonContext) => Tooltip(
+                              message: AppLocalizations.of(context).shareAskFriend,
+                              child: Semantics(
+                                button: true,
+                                label: AppLocalizations.of(context).shareAskFriend,
+                                child: InkWell(
+                                  onTap: () => _askFriend(buttonContext, game),
+                                  child: Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(color: colors.bgPanel, borderRadius: BorderRadius.circular(10)),
+                                    child: const Icon(Icons.share, color: AppColors.goldBright, size: 18),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                     const SizedBox(height: 10),

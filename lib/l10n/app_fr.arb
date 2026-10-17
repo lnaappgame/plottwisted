@@ -348,5 +348,25 @@
   "shopTitle": "BOUTIQUE",
   "shopUnavailable": "Boutique indisponible pour le moment.",
   "shopRestore": "Restaurer mes achats",
-  "shopRestoreDone": "Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli."
+  "shopRestoreDone": "Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.",
+
+  "shareButton": "Partager",
+  "shareAskFriend": "Demander à un ami",
+  "shareInviteFriends": "📣 Inviter des amis",
+  "shareLevelText": "🎬 Plot Twist(ed) · Monde {world}, niveau {level} : film trouvé en {time} ! Tu fais mieux ? 👉 {link}",
+  "@shareLevelText": {"placeholders": {"world": {"type": "int"}, "level": {"type": "int"}, "time": {"type": "String"}, "link": {"type": "String"}}},
+  "shareDefiText": "🎬 Défi du jour Plot Twist(ed) · {theme} : terminé en {time} ⏱️ Tu fais mieux ? 👉 {link}",
+  "@shareDefiText": {"placeholders": {"theme": {"type": "String"}, "time": {"type": "String"}, "link": {"type": "String"}}},
+  "shareEnigmeText": "🎬 Énigme de la semaine Plot Twist(ed) : trouvée en {time}, le jour {day} 🕵️ À ton tour ! 👉 {link}",
+  "@shareEnigmeText": {"placeholders": {"time": {"type": "String"}, "day": {"type": "int"}, "link": {"type": "String"}}},
+  "shareDuelWinText": "⚔️ Victoire {score} en duel sur Plot Twist(ed) ! Viens m'affronter 👉 {link}",
+  "@shareDuelWinText": {"placeholders": {"score": {"type": "String"}, "link": {"type": "String"}}},
+  "shareDuelLossText": "⚔️ Défaite {score} en duel sur Plot Twist(ed)… Qui me venge ? 👉 {link}",
+  "@shareDuelLossText": {"placeholders": {"score": {"type": "String"}, "link": {"type": "String"}}},
+  "shareDuelDrawText": "⚔️ Match nul {score} en duel sur Plot Twist(ed) ! À ton tour 👉 {link}",
+  "@shareDuelDrawText": {"placeholders": {"score": {"type": "String"}, "link": {"type": "String"}}},
+  "shareAskFriendText": "🆘 Aide-moi à trouver ce film !\n\n{pitch}\n\n🔤 {mask}\n\nAttention, les noms en couleur sont piégés 😉 Joue toi aussi à Plot Twist(ed) 👉 {link}",
+  "@shareAskFriendText": {"placeholders": {"pitch": {"type": "String"}, "mask": {"type": "String"}, "link": {"type": "String"}}},
+  "shareInviteText": "Je joue à Plot Twist(ed), le quiz ciné où les noms mentent 🎬 Un pitch de film, des noms piégés, un titre à retrouver. C'est gratuit 👉 {link}",
+  "@shareInviteText": {"placeholders": {"link": {"type": "String"}}}
 }
