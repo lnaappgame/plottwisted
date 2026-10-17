@@ -13,6 +13,7 @@ import '../services/streak_state.dart';
 import '../services/share_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/answer_row.dart';
+import '../widgets/ask_friend_link.dart';
 import '../widgets/clapper_transition.dart';
 import '../widgets/joker_bar.dart';
 import '../widgets/joker_fx.dart';
@@ -709,33 +710,19 @@ class _GameScreenState extends State<GameScreen> {
                           child: Text('PLOT TWIST(ED)',
                               textAlign: TextAlign.center, style: AppTextStyles.display(size: 28)),
                         ),
-                        // « Demander à un ami » : partage le pitch du niveau en cours.
-                        if (game.inTutorial)
-                          const SizedBox(width: 36)
-                        else
-                          Builder(
-                            builder: (buttonContext) => Tooltip(
-                              message: AppLocalizations.of(context).shareAskFriend,
-                              child: Semantics(
-                                button: true,
-                                label: AppLocalizations.of(context).shareAskFriend,
-                                child: InkWell(
-                                  onTap: () => _askFriend(buttonContext, game),
-                                  child: Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(color: colors.bgPanel, borderRadius: BorderRadius.circular(10)),
-                                    child: const Icon(Icons.share, color: AppColors.goldBright, size: 18),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                        const SizedBox(width: 36),
                       ],
                     ),
                     const SizedBox(height: 10),
                     PitchCard(fx: _fx),
-                    const SizedBox(height: 12),
+                    // « Demander à un ami » : partage le pitch du niveau en cours.
+                    if (game.inTutorial)
+                      const SizedBox(height: 12)
+                    else ...[
+                      const SizedBox(height: 2),
+                      AskFriendLink(onTap: (linkContext) => _askFriend(linkContext, game)),
+                      const SizedBox(height: 4),
+                    ],
                     AnswerRow(highlightSolved: _revealingAnswer, fx: _fx),
                     const SizedBox(height: 12),
                     LetterPool(fx: _fx, onTileTapped: _maybeShowInputModeTip),

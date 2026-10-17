@@ -13,6 +13,7 @@ import '../services/leaderboard_service.dart';
 import '../services/streak_state.dart';
 import '../services/share_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/ask_friend_link.dart';
 import '../widgets/joker_style.dart';
 import '../widgets/letter_keyboard.dart';
 import '../widgets/scifi_background.dart';
@@ -604,12 +605,17 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
                   ),
                 ),
               ),
+              // « Demander à un ami » : partage le texte déjà révélé et la grille masquée.
+              if (!enigmeState.solved) ...[
+                const SizedBox(height: 2),
+                AskFriendLink(onTap: (linkContext) => _askFriend(linkContext, enigmeState)),
+              ],
               if (countdown > Duration.zero) ...[
-                const SizedBox(height: 8),
+                SizedBox(height: enigmeState.solved ? 8 : 2),
                 Text(t.enigmeNextLetterIn(_formatCountdown(countdown)),
                     textAlign: TextAlign.center, style: AppTextStyles.body(size: 11, color: colors.muted)),
               ],
-              const SizedBox(height: 18),
+              SizedBox(height: enigmeState.solved ? 18 : 14),
               if (enigmeState.solved)
                 _SolvedPanel(colors: colors)
               else ...[
@@ -651,6 +657,24 @@ class _EnigmeScreenState extends State<EnigmeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  /// Partage l'énigme telle que le joueur la voit (texte déjà révélé, badge
+  /// s'il a commencé à sortir) et la grille masquée, sans la réponse.
+  void _askFriend(BuildContext linkContext, EnigmeState enigmeState) {
+    final t = AppLocalizations.of(context);
+    final enigme = enigmeState.enigme;
+    var text = ShareService.revealedTextForShare(enigmeState.texteRevele);
+    final badge = enigmeState.badgeRevele;
+    if (badge != null && badge.contains(RegExp(r'\d'))) {
+      text += '\n${enigme.categorie.name == 'film' ? t.enigmeYear(badge) : t.enigmeAge(badge)}';
+    }
+    ShareService.share(
+      linkContext,
+      t.shareAskFriendEnigmeText(enigme.categorieLabelFor(enigmeState.locale), text,
+          ShareService.titleMask(enigme.sujetFor(enigmeState.locale)),
+          ShareService.link(ShareService.sourceAskFriendEnigme)),
     );
   }
 

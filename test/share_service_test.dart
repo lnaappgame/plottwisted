@@ -33,7 +33,8 @@ void main() {
     expect(en.shareLevelText(3, 4, '42 s', link), contains('World 3, level 4'));
     // La source reste dans ce que la page du lien accepte : [a-z0-9_-], 20 caractères au plus.
     for (final s in [ShareService.sourceLevel, ShareService.sourceDefi, ShareService.sourceEnigme,
-        ShareService.sourceDuel, ShareService.sourceAskFriend, ShareService.sourceInvite]) {
+        ShareService.sourceDuel, ShareService.sourceAskFriend, ShareService.sourceAskFriendEnigme,
+        ShareService.sourceInvite]) {
       expect(RegExp(r'^[a-z0-9_-]{1,20}$').hasMatch(s), isTrue, reason: s);
     }
   });
@@ -52,5 +53,17 @@ void main() {
         expect(text.toUpperCase().contains('\n${puzzle.title}\n'), isFalse, reason: puzzle.title);
       }
     }
+  });
+
+  test('énigme : trous visibles et indiscernables des vraies espaces', () {
+    // « UN F LM » : la lettre cachée et l'espace s'affichent pareil.
+    final shared = ShareService.revealedTextForShare('UN F LM');
+    expect(shared, 'UN\u2002F\u2002LM');
+    expect(shared.contains(' '), isFalse);
+    final fr = AppLocalizationsFr();
+    final text = fr.shareAskFriendEnigmeText('Film', shared, ShareService.titleMask('TITANIC'), 'L');
+    expect(text, contains('🧩 Film'));
+    expect(text, contains('_ _ _ _ _ _ _'));
+    expect(text.contains('TITANIC'), isFalse);
   });
 }

@@ -22,6 +22,7 @@ class ShareService {
   static const sourceEnigme = 'p-enigme';
   static const sourceDuel = 'p-duel';
   static const sourceAskFriend = 'p-aide';
+  static const sourceAskFriendEnigme = 'p-aide-enigme';
   static const sourceInvite = 'p-invit';
 
   static String link(String source) => '$_base?s=$source';
@@ -70,4 +71,10 @@ class ShareService {
         .map((w) => w.split('').map((ch) => RegExp(r'[\p{L}\p{N}]', unicode: true).hasMatch(ch) ? '_' : ch).join(' '))
         .join('   ');
   }
+
+  /// Le texte de l'énigme tel qu'il est affiché (lettres cachées = espaces),
+  /// avec chaque espace remplacé par une espace cadratin : les messageries
+  /// ne la fusionnent pas, donc les trous restent visibles, et vraies
+  /// espaces et lettres cachées restent indiscernables, comme à l'écran.
+  static String revealedTextForShare(String texteRevele) => texteRevele.replaceAll(' ', ' ');
 }

@@ -1947,6 +1947,13 @@ abstract class AppLocalizations {
   /// **'🆘 Aide-moi à trouver ce film !\n\n{pitch}\n\n🔤 {mask}\n\nAttention, les noms en couleur sont piégés 😉 Joue toi aussi à Plot Twist(ed) 👉 {link}'**
   String shareAskFriendText(String pitch, String mask, String link);
 
+  /// No description provided for @shareAskFriendEnigmeText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🆘 Aide-moi à résoudre l\'énigme de la semaine !\n\n🧩 {category}\n{text}\n\n🔤 {mask}\n\nJoue toi aussi à Plot Twist(ed) 👉 {link}'**
+  String shareAskFriendEnigmeText(
+      String category, String text, String mask, String link);
+
   /// No description provided for @shareInviteText.
   ///
   /// In fr, this message translates to:

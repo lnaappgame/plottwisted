@@ -358,5 +358,6 @@
   "shareDuelLossText": "⚔️ Lost a {score} duel on Plot Twist(ed)… Who'll avenge me? 👉 {link}",
   "shareDuelDrawText": "⚔️ {score} draw in a Plot Twist(ed) duel! Your turn 👉 {link}",
   "shareAskFriendText": "🆘 Help me find this movie!\n\n{pitch}\n\n🔤 {mask}\n\nCareful, the colored names are booby-trapped 😉 Play Plot Twist(ed) too 👉 {link}",
+  "shareAskFriendEnigmeText": "🆘 Help me solve the Puzzle of the Week!\n\n🧩 {category}\n{text}\n\n🔤 {mask}\n\nPlay Plot Twist(ed) too 👉 {link}",
   "shareInviteText": "I'm playing Plot Twist(ed), the movie quiz where names lie 🎬 One movie pitch, booby-trapped names, a title to find. It's free 👉 {link}"
 }

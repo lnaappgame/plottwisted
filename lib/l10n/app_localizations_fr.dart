@@ -1096,6 +1096,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String shareAskFriendEnigmeText(
+      String category, String text, String mask, String link) {
+    return '🆘 Aide-moi à résoudre l\'énigme de la semaine !\n\n🧩 $category\n$text\n\n🔤 $mask\n\nJoue toi aussi à Plot Twist(ed) 👉 $link';
+  }
+
+  @override
   String shareInviteText(String link) {
     return 'Je joue à Plot Twist(ed), le quiz ciné où les noms mentent 🎬 Un pitch de film, des noms piégés, un titre à retrouver. C\'est gratuit 👉 $link';
   }
