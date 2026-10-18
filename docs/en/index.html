@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plot Twist(ed) — Legal</title>
+<meta name="description" content="Privacy Policy and Terms of Use of Plot Twist(ed).">
+<link rel="alternate" hreflang="fr" href="https://lnaappgame.github.io/plottwisted/">
+<link rel="alternate" hreflang="en" href="https://lnaappgame.github.io/plottwisted/en/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F6F1E6;
+    --paper-deep: #EFE7D6;
+    --ink: #2B2118;
+    --ink-soft: #7A6D5C;
+    --gold: #A9782C;
+    --gold-bright: #8C6423;
+    --crimson: #7A1F2B;
+    --rule: #DDD0B4;
+    --card: #FFFFFF;
+    --shadow: rgba(43,33,24,0.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #17120D;
+      --paper-deep: #1D1610;
+      --ink: #ECE3D2;
+      --ink-soft: #A6987F;
+      --gold: #D9B15E;
+      --gold-bright: #E8C578;
+      --crimson: #D67587;
+      --rule: #3A2E22;
+      --card: #211A13;
+      --shadow: rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #17120D;
+    --paper-deep: #1D1610;
+    --ink: #ECE3D2;
+    --ink-soft: #A6987F;
+    --gold: #D9B15E;
+    --gold-bright: #E8C578;
+    --crimson: #D67587;
+    --rule: #3A2E22;
+    --card: #211A13;
+    --shadow: rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Libre Franklin", system-ui, sans-serif;
+    line-height: 1.65;
+  }
+  .wrap{
+    max-width: 720px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 40px 64px;
+  }
+
+  header.top{
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .wordmark{
+    font-family: "Bebas Neue", system-ui, sans-serif;
+    letter-spacing: 0.04em;
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    color: var(--gold);
+    line-height: 1;
+  }
+  .wordmark span{ color: var(--crimson) }
+  .kicker{
+    font-family: "Courier Prime", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  nav.tabs{
+    display:flex;
+    gap: 8px;
+    justify-content:center;
+    margin: 28px 0 8px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0;
+  }
+  nav.tabs button{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    padding: 10px 6px 12px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  nav.tabs button:hover{ color: var(--ink) }
+  nav.tabs button[aria-selected="true"]{
+    color: var(--ink);
+    border-bottom-color: var(--gold);
+  }
+  nav.tabs button:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .doc{ display:none }
+  .doc.active{ display:block }
+
+  .masthead{
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px -12px var(--shadow);
+    padding: 22px 24px;
+    margin: 28px 0 36px;
+    font-family: "Courier Prime", monospace;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.9;
+  }
+  .masthead strong{ color: var(--ink); font-weight: 700 }
+  .masthead .doctitle{
+    display:block;
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .masthead .updated{
+    display:block;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic;
+  }
+  .masthead .draftnote{
+    display:block;
+    margin-top: 10px;
+    color: var(--crimson);
+    font-style: normal;
+  }
+
+  h2{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin: 2.4em 0 0.7em;
+    text-wrap: balance;
+    scroll-margin-top: 16px;
+  }
+  h3{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--gold-bright);
+    margin: 1.8em 0 0.5em;
+  }
+  p, li{
+    max-width: 64ch;
+    color: var(--ink);
+  }
+  p{ margin: 0 0 1em; }
+  strong{ color: var(--ink); font-weight: 700 }
+  a{ color: var(--gold-bright); text-decoration-color: var(--rule); text-underline-offset: 2px; }
+  a:hover{ text-decoration-color: var(--gold-bright); }
+  ul{ margin: 0 0 1.2em; padding-left: 1.3em; }
+  li{ margin-bottom: 0.5em; }
+
+  .toc{
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin: 24px 0 8px;
+    font-size: 0.88rem;
+  }
+  .toc summary{
+    cursor: pointer;
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .toc ol{
+    margin: 14px 0 0;
+    padding-left: 1.2em;
+    columns: 2;
+    column-gap: 24px;
+  }
+  .toc li{ margin-bottom: 0.35em; break-inside: avoid; color: var(--ink-soft) }
+  .toc a{ color: var(--ink-soft) }
+  .toc a:hover{ color: var(--gold-bright) }
+
+  .tablewrap{ overflow-x: auto; margin: 1em 0 1.4em; }
+  table{
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 420px;
+    font-size: 0.92rem;
+  }
+  th, td{
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  th{
+    font-family: "Libre Franklin", sans-serif;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  hr.rule{
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 2.4em 0;
+  }
+
+  footer.contact{
+    margin-top: 3em;
+    padding-top: 1.6em;
+    border-top: 1px solid var(--rule);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  footer.contact .copybtn{
+    font-family: "Libre Franklin", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+  footer.contact .copybtn:hover{ border-color: var(--gold-bright) }
+
+  @media (max-width: 480px){
+    .toc ol{ columns: 1; }
+    nav.tabs{ font-size: 0.85rem; }
+  }
+  .langswitch{
+    margin-top: 12px;
+    font-size: 0.82rem;
+  }
+  .langswitch a{ color: var(--ink-soft) }
+  .langswitch a:hover{ color: var(--gold-bright) }
+  .transnote{
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 20px 0 0;
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="wordmark">PLOT TWIST<span>(ED)</span></div>
+    <div class="kicker">Legal — LNA App</div>
+    <div class="langswitch"><a href="../" hreflang="fr" lang="fr">Version française</a></div>
+  </header>
+
+  <p class="transnote">This English version is a translation provided for information. In case of any discrepancy, the <a href="../" hreflang="fr">French version</a> prevails (see section 26 of the Terms of Use).</p>
+
+  <nav class="tabs" role="tablist" aria-label="Legal documents">
+    <button id="tab-privacy" role="tab" aria-selected="true" aria-controls="doc-privacy">Privacy Policy</button>
+    <button id="tab-terms" role="tab" aria-selected="false" aria-controls="doc-terms">Terms of Use</button>
+  </nav>
+
+  <!-- ─────────────── Privacy Policy ─────────────── -->
+  <article id="doc-privacy" class="doc active" role="tabpanel" aria-labelledby="tab-privacy">
+    <div class="masthead">
+      <span class="doctitle">Privacy Policy — Plot Twist(ed)</span>
+      <strong>LNA App</strong><br>
+      12 montée du Château, 13650 Meyrargues, France<br>
+      SIRET (French business ID): 790 346 076 00025<br>
+      EU VAT number: FR 19790346076<br>
+      Contact: lna.app.game@gmail.com
+      <span class="updated">Last updated: September 25, 2026 (English translation: October 19, 2026)</span>
+    </div>
+
+    <details class="toc">
+      <summary>Contents (11 sections)</summary>
+      <ol>
+        <li><a href="#c1">Publisher of the app</a></li>
+        <li><a href="#c2">What data is processed</a></li>
+        <li><a href="#c3">Legal basis and purposes</a></li>
+        <li><a href="#c4">Recipients of the data</a></li>
+        <li><a href="#c5">Transfers outside the European Union</a></li>
+        <li><a href="#c6">Retention periods</a></li>
+        <li><a href="#c7">Your rights</a></li>
+        <li><a href="#c8">Children</a></li>
+        <li><a href="#c9">Security</a></li>
+        <li><a href="#c10">Changes to this policy</a></li>
+        <li><a href="#c11">Contact</a></li>
+      </ol>
+    </details>
+
+    <h2 id="c1">1. Publisher of the app</h2>
+    <p>The mobile app <strong>Plot Twist(ed)</strong> is published by:</p>
+    <p><strong>LNA App</strong><br>
+    12 montée du Château, 13650 Meyrargues, France<br>
+    SIRET (French business ID): 790 346 076 00025<br>
+    EU VAT number: FR 19790346076<br>
+    Contact: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+
+    <h2 id="c2">2. What data is processed?</h2>
+
+    <h3>2.1 Local game data (by default)</h3>
+    <p>Plot Twist(ed) does not ask for an account, a name or an email address to play. By default, your progress (unlocked worlds, jokers, display and accessibility settings, chosen avatar, automatically generated player ID such as “Cinephile #123456”) is stored <strong>only on your device</strong> (the app's local storage) and is not sent to any server, unless you yourself turn on one of the features described in sections 2.2 and 2.3 below. If you uninstall the app or use the “Reset save data” option, this local data is deleted from your device.</p>
+
+    <h3>2.2 Backup and restore linked to a Google account (optional)</h3>
+    <p>If you choose to turn on the “Save with Google” button in the settings, the app uses the <strong>Firebase Authentication</strong> and <strong>Firebase Firestore</strong> services (provided by Google) as follows:</p>
+    <ul>
+      <li>From its first launch, each installation of the app is given an anonymous technical identifier (an “anonymous” Firebase account), without any action on your part.</li>
+      <li>When you turn on Google backup, this anonymous identifier is linked to your Google account through the <strong>Google Sign-In</strong> service. In this context, Google sends us the <strong>email address</strong> of that account, for the sole purpose of recognizing the account if you sign in again later from another device (so that we can offer to restore your progress). This email address is never shown to other players, and LNA App never uses it for communication or marketing.</li>
+      <li>All of your local game data (progress, settings, avatar, player ID) is then copied to Google's <strong>Firestore</strong> servers, in a technical document associated with this identifier, so that it can be restored on another device or after a reinstall.</li>
+    </ul>
+    <p>This feature is strictly optional: if you never turn it on, none of this data is sent and only what is described in section 2.1 applies.</p>
+
+    <h3>2.3 Online leaderboards and Multiplayer (Firestore)</h3>
+    <p>The <strong>Weekly Puzzle</strong> and <strong>Multiplayer</strong> modes rely on a leaderboard or a comparison of performances shared by several players, which requires sending some data to our <strong>Firebase Firestore</strong> servers, associated only with the anonymous technical identifier mentioned in section 2.2 (never with your name or email address, even if you have also linked a Google account):</p>
+    <ul>
+      <li>for the Weekly Puzzle: your solving time, the day you solved it, and your ranking relative to the other players of the current week;</li>
+      <li>for Multiplayer: the result of each round played (time, win or loss), used to set the reference time offered to other players and to calculate your rating (“Elo”).</li>
+    </ul>
+    <p>Both features require an active internet connection. Past weekly leaderboards are not automatically deleted from our servers when the next week replaces them; they simply stop being actively displayed in the app (see section 6).</p>
+
+    <h3>2.4 Analytics and technical diagnostics (Firebase Analytics and Crashlytics)</h3>
+    <p>The app uses <strong>Firebase Analytics</strong> to measure general usage of the app (for example: which game mode is started, a level completed, an ad watched, a purchase made) and <strong>Firebase Crashlytics</strong> to receive an automatic technical report when the app crashes (type of error, technical state of the app at the time of the incident). These tools, provided by Google, collect technical data about your device (model, operating system version, installation identifier) but are not intended to identify you personally.</p>
+
+    <h3>2.5 Advertising (Google AdMob)</h3>
+    <p>The app shows ads (rewarded videos and ads between levels) provided by <strong>Google AdMob</strong>. To serve, measure and personalize these ads, Google may collect technical data about your device: advertising identifier (AAID on Android, IDFA on iOS — the latter only being accessible after your explicit permission through Apple's “App Tracking Transparency” prompt), approximate IP address, device information and interactions with ads.</p>
+    <p>LNA App does not receive or store this data itself: it is processed directly by Google, under its own privacy policy, available here: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></p>
+    <p>A consent tool (Google User Messaging Platform) is shown to users located in the European Economic Area before any personalized ad is displayed, in accordance with the GDPR.</p>
+
+    <h3>2.6 In-app purchases (Google Play / App Store)</h3>
+    <p>Plot Twist(ed) offers optional in-app purchases (joker packs, ad removal — full list in the Terms of Use). These purchases are handled entirely by <strong>Google Play</strong> or Apple's <strong>App Store</strong>: LNA App never sees or keeps your payment information (card number, etc.). Only the confirmation that a purchase was made is sent to the app, in order to unlock the corresponding content.</p>
+
+    <h3>2.7 Fonts (Google Fonts)</h3>
+    <p>The app loads some fonts from Google's servers on first launch. This technical request does not send any personal data beyond what is strictly necessary to deliver the font file (IP address, processed directly by Google).</p>
+
+    <h3>2.8 What we do not do</h3>
+    <p>LNA App does not sell any data to third parties, does not use any analytics or ad-targeting tool other than those listed above (Google AdMob, Firebase), does not use the data described in sections 2.2 to 2.4 for any purpose other than the one it was collected for, and has no access to your contacts, photos, precise location or any other data on your device not mentioned in this policy.</p>
+
+    <h2 id="c3">3. Legal basis and purposes</h2>
+    <ul>
+      <li>Running the game and local saving (section 2.1) are based on the performance of the service requested by the user.</li>
+      <li>Backup/restore linked to a Google account (section 2.2) and online leaderboards (section 2.3) are based on the performance of the service you explicitly request by turning on these optional features.</li>
+      <li>Analytics and technical diagnostics (section 2.4) are based on LNA App's legitimate interest in understanding how the app is used and fixing technical malfunctions; you can object within the limits described in section 7.</li>
+      <li>Personalized ads (section 2.5) are based on your <strong>consent</strong>, collected through the tool mentioned in that section; you can refuse it without losing access to the game (non-personalized ads may then be shown).</li>
+      <li>In-app purchases (section 2.6) are based on the performance of the contract concluded at the time of purchase.</li>
+    </ul>
+
+    <h2 id="c4">4. Recipients of the data</h2>
+    <p>The recipients of the data described above are: <strong>Google</strong> (for Firebase — Authentication, Firestore, Analytics, Crashlytics; AdMob for advertising; Google Play for purchases and Google Sign-In) and <strong>Apple</strong> (App Store, for purchases on iOS), each strictly within the scope of the services described above. No data is sold or passed on to any other third party.</p>
+
+    <h2 id="c5">5. Transfers outside the European Union</h2>
+    <p>Google and Apple may process some data, in particular data related to Firebase and AdMob, outside the European Union (in particular in the United States). These transfers rely on the safeguards provided by these companies (including the European Commission's standard contractual clauses). See their respective privacy policies for more details: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a> for Google, <a href="https://www.apple.com/legal/privacy/en-ww/" target="_blank" rel="noopener">apple.com/legal/privacy</a> for Apple.</p>
+
+    <h2 id="c6">6. Retention periods</h2>
+    <ul>
+      <li>Local game data (section 2.1) is kept on your device until you uninstall the app or reset it manually.</li>
+      <li>Backup data linked to a Google account (section 2.2) is kept until you ask for it to be deleted (see section 7) or remove the link to your Google account yourself.</li>
+      <li>Leaderboard results (section 2.3) are kept beyond the week or period they relate to; past periods are no longer actively displayed in the app but may remain archived on our servers.</li>
+      <li>Analytics and diagnostic data (section 2.4) is kept for the default periods of Firebase Analytics and Crashlytics, generally several months.</li>
+      <li>Data processed by Google for AdMob or Google Play is kept for the periods set by Google.</li>
+    </ul>
+
+    <h2 id="c7">7. Your rights</h2>
+    <p>Under the GDPR, you have the right to access, rectify, erase, restrict, object to and port the data concerning you. You can exercise these rights:</p>
+    <ul>
+      <li>for local game data (section 2.1): directly in the app (Settings → Reset save data) or by uninstalling the app;</li>
+      <li>for backup or leaderboard data stored with Firebase (sections 2.2 and 2.3): by contacting us at the address given in section 11, stating the player ID shown in the app (for example “Cinephile #123456”) or the email address of the linked Google account, so that we can find and delete the corresponding data;</li>
+      <li>for data processed by Google or Apple (AdMob, Play, App Store, analytics): directly with these companies, through their respective ad-data or account management tools.</li>
+    </ul>
+    <p>You can also contact us at the address in section 11 with any question, and you have the right to lodge a complaint with the French data protection authority, the CNIL (<a href="https://www.cnil.fr/en" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
+
+    <h2 id="c8">8. Children</h2>
+    <p>Plot Twist(ed) is not specifically intended for children under 13 and does not knowingly collect personal data from children beyond the technical processing described above, which applies to all users alike.</p>
+
+    <h2 id="c9">9. Security</h2>
+    <p>Game data stored only locally (section 2.1) carries no risk of a server-side leak, since it never leaves your device. The data you choose to send to our servers (Google backup, leaderboards) is hosted on Google's Firebase infrastructure and benefits from the security measures Google applies to this service; LNA App's access to this data is limited to what is needed to run the features described in this policy.</p>
+
+    <h2 id="c10">10. Changes to this policy</h2>
+    <p>This privacy policy may be updated, in particular when new game modes or new data processing are added. The date of the last update is shown at the top of this document.</p>
+
+    <h2 id="c11">11. Contact</h2>
+    <p>For any question about this privacy policy, or to exercise any of the rights mentioned in section 7: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+
+    <footer class="contact">
+      LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>
+      <button class="copybtn" data-copy="lna.app.game@gmail.com">Copy email</button>
+    </footer>
+  </article>
+
+  <!-- ─────────────── Terms of Use ─────────────── -->
+  <article id="doc-terms" class="doc" role="tabpanel" aria-labelledby="tab-terms">
+    <div class="masthead">
+      <span class="doctitle">Terms of Use — Plot Twist(ed)</span>
+      <strong>LNA App</strong><br>
+      12 montée du Château, 13650 Meyrargues, France<br>
+      SIRET (French business ID): 790 346 076 00025<br>
+      EU VAT number: FR 19790346076<br>
+      Publication director: Damien Ellena<br>
+      Contact: lna.app.game@gmail.com
+      <span class="updated">Last updated: October 13, 2026 (English translation: October 19, 2026)</span>
+    </div>
+
+    <details class="toc">
+      <summary>Contents (28 sections)</summary>
+      <ol>
+        <li><a href="#g1">Purpose and acceptance</a></li>
+        <li><a href="#g2">Definitions</a></li>
+        <li><a href="#g3">Publisher of the App</a></li>
+        <li><a href="#g4">Capacity to contract</a></li>
+        <li><a href="#g5">Description of the Service</a></li>
+        <li><a href="#g6">Access and availability</a></li>
+        <li><a href="#g7">Player identity and Google sign-in</a></li>
+        <li><a href="#g8">Saving and progress</a></li>
+        <li><a href="#g9">Leaderboards and multiplayer</a></li>
+        <li><a href="#g10">Advertising</a></li>
+        <li><a href="#g11">In-app purchases</a></li>
+        <li><a href="#g12">Notifications</a></li>
+        <li><a href="#g13">Intellectual property</a></li>
+        <li><a href="#g14">Permitted use</a></li>
+        <li><a href="#g15">Sanctions</a></li>
+        <li><a href="#g16">Liability and warranties</a></li>
+        <li><a href="#g17">App Store terms</a></li>
+        <li><a href="#g18">Google Play terms</a></li>
+        <li><a href="#g19">Personal data</a></li>
+        <li><a href="#g20">Changes to the Terms</a></li>
+        <li><a href="#g21">Term, deletion, termination</a></li>
+        <li><a href="#g22">Severability</a></li>
+        <li><a href="#g23">No waiver</a></li>
+        <li><a href="#g24">Entire agreement</a></li>
+        <li><a href="#g25">Assignment</a></li>
+        <li><a href="#g26">Language of the contract</a></li>
+        <li><a href="#g27">Governing law and disputes</a></li>
+        <li><a href="#g28">Contact</a></li>
+      </ol>
+    </details>
+
+    <h2 id="g1">1. Purpose and acceptance</h2>
+    <p>These Terms of Use (the “<strong>Terms</strong>”) set out the terms and conditions under which LNA App makes the mobile app <strong>Plot Twist(ed)</strong> (the “<strong>App</strong>”) available, and the conditions of use of the service by anyone accessing it (the “<strong>User</strong>”).</p>
+    <p>Downloading, installing or using the App in any way implies full, complete and unreserved acceptance of these Terms. If the User does not accept all or part of these Terms, they are invited not to use the App and to uninstall it.</p>
+    <p>These Terms are supplemented by the <a href="#" data-goto="privacy">Privacy Policy</a>, which forms an integral part of them and details the processing of personal data carried out in connection with the App.</p>
+
+    <h2 id="g2">2. Definitions</h2>
+    <ul>
+      <li><strong>App</strong>: the mobile game Plot Twist(ed), in all its versions and on all distribution platforms (Google Play, App Store).</li>
+      <li><strong>Publisher</strong>, <strong>LNA App</strong>, <strong>“we”</strong>: the natural or legal person described in section 3, publisher of the App.</li>
+      <li><strong>User</strong>, <strong>Player</strong>, <strong>“you”</strong>: any person using the App.</li>
+      <li><strong>Store(s)</strong>: the app distribution platforms through which the App is offered for download (Google Play Store, Apple App Store).</li>
+      <li><strong>Digital content</strong>: within the meaning of consumer law, any digital item provided by the App, including jokers, ad removal and any feature unlocked by an In-App Purchase.</li>
+      <li><strong>In-App Purchase</strong>: any purchase made from the App through the billing system of the relevant Store.</li>
+      <li><strong>Progress</strong>: all of a User's own game data (unlocked worlds, jokers owned, settings, statistics, ranking).</li>
+    </ul>
+
+    <h2 id="g3">3. Publisher of the App</h2>
+    <p><strong>LNA App</strong><br>
+    12 montée du Château, 13650 Meyrargues, France<br>
+    SIRET (French business ID): 790 346 076 00025<br>
+    EU VAT number: FR 19790346076<br>
+    Publication director: Damien Ellena<br>
+    Contact: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+
+    <h2 id="g4">4. Capacity to contract</h2>
+    <p>The App is intended for a family audience and contains no content reserved for adults. It is not subject to any specific age restriction beyond those imposed by the Stores themselves (indicative age rating shown on the App's store page).</p>
+    <p>In-App Purchases require the User (or, for a minor, their legal representative holding the payment method associated with the Store account) to have the legal capacity to contract, or to be duly authorized by the person exercising parental authority to make such purchases. The Publisher has no means of verifying the User's age or their authorization to make a purchase: this responsibility lies with the holder of the Google Play account or Apple ID used, and is governed by the parental control tools offered by each Store.</p>
+
+    <h2 id="g5">5. Description of the Service</h2>
+    <p>Plot Twist(ed) is a movie guessing game in which the User finds the title of a movie from a pitch whose character names have been deliberately swapped, with the help of clues and jokers. The App is available in French and English.</p>
+    <p>The App offers in particular the following modes:</p>
+    <ul>
+      <li><strong>Main game</strong>: a progression through themed worlds, each grouping several puzzles of increasing difficulty.</li>
+      <li><strong>Daily Challenge</strong>: a timed daily challenge, identical for all players on the same day, with tracking of the personal best time.</li>
+      <li><strong>Weekly Puzzle</strong>: a weekly puzzle shared by all players, whose text is gradually revealed, with an online leaderboard (see section 9).</li>
+      <li><strong>Multiplayer</strong>: rounds played against a reference time (a real opponent recorded earlier, or a calibration time when real data is insufficient), with a rating system (“Elo”) and a match history.</li>
+    </ul>
+    <p>The App offers help jokers obtained through progress, by watching optional ads or by purchase, as well as optional In-App Purchases described in section 11.</p>
+    <p>This description is given for information only; the Publisher reserves the right to change, add or remove features under the conditions of section 20.</p>
+
+    <h2 id="g6">6. Access and availability</h2>
+    <p>The App is available free of charge for download on compatible Stores. It does not require creating an account to be used in full (see however section 7 for the optional Google sign-in) and most of its features can be used without an internet connection, except for the online features described in section 9, the display of ads, the processing of In-App Purchases and the optional Google sign-in.</p>
+    <p>The Publisher strives to ensure continuous access to the App but does not guarantee permanent availability, in particular in the event of maintenance, outage, or unavailability of the third-party services the App depends on (Google Play Services, Firebase, ad networks).</p>
+
+    <h2 id="g7">7. Player identity and Google sign-in (optional)</h2>
+    <p>By default, the App gives each User an automatically generated player ID (for example “Cinephile #123456”) and an avatar, without any information that could directly identify the User being requested or collected.</p>
+    <p>The App offers, strictly optionally and at the User's initiative (“Save with Google” button in the settings), to link the Progress to a Google account through the Google Sign-In authentication service. The sole purpose of this link is to back up the Progress on the Publisher's Firebase servers and restore it later (for example after changing device or reinstalling), and it does not create a user account in the sense of a personal space viewable by third parties, nor a public identity within the App.</p>
+    <p>The User remains free never to turn on this feature; all game modes remain available without it, the Progress then being kept locally only, as described in section 8.</p>
+
+    <h2 id="g8">8. Saving and progress</h2>
+    <p><strong>Local save.</strong> By default, the User's Progress is saved locally on their device. It is not sent to or viewed by the Publisher, nor synchronized between devices, unless the Google backup described in section 7 is turned on. It is permanently lost if the App is uninstalled, if the device is changed without a prior backup, or if the reset option provided in the settings is used.</p>
+    <p><strong>Google backup (optional).</strong> When the User turns on the link to a Google account, a copy of their Progress is also kept on the Publisher's Firebase servers, associated with a technical identifier linked to that account, so that it can be restored. This copy is processed in accordance with the Privacy Policy.</p>
+    <p>In all cases, the Publisher cannot be held liable for the loss of Progress, whatever the cause (uninstallation, change of device, outage, version incompatibility, malfunction of the Google backup service, etc.), the User being solely responsible for backing up their own data if it matters to them.</p>
+
+    <h2 id="g9">9. Online features: leaderboards and multiplayer</h2>
+    <p><strong>Weekly Puzzle.</strong> The User's solving time and their ranking relative to the other players of the same week are sent to and kept on the Publisher's Firebase servers, associated with an anonymous technical identifier (and not with a personal identity), in order to calculate and display a shared leaderboard. This leaderboard is reset every week; a personal history of past results remains available locally on the User's device.</p>
+    <p><strong>Multiplayer.</strong> This mode does not connect two players in real time: it compares the User's performance with a reference time, which may come from a game actually recorded by another player at a different time, or from a generic calibration time when the real data available for a given puzzle is insufficient. The result of each round played by the User (time, win/loss) is kept on the Publisher's servers to feed this mechanism for the benefit of all players, anonymously.</p>
+    <p>The User undertakes not to artificially manipulate these mechanisms (automation, exploitation of technical flaws) in order to distort a leaderboard or obtain an undue advantage; the Publisher reserves the right to remove from a leaderboard any result obviously obtained fraudulently.</p>
+    <p>These features require an active internet connection and are not available offline. The number of daily Multiplayer games may be limited, with the option of getting extra games by watching optional ads.</p>
+
+    <h2 id="g10">10. Advertising</h2>
+    <p>The App shows ads provided by the <strong>Google AdMob</strong> ad network, in two forms: interstitial ads that may appear between levels (shown less often to new players), and optional ads giving access to an in-game reward (jokers, extra Multiplayer games) that the User freely chooses to watch.</p>
+    <p>A consent tool (Google User Messaging Platform, compliant with the IAB Europe Transparency and Consent Framework) is shown to the User before any personalized ad is displayed, in accordance with the GDPR. The User can review their choice at any time from the App's settings (“Ad privacy options”).</p>
+    <p>The Publisher does not select or control the exact content of the ads served by this third-party network, and cannot be held liable for the content of the ads displayed, subject to the Publisher's compliance with the advertising content rules imposed by the Stores.</p>
+
+    <h2 id="g11">11. In-app purchases</h2>
+    <p><strong>11.1 Description.</strong> The App offers the following optional In-App Purchases, for information (the exact list and prices, including all taxes, are those shown in the App at the time of purchase and may change):</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Product</th><th>Content</th></tr></thead>
+        <tbody>
+          <tr><td>Remove ads</td><td>Permanent removal of interstitial ads</td></tr>
+          <tr><td>10 mixed jokers pack</td><td>10 help jokers of various types</td></tr>
+          <tr><td>30 jokers + no ads pack</td><td>30 help jokers + permanent removal of ads</td></tr>
+          <tr><td>100 jokers + no ads pack</td><td>100 help jokers + permanent removal of ads</td></tr>
+          <tr><td>3 red jokers pack</td><td>3 jokers that unlock an orange name</td></tr>
+          <tr><td>“Skip for good” joker</td><td>1 joker that automatically solves the current level of the main game</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>These are exclusively one-time purchases (no subscription is offered at this time). Should the Publisher offer a subscription in the future, these Terms would be updated accordingly to specify its renewal and cancellation terms.</p>
+    <p><strong>11.2 Payment processing.</strong> In-App Purchases are processed exclusively by the billing system of the Store used (Google Play or Apple's App Store), under the terms of sale, payment methods and refund policies specific to each of these Stores. The Publisher never collects, sees or keeps the User's payment information (card number, etc.); only the technical confirmation that a purchase was made is sent to the App in order to unlock the corresponding content.</p>
+    <p><strong>11.3 Scope of purchases.</strong> Unless a purchase restoration mechanism is offered by the relevant Store (for example when reinstalling with the same Google Play account or Apple ID), content unlocked by an In-App Purchase is tied to the device and installation on which the purchase was made, and is not automatically transferred when changing device without such a restoration or the Google backup described in section 7.</p>
+    <p><strong>11.4 No right of withdrawal.</strong> In accordance with Article L.221-28, 13° of the French Consumer Code, the 14-day right of withdrawal provided for distance contracts does not apply to contracts for the supply of digital content not supplied on a tangible medium whose performance has begun with the User's prior express consent and express waiver of their right of withdrawal. By confirming an In-App Purchase, whose content is unlocked immediately, the User expressly acknowledges and accepts that performance begins immediately and consequently waives their right of withdrawal.</p>
+    <p><strong>11.5 Complaints.</strong> Any complaint about the payment itself (incorrect charge, refund) must first be addressed to the customer service of the Store used, which alone is able to act on the transaction. For any question about the content unlocked by a purchase, the User may contact the Publisher using the details in section 28.</p>
+
+    <h2 id="g12">12. Notifications</h2>
+    <p>The App may offer to send local notifications (Daily Challenge reminder, weekly Weekly Puzzle reminder), generated directly by the User's device without using a remote server. These notifications can be turned off at any time in the settings of the device's operating system.</p>
+
+    <h2 id="g13">13. Intellectual property</h2>
+    <p>The App, its source code, interface, graphics, texts, visual identity and game mechanics are the exclusive property of LNA App or its licensors, and are protected by intellectual property law. Any unauthorized reproduction, representation, modification, adaptation or exploitation of the App, in whole or in part, is strictly prohibited.</p>
+    <p><strong>Plot Twist(ed) is not affiliated with, associated with, sponsored or endorsed by any film studio, distributor, streaming platform, or rights holder of the movies, TV shows or characters mentioned in the game.</strong> Movie titles, character names, actor names and film references used in the pitches, clues and puzzles are used by way of quotation and commentary, for the strictly playful purpose of cultural recognition, and remain the property of their respective rights holders. Any such mention constitutes neither a reproduction of the work itself nor an intentional infringement of the rights of said rights holders.</p>
+    <p>Any third-party trademark, logo or distinctive sign that may appear as a cultural reference in the App remains the property of its owner.</p>
+
+    <h2 id="g14">14. Permitted use and prohibited conduct</h2>
+    <p>The User undertakes to use the App in accordance with its purpose, for strictly personal and non-commercial purposes, and in particular not to:</p>
+    <ul>
+      <li>attempt to circumvent, disable or disrupt the App's operating mechanisms (cheating, exploiting technical flaws, reverse engineering, using bots or automated scripts);</li>
+      <li>artificially manipulate a leaderboard or a Multiplayer result, or obtain an In-App Purchase or a joker by fraudulent means;</li>
+      <li>attempt to access the Publisher's systems, data or servers without authorization;</li>
+      <li>use the App for illegal purposes or purposes contrary to public order.</li>
+    </ul>
+
+    <h2 id="g15">15. Sanctions in case of breach</h2>
+    <p>In the event of a proven breach of sections 4 or 14, the Publisher reserves the right, without notice or compensation, to suspend or revoke the User's access to the App's online features (leaderboards, Multiplayer, backup linked to a Google account), in particular by invalidating a result obtained fraudulently, without prejudice to any legal action the Publisher may consider appropriate.</p>
+
+    <h2 id="g16">16. Liability and warranties</h2>
+    <p>The App is provided “as is” and “as available”, without any guarantee that it is free of errors, bugs or interruptions. The Publisher takes reasonable measures to ensure the App works properly but cannot guarantee compatibility with all existing hardware and software configurations.</p>
+    <p>To the extent permitted by applicable law, the Publisher cannot be held liable for indirect damages (loss of data, time or jokers, moral or commercial harm) resulting from the use of or inability to use the App, including in the event of loss of Progress or temporary or permanent unavailability of the online features. Nothing in these Terms is intended to exclude or limit the Publisher's liability where applicable law does not allow it (in particular in the event of gross negligence or willful misconduct).</p>
+
+    <h2 id="g17">17. App Store (Apple) specific terms</h2>
+    <p>When the App is downloaded from Apple's App Store, the following provisions apply in addition to these Terms, in accordance with Apple Inc.'s requirements:</p>
+    <ul>
+      <li>These Terms are concluded between the User and the Publisher only, and not with Apple Inc.; Apple is not a party to these Terms and has no obligation whatsoever to provide any maintenance or support services with respect to the App.</li>
+      <li>In the event of any failure of the App to conform to any applicable warranty, the User may notify Apple, and Apple may refund the purchase price of the App, if any; to the maximum extent permitted by applicable law, Apple will have no other warranty obligation whatsoever with respect to the App.</li>
+      <li>Apple is not responsible for addressing any claims by the User or any third party relating to the App or the User's possession and/or use of the App, including claims relating to intellectual property.</li>
+      <li>The User represents that they are not located in a country that is subject to a U.S. Government embargo, or that has been designated by the U.S. Government as a “terrorist supporting” country, and that they are not listed on any U.S. Government list of prohibited or restricted parties.</li>
+      <li>Apple and its subsidiaries are third-party beneficiaries of these Terms and, as such, have the right to enforce these Terms against the User as third-party beneficiaries.</li>
+    </ul>
+
+    <h2 id="g18">18. Google Play specific terms</h2>
+    <p>When the App is downloaded from the Google Play Store, its use is also subject to the <a href="https://play.google.com/intl/en/about/play-terms/" target="_blank" rel="noopener">Google Play Terms of Service</a> and related policies. In the event of a conflict between these Terms and the conditions imposed by Google for the matters those conditions specifically govern (in particular the billing of In-App Purchases), Google's conditions prevail for those matters.</p>
+
+    <h2 id="g19">19. Personal data</h2>
+    <p>How personal data is collected and processed in connection with the use of the App is described in detail in the <a href="#" data-goto="privacy">Privacy Policy</a>, which forms an integral part of these Terms.</p>
+
+    <h2 id="g20">20. Changes to the Terms</h2>
+    <p>The Publisher reserves the right to change these Terms at any time, in particular when new features are added, when the applicable regulations change, or when the third-party services used change. Any substantial change will be announced in the App or on its store page, and will take effect upon publication of a new version of the App incorporating these changes or on the date indicated therein. Continued use of the App after the changes take effect constitutes acceptance of the amended Terms.</p>
+
+    <h2 id="g21">21. Term, deletion and termination</h2>
+    <p>These Terms apply for as long as the User uses the App. The User may stop using the App at any time by uninstalling it from their device, which deletes the Progress saved locally (Progress saved through the Google sign-in described in section 7 remains on the Publisher's servers until deletion is requested in accordance with the Privacy Policy).</p>
+    <p>The Publisher reserves the right to stop operating the App or some of its online features, in particular if it becomes economically or technically impossible to maintain them, subject to reasonable notice where circumstances allow.</p>
+
+    <h2 id="g22">22. Severability</h2>
+    <p>If any provision of these Terms is held to be void or unenforceable under a law or regulation or following a final court decision, it will be deemed unwritten, without affecting the validity of the other provisions, which will remain in full force and effect.</p>
+
+    <h2 id="g23">23. No waiver</h2>
+    <p>The Publisher's failure at any given time to enforce a breach by the User of any of the obligations set out in these Terms shall not be interpreted as a waiver of its right to enforce that breach in the future.</p>
+
+    <h2 id="g24">24. Entire agreement</h2>
+    <p>These Terms, supplemented by the Privacy Policy, set out all the rights and obligations of the parties relating to the use of the App. They replace and cancel any prior agreement, written or oral, on the same subject.</p>
+
+    <h2 id="g25">25. Assignment</h2>
+    <p>The Publisher may assign or transfer these Terms, in whole or in part, to any company that takes over the operation of the App, without the User's prior consent, provided that the rights the User holds under these Terms are respected. The User may not assign these Terms without the Publisher's prior written consent.</p>
+
+    <h2 id="g26">26. Language of the contract</h2>
+    <p>These Terms are written in French. This English version is made available for information to Users who use the App in English; in the event of any discrepancy between the two versions, only the <a href="../#cgu" hreflang="fr">French version</a> is authoritative.</p>
+
+    <h2 id="g27">27. Governing law and dispute resolution</h2>
+    <p>These Terms are governed by French law, without prejudice to the mandatory consumer protection provisions the User may benefit from under the law of their country of residence within the European Union.</p>
+    <p>In the event of a dispute, the User is invited to contact the Publisher first using the details in section 28 in order to seek an amicable solution. Failing an amicable resolution, and in accordance with Articles L.616-1 and R.616-1 of the French Consumer Code, any consumer has the right to use, free of charge, the services of a consumer mediator for the amicable resolution of the dispute: the CM2C (Centre de la Médiation de la Consommation de Conciliateurs de Justice), 49 rue de Ponthieu, 75008 Paris, France, phone +33 1 89 47 00 14. The consumer may refer the matter online at <a href="https://www.cm2c.net/declarer-un-litige.php">www.cm2c.net/declarer-un-litige.php</a>, by email to <a href="mailto:litiges@cm2c.net">litiges@cm2c.net</a> or by post to the address above. Failing an amicable agreement or recourse to mediation, the competent French courts shall have sole jurisdiction, subject to the mandatory jurisdiction rules applicable to consumers.</p>
+
+    <h2 id="g28">28. Contact</h2>
+    <p>For any question about these Terms: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+
+    <footer class="contact">
+      LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>
+      <button class="copybtn" data-copy="lna.app.game@gmail.com">Copy email</button>
+    </footer>
+  </article>
+</div>
+
+<script>
+  const tabs = {
+    privacy: { btn: document.getElementById('tab-privacy'), panel: document.getElementById('doc-privacy') },
+    terms: { btn: document.getElementById('tab-terms'), panel: document.getElementById('doc-terms') },
+  };
+  // The French page uses #conf / #cgu: accept them too.
+  const aliases = { conf: 'privacy', cgu: 'terms' };
+  function activate(name, push) {
+    for (const key in tabs) {
+      const isActive = key === name;
+      tabs[key].btn.setAttribute('aria-selected', String(isActive));
+      tabs[key].panel.classList.toggle('active', isActive);
+    }
+    if (push) history.replaceState(null, '', '#' + name);
+  }
+  tabs.privacy.btn.addEventListener('click', () => activate('privacy', true));
+  tabs.terms.btn.addEventListener('click', () => activate('terms', true));
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      activate(el.getAttribute('data-goto'), true);
+    });
+  });
+
+  function fromHash() {
+    let h = location.hash.replace('#', '');
+    h = aliases[h] || h;
+    if (h === 'terms' || h === 'privacy') { activate(h, false); return; }
+    // Anchor of a section (#g12, #c7…): open the tab that contains it.
+    const target = h && document.getElementById(h);
+    if (target) {
+      activate(target.closest('#doc-terms') ? 'terms' : 'privacy', false);
+      target.scrollIntoView();
+    }
+  }
+  fromHash();
+  window.addEventListener('hashchange', fromHash);
+
+  document.querySelectorAll('.copybtn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-copy');
+      const original = btn.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copied';
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(btn);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        btn.textContent = 'Selected';
+      }
+      setTimeout(() => { btn.textContent = original; }, 1600);
+    });
+  });
+</script>
+
+</body>
+</html>
