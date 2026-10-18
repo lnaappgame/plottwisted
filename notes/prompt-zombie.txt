@@ -1,0 +1,9 @@
+Vertical 9:16 short animated clip, 5 seconds, no text, no letters, no subtitles, no logo, no watermark, no music. Keep the top quarter of the frame calm and empty (a clean studio ceiling with soft lights) for a caption added later.
+
+Style: bold 2D cartoon animation, thick clean outlines, expressive character, cinematic lighting, palette of deep warm black (#0C0906), gold (#C9A24B, #F0CF7A) and crimson red (#A3283A) with pastel pink and mint accents from the baking set, smooth motion. Humor comes from a character who seriously plays the hero of the WRONG kind of movie.
+
+A zombie in a TV baking contest. A bright TV cooking-show studio with pastel workstations, mixers and colorful cakes. A friendly cartoon zombie with green skin, messy hair and a tidy chef's apron and toque decorates a tall pink layer cake with intense concentration, piping a perfect swirl of cream, tongue out. He steps back, admires his masterpiece and gives a proud thumbs-up to the camera; his thumb pops off comically, he catches it and sticks it back on with a sheepish grin. Silly and wholesome, never scary, no blood or gore. Camera: medium shot from the front like a cooking show, quick push-in on the thumbs-up.
+
+Strict rules (this is an advertisement): only generic, original characters. No existing character from any film, series, game or book, no resemblance to any real chef, TV host or person, no TV show name, brand or logo anywhere, no readable signs or random letters, no existing music.
+
+Negative prompt: text, letters, words, subtitles, captions, watermark, logo, brand, signage, blood, gore, horror, scary face, famous characters, celebrity likeness, photorealism, extra limbs, distorted hands, flicker.

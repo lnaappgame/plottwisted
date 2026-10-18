@@ -1,0 +1,15 @@
+Create 3 separate short animated clips for a mobile game trailer. Each clip: vertical 9:16 (1080x1920 or 720x1280), 4 to 5 seconds, no text, no letters, no subtitles, no logo, no watermark, no music. Keep the top quarter of every frame calm and empty (sky, curtain or starfield): a caption will be added there later.
+
+Shared style for all 3 clips (they must look like the same series): bold 2D cartoon animation, thick clean outlines, expressive characters, cinematic lighting, palette of deep warm black (#0C0906), gold (#C9A24B, #F0CF7A) and crimson red (#A3283A), smooth motion, one strong action per clip. Humor comes from a character who seriously plays the hero of the WRONG kind of movie.
+
+CLIP 1 - A wizard in a spy movie. Night, rooftops of a neon-lit modern city. A generic old wizard (long white beard, pointy midnight-blue hat, starry robe, wooden staff) sprints across a rooftop while a helicopter searchlight sweeps behind him. He hooks his staff onto a steel cable and slides down it like a zipline, then lands in a heroic crouch and puts on dark sunglasses as a burst of colorful magic sparks explodes behind him. Camera: lateral tracking shot, slight push-in on the landing. Night blues, neon reflections, gold highlights on the robe.
+
+CLIP 2 - A demon in a musical. A theatre stage with red velvet curtains and golden spotlights, golden dust in the light beams. A small red cartoon demon (tiny horns, pointed tail, big lovestruck eyes) kneels holding a single red rose, then sings with arms wide open as little hearts float up around him, then spins once while a line of cheerful chorus dancers kicks in rhythm behind him. Camera: static front view from the first row, slight upward tilt at the end. Deep reds and warm gold.
+
+CLIP 3 - A cowboy in a space opera. Deep space, purple nebula, a distant space station. A generic cowboy (wide hat, boots, neckerchief, spurs) floats in zero gravity spinning his lasso; his horse floats beside him wearing a round astronaut helmet. He throws the lasso and catches a small flying saucer, looking very pleased. Camera: slow orbit around the cowboy to sell weightlessness. Starry black, violet tones, golden glints on the spurs.
+
+Strict rules (this is an advertisement): only generic, original characters. No existing character from any film, series, game or book (no Gandalf, no Disney Merlin, no Hellboy), no resemblance to any real actor or person, no franchise elements (no 007, no gun-barrel shot, no Star Wars ships, no set from a known musical), no brand or logo anywhere, no readable signs or random letters in the background, no existing music or quotes.
+
+Negative prompt: text, letters, words, subtitles, captions, watermark, logo, brand, signage, famous characters, celebrity likeness, photorealism, extra limbs, distorted hands, flicker.
+
+Deliver as three MP4 files named plan1.mp4 (wizard), plan2.mp4 (demon), plan3.mp4 (cowboy).

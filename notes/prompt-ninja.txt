@@ -1,0 +1,9 @@
+Vertical 9:16 short animated clip, 5 seconds, no text, no letters, no subtitles, no logo, no watermark, no music. Keep the top quarter of the frame calm and empty (a soft blue sky) for a caption added later.
+
+Style: bold 2D cartoon animation, thick clean outlines, expressive character, cinematic lighting, palette of deep warm black (#0C0906), gold (#C9A24B, #F0CF7A) and crimson red (#A3283A) with soft white and pastel wedding colors, smooth motion. Humor comes from a character who seriously plays the hero of the WRONG kind of movie.
+
+A ninja in a wedding movie. A sunny garden wedding with white chairs, a flower arch and guests in their best outfits. The bride, back to camera, throws her bouquet over her shoulder toward a group of hopeful guests. Suddenly a ninja in a black outfit and mask leaps out of a flowering bush in a perfect acrobatic flip, catches the bouquet in mid-air, lands in a dramatic crouch holding it proudly, then vanishes in a puff of rose petals while the guests stare, stunned. Light, joyful and funny, no weapons. Camera: wide shot of the garden, then a quick slow-motion moment on the mid-air catch.
+
+Strict rules (this is an advertisement): only generic, original characters. No existing character from any film, series, game or book, no resemblance to any real actor or person, no brand or logo anywhere, no readable signs or random letters, no existing music.
+
+Negative prompt: text, letters, words, subtitles, captions, watermark, logo, brand, signage, weapons, sword, famous characters, celebrity likeness, photorealism, extra limbs, distorted hands, flicker.

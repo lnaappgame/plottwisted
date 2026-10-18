@@ -1,0 +1,9 @@
+Vertical 9:16 short animated clip, 5 seconds, no text, no letters, no subtitles, no logo, no watermark, no music. Keep the top quarter of the frame calm and empty (dark gym ceiling) for a caption added later.
+
+Style: bold 2D cartoon animation, thick clean outlines, expressive character, cinematic lighting, palette of deep warm black (#0C0906), gold (#C9A24B, #F0CF7A) and crimson red (#A3283A) with warm Halloween orange accents, smooth motion. Humor comes from a character who seriously plays the hero of the WRONG kind of movie.
+
+A ghost in a sports movie. An indoor basketball court lit like the dramatic final seconds of a championship game, golden spotlights, a blurred cheering crowd in the stands. A cute classic white sheet ghost wearing a sweatband dribbles the ball with total concentration, floats up in one big heroic jump and shoots the winning shot. The ball swishes perfectly through the hoop, and as it passes through the net it magically transforms into a glowing carved jack-o'-lantern pumpkin, with a little burst of orange sparkles; the pumpkin drops and bounces on the court with a friendly grin. The ghost lands, stares at the pumpkin, then raises both arms in triumph. Light, comedic, never scary. Camera: low-angle sports shot that follows the jump in slow motion, then tilts down to the pumpkin bouncing on the court.
+
+Strict rules (this is an advertisement): only a generic, original character. No existing character from any film, series, game or book, no resemblance to any real athlete or person, no team names, jersey numbers, brands or logos anywhere, no readable scoreboard or random letters, no existing music.
+
+Negative prompt: text, letters, numbers, words, subtitles, captions, scoreboard, watermark, logo, brand, signage, gore, horror, scary face, photorealism, extra limbs, distorted hands, flicker.

@@ -1,0 +1,9 @@
+Vertical 9:16 short animated clip, 5 seconds, no text, no letters, no subtitles, no logo, no watermark, no music. Keep the top quarter of the frame calm and empty (dark night sky) for a caption added later.
+
+Style: bold 2D cartoon animation, thick clean outlines, expressive character, cinematic lighting, palette of deep warm black (#0C0906), gold (#C9A24B, #F0CF7A) and crimson red (#A3283A) with the cool blue and red glow of city lights, smooth motion. Humor comes from a character who seriously plays the hero of the WRONG kind of movie.
+
+A medieval knight in a car chase movie. A multi-lane city highway at night, light trails, generic modern cars and trucks speeding. A knight in full shining plate armor with a red plume on his helmet gallops on his armored horse between the cars, lance under his arm, weaving left and right with total seriousness. He overtakes a sports car, raises his visor and gives the driver a polite nod, then leans forward as his horse speeds up and sparks fly from its horseshoes on the asphalt. Epic, fast and funny, no violence. Camera: low tracking shot alongside the horse, with motion blur on the background.
+
+Strict rules (this is an advertisement): only generic, original characters. No existing character from any film, series, game or book, no resemblance to any real actor or person, no real car makes, models, logos or license plates, no readable road signs or random letters, no existing music.
+
+Negative prompt: text, letters, words, numbers, subtitles, captions, license plates, road signs, watermark, logo, brand, car brand, famous characters, celebrity likeness, photorealism, extra limbs, distorted hooves, flicker.

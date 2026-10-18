@@ -1,0 +1,9 @@
+Vertical 9:16 short animated clip, 5 seconds, no text, no letters, no subtitles, no logo, no watermark, no music. Keep the top quarter of the frame calm and empty (a plain wall) for a caption added later.
+
+Style: bold 2D cartoon animation, thick clean outlines, expressive character, cinematic lighting, palette of deep warm black (#0C0906), gold (#C9A24B, #F0CF7A) and crimson red (#A3283A) with a few neon pink and cyan accents from the 80s set, smooth motion. Humor comes from a character who seriously plays the hero of the WRONG kind of movie.
+
+A skeleton in an 80s aerobics workout video. A bright retro gym studio with a mirror wall, a checkerboard floor and neon light strips. A friendly cartoon skeleton wearing a fluorescent headband, leg warmers and wristbands energetically does an 80s aerobics routine facing the camera: arm circles, then high knees, then a big jumping jack. On the last jump, his bones scatter in mid-air for a split second and snap back together perfectly in rhythm, and he finishes with a cheesy thumbs-up and a confident smile. Light, comedic, never scary or gory. Camera: static front view like a workout tape, slight zoom-in on the final pose.
+
+Strict rules (this is an advertisement): only a generic, original character. No existing character from any film, series, game or book, no resemblance to any real person or fitness celebrity, no brand or logo on the clothes or in the room, no readable signs or random letters, no existing music.
+
+Negative prompt: text, letters, words, subtitles, captions, watermark, logo, brand, signage, gore, blood, horror, scary face, photorealism, extra limbs, distorted hands, flicker.
