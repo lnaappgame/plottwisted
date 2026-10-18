@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -199,6 +200,19 @@ Future<void> _initBackgroundServices({
         FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
         return true;
       };
+    } catch (_) {}
+    // App Check : chaque appel Firestore porte une preuve qu'il vient du vrai
+    // jeu installé depuis le store (Play Integrity sur Android, DeviceCheck
+    // sur iPhone). Tant que l'application n'est pas imposée dans la console
+    // Firebase, un jeton absent ne bloque rien : on active d'abord en mode
+    // surveillance, puis on impose quand presque tous les joueurs ont cette
+    // version. En debug, le fournisseur « debug » affiche dans les logs un
+    // jeton à déclarer dans la console.
+    try {
+      await FirebaseAppCheck.instance.activate(
+        androidProvider: kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+        appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.deviceCheck,
+      );
     } catch (_) {}
 
     // RGPD (UMP) — obligatoire pour les utilisateurs UE/UK/Suisse avant
