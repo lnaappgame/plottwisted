@@ -20,8 +20,16 @@ import '../theme/app_theme.dart';
 // documents sous onglets ; les ancres #cgu/#conf ouvrent directement le bon
 // onglet. Hébergée ici (plutôt que sur claude.ai) car les robots de
 // vérification de Google Play/AdMob recevaient un 403 sur les artifacts.
-const String _kCguUrl = 'https://lnaappgame.github.io/plottwisted/#cgu';
-const String _kPrivacyPolicyUrl = 'https://lnaappgame.github.io/plottwisted/#conf';
+// Traduction anglaise (pour information, le français fait foi) sous /en/,
+// avec les ancres #terms/#privacy.
+const String _kLegalBaseUrl = 'https://lnaappgame.github.io/plottwisted/';
+
+String _legalUrl(BuildContext context, {required bool terms}) {
+  if (Localizations.localeOf(context).languageCode == 'en') {
+    return '${_kLegalBaseUrl}en/#${terms ? 'terms' : 'privacy'}';
+  }
+  return '$_kLegalBaseUrl#${terms ? 'cgu' : 'conf'}';
+}
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -114,12 +122,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 _LegalLink(
                   label: t.settingsCgu, colors: colors,
-                  onTap: () => launchUrl(Uri.parse(_kCguUrl), mode: LaunchMode.externalApplication),
+                  onTap: () => launchUrl(Uri.parse(_legalUrl(context, terms: true)), mode: LaunchMode.externalApplication),
                 ),
                 Text('·', style: AppTextStyles.body(size: 11, color: colors.muted)),
                 _LegalLink(
                   label: t.settingsPrivacyPolicy, colors: colors,
-                  onTap: () => launchUrl(Uri.parse(_kPrivacyPolicyUrl), mode: LaunchMode.externalApplication),
+                  onTap: () => launchUrl(Uri.parse(_legalUrl(context, terms: false)), mode: LaunchMode.externalApplication),
                 ),
               ],
             ),
