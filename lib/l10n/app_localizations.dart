@@ -2037,6 +2037,204 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Chances : chaque joker mineur 15 %, chaque majeur 10 %, les 3 mineurs 15 %, les 3 majeurs 10 %.'**
   String get wheelOdds;
+
+  /// No description provided for @homeHalloweenEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎃 EVENT HALLOWEEN'**
+  String get homeHalloweenEvent;
+
+  /// No description provided for @evtTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'EVENT HALLOWEEN'**
+  String get evtTitle;
+
+  /// No description provided for @evtIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pour chaque film mystère, réponds à 4 questions de culture générale. Tes réponses sont les indices du film à trouver !'**
+  String get evtIntro;
+
+  /// No description provided for @evtUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Jusqu\'au 8 novembre'**
+  String get evtUntil;
+
+  /// No description provided for @evtProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{found}/{total} films trouvés'**
+  String evtProgress(int found, int total);
+
+  /// No description provided for @evtFilmNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'FILM {n}'**
+  String evtFilmNumber(int n);
+
+  /// No description provided for @evtLockedDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =1{Disponible demain} other{Disponible dans {days} jours}}'**
+  String evtLockedDays(int days);
+
+  /// No description provided for @evtToPlay.
+  ///
+  /// In fr, this message translates to:
+  /// **'À jouer'**
+  String get evtToPlay;
+
+  /// No description provided for @evtInProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'Question {n}/4'**
+  String evtInProgress(int n);
+
+  /// No description provided for @evtFindFilm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trouve le film !'**
+  String get evtFindFilm;
+
+  /// No description provided for @evtComeBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reviens demain pour un nouveau film : l\'event continue !'**
+  String get evtComeBack;
+
+  /// No description provided for @evtAllDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bravo, tu as trouvé les 10 films de l\'event !'**
+  String get evtAllDone;
+
+  /// No description provided for @evtOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'event Halloween est terminé. Merci d\'avoir joué !'**
+  String get evtOver;
+
+  /// No description provided for @evtSkinsTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'AVATARS À GAGNER'**
+  String get evtSkinsTitle;
+
+  /// No description provided for @evtSkinPumpkin.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tête de citrouille : trouve ton premier film'**
+  String get evtSkinPumpkin;
+
+  /// No description provided for @evtSkinFire.
+  ///
+  /// In fr, this message translates to:
+  /// **'Citrouille en feu : trouve les 10 films'**
+  String get evtSkinFire;
+
+  /// No description provided for @evtQuestion.
+  ///
+  /// In fr, this message translates to:
+  /// **'QUESTION {n}/4'**
+  String evtQuestion(int n);
+
+  /// No description provided for @evtLevel1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Facile'**
+  String get evtLevel1;
+
+  /// No description provided for @evtLevel2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen'**
+  String get evtLevel2;
+
+  /// No description provided for @evtLevel3.
+  ///
+  /// In fr, this message translates to:
+  /// **'Difficile'**
+  String get evtLevel3;
+
+  /// No description provided for @evtLevel4.
+  ///
+  /// In fr, this message translates to:
+  /// **'Expert'**
+  String get evtLevel4;
+
+  /// No description provided for @evtCluesTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'TES INDICES'**
+  String get evtCluesTitle;
+
+  /// No description provided for @evtCluesHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vert : tes bonnes réponses. Rouge : les questions ratées, leur réponse reste cachée.'**
+  String get evtCluesHint;
+
+  /// No description provided for @evtRevealClue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dévoiler un indice ({n})'**
+  String evtRevealClue(int n);
+
+  /// No description provided for @evtFindTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'QUEL EST CE FILM ?'**
+  String get evtFindTitle;
+
+  /// No description provided for @evtWrong.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce n\'est pas ce film… essaie encore !'**
+  String get evtWrong;
+
+  /// No description provided for @evtSolvedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'ÉTAIT…'**
+  String get evtSolvedTitle;
+
+  /// No description provided for @evtRewardJoker.
+  ///
+  /// In fr, this message translates to:
+  /// **'+1 joker {joker}'**
+  String evtRewardJoker(String joker);
+
+  /// No description provided for @evtRewardPerfect.
+  ///
+  /// In fr, this message translates to:
+  /// **'Sans faute : joker majeur !'**
+  String get evtRewardPerfect;
+
+  /// No description provided for @evtAvatarUnlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel avatar débloqué : Tête de citrouille !'**
+  String get evtAvatarUnlocked;
+
+  /// No description provided for @evtFinalReward.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les 10 films ! Bonus : 1 joker de chaque + 1 joker rouge, et l\'avatar Citrouille en feu !'**
+  String get evtFinalReward;
+
+  /// No description provided for @evtContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'CONTINUER'**
+  String get evtContinue;
+
+  /// No description provided for @avatarEventLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avatars de l\'event Halloween'**
+  String get avatarEventLocked;
 }
 
 class _AppLocalizationsDelegate

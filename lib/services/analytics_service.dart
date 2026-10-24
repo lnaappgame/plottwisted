@@ -41,6 +41,10 @@ class AnalyticsService {
 
   Future<void> logPurchase({required String productId}) => _log('purchase_completed', {'product_id': productId});
 
+  /// Un film de l'event Halloween trouvé ([film] = index de 0 à 9).
+  Future<void> logHalloweenFilmSolved({required int film, required bool perfect, required int adClues}) =>
+      _log('halloween_film_solved', {'film': film, 'perfect': perfect ? 1 : 0, 'ad_clues': adClues});
+
   /// Un tour de la bobine du jour : [segment] = index dans kWheelSegments.
   Future<void> logWheelSpin({required bool afterAd, required int segment}) =>
       _log('wheel_spin', {'after_ad': afterAd ? 1 : 0, 'segment': segment});

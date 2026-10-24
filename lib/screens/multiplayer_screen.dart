@@ -9,6 +9,7 @@ import '../services/game_state.dart';
 import '../services/multiplayer_state.dart';
 import '../services/share_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/avatar_view.dart';
 import '../widgets/letter_keyboard.dart';
 import '../widgets/scifi_background.dart';
 
@@ -494,7 +495,7 @@ class _DuelSide extends StatelessWidget {
     return Column(
       crossAxisAlignment: alignRight ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
-        CircleAvatar(radius: 18, backgroundColor: avatarBg, child: Text(avatar, style: const TextStyle(fontSize: 17))),
+        AvatarView(avatar: avatar, radius: 18, background: avatarBg),
         const SizedBox(height: 4),
         Text(nom,
             textAlign: alignRight ? TextAlign.right : TextAlign.left,

@@ -6,11 +6,13 @@ import '../services/app_settings.dart';
 import '../services/game_state.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/avatar_view.dart';
 import '../widgets/clapper_transition.dart';
 import '../widgets/daily_wheel_dialog.dart';
 import '../widgets/scifi_background.dart';
 import 'defi_screen.dart';
 import 'enigme_screen.dart';
+import 'halloween_event_screen.dart';
 import 'multiplayer_screen.dart';
 import 'settings_screen.dart';
 import 'shop_screen.dart';
@@ -132,11 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   child: Row(
                                     children: [
-                                      CircleAvatar(
-                                        radius: 16,
-                                        backgroundColor: AppColors.gold,
-                                        child: Text(settings.avatar, style: const TextStyle(fontSize: 15)),
-                                      ),
+                                      AvatarView(avatar: settings.avatar, radius: 16, background: AppColors.gold),
                                       const SizedBox(width: 8),
                                       ConstrainedBox(
                                         constraints: const BoxConstraints(maxWidth: 110),
@@ -211,6 +209,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
+                          if (context.watch<GameState>().halloween.isActive) ...[
+                            const _HalloweenEventButton(),
+                            const SizedBox(height: 12),
+                          ],
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton(
@@ -334,22 +336,62 @@ class _ProfilDialogState extends State<_ProfilDialog> {
               alignment: WrapAlignment.center,
               spacing: 8,
               runSpacing: 8,
-              children: kAvatarEmojis.map((a) {
-                final selected = a == settings.avatar;
-                return InkWell(
-                  onTap: () => context.read<AppSettings>().setAvatar(a),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: colors.bgPanel,
-                    child: CircleAvatar(
-                      radius: selected ? 18 : 19,
-                      backgroundColor: selected ? AppColors.gold.withOpacity(0.25) : Colors.transparent,
-                      child: Text(a, style: const TextStyle(fontSize: 16)),
+              children: [
+                // Avatars de l'event Halloween : en tête une fois gagnés.
+                for (final a in kEventAvatars)
+                  if (settings.isAvatarUnlocked(a))
+                    InkWell(
+                      key: ValueKey('avatar:$a'),
+                      onTap: () => context.read<AppSettings>().setAvatar(a),
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: a == settings.avatar ? AppColors.goldBright : Colors.transparent, width: 2),
+                        ),
+                        child: AvatarView(avatar: a, radius: 18, background: colors.bgPanel),
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
+                ...kAvatarEmojis.map((a) {
+                  final selected = a == settings.avatar;
+                  return InkWell(
+                    onTap: () => context.read<AppSettings>().setAvatar(a),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: colors.bgPanel,
+                      child: CircleAvatar(
+                        radius: selected ? 18 : 19,
+                        backgroundColor: selected ? AppColors.gold.withOpacity(0.25) : Colors.transparent,
+                        child: Text(a, style: const TextStyle(fontSize: 16)),
+                      ),
+                    ),
+                  );
+                }),
+              ],
             ),
+            if (kEventAvatars.any((a) => !settings.isAvatarUnlocked(a))) ...[
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (final a in kEventAvatars)
+                    if (!settings.isAvatarUnlocked(a))
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Opacity(opacity: 0.35, child: AvatarView(avatar: a, radius: 16, background: colors.bgPanel)),
+                            Icon(Icons.lock, size: 14, color: colors.cream),
+                          ],
+                        ),
+                      ),
+                  const SizedBox(width: 6),
+                  Text(t.avatarEventLocked, style: AppTextStyles.body(size: 11, color: colors.muted)),
+                ],
+              ),
+            ],
             const SizedBox(height: 20),
             Text(t.homeYourId, textAlign: TextAlign.center, style: AppTextStyles.display(size: 20)),
             const SizedBox(height: 10),
@@ -400,6 +442,53 @@ class _IconButton extends StatelessWidget {
           border: Border.all(color: AppColors.gold.withOpacity(0.3)),
         ),
         child: Icon(icon, color: AppColors.goldBright, size: 18),
+      ),
+    );
+  }
+}
+
+/// Entrée de l'event Halloween (visible tant qu'il dure), avec le nombre de
+/// films jouables pas encore trouvés.
+class _HalloweenEventButton extends StatelessWidget {
+  const _HalloweenEventButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final event = context.watch<GameState>().halloween;
+    final t = AppLocalizations.of(context);
+    final toPlay = List.generate(event.availableCount, (i) => event.progressOf(i).solved).where((s) => !s).length;
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        key: const ValueKey('homeHalloweenEvent'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF3A1F52),
+          padding: const EdgeInsets.symmetric(vertical: 13),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: const BorderSide(color: Color(0xFFF28C28), width: 1.5),
+          ),
+        ),
+        onPressed: () => ClapperTransition.play(context, () {
+          if (context.mounted) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => const HalloweenEventScreen()));
+          }
+        }),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(t.homeHalloweenEvent, style: AppTextStyles.display(size: 18, color: const Color(0xFFFFB347))),
+            if (toPlay > 0) ...[
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                decoration: BoxDecoration(color: const Color(0xFFF28C28), borderRadius: BorderRadius.circular(10)),
+                child: Text('$toPlay',
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF1B1326))),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

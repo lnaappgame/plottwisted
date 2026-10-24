@@ -8,6 +8,7 @@ import '../models/puzzle.dart';
 import 'ad_service.dart';
 import 'analytics_service.dart';
 import 'app_settings.dart';
+import 'halloween_event.dart';
 import 'save_service.dart';
 
 /// Traduit pour l'affichage un libellé de joker renvoyé par
@@ -142,7 +143,16 @@ class GameState extends ChangeNotifier {
         'postponedLevels': _postponedLevels,
         'wheelFreeSpinDay': wheelFreeSpinDay,
         'wheelAdSpinDay': wheelAdSpinDay,
+        'halloween': halloween.toJson(),
       };
+
+  // ─── Event Halloween ───
+  // Son état vit dans la même sauvegarde (et la même sauvegarde cloud) que
+  // le jeu principal, dont il alimente le stock de jokers.
+  late final HalloweenEvent halloween = HalloweenEvent(this);
+
+  /// Appelé par [halloween] à chaque changement (sauvegarde + affichage).
+  void eventChanged() => notifyListeners();
 
   // ─── Niveau en cours ───
   // Sauvegardé avec le reste : rouvrir l'app en plein niveau retrouve la
@@ -312,6 +322,7 @@ class GameState extends ChangeNotifier {
         : {};
     wheelFreeSpinDay = data['wheelFreeSpinDay'] as String?;
     wheelAdSpinDay = data['wheelAdSpinDay'] as String?;
+    halloween.restore(data['halloween']);
     if (hasPendingSolve) loadPuzzle();
     _restoring = false;
   }
@@ -597,6 +608,7 @@ class GameState extends ChangeNotifier {
     _solvedPendingKey = null;
     _savedLevel = null;
     _postponedLevels = {};
+    halloween.reset();
     worldChoiceReserve = null;
     _worldChoiceFrontier = 4;
     _worldChoicesExhausted = false;
@@ -1187,8 +1199,7 @@ class GameState extends ChangeNotifier {
   String? wheelFreeSpinDay;
   String? wheelAdSpinDay;
 
-  /// Horloge de la bobine, remplaçable dans les tests.
-  @visibleForTesting
+  /// Horloge de la bobine et de l'event Halloween, remplaçable dans les tests.
   DateTime Function() clock = DateTime.now;
 
   String get _todayKey {

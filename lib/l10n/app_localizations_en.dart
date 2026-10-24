@@ -1141,4 +1141,127 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get wheelOdds =>
       'Odds: each minor joker 15%, each major 10%, all 3 minors 15%, all 3 majors 10%.';
+
+  @override
+  String get homeHalloweenEvent => '🎃 HALLOWEEN EVENT';
+
+  @override
+  String get evtTitle => 'HALLOWEEN EVENT';
+
+  @override
+  String get evtIntro =>
+      'For each mystery movie, answer 4 trivia questions. Your answers are the clues to the movie!';
+
+  @override
+  String get evtUntil => 'Until November 8';
+
+  @override
+  String evtProgress(int found, int total) {
+    return '$found/$total movies found';
+  }
+
+  @override
+  String evtFilmNumber(int n) {
+    return 'MOVIE $n';
+  }
+
+  @override
+  String evtLockedDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Available in $days days',
+      one: 'Available tomorrow',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get evtToPlay => 'Play';
+
+  @override
+  String evtInProgress(int n) {
+    return 'Question $n/4';
+  }
+
+  @override
+  String get evtFindFilm => 'Find the movie!';
+
+  @override
+  String get evtComeBack =>
+      'Come back tomorrow for a new movie: the event goes on!';
+
+  @override
+  String get evtAllDone => 'Well done, you found all 10 event movies!';
+
+  @override
+  String get evtOver => 'The Halloween event is over. Thanks for playing!';
+
+  @override
+  String get evtSkinsTitle => 'AVATARS TO WIN';
+
+  @override
+  String get evtSkinPumpkin => 'Pumpkin head: find your first movie';
+
+  @override
+  String get evtSkinFire => 'Flaming pumpkin: find all 10 movies';
+
+  @override
+  String evtQuestion(int n) {
+    return 'QUESTION $n/4';
+  }
+
+  @override
+  String get evtLevel1 => 'Easy';
+
+  @override
+  String get evtLevel2 => 'Medium';
+
+  @override
+  String get evtLevel3 => 'Hard';
+
+  @override
+  String get evtLevel4 => 'Expert';
+
+  @override
+  String get evtCluesTitle => 'YOUR CLUES';
+
+  @override
+  String get evtCluesHint =>
+      'Green: your right answers. Red: missed questions, their answer stays hidden.';
+
+  @override
+  String evtRevealClue(int n) {
+    return 'Reveal a clue ($n)';
+  }
+
+  @override
+  String get evtFindTitle => 'WHICH MOVIE IS IT?';
+
+  @override
+  String get evtWrong => 'That\'s not the movie… try again!';
+
+  @override
+  String get evtSolvedTitle => 'IT WAS…';
+
+  @override
+  String evtRewardJoker(String joker) {
+    return '+1 $joker joker';
+  }
+
+  @override
+  String get evtRewardPerfect => 'Flawless: major joker!';
+
+  @override
+  String get evtAvatarUnlocked => 'New avatar unlocked: Pumpkin head!';
+
+  @override
+  String get evtFinalReward =>
+      'All 10 movies! Bonus: one of each joker + 1 red joker, and the Flaming pumpkin avatar!';
+
+  @override
+  String get evtContinue => 'CONTINUE';
+
+  @override
+  String get avatarEventLocked => 'Halloween event avatars';
 }

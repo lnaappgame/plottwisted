@@ -11,6 +11,12 @@ const List<String> kAvatarEmojis = [
 // personnage protégé ni d'acteur reconnaissable — voir la planche pixel-art
 // fournie à part pour la version dessinée de ces avatars.
 
+/// Avatars dessinés (voir AvatarView) gagnés pendant l'event Halloween :
+/// tête de citrouille au premier film trouvé, citrouille en feu pour les 10.
+const kPumpkinAvatar = 'pumpkin';
+const kFirePumpkinAvatar = 'pumpkin_fire';
+const kEventAvatars = [kPumpkinAvatar, kFirePumpkinAvatar];
+
 const int kPlayerIdMaxLength = 20;
 
 class AppSettings extends ChangeNotifier {
@@ -34,6 +40,7 @@ class AppSettings extends ChangeNotifier {
   String playerName = kDefaultPlayerNameFr;
   String playerId = _genererPlayerId();
   String avatar = kAvatarEmojis.first;
+  Set<String> unlockedAvatars = {}; // avatars d'event gagnés (kEventAvatars)
   bool reviewRequested = false; // demande d'avis store : une seule fois par installation
 
   // Saisie des lettres dans le jeu principal, l'énigme et le multijoueur :
@@ -84,6 +91,15 @@ class AppSettings extends ChangeNotifier {
   void setLargeText(bool value) { largeText = value; notifyListeners(); }
   void toggleDyslexicMode() { dyslexicMode = !dyslexicMode; notifyListeners(); }
   void setAvatar(String emoji) { avatar = emoji; notifyListeners(); }
+
+  bool isAvatarUnlocked(String id) => unlockedAvatars.contains(id);
+
+  /// Débloque un avatar d'event ; true seulement s'il ne l'était pas encore.
+  bool unlockAvatar(String id) {
+    if (!unlockedAvatars.add(id)) return false;
+    notifyListeners();
+    return true;
+  }
   void setLocale(String value) { locale = value; notifyListeners(); }
   void setInputMode(String value) { inputMode = value; notifyListeners(); }
   void markInputModeTipShown() { inputModeTipShown = true; notifyListeners(); }
@@ -115,6 +131,7 @@ class AppSettings extends ChangeNotifier {
         'playerName': playerName,
         'playerId': playerId,
         'avatar': avatar,
+        'unlockedAvatars': unlockedAvatars.toList(),
         'reviewRequested': reviewRequested,
         'inputMode': inputMode,
         'inputModeTipShown': inputModeTipShown,
@@ -148,6 +165,10 @@ class AppSettings extends ChangeNotifier {
     playerName = data['playerName'] as String? ?? playerName;
     playerId = data['playerId'] as String? ?? playerId;
     avatar = data['avatar'] as String? ?? avatar;
+    unlockedAvatars = ((data['unlockedAvatars'] as List?) ?? const []).whereType<String>().toSet();
+    // Un avatar d'event jamais gagné (sauvegarde trafiquée, restauration
+    // partielle) ne reste pas affiché.
+    if (kEventAvatars.contains(avatar) && !unlockedAvatars.contains(avatar)) avatar = kAvatarEmojis.first;
     reviewRequested = data['reviewRequested'] as bool? ?? reviewRequested;
     final fld = data['firstLaunchDay'] as String?;
     if (fld != null) {
