@@ -1149,97 +1149,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get evtTitle => 'HALLOWEEN EVENT';
 
   @override
+  String get evtIntroTitle => 'WHAT IF THE VILLAINS WERE RIGHT?';
+
+  @override
   String get evtIntro =>
-      'For each mystery movie, answer 4 trivia questions. Your answers are the clues to the movie!';
+      'Why does nobody ever try to understand the villains? For Halloween, they finally tell their side of the story. After all, being bad isn\'t so bad…';
+
+  @override
+  String get evtIntro2 =>
+      '30 horror and Halloween movies told by their villain: can you find them all?';
+
+  @override
+  String get evtRules =>
+      '10 pitches open on day one, then 2 more every day. Jokers: Reveal, Eliminate and Reveal a word. A free joker every 5 pitches found.';
 
   @override
   String get evtUntil => 'Until November 8';
 
   @override
   String evtProgress(int found, int total) {
-    return '$found/$total movies found';
+    return '$found/$total pitches found';
   }
 
   @override
-  String evtFilmNumber(int n) {
-    return 'MOVIE $n';
+  String get evtPlay => 'PLAY';
+
+  @override
+  String evtPitchNumber(int n, int total) {
+    return 'PITCH $n/$total';
   }
-
-  @override
-  String evtLockedDays(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other: 'Available in $days days',
-      one: 'Available tomorrow',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get evtToPlay => 'Play';
-
-  @override
-  String evtInProgress(int n) {
-    return 'Question $n/4';
-  }
-
-  @override
-  String get evtFindFilm => 'Find the movie!';
 
   @override
   String get evtComeBack =>
-      'Come back tomorrow for a new movie: the event goes on!';
+      'You found every pitch available today! Come back tomorrow for more.';
 
   @override
-  String get evtAllDone => 'Well done, you found all 10 event movies!';
+  String get evtAllDone => 'Well done, you found all 30 event pitches!';
 
   @override
   String get evtOver => 'The Halloween event is over. Thanks for playing!';
 
   @override
+  String get evtSkipLast =>
+      'This is the only pitch available right now: you can\'t skip it.';
+
+  @override
   String get evtSkinsTitle => 'AVATARS TO WIN';
 
   @override
-  String get evtSkinPumpkin => 'Pumpkin head: find your first movie';
+  String get evtSkinPumpkin => 'Pumpkin head: find your first pitch';
 
   @override
-  String get evtSkinFire => 'Flaming pumpkin: find all 10 movies';
+  String get evtSkinFire => 'Flaming pumpkin: find all 30 pitches';
 
   @override
-  String evtQuestion(int n) {
-    return 'QUESTION $n/4';
-  }
-
-  @override
-  String get evtLevel1 => 'Easy';
-
-  @override
-  String get evtLevel2 => 'Medium';
-
-  @override
-  String get evtLevel3 => 'Hard';
-
-  @override
-  String get evtLevel4 => 'Expert';
-
-  @override
-  String get evtCluesTitle => 'YOUR CLUES';
-
-  @override
-  String get evtCluesHint =>
-      'Green: your right answers. Red: missed questions, their answer stays hidden.';
-
-  @override
-  String evtRevealClue(int n) {
-    return 'Reveal a clue ($n)';
-  }
-
-  @override
-  String get evtFindTitle => 'WHICH MOVIE IS IT?';
-
-  @override
-  String get evtWrong => 'That\'s not the movie… try again!';
+  String get evtWellDone => 'WELL DONE!';
 
   @override
   String get evtSolvedTitle => 'IT WAS…';
@@ -1250,17 +1214,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get evtRewardPerfect => 'Flawless: major joker!';
-
-  @override
   String get evtAvatarUnlocked => 'New avatar unlocked: Pumpkin head!';
 
   @override
   String get evtFinalReward =>
-      'All 10 movies! Bonus: one of each joker + 1 red joker, and the Flaming pumpkin avatar!';
+      'All 30 pitches! Bonus: one of each joker + 1 red joker, and the Flaming pumpkin avatar!';
 
   @override
-  String get evtContinue => 'CONTINUE';
+  String get evtNext => 'NEXT PITCH';
+
+  @override
+  String get evtBackToEvent => 'BACK TO THE EVENT';
 
   @override
   String get avatarEventLocked => 'Halloween event avatars';

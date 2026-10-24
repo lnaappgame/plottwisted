@@ -40,7 +40,7 @@ String normalize(String input) {
   return result;
 }
 
-class GameState extends ChangeNotifier {
+class GameState extends ChangeNotifier implements TitleGrid {
   final AdService adService;
   final SaveService saveService;
   final AnalyticsService analytics;
@@ -1133,8 +1133,11 @@ class GameState extends ChangeNotifier {
   }
 
   /// Tire et accorde un joker mineur ou majeur selon [jokerOddsWithin].
-  JokerKind grantRandomJoker({required bool minor}) {
-    final odds = jokerOddsWithin(minor ? kMinorJokers : kMajorJokers);
+  JokerKind grantRandomJoker({required bool minor}) => grantRandomJokerAmong(minor ? kMinorJokers : kMajorJokers);
+
+  /// Tire et accorde un joker parmi [kinds] selon [jokerOddsWithin].
+  JokerKind grantRandomJokerAmong(List<JokerKind> kinds) {
+    final odds = jokerOddsWithin(kinds);
     var roll = _rng.nextDouble();
     var kind = odds.keys.last;
     for (final entry in odds.entries) {

@@ -448,7 +448,7 @@ class _IconButton extends StatelessWidget {
 }
 
 /// Entrée de l'event Halloween (visible tant qu'il dure), avec le nombre de
-/// films jouables pas encore trouvés.
+/// pitchs jouables pas encore trouvés.
 class _HalloweenEventButton extends StatelessWidget {
   const _HalloweenEventButton();
 
@@ -456,7 +456,7 @@ class _HalloweenEventButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final event = context.watch<GameState>().halloween;
     final t = AppLocalizations.of(context);
-    final toPlay = List.generate(event.availableCount, (i) => event.progressOf(i).solved).where((s) => !s).length;
+    final toPlay = event.toPlayCount;
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(

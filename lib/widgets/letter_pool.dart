@@ -13,7 +13,10 @@ class LetterPool extends StatelessWidget {
   final JokerFx? fx;
   /// Appelé après chaque lettre placée (conseil sur le mode de saisie, voir GameScreen).
   final VoidCallback? onTileTapped;
-  const LetterPool({super.key, this.fx, this.onTileTapped});
+
+  /// Grille alimentée : celle du jeu principal par défaut.
+  final TitleGrid? grid;
+  const LetterPool({super.key, this.fx, this.onTileTapped, this.grid});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,9 @@ class LetterPool extends StatelessWidget {
   }
 
   Widget _build(BuildContext context) {
-    final game = context.watch<GameState>();
+    // La grille de l'event change elle aussi par les notifications de GameState.
+    final state = context.watch<GameState>();
+    final TitleGrid game = grid ?? state;
     final settings = context.watch<AppSettings>();
     final sound = context.read<SoundService>();
     final colors = AppColors(settings.isLightTheme);
@@ -53,7 +58,7 @@ class LetterPool extends StatelessWidget {
     );
   }
 
-  Widget _tile(BuildContext context, GameState game, AppSettings settings, SoundService sound, AppColors colors,
+  Widget _tile(BuildContext context, TitleGrid game, AppSettings settings, SoundService sound, AppColors colors,
       int index, LetterTile tile) {
     // Lettre visée par le faisceau d'Éliminer : ne s'éteint qu'à l'impact.
     final eliminated = tile.eliminated && !(fx?.isIncoming('tile:$index') ?? false);

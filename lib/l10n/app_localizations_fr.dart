@@ -1154,97 +1154,61 @@ class AppLocalizationsFr extends AppLocalizations {
   String get evtTitle => 'L\'EVENT HALLOWEEN';
 
   @override
+  String get evtIntroTitle => 'ET SI LES MÉCHANTS AVAIENT RAISON ?';
+
+  @override
   String get evtIntro =>
-      'Pour chaque film mystère, réponds à 4 questions de culture générale. Tes réponses sont les indices du film à trouver !';
+      'Pourquoi personne ne cherche jamais à comprendre les méchants ? Pour Halloween, ils racontent enfin leur version de l\'histoire. Après tout, ce n\'est pas si mal d\'être méchant…';
+
+  @override
+  String get evtIntro2 =>
+      '30 films d\'horreur et d\'Halloween racontés par leur méchant : à toi de les retrouver !';
+
+  @override
+  String get evtRules =>
+      '10 pitchs ouverts le premier jour, puis 2 de plus chaque jour. Jokers : Révéler, Éliminer et Révéler un mot. Un joker offert tous les 5 pitchs trouvés.';
 
   @override
   String get evtUntil => 'Jusqu\'au 8 novembre';
 
   @override
   String evtProgress(int found, int total) {
-    return '$found/$total films trouvés';
+    return '$found/$total pitchs trouvés';
   }
 
   @override
-  String evtFilmNumber(int n) {
-    return 'FILM $n';
+  String get evtPlay => 'JOUER';
+
+  @override
+  String evtPitchNumber(int n, int total) {
+    return 'PITCH $n/$total';
   }
-
-  @override
-  String evtLockedDays(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other: 'Disponible dans $days jours',
-      one: 'Disponible demain',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get evtToPlay => 'À jouer';
-
-  @override
-  String evtInProgress(int n) {
-    return 'Question $n/4';
-  }
-
-  @override
-  String get evtFindFilm => 'Trouve le film !';
 
   @override
   String get evtComeBack =>
-      'Reviens demain pour un nouveau film : l\'event continue !';
+      'Tu as trouvé tous les pitchs du jour ! Reviens demain pour la suite de l\'event.';
 
   @override
-  String get evtAllDone => 'Bravo, tu as trouvé les 10 films de l\'event !';
+  String get evtAllDone => 'Bravo, tu as trouvé les 30 pitchs de l\'event !';
 
   @override
   String get evtOver => 'L\'event Halloween est terminé. Merci d\'avoir joué !';
 
   @override
+  String get evtSkipLast =>
+      'C\'est le seul pitch disponible pour l\'instant : impossible de le passer.';
+
+  @override
   String get evtSkinsTitle => 'AVATARS À GAGNER';
 
   @override
-  String get evtSkinPumpkin => 'Tête de citrouille : trouve ton premier film';
+  String get evtSkinPumpkin => 'Tête de citrouille : trouve ton premier pitch';
 
   @override
-  String get evtSkinFire => 'Citrouille en feu : trouve les 10 films';
+  String get evtSkinFire => 'Citrouille en feu : trouve les 30 pitchs';
 
   @override
-  String evtQuestion(int n) {
-    return 'QUESTION $n/4';
-  }
-
-  @override
-  String get evtLevel1 => 'Facile';
-
-  @override
-  String get evtLevel2 => 'Moyen';
-
-  @override
-  String get evtLevel3 => 'Difficile';
-
-  @override
-  String get evtLevel4 => 'Expert';
-
-  @override
-  String get evtCluesTitle => 'TES INDICES';
-
-  @override
-  String get evtCluesHint =>
-      'Vert : tes bonnes réponses. Rouge : les questions ratées, leur réponse reste cachée.';
-
-  @override
-  String evtRevealClue(int n) {
-    return 'Dévoiler un indice ($n)';
-  }
-
-  @override
-  String get evtFindTitle => 'QUEL EST CE FILM ?';
-
-  @override
-  String get evtWrong => 'Ce n\'est pas ce film… essaie encore !';
+  String get evtWellDone => 'BIEN JOUÉ !';
 
   @override
   String get evtSolvedTitle => 'C\'ÉTAIT…';
@@ -1255,18 +1219,18 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get evtRewardPerfect => 'Sans faute : joker majeur !';
-
-  @override
   String get evtAvatarUnlocked =>
       'Nouvel avatar débloqué : Tête de citrouille !';
 
   @override
   String get evtFinalReward =>
-      'Les 10 films ! Bonus : 1 joker de chaque + 1 joker rouge, et l\'avatar Citrouille en feu !';
+      'Les 30 pitchs ! Bonus : 1 joker de chaque + 1 joker rouge, et l\'avatar Citrouille en feu !';
 
   @override
-  String get evtContinue => 'CONTINUER';
+  String get evtNext => 'PITCH SUIVANT';
+
+  @override
+  String get evtBackToEvent => 'RETOUR À L\'EVENT';
 
   @override
   String get avatarEventLocked => 'Avatars de l\'event Halloween';

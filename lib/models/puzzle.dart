@@ -176,6 +176,21 @@ class AnswerSlot {
   }
 }
 
+/// Grille d'un titre à trouver, telle que l'affichent AnswerRow et
+/// LetterPool : celle du jeu principal (GameState) ou celle de l'event
+/// Halloween.
+abstract interface class TitleGrid {
+  List<AnswerSlot> get slots;
+  List<int?> get guess;
+  List<LetterTile> get pool;
+  List<List<int>> get wordRanges;
+  Set<int> get lockedWords;
+  Set<int> get lockedSlots;
+  int get cursorIndex;
+  void onBlankTap(int i);
+  void onLetterTap(LetterTile tile);
+}
+
 /// Une tuile de la grille de lettres/chiffres à disposition du joueur.
 class LetterTile {
   final String letter;

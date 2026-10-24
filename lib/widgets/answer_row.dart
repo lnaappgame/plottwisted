@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/puzzle.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
 import '../theme/app_theme.dart';
@@ -10,9 +11,12 @@ class AnswerRow extends StatelessWidget {
   /// révélation), quelles que soient les lettres placées par le joueur.
   final bool highlightSolved;
   final JokerFx? fx;
-  const AnswerRow({super.key, this.highlightSolved = false, this.fx});
 
-  bool _isLocked(GameState game, int i) {
+  /// Grille affichée : celle du jeu principal par défaut.
+  final TitleGrid? grid;
+  const AnswerRow({super.key, this.highlightSolved = false, this.fx, this.grid});
+
+  bool _isLocked(TitleGrid game, int i) {
     if (game.lockedSlots.contains(i)) return true;
     final w = game.wordRanges.indexWhere((r) => r.contains(i));
     return w != -1 && game.lockedWords.contains(w);
@@ -26,7 +30,9 @@ class AnswerRow extends StatelessWidget {
   }
 
   Widget _build(BuildContext context) {
-    final game = context.watch<GameState>();
+    // La grille de l'event change elle aussi par les notifications de GameState.
+    final state = context.watch<GameState>();
+    final TitleGrid game = grid ?? state;
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme);
 

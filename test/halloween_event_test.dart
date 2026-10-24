@@ -3,14 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:cine_devinette/data/halloween_event_data.dart';
+import 'package:cine_devinette/data/halloween_pitches_data.dart';
 import 'package:cine_devinette/l10n/app_localizations.dart';
+import 'package:cine_devinette/models/joker.dart';
 import 'package:cine_devinette/screens/halloween_event_screen.dart';
 import 'package:cine_devinette/services/ad_service.dart';
 import 'package:cine_devinette/services/app_settings.dart';
 import 'package:cine_devinette/services/game_state.dart';
+import 'package:cine_devinette/services/halloween_event.dart';
 import 'package:cine_devinette/services/save_service.dart';
 import 'package:cine_devinette/services/sound_service.dart';
+import 'package:cine_devinette/services/streak_state.dart';
 
 GameState _newGame({DateTime? now}) {
   final saveService = SaveService();
@@ -19,195 +22,242 @@ GameState _newGame({DateTime? now}) {
   return game;
 }
 
-/// Répond aux 4 questions du film [i] : juste si [right] vaut true.
-void _answerAll(GameState game, int i, List<bool> right) {
-  for (var q = 0; q < 4; q++) {
-    game.halloween.answer(i, q, right[q] ? 0 : 1);
-  }
-}
-
-/// Remplit la grille avec le bon titre.
-void _typeTitle(GameState game) {
-  final e = game.halloween;
+/// Remplit les cases encore vides avec les bonnes lettres.
+void _typeTitle(HalloweenEvent e) {
   for (var s = 0; s < e.slots.length; s++) {
     final slot = e.slots[s];
-    if (slot.isSpace || slot.isAuto) continue;
-    final tile = e.pool.firstWhere((t) => t.letter == slot.char && !t.used);
+    if (slot.isSpace || slot.isAuto || e.guess[s] != null) continue;
+    final tile = e.pool.firstWhere((t) => t.letter == slot.char && !t.used && !t.eliminated);
     e.onBlankTap(s);
     e.onLetterTap(tile);
   }
 }
 
-int _jokerTotal(GameState g) =>
-    g.revealCount + g.eliminateCount + g.characterCount + g.actorCount + g.hintCount + g.revealWordCount;
+String _answer(HalloweenEvent e) => e.slots.map((s) => s.char).join();
+
+/// Mots de 4 lettres ou plus, sans accents ni ponctuation.
+Set<String> _words(String text) =>
+    normalize(text).split(RegExp(r'[^A-Z0-9]+')).where((w) => w.length >= 4).toSet();
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  test('le contenu : 10 films, 4 questions de 6 choix, en FR et EN', () {
-    expect(kHalloweenFilms.length, 10);
-    for (final film in kHalloweenFilms) {
-      expect(film.questions.length, 4, reason: film.titleFr);
-      for (final q in film.questions) {
-        expect(q.choicesFr.length, 6, reason: q.fr);
-        expect(q.choicesEn.length, 6, reason: q.en);
-        expect(q.choicesFr.toSet().length, 6, reason: 'choix en double : ${q.fr}');
-        expect(q.choicesEn.toSet().length, 6, reason: 'duplicate choice: ${q.en}');
-      }
+  test('le contenu : 30 pitchs en FR et EN, sans le titre dans le pitch', () {
+    expect(kHalloweenPitches.length, 30);
+    expect(kHalloweenPitches.map((p) => p.titleFr).toSet().length, 30);
+    for (final p in kHalloweenPitches) {
+      expect(p.pitchFr.trim(), isNotEmpty, reason: p.titleFr);
+      expect(p.pitchEn.trim(), isNotEmpty, reason: p.titleEn);
+      expect(_words(p.pitchFr).intersection(_words(p.titleFr)), isEmpty, reason: p.titleFr);
+      expect(_words(p.pitchEn).intersection(_words(p.titleEn)), isEmpty, reason: p.titleEn);
     }
   });
 
   group('calendrier', () {
-    test('5 films le premier jour, puis un de plus par jour', () {
+    test('10 pitchs le premier jour, puis 2 de plus par jour', () {
       var now = DateTime(2026, 10, 26, 20);
       final game = _newGame()..clock = () => now;
-      final e = game.halloween;
-      expect(e.availableCount, 5);
-      e.markVisited();
-      expect(e.availableCount, 5);
-      expect(e.daysUntilAvailable(5), 1);
-      expect(e.daysUntilAvailable(9), 5);
-      now = DateTime(2026, 10, 27, 0, 5);
-      expect(e.availableCount, 6);
-      now = DateTime(2026, 10, 31, 9);
+      final e = game.halloween..markVisited();
       expect(e.availableCount, 10);
-      expect(e.moreToCome, isFalse);
+      now = DateTime(2026, 10, 27, 0, 5);
+      expect(e.availableCount, 12);
+      now = DateTime(2026, 11, 4, 9);
+      expect(e.availableCount, 28);
+      now = DateTime(2026, 11, 5, 9);
+      expect(e.availableCount, 30);
     });
 
     test('un joueur arrivé tard a tout le dernier jour', () {
       var now = DateTime(2026, 11, 5, 10);
       final game = _newGame()..clock = () => now;
       game.halloween.markVisited();
-      expect(game.halloween.availableCount, 7, reason: 'il reste 3 jours : 10 - 3');
+      expect(game.halloween.availableCount, 24, reason: 'il reste 3 jours : 30 - 3 × 2');
       now = DateTime(2026, 11, 8, 23);
-      expect(game.halloween.availableCount, 10);
+      expect(game.halloween.availableCount, 30);
       expect(game.halloween.isActive, isTrue);
       now = DateTime(2026, 11, 9, 0, 1);
       expect(game.halloween.isActive, isFalse);
     });
 
-    test('films du jour finis : « reviens demain »', () {
+    test('pitchs du jour finis : « reviens demain »', () {
       final game = _newGame(now: DateTime(2026, 10, 26, 12));
       final e = game.halloween..markVisited();
-      for (var i = 0; i < 5; i++) {
-        e.progressOf(i).solved = true;
-      }
+      e.solved.addAll(List.generate(10, (i) => i));
+      expect(e.currentPitch, isNull);
       expect(e.waitingForTomorrow, isTrue);
+      expect(e.toPlayCount, 0);
     });
   });
 
-  group('questions et indices', () {
-    test('bonnes réponses = indices, ratées cachées, pub = la plus simple d\'abord', () {
+  group('jouer', () {
+    test('mots justes gardés après une erreur, puis pitch trouvé : citrouille, pitch suivant', () {
       final game = _newGame(now: DateTime(2026, 10, 26));
-      final e = game.halloween;
-      _answerAll(game, 0, [true, false, true, false]);
-      expect(e.questionsDone(0), isTrue);
-      expect([for (var q = 0; q < 4; q++) e.clueFound(0, q)], [true, false, true, false]);
-      expect(e.hiddenClueCount(0), 2);
-      expect(e.nextClueToReveal(0), 1);
-      e.revealClue(0);
-      expect(e.clueFound(0, 1), isTrue);
-      expect(e.nextClueToReveal(0), 3);
-      e.revealClue(0);
-      expect(e.hiddenClueCount(0), 0);
-      e.revealClue(0); // plus rien à dévoiler : sans effet
-      expect(e.progressOf(0).adRevealed, {1, 3});
-      expect(e.perfect(0), isFalse);
-    });
-
-    test('une réponse donnée ne change plus', () {
-      final game = _newGame();
-      expect(game.halloween.answer(1, 0, 3), isFalse);
-      expect(game.halloween.answer(1, 0, 0), isFalse);
-    });
-
-    test('l\'ordre des choix est mélangé mais stable', () {
-      final e = _newGame().halloween;
-      final order = e.choiceOrder(0, 1);
-      expect(order.toSet(), {0, 1, 2, 3, 4, 5});
-      expect(e.choiceOrder(0, 1), order);
-    });
-  });
-
-  group('trouver le film', () {
-    test('mauvais titre : la grille se vide ; bon titre : joker + avatar citrouille', () {
-      final game = _newGame(now: DateTime(2026, 10, 26));
-      final e = game.halloween;
-      _answerAll(game, 0, [true, true, false, true]);
-      e.startGuess(0);
-      // Lettres au hasard : faux.
-      for (final tile in e.pool.where((t) => !e.slots.any((s) => s.char == t.letter)).take(e.slots.length)) {
-        e.onLetterTap(tile);
-      }
-      for (final tile in e.pool) {
-        if (!e.gridFull && !tile.used) e.onLetterTap(tile);
-      }
+      final e = game.halloween..loadCurrent();
+      expect(e.loadedPitch, 0);
+      expect(_answer(e), 'LES DENTS DE LA MER');
+      // Tout juste sauf la première lettre du dernier mot (MER).
+      final wrongSlot = e.wordRanges.last.first;
+      final decoy = e.pool.firstWhere((t) => !_answer(e).contains(t.letter));
+      e.onBlankTap(wrongSlot);
+      e.onLetterTap(decoy);
+      _typeTitle(e);
       expect(e.validate(), 'wrong');
-      expect(e.guess.every((g) => g == null), isTrue);
+      expect(e.lockedWords, {0, 1, 2, 3});
+      expect(e.guess[wrongSlot], isNull);
 
-      final before = _jokerTotal(game);
-      _typeTitle(game);
+      _typeTitle(e);
       expect(e.validate(), 'solved');
-      expect(e.progressOf(0).solved, isTrue);
-      expect(_jokerTotal(game), before + 1);
-      expect(e.lastReward!.joker.isMinor, isTrue, reason: 'une erreur : joker mineur');
+      expect(e.solved, {0});
       expect(e.lastReward!.pumpkinUnlocked, isTrue);
+      expect(e.lastReward!.joker, isNull);
       expect(game.settings.isAvatarUnlocked(kPumpkinAvatar), isTrue);
+      expect(e.currentPitch, 1);
+      e.loadCurrent();
+      expect(_answer(e), 'CA');
     });
 
-    test('sans faute : joker majeur', () {
-      final game = _newGame();
-      _answerAll(game, 2, [true, true, true, true]);
-      game.halloween.startGuess(2);
-      _typeTitle(game);
-      expect(game.halloween.validate(), 'solved');
-      expect(game.halloween.lastReward!.joker.isMinor, isFalse);
+    test('un joker de l\'event tous les 5 pitchs trouvés', () {
+      final game = _newGame(now: DateTime(2026, 10, 26));
+      final e = game.halloween;
+      final jokers = <JokerKind?>[];
+      for (var i = 0; i < 5; i++) {
+        e.loadCurrent();
+        _typeTitle(e);
+        expect(e.validate(), 'solved');
+        jokers.add(e.lastReward!.joker);
+      }
+      expect(jokers.take(4), everyElement(isNull));
+      expect(kEventJokers, contains(jokers.last));
+      expect(game.countOf(jokers.last!), 1);
     });
 
     test('titre en anglais quand le jeu est en anglais', () {
       final game = _newGame()..settings.setLocale('en');
-      game.halloween.startGuess(1);
-      expect(game.halloween.slots.map((s) => s.char).join(), 'THE ADDAMS FAMILY');
+      game.halloween.loadCurrent();
+      expect(_answer(game.halloween), 'JAWS');
     });
 
-    test('les 10 films : bonus final et citrouille en feu, une seule fois', () {
+    test('les 30 pitchs : bonus final et citrouille en feu, une seule fois', () {
       final game = _newGame(now: DateTime(2026, 11, 8));
       final e = game.halloween;
-      for (var i = 0; i < 10; i++) {
-        _answerAll(game, i, [true, true, true, true]);
-        e.startGuess(i);
-        final redBefore = game.redJokerCount;
-        _typeTitle(game);
-        expect(e.validate(), 'solved', reason: kHalloweenFilms[i].titleFr);
-        if (i < 9) {
-          expect(e.lastReward!.finalReward, isFalse);
-          expect(game.redJokerCount, redBefore);
-        }
+      for (var i = 0; i < 30; i++) {
+        e.loadCurrent();
+        _typeTitle(e);
+        expect(e.validate(), 'solved', reason: kHalloweenPitches[e.loadedPitch!].titleFr);
+        expect(e.lastReward!.finalReward, i == 29);
       }
-      expect(e.lastReward!.finalReward, isTrue);
       expect(game.redJokerCount, 1);
       expect(game.settings.isAvatarUnlocked(kFirePumpkinAvatar), isTrue);
       expect(e.allSolved, isTrue);
-      expect(e.finalRewardGranted, isTrue);
+      expect(e.currentPitch, isNull);
     });
   });
 
-  test('l\'event est sauvegardé avec le jeu', () async {
+  group('passer, j\'y reviendrai', () {
+    test('le pitch repart en fin de file avec sa grille et ses jokers', () {
+      final game = _newGame(now: DateTime(2026, 10, 26))..grantJokers(eliminate: 1);
+      final e = game.halloween..loadCurrent();
+      e.onLetterTap(e.pool.firstWhere((t) => t.letter == 'L'));
+      expect(e.useEliminateJoker().length, 3);
+      final eliminated = [for (final t in e.pool) t.eliminated];
+      expect(e.skipCurrent(), isTrue);
+      expect(e.loadedPitch, 1);
+      expect(e.queue.last, 0);
+
+      // Les 9 autres pitchs du jour trouvés : retour au premier.
+      for (var i = 0; i < 9; i++) {
+        _typeTitle(e);
+        expect(e.validate(), 'solved');
+        e.loadCurrent();
+      }
+      expect(e.loadedPitch, 0);
+      expect(e.pool[e.guess[0]!].letter, 'L');
+      expect([for (final t in e.pool) t.eliminated], eliminated);
+      expect(e.canSkip, isFalse, reason: 'dernier pitch ouvert');
+      expect(e.skipCurrent(), isFalse);
+    });
+  });
+
+  group('jokers', () {
+    test('Révéler, Éliminer et Révéler un mot puisent dans le stock du jeu', () {
+      final game = _newGame(now: DateTime(2026, 10, 26))
+        ..grantJokers(reveal: 1, eliminate: 1)
+        ..revealWordCount = 1;
+      final e = game.halloween..loadCurrent(); // LES DENTS DE LA MER
+      final slot = e.useRevealJoker()!;
+      expect(e.pool[e.guess[slot]!].letter, e.slots[slot].char);
+      expect(e.lockedSlots, contains(slot));
+      expect(game.revealCount, 0);
+      expect(e.useRevealJoker(), isNull, reason: 'plus de joker');
+
+      final gone = e.useEliminateJoker();
+      expect(gone.length, 3);
+      for (final i in gone) {
+        expect(_answer(e).contains(e.pool[i].letter), isFalse);
+      }
+      expect(game.eliminateCount, 0);
+
+      final revealed = e.useRevealWordJoker();
+      expect(revealed, isNotEmpty);
+      expect(e.lockedWords.length, 1);
+      expect(game.revealWordCount, 0);
+    });
+
+    test('Révéler un mot sur un titre d\'un seul mot : un tiers des lettres', () {
+      final game = _newGame(now: DateTime(2026, 11, 8))..revealWordCount = 1;
+      final e = game.halloween;
+      e.queue
+        ..remove(3)
+        ..insert(0, 3); // FRANKENSTEIN
+      e.loadCurrent();
+      expect(e.revealWordIsNerfed, isTrue);
+      expect(e.useRevealWordJoker().length, 4);
+      expect(game.revealWordCount, 0);
+    });
+
+    test('pub : toujours un des trois jokers de l\'event', () {
+      final game = _newGame();
+      for (var i = 0; i < 20; i++) {
+        expect(kEventJokers, contains(game.halloween.grantAdJoker()));
+      }
+    });
+  });
+
+  test('l\'event est sauvegardé avec le jeu, grille en cours comprise', () async {
     final game = _newGame(now: DateTime(2026, 10, 26));
-    game.halloween.markVisited();
-    _answerAll(game, 0, [true, false, true, true]);
-    game.halloween.revealClue(0);
-    game.halloween.progressOf(3).solved = true;
+    final e = game.halloween
+      ..markVisited()
+      ..loadCurrent();
+    _typeTitle(e);
+    e.validate();
+    e.loadCurrent(); // pitch 2 : ÇA
+    e.skipCurrent(); // pitch 3 : DRACULA
+    e.onLetterTap(e.pool.firstWhere((t) => t.letter == 'D'));
     await game.flushSave();
+
     final reopened = _newGame(now: DateTime(2026, 10, 27));
     await reopened.restore();
-    final e = reopened.halloween;
-    expect(e.firstDay, '2026-10-26');
-    expect(e.availableCount, 6);
-    expect(e.progressOf(0).answers, [0, 1, 0, 0]);
-    expect(e.progressOf(0).adRevealed, {1});
-    expect(e.progressOf(3).solved, isTrue);
+    final r = reopened.halloween;
+    expect(r.firstDay, '2026-10-26');
+    expect(r.availableCount, 12);
+    expect(r.solved, {0});
+    expect(r.queue.last, 1);
+    r.loadCurrent();
+    expect(r.loadedPitch, 2);
+    expect(r.pool[r.guess[0]!].letter, 'D');
+  });
+
+  test('une sauvegarde de l\'ancienne version (questions) est ignorée', () {
+    final e = _newGame().halloween;
+    e.restore({
+      'firstDay': '2026-10-24',
+      'progress': {
+        '0': {'answers': [0, 0, 0, 0], 'solved': true}
+      },
+    });
+    expect(e.firstDay, isNull);
+    expect(e.solved, isEmpty);
   });
 
   test('avatars d\'event : sauvegardés, et jamais affichés sans avoir été gagnés', () async {
@@ -232,13 +282,17 @@ void main() {
     expect(restored.avatar, isNot(kFirePumpkinAvatar));
   });
 
-  testWidgets('écran : jouer un film des questions jusqu\'au titre', (tester) async {
+  testWidgets('écran : présentation, puis un pitch trouvé et le suivant', (tester) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 2.6;
+    addTearDown(tester.view.reset);
     final game = _newGame(now: DateTime(2026, 10, 26, 12));
     await tester.pumpWidget(
       MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: game.settings),
           ChangeNotifierProvider.value(value: game),
+          ChangeNotifierProvider(create: (_) => StreakState(saveService: game.saveService)),
           Provider(create: (_) => SoundService()),
         ],
         child: MaterialApp(
@@ -250,34 +304,35 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.text('FILM 1'), findsOneWidget);
-    await tester.scrollUntilVisible(find.byKey(const ValueKey('eventFilm9')), 200);
-    expect(find.text('Disponible dans 5 jours'), findsOneWidget);
-    await tester.scrollUntilVisible(find.byKey(const ValueKey('eventFilm0')), -200);
+    expect(find.text('ET SI LES MÉCHANTS AVAIENT RAISON ?'), findsOneWidget);
+    expect(find.text('0/30 pitchs trouvés'), findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey('eventFilm0')));
+    await tester.scrollUntilVisible(find.byKey(const ValueKey('eventPlay')), 200);
+    await tester.tap(find.byKey(const ValueKey('eventPlay')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 800)); // transition de page (le fond animé empêche pumpAndSettle)
-    expect(find.text('QUESTION 1/4  ·  Facile'), findsOneWidget);
-    for (var q = 0; q < 4; q++) {
-      // Bonne réponse aux questions 1 et 3, mauvaise aux 2 et 4.
-      await tester.tap(find.byKey(ValueKey(q.isEven ? 'eventChoice0' : 'eventChoice4')));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 1200));
-    }
-    await tester.pump();
-    expect(find.byKey(const ValueKey('eventClue0')), findsOneWidget);
-    expect(find.text('La citrouille'), findsOneWidget);
-    expect(find.byKey(const ValueKey('eventMissed1')), findsOneWidget);
-    expect(find.text('Dévoiler un indice (2)'), findsOneWidget);
+    expect(find.text('PITCH 1/30'), findsOneWidget);
+    expect(find.textContaining('Un nageur solitaire'), findsOneWidget);
 
-    _typeTitle(game);
+    _typeTitle(game.halloween);
     await tester.pump();
     await tester.ensureVisible(find.byKey(const ValueKey('eventValidate')));
     await tester.tap(find.byKey(const ValueKey('eventValidate')));
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1100));
     expect(find.byKey(const ValueKey('eventSolvedTitle')), findsOneWidget);
+    expect(find.text('Les Dents de la mer'), findsOneWidget);
     expect(find.text('Nouvel avatar débloqué : Tête de citrouille !'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('eventNext')));
+    await tester.pump();
+    expect(find.text('PITCH 2/30'), findsOneWidget);
+    expect(find.textContaining('Un clown très investi'), findsOneWidget);
+
+    await tester.ensureVisible(find.byKey(const ValueKey('eventSkip')));
+    await tester.tap(find.byKey(const ValueKey('eventSkip')));
+    await tester.pump();
+    expect(find.textContaining('Un comte insomniaque'), findsOneWidget);
     await tester.pump(const Duration(seconds: 1));
   });
 }

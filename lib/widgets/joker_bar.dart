@@ -58,7 +58,7 @@ class JokerBar extends StatelessWidget {
         ),
         if (!game.inTutorial) ...[
           const SizedBox(height: 10),
-          _WinJokerButton(label: t.jokerWinOne, colors: colors, onTap: onWatchAdForJoker),
+          WinJokerButton(label: t.jokerWinOne, colors: colors, onTap: onWatchAdForJoker),
         ],
       ],
     );
@@ -77,7 +77,7 @@ class JokerBar extends StatelessWidget {
     } else if (redEmpty) {
       subtitle = game.peutRegarderPubJokerRouge && !game.inTutorial ? t.jokerAdUnlockSubtitle : t.jokerLockedSubtitle;
     }
-    return _JokerButton(
+    return JokerButton(
       key: fx?.key('joker:${kind.name}'),
       label: jokerName(kind, t),
       icon: kind.icon,
@@ -130,11 +130,12 @@ class JokerBar extends StatelessWidget {
   }
 }
 
-class _WinJokerButton extends StatelessWidget {
+/// Bouton « Gagner un joker » (une pub), aussi utilisé par l'event Halloween.
+class WinJokerButton extends StatelessWidget {
   final String label;
   final AppColors colors;
   final VoidCallback onTap;
-  const _WinJokerButton({required this.label, required this.colors, required this.onTap});
+  const WinJokerButton({super.key, required this.label, required this.colors, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +168,8 @@ class _WinJokerButton extends StatelessWidget {
   }
 }
 
-class _JokerButton extends StatefulWidget {
+/// Un joker de la barre, avec son stock (aussi utilisé par l'event Halloween).
+class JokerButton extends StatefulWidget {
   final String label;
   final String icon;
   final int count;
@@ -179,7 +181,7 @@ class _JokerButton extends StatefulWidget {
   final String? subtitle;
   final VoidCallback onTap;
 
-  const _JokerButton({
+  const JokerButton({
     super.key,
     required this.label,
     required this.icon,
@@ -194,15 +196,15 @@ class _JokerButton extends StatefulWidget {
   });
 
   @override
-  State<_JokerButton> createState() => _JokerButtonState();
+  State<JokerButton> createState() => _JokerButtonState();
 }
 
-class _JokerButtonState extends State<_JokerButton> with TickerProviderStateMixin {
+class _JokerButtonState extends State<JokerButton> with TickerProviderStateMixin {
   late final AnimationController _flash = AnimationController(vsync: this, duration: const Duration(milliseconds: 320));
   late final AnimationController _bump = AnimationController(vsync: this, duration: const Duration(milliseconds: 340));
 
   @override
-  void didUpdateWidget(covariant _JokerButton old) {
+  void didUpdateWidget(covariant JokerButton old) {
     super.didUpdateWidget(old);
     if (widget.count > old.count) _bump.forward(from: 0);
   }
