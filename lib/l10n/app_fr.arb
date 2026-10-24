@@ -370,5 +370,20 @@
   "shareAskFriendEnigmeText": "🆘 Aide-moi à résoudre l'énigme de la semaine !\n\n🧩 {category}\n{text}\n\n🔤 {mask}\n\nJoue toi aussi à Plot Twist(ed) 👉 {link}",
   "@shareAskFriendEnigmeText": {"placeholders": {"category": {"type": "String"}, "text": {"type": "String"}, "mask": {"type": "String"}, "link": {"type": "String"}}},
   "shareInviteText": "Je joue à Plot Twist(ed), le quiz ciné où les noms mentent 🎬 Un pitch de film, des noms piégés, un titre à retrouver. C'est gratuit 👉 {link}",
-  "@shareInviteText": {"placeholders": {"link": {"type": "String"}}}
+  "@shareInviteText": {"placeholders": {"link": {"type": "String"}}},
+
+  "nameInfoGreen": "Vert : le vrai nom du personnage",
+  "nameInfoRed": "Rouge : un autre rôle du même acteur (piège)",
+  "nameInfoBlue": "Bleu : le nom de l'acteur",
+  "nameInfoOrange": "Orange : un autre acteur ayant joué ce rôle",
+  "nameInfoViolet": "Violet : un proche de l'acteur ou du personnage",
+
+  "wheelHomeLabel": "Bobine du jour",
+  "wheelTitle": "LA BOBINE DU JOUR",
+  "wheelSubtitle": "Un tour gratuit chaque jour : tente ta chance !",
+  "wheelSpin": "FAIRE TOURNER",
+  "wheelRespin": "RELANCER LA ROUE",
+  "wheelComeBack": "Reviens demain pour un nouveau tour gratuit !",
+  "wheelYouWin": "TU GAGNES",
+  "wheelOdds": "Chances : chaque joker mineur 15 %, chaque majeur 10 %, les 3 mineurs 15 %, les 3 majeurs 10 %."
 }

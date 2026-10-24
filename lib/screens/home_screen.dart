@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/app_settings.dart';
+import '../services/game_state.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/clapper_transition.dart';
+import '../widgets/daily_wheel_dialog.dart';
 import '../widgets/scifi_background.dart';
 import 'defi_screen.dart';
 import 'enigme_screen.dart';
@@ -160,6 +163,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
+                                  _WheelButton(colors: colors),
+                                  const SizedBox(height: 8),
                                   _IconButton(
                                     icon: Icons.settings,
                                     colors: colors,
@@ -395,6 +400,110 @@ class _IconButton extends StatelessWidget {
           border: Border.all(color: AppColors.gold.withOpacity(0.3)),
         ),
         child: Icon(icon, color: AppColors.goldBright, size: 18),
+      ),
+    );
+  }
+}
+
+/// Bouton de la bobine du jour : une mini-bobine, avec une pastille qui
+/// pulse tant que le tour gratuit du jour n'a pas été pris. Se met à jour à
+/// minuit (heure du téléphone) et au retour dans l'app.
+class _WheelButton extends StatefulWidget {
+  final AppColors colors;
+  const _WheelButton({required this.colors});
+
+  @override
+  State<_WheelButton> createState() => _WheelButtonState();
+}
+
+class _WheelButtonState extends State<_WheelButton> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  late final AnimationController _pulse =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat(reverse: true);
+  Timer? _midnight;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _scheduleMidnight();
+  }
+
+  void _scheduleMidnight() {
+    final now = DateTime.now();
+    final next = DateTime(now.year, now.month, now.day + 1);
+    _midnight?.cancel();
+    _midnight = Timer(next.difference(now) + const Duration(seconds: 1), () {
+      if (!mounted) return;
+      setState(() {});
+      _scheduleMidnight();
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      setState(() {});
+      _scheduleMidnight();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _midnight?.cancel();
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final game = context.watch<GameState>();
+    final colors = widget.colors;
+    final available = game.wheelFreeSpinAvailable;
+    return Semantics(
+      button: true,
+      label: AppLocalizations.of(context).wheelHomeLabel,
+      child: InkWell(
+        key: const ValueKey('homeWheelButton'),
+        onTap: () => showDialog(context: context, barrierDismissible: false, builder: (_) => const DailyWheelDialog()),
+        borderRadius: BorderRadius.circular(10),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: 38,
+              height: 38,
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: colors.bgPanel,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.gold.withOpacity(available ? 0.9 : 0.3)),
+              ),
+              child: const CustomPaint(painter: ReelPainter(showPointer: false)),
+            ),
+            if (available)
+              Positioned(
+                top: -5,
+                right: -5,
+                child: ScaleTransition(
+                  scale: Tween(begin: 0.85, end: 1.15).animate(CurvedAnimation(parent: _pulse, curve: Curves.easeInOut)),
+                  child: Container(
+                    key: const ValueKey('homeWheelBadge'),
+                    width: 16,
+                    height: 16,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.crimsonBright,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: colors.bgDeep, width: 1.5),
+                    ),
+                    child: const Text('1',
+                        style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white, height: 1)),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

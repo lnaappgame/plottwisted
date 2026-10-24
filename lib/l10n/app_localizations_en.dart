@@ -1100,4 +1100,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String shareInviteText(String link) {
     return 'I\'m playing Plot Twist(ed), the movie quiz where names lie 🎬 One movie pitch, booby-trapped names, a title to find. It\'s free 👉 $link';
   }
+
+  @override
+  String get nameInfoGreen => 'Green: the character\'s real name';
+
+  @override
+  String get nameInfoRed => 'Red: another role by the same actor (trap)';
+
+  @override
+  String get nameInfoBlue => 'Blue: the actor\'s name';
+
+  @override
+  String get nameInfoOrange => 'Orange: another actor who played this role';
+
+  @override
+  String get nameInfoViolet =>
+      'Purple: someone close to the actor or character';
+
+  @override
+  String get wheelHomeLabel => 'Daily reel';
+
+  @override
+  String get wheelTitle => 'DAILY REEL';
+
+  @override
+  String get wheelSubtitle => 'One free spin every day: try your luck!';
+
+  @override
+  String get wheelSpin => 'SPIN';
+
+  @override
+  String get wheelRespin => 'SPIN AGAIN';
+
+  @override
+  String get wheelComeBack => 'Come back tomorrow for a new free spin!';
+
+  @override
+  String get wheelYouWin => 'YOU WIN';
+
+  @override
+  String get wheelOdds =>
+      'Odds: each minor joker 15%, each major 10%, all 3 minors 15%, all 3 majors 10%.';
 }

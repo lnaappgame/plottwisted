@@ -15,6 +15,7 @@ import '../theme/app_theme.dart';
 import '../widgets/answer_row.dart';
 import '../widgets/ask_friend_link.dart';
 import '../widgets/clapper_transition.dart';
+import '../widgets/input_mode_tip_dialog.dart';
 import '../widgets/joker_bar.dart';
 import '../widgets/joker_fx.dart';
 import '../widgets/letter_pool.dart';
@@ -288,50 +289,9 @@ class _GameScreenState extends State<GameScreen> {
     final settings = context.read<AppSettings>();
     if (!game.inputModeTipDue) return;
     settings.markInputModeTipShown();
-    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
-    final t = AppLocalizations.of(context);
-    final modes = [('tiles', t.settingsInputTiles), ('azerty', t.settingsInputAzerty), ('qwerty', t.settingsInputQwerty)];
-    showDialog(
-      context: context,
-      builder: (dialogContext) => Dialog(
-        backgroundColor: colors.bgPanel2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: AppColors.gold.withOpacity(0.6)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(22, 20, 22, 18),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(t.tipInputTitle,
-                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 20, color: AppColors.goldBright)),
-              const SizedBox(height: 12),
-              Text(t.tipInputBody,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5)),
-              const SizedBox(height: 18),
-              for (final (mode, label) in modes) ...[
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: settings.inputMode == mode ? AppColors.gold.withOpacity(0.18) : null,
-                    side: BorderSide(color: AppColors.gold.withOpacity(settings.inputMode == mode ? 1 : 0.4)),
-                  ),
-                  onPressed: () {
-                    settings.setInputMode(mode);
-                    Navigator.of(dialogContext).pop();
-                  },
-                  child: Text(label,
-                      style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: AppColors.goldBright)),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
+    // Pas de fermeture en touchant à côté : le joueur choisit un mode, et les
+    // boutons ne répondent qu'après 3 s (voir InputModeTipDialog).
+    showDialog(context: context, barrierDismissible: false, builder: (_) => const InputModeTipDialog());
   }
 
   /// « Révéler un mot » sur un titre d'un seul mot, la première fois : le

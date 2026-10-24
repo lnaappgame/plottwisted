@@ -1105,4 +1105,45 @@ class AppLocalizationsFr extends AppLocalizations {
   String shareInviteText(String link) {
     return 'Je joue à Plot Twist(ed), le quiz ciné où les noms mentent 🎬 Un pitch de film, des noms piégés, un titre à retrouver. C\'est gratuit 👉 $link';
   }
+
+  @override
+  String get nameInfoGreen => 'Vert : le vrai nom du personnage';
+
+  @override
+  String get nameInfoRed => 'Rouge : un autre rôle du même acteur (piège)';
+
+  @override
+  String get nameInfoBlue => 'Bleu : le nom de l\'acteur';
+
+  @override
+  String get nameInfoOrange => 'Orange : un autre acteur ayant joué ce rôle';
+
+  @override
+  String get nameInfoViolet =>
+      'Violet : un proche de l\'acteur ou du personnage';
+
+  @override
+  String get wheelHomeLabel => 'Bobine du jour';
+
+  @override
+  String get wheelTitle => 'LA BOBINE DU JOUR';
+
+  @override
+  String get wheelSubtitle => 'Un tour gratuit chaque jour : tente ta chance !';
+
+  @override
+  String get wheelSpin => 'FAIRE TOURNER';
+
+  @override
+  String get wheelRespin => 'RELANCER LA ROUE';
+
+  @override
+  String get wheelComeBack => 'Reviens demain pour un nouveau tour gratuit !';
+
+  @override
+  String get wheelYouWin => 'TU GAGNES';
+
+  @override
+  String get wheelOdds =>
+      'Chances : chaque joker mineur 15 %, chaque majeur 10 %, les 3 mineurs 15 %, les 3 majeurs 10 %.';
 }

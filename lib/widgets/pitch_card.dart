@@ -50,6 +50,90 @@ class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
   String? _flashSlot;
   final Set<String> _wasIncoming = {};
 
+  // Info-bulle au-dessus d'un nom touché sans joker armé : rappelle ce que
+  // veut dire sa couleur. Toucher à nouveau le nom (ou n'importe où ailleurs)
+  // la referme.
+  final OverlayPortalController _info = OverlayPortalController();
+  final Object _infoGroup = Object();
+  final Map<String, GlobalKey> _nameKeys = {};
+  String? _infoId; // 'p1:0'... : nom concerné et rang de la couleur affichée
+  NameColor? _infoColor;
+  Rect? _infoRect; // position du nom dans le repère de l'Overlay
+
+  void _toggleInfo(String id, NameColor color) {
+    if (_infoId == id) {
+      _hideInfo();
+      return;
+    }
+    final box = _nameKeys[id]?.currentContext?.findRenderObject() as RenderBox?;
+    final overlayBox = Overlay.of(context).context.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize || overlayBox == null) return;
+    final topLeft = box.localToGlobal(Offset.zero, ancestor: overlayBox);
+    setState(() {
+      _infoId = id;
+      _infoColor = color;
+      _infoRect = topLeft & box.size;
+    });
+    _info.show();
+  }
+
+  void _hideInfo() {
+    if (_infoId == null || !mounted) return;
+    _info.hide();
+    setState(() => _infoId = null);
+  }
+
+  Widget _infoBubble(BuildContext context) {
+    final rect = _infoRect, color = _infoColor;
+    if (_infoId == null || rect == null || color == null) return const SizedBox.shrink();
+    final settings = context.read<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    final text = switch (color) {
+      NameColor.green => t.nameInfoGreen,
+      NameColor.red => t.nameInfoRed,
+      NameColor.blue => t.nameInfoBlue,
+      NameColor.orange => t.nameInfoOrange,
+      NameColor.violet => t.nameInfoViolet,
+    };
+    final c = colors.forNameColor(color);
+    return CustomSingleChildLayout(
+      delegate: _InfoBubbleLayout(rect),
+      child: TapRegion(
+        groupId: _infoGroup,
+        onTapOutside: (_) => _hideInfo(),
+        child: GestureDetector(
+          onTap: _hideInfo,
+          child: Material(
+            type: MaterialType.transparency,
+            child: Container(
+              key: const ValueKey('nameInfoBubble'),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: colors.bgPanel2,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: c, width: 1.5),
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.35), blurRadius: 10, offset: const Offset(0, 3))],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(width: 10, height: 10, decoration: BoxDecoration(color: c, shape: BoxShape.circle)),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(text,
+                        style: AppTextStyles.body(size: 13, weight: FontWeight.w600, color: colors.cream)
+                            .copyWith(height: 1.3)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -145,8 +229,14 @@ class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
           _pulseController
             ..value = 0
             ..repeat();
+          _hideInfo();
         }
       });
+    }
+    // Un joker de nom armé : le toucher d'un nom sert à le jouer, plus à
+    // afficher l'info-bulle.
+    if (game.activeNameJoker != null && _infoId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _hideInfo());
     }
 
     final settings = context.watch<AppSettings>();
@@ -160,12 +250,18 @@ class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
       if (puzzle.hasP2) ('{p2}', 'p2'),
     ];
 
-    WidgetSpan nameSpan(String slot, NameColor nameColor, bool armed, {bool isTarget = false, String suffix = ''}) {
+    WidgetSpan nameSpan(String slot, NameColor nameColor, bool armed,
+        {bool isTarget = false, String suffix = '', required String infoId}) {
       final text = game.displayFor(slot, nameColor);
       final color = colors.forNameColor(nameColor);
       final label = settings.colorblindMode ? '${AppColors.symbolForNameColor(nameColor)} $text' : text;
       final name = GestureDetector(
+        key: _nameKeys.putIfAbsent(infoId, GlobalKey.new),
         onTap: () {
+          if (game.activeNameJoker == null) {
+            _toggleInfo(infoId, nameColor);
+            return;
+          }
           final armedColor = game.activeNameJoker;
           final err = game.onNameTap(slot);
           final kind = armedColor == null ? null : JokerKind.fromNameColor(armedColor);
@@ -201,14 +297,17 @@ class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
           ),
         ),
       );
+      // Même groupe que l'info-bulle : toucher le nom n'est pas un toucher
+      // « ailleurs », c'est son onTap qui ouvre ou ferme la bulle.
+      final tappable = TapRegion(groupId: _infoGroup, child: name);
       return WidgetSpan(
         alignment: PlaceholderAlignment.middle,
         // La ponctuation collée au nom (« The Dude. ») reste avec lui : sinon
         // le point pouvait passer seul en début de ligne suivante.
         child: suffix.isEmpty
-            ? name
+            ? tappable
             : Row(mainAxisSize: MainAxisSize.min, children: [
-                Flexible(child: name), // un nom plus large que la ligne peut encore passer à la ligne
+                Flexible(child: tappable), // un nom plus large que la ligne peut encore passer à la ligne
                 Text(suffix, style: AppTextStyles.body(size: 16, color: colors.cream)),
               ]),
       );
@@ -240,7 +339,8 @@ class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
       remaining = remaining.substring(suffix.length);
       for (var k = 0; k < shown.length; k++) {
         if (k > 0) spans.add(TextSpan(text: ' / ', style: TextStyle(color: colors.muted)));
-        spans.add(nameSpan(matchSlot, shown[k], armed, isTarget: k == 0, suffix: k == shown.length - 1 ? suffix : ''));
+        spans.add(nameSpan(matchSlot, shown[k], armed,
+            isTarget: k == 0, suffix: k == shown.length - 1 ? suffix : '', infoId: '$matchSlot:$k'));
       }
     }
 
@@ -335,8 +435,39 @@ class _PitchCardState extends State<PitchCard> with TickerProviderStateMixin {
       ),
     );
 
-    return isExtreme ? _FlameBorder(child: card) : card;
+    return OverlayPortal(
+      controller: _info,
+      overlayChildBuilder: _infoBubble,
+      child: isExtreme ? _FlameBorder(child: card) : card,
+    );
   }
+}
+
+/// Place l'info-bulle centrée au-dessus du nom touché (en dessous s'il n'y a
+/// pas la place), sans jamais dépasser des bords de l'écran.
+class _InfoBubbleLayout extends SingleChildLayoutDelegate {
+  final Rect anchor;
+  const _InfoBubbleLayout(this.anchor);
+
+  static const _margin = 12.0;
+  static const _gap = 6.0;
+
+  @override
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) =>
+      BoxConstraints(maxWidth: min(260, constraints.maxWidth - 2 * _margin));
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final x = (anchor.center.dx - childSize.width / 2)
+        .clamp(_margin, max(_margin, size.width - childSize.width - _margin))
+        .toDouble();
+    final aboveY = anchor.top - childSize.height - _gap;
+    final y = aboveY >= _margin ? aboveY : anchor.bottom + _gap;
+    return Offset(x, y);
+  }
+
+  @override
+  bool shouldRelayout(_InfoBubbleLayout oldDelegate) => oldDelegate.anchor != anchor;
 }
 
 /// Petites flammes qui vacillent le long du bas du cadre, pour les

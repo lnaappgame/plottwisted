@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import '../data/puzzles_data.dart';
+import '../models/daily_wheel.dart';
 import '../models/joker.dart';
 import '../models/puzzle.dart';
 import 'ad_service.dart';
@@ -138,6 +139,9 @@ class GameState extends ChangeNotifier {
         'solvedPending': _solvedPendingKey,
         'revealWordNerfExplained': revealWordNerfExplained,
         'level': _levelJson(),
+        'postponedLevels': _postponedLevels,
+        'wheelFreeSpinDay': wheelFreeSpinDay,
+        'wheelAdSpinDay': wheelAdSpinDay,
       };
 
   // ─── Niveau en cours ───
@@ -146,6 +150,12 @@ class GameState extends ChangeNotifier {
   // les jokers joués sur le niveau étaient perdus à la fermeture de l'app.
   // Lu au démarrage, appliqué au premier chargement de ce même niveau.
   Map<String, dynamic>? _savedLevel;
+
+  // Niveaux laissés de côté par « Passer, j'y reviendrai », avec leur état au
+  // moment où le joueur les a quittés (même format que [_levelJson], indexé
+  // par 'monde-niveau'). Sans ça, un joker joué sur un niveau passé (un mot
+  // révélé, un nom recoloré...) était perdu quand le joueur y revenait.
+  Map<String, Map<String, dynamic>> _postponedLevels = {};
 
   Map<String, dynamic>? _levelJson() {
     if (!puzzleLoaded) return _savedLevel; // pas encore rechargé : on garde l'état lu au démarrage
@@ -293,6 +303,15 @@ class GameState extends ChangeNotifier {
     revealWordNerfExplained = data['revealWordNerfExplained'] as bool? ?? revealWordNerfExplained;
     final savedLevel = data['level'];
     _savedLevel = savedLevel is Map ? savedLevel.cast<String, dynamic>() : null;
+    final savedPostponed = data['postponedLevels'];
+    _postponedLevels = savedPostponed is Map
+        ? {
+            for (final e in savedPostponed.entries)
+              if (e.value is Map) e.key as String: (e.value as Map).cast<String, dynamic>()
+          }
+        : {};
+    wheelFreeSpinDay = data['wheelFreeSpinDay'] as String?;
+    wheelAdSpinDay = data['wheelAdSpinDay'] as String?;
     if (hasPendingSolve) loadPuzzle();
     _restoring = false;
   }
@@ -467,6 +486,7 @@ class GameState extends ChangeNotifier {
     puzzleLoaded = false;
     worldIndex = number;
     if (number != 0) worldsPlayedHistory.add(number);
+    _postponedLevels = {}; // ceux du monde précédent ne reviendront plus
     final world = currentWorld;
     remainingLevels = List.generate(world.puzzles.length, (i) => i + 1);
     currentLevelNumber = remainingLevels.first;
@@ -576,6 +596,7 @@ class GameState extends ChangeNotifier {
     puzzleLoaded = false;
     _solvedPendingKey = null;
     _savedLevel = null;
+    _postponedLevels = {};
     worldChoiceReserve = null;
     _worldChoiceFrontier = 4;
     _worldChoicesExhausted = false;
@@ -678,9 +699,15 @@ class GameState extends ChangeNotifier {
     pool = all.map((l) => LetterTile(letter: l)).toList();
 
     cursorIndex = _firstEmptySlotFrom(0);
+    final key = '$worldIndex-$currentLevelNumber';
     final saved = _savedLevel;
     _savedLevel = null;
-    if (saved != null && saved['key'] == '$worldIndex-$currentLevelNumber') _applySavedLevel(saved);
+    final postponed = _postponedLevels.remove(key);
+    if (saved != null && saved['key'] == key) {
+      _applySavedLevel(saved);
+    } else if (postponed != null) {
+      _applySavedLevel(postponed);
+    }
     notifyListeners();
   }
 
@@ -1154,6 +1181,43 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ─── Bobine du jour ───
+  // Un tour gratuit par jour (minuit à l'heure du téléphone du joueur), puis
+  // un seul relancement de plus contre une pub. Jours notés 'aaaa-mm-jj'.
+  String? wheelFreeSpinDay;
+  String? wheelAdSpinDay;
+
+  /// Horloge de la bobine, remplaçable dans les tests.
+  @visibleForTesting
+  DateTime Function() clock = DateTime.now;
+
+  String get _todayKey {
+    final d = clock();
+    return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+  }
+
+  bool get wheelFreeSpinAvailable => wheelFreeSpinDay != _todayKey;
+  bool get wheelAdSpinAvailable => !wheelFreeSpinAvailable && wheelAdSpinDay != _todayKey;
+
+  /// Lance la bobine (tour gratuit, ou relancement après une pub si
+  /// [afterAd]) : tire une case de [kWheelSegments], accorde ses jokers et
+  /// retourne son index. Null si ce tour n'est plus disponible aujourd'hui.
+  int? spinWheel({bool afterAd = false, double? roll}) {
+    if (afterAd ? !wheelAdSpinAvailable : !wheelFreeSpinAvailable) return null;
+    final index = wheelSegmentFor(roll ?? _rng.nextDouble());
+    for (final kind in kWheelSegments[index].jokers) {
+      _addJoker(kind, 1);
+    }
+    if (afterAd) {
+      wheelAdSpinDay = _todayKey;
+    } else {
+      wheelFreeSpinDay = _todayKey;
+    }
+    notifyListeners();
+    analytics.logWheelSpin(afterAd: afterAd, segment: index);
+    return index;
+  }
+
   int countOf(JokerKind kind) => switch (kind) {
         JokerKind.reveal => revealCount,
         JokerKind.eliminate => eliminateCount,
@@ -1171,14 +1235,15 @@ class GameState extends ChangeNotifier {
   /// découvrent le jeu, puis revient progressivement à la normale :
   ///  - 1er monde joué : aucune pub forcée (seules les pubs volontaires
   ///    restent proposées).
-  ///  - 2e à 4e monde joué : pubs après les niveaux 5 et 10 seulement, jamais
-  ///    pour un niveau qui a pris plus de 60s.
-  ///  - 5e à 7e monde joué : pubs après les niveaux 3, 6 et 10, plus la
-  ///    règle des 60s.
-  ///  - 8e monde joué et au-delà : comportement standard (3, 5, 8, 10 + 60s).
+  ///  - 2e à 4e monde joué : pubs après les niveaux 5 et 10 seulement.
+  ///  - 5e à 7e monde joué : pubs après les niveaux 3, 6 et 10.
+  ///  - 8e monde joué et au-delà : pubs après les niveaux 3, 5, 8 et 10.
+  ///
+  /// Plus de pub forcée pour un niveau qui a pris plus de 60 s (bundle
+  /// 1.0.10) : regarder une pub pour un joker suffisait à dépasser ce temps,
+  /// et le joueur enchaînait alors pub volontaire et pub forcée.
   bool get mustShowForcedAd {
     if (inTutorial) return false;
-    final tookTooLong = lastSolveDuration.inSeconds > 60;
     final n = worldsPlayedCount;
     if (n <= 1) {
       return false;
@@ -1186,10 +1251,10 @@ class GameState extends ChangeNotifier {
       return currentLevelNumber == 5 || currentLevelNumber == 10;
     } else if (n <= 7) {
       const adAfterPositions = {3, 6, 10};
-      return adAfterPositions.contains(currentLevelNumber) || tookTooLong;
+      return adAfterPositions.contains(currentLevelNumber);
     } else {
       const adAfterPositions = {3, 5, 8, 10};
-      return adAfterPositions.contains(currentLevelNumber) || tookTooLong;
+      return adAfterPositions.contains(currentLevelNumber);
     }
   }
 
@@ -1249,9 +1314,13 @@ class GameState extends ChangeNotifier {
   /// guidé à ordre fixe) et s'il reste au moins un autre niveau dans le monde.
   bool get canPostponeLevel => !inTutorial && remainingLevels.length > 1;
 
-  /// Le joueur choisit de laisser ce niveau de côté ; il repasse en fin de file.
+  /// Le joueur choisit de laisser ce niveau de côté ; il repasse en fin de
+  /// file. Son état (jokers joués, lettres placées) est mis de côté avec lui
+  /// et rendu quand il y revient (voir [_postponedLevels]).
   void skipCurrentLevel() {
     if (!canPostponeLevel) return;
+    final state = _levelJson();
+    if (state != null) _postponedLevels[state['key'] as String] = state;
     remainingLevels.add(remainingLevels.removeAt(0));
     currentLevelNumber = remainingLevels.first;
     loadPuzzle();

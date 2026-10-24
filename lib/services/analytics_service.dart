@@ -41,6 +41,10 @@ class AnalyticsService {
 
   Future<void> logPurchase({required String productId}) => _log('purchase_completed', {'product_id': productId});
 
+  /// Un tour de la bobine du jour : [segment] = index dans kWheelSegments.
+  Future<void> logWheelSpin({required bool afterAd, required int segment}) =>
+      _log('wheel_spin', {'after_ad': afterAd ? 1 : 0, 'segment': segment});
+
   Future<void> _log(String name, Map<String, Object> params) async {
     if (!_supported) return;
     try {

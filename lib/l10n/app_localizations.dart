@@ -1959,6 +1959,84 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Je joue à Plot Twist(ed), le quiz ciné où les noms mentent 🎬 Un pitch de film, des noms piégés, un titre à retrouver. C\'est gratuit 👉 {link}'**
   String shareInviteText(String link);
+
+  /// No description provided for @nameInfoGreen.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vert : le vrai nom du personnage'**
+  String get nameInfoGreen;
+
+  /// No description provided for @nameInfoRed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rouge : un autre rôle du même acteur (piège)'**
+  String get nameInfoRed;
+
+  /// No description provided for @nameInfoBlue.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bleu : le nom de l\'acteur'**
+  String get nameInfoBlue;
+
+  /// No description provided for @nameInfoOrange.
+  ///
+  /// In fr, this message translates to:
+  /// **'Orange : un autre acteur ayant joué ce rôle'**
+  String get nameInfoOrange;
+
+  /// No description provided for @nameInfoViolet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Violet : un proche de l\'acteur ou du personnage'**
+  String get nameInfoViolet;
+
+  /// No description provided for @wheelHomeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bobine du jour'**
+  String get wheelHomeLabel;
+
+  /// No description provided for @wheelTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'LA BOBINE DU JOUR'**
+  String get wheelTitle;
+
+  /// No description provided for @wheelSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un tour gratuit chaque jour : tente ta chance !'**
+  String get wheelSubtitle;
+
+  /// No description provided for @wheelSpin.
+  ///
+  /// In fr, this message translates to:
+  /// **'FAIRE TOURNER'**
+  String get wheelSpin;
+
+  /// No description provided for @wheelRespin.
+  ///
+  /// In fr, this message translates to:
+  /// **'RELANCER LA ROUE'**
+  String get wheelRespin;
+
+  /// No description provided for @wheelComeBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reviens demain pour un nouveau tour gratuit !'**
+  String get wheelComeBack;
+
+  /// No description provided for @wheelYouWin.
+  ///
+  /// In fr, this message translates to:
+  /// **'TU GAGNES'**
+  String get wheelYouWin;
+
+  /// No description provided for @wheelOdds.
+  ///
+  /// In fr, this message translates to:
+  /// **'Chances : chaque joker mineur 15 %, chaque majeur 10 %, les 3 mineurs 15 %, les 3 majeurs 10 %.'**
+  String get wheelOdds;
 }
 
 class _AppLocalizationsDelegate

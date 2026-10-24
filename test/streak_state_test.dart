@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cine_devinette/l10n/app_localizations.dart';
 import 'package:cine_devinette/screens/home_screen.dart';
+import 'package:cine_devinette/services/ad_service.dart';
 import 'package:cine_devinette/services/app_settings.dart';
+import 'package:cine_devinette/services/game_state.dart';
 import 'package:cine_devinette/services/save_service.dart';
 import 'package:cine_devinette/services/streak_state.dart';
 
@@ -141,6 +143,8 @@ void main() {
         providers: [
           ChangeNotifierProvider.value(value: settings),
           ChangeNotifierProvider.value(value: streak),
+          ChangeNotifierProvider.value(
+              value: GameState(adService: AdService(), saveService: saveService, settings: settings)),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,

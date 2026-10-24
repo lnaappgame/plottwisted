@@ -28,7 +28,13 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.lnaapp.plottwisted"
+        // Version de test installable à côté de celle du Play Store (sans la
+        // remplacer ni toucher à ses données) : PT_TEST_BUILD=1 flutter build apk.
+        // Elle reprend l'ancien identifiant de développement, toujours
+        // enregistré dans google-services.json, et s'appelle « PT test ».
+        val testBuild = System.getenv("PT_TEST_BUILD") == "1"
+        applicationId = if (testBuild) "com.example.cine_devinette" else "com.lnaapp.plottwisted"
+        manifestPlaceholders["appLabel"] = if (testBuild) "PT test" else "Plot Twist(ed)"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
