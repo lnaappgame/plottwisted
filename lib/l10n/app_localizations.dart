@@ -1908,20 +1908,47 @@ abstract class AppLocalizations {
   /// No description provided for @shareLevelText.
   ///
   /// In fr, this message translates to:
-  /// **'🎬 Plot Twist(ed) · Monde {world}, niveau {level} : film trouvé en {time} ! Tu fais mieux ? 👉 {link}'**
-  String shareLevelText(int world, int level, String time, String link);
+  /// **'🎬 Plot Twist(ed) · Monde {world}-{level}\n{grid}{details}\nTu fais mieux ? 👉 {link}'**
+  String shareLevelText(
+      int world, int level, String grid, String details, String link);
 
   /// No description provided for @shareDefiText.
   ///
   /// In fr, this message translates to:
-  /// **'🎬 Défi du jour Plot Twist(ed) · {theme} : terminé en {time} ⏱️ Tu fais mieux ? 👉 {link}'**
-  String shareDefiText(String theme, String time, String link);
+  /// **'🎯 Plot Twist(ed) · Défi du jour : {theme}\n{grid}⏱️ {time}{penalty}\nTu fais mieux ? 👉 {link}'**
+  String shareDefiText(
+      String theme, String grid, String time, String penalty, String link);
 
   /// No description provided for @shareEnigmeText.
   ///
   /// In fr, this message translates to:
-  /// **'🎬 Énigme de la semaine Plot Twist(ed) : trouvée en {time}, le jour {day} 🕵️ À ton tour ! 👉 {link}'**
-  String shareEnigmeText(String time, int day, String link);
+  /// **'🕵️ Plot Twist(ed) · Énigme de la semaine #{number}\n{bar}\nTrouvée le jour {day}/7 en {time}\nÀ ton tour ! 👉 {link}'**
+  String shareEnigmeText(
+      int number, String bar, int day, String time, String link);
+
+  /// No description provided for @shareEventText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎃 Plot Twist(ed) · Halloween {number}/30\n{grid}{details}\nÀ ton tour 👉 {link}'**
+  String shareEventText(int number, String grid, String details, String link);
+
+  /// No description provided for @shareNoJoker.
+  ///
+  /// In fr, this message translates to:
+  /// **'0 joker 💪'**
+  String get shareNoJoker;
+
+  /// No description provided for @shareSkipped.
+  ///
+  /// In fr, this message translates to:
+  /// **'⏭️ passé avec un joker'**
+  String get shareSkipped;
+
+  /// No description provided for @sharePenalty.
+  ///
+  /// In fr, this message translates to:
+  /// **' (dont {seconds} s de pénalité)'**
+  String sharePenalty(int seconds);
 
   /// No description provided for @shareDuelWinText.
   ///

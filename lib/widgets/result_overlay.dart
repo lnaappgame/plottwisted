@@ -165,8 +165,15 @@ class ResultOverlay extends StatelessWidget {
                       ),
                       onPressed: () => ShareService.share(
                         buttonContext,
-                        t.shareLevelText(game.worldIndex, game.currentLevelNumber,
-                            ShareService.formatDuration(game.lastSolveDuration.inSeconds),
+                        t.shareLevelText(
+                            game.worldIndex,
+                            game.currentLevelNumber,
+                            ShareService.attemptGrid(game.attemptRows),
+                            ShareService.resultDetails(
+                                ShareService.formatDuration(game.lastSolveDuration.inSeconds), game.jokersUsed,
+                                skipped: game.solvedWithSkip,
+                                noJoker: t.shareNoJoker,
+                                skippedLabel: t.shareSkipped),
                             ShareService.link(ShareService.sourceLevel)),
                       ),
                       icon: const Icon(Icons.share, size: 16, color: AppColors.gold),

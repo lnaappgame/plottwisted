@@ -79,7 +79,9 @@ class GameState extends ChangeNotifier implements TitleGrid {
     // l'ancienne réponse ne peuvent pas être reportés.
     final keptP1 = p1Colors, keptP2 = p2Colors, keptHint = hintRevealed;
     final keptStart = levelStartTime, keptAds = adsWatchedThisLevel, keptRedAd = redJokerAdWatchedThisLevel;
+    final keptJokers = jokersUsed;
     loadPuzzle();
+    jokersUsed = keptJokers;
     p1Colors = _shownColors('p1', keptP1);
     p2Colors = _shownColors('p2', keptP2);
     hintRevealed = keptHint;
@@ -185,6 +187,8 @@ class GameState extends ChangeNotifier implements TitleGrid {
       'failStreak': failStreak,
       'adsWatched': adsWatchedThisLevel,
       'redAdWatched': redJokerAdWatchedThisLevel,
+      'attempts': attemptRows,
+      'jokersUsed': [for (final k in jokersUsed) k.name],
     };
   }
 
@@ -206,6 +210,11 @@ class GameState extends ChangeNotifier implements TitleGrid {
     failStreak = saved['failStreak'] as int? ?? failStreak;
     adsWatchedThisLevel = saved['adsWatched'] as int? ?? adsWatchedThisLevel;
     redJokerAdWatchedThisLevel = saved['redAdWatched'] as bool? ?? redJokerAdWatchedThisLevel;
+    final byName = JokerKind.values.asNameMap();
+    jokersUsed = [
+      for (final n in (saved['jokersUsed'] as List?) ?? const [])
+        if (byName[n] case final kind?) kind
+    ];
 
     // La grille n'est reprise que si la réponse n'a pas changé entre-temps
     // (autre langue, contenu corrigé par une mise à jour).
@@ -224,6 +233,10 @@ class GameState extends ChangeNotifier implements TitleGrid {
       if (savedGuess.any((g) => g != null && (g < 0 || g >= savedPool.length))) return;
       final savedLockedSlots = (saved['lockedSlots'] as List).cast<int>().toSet();
       final savedLockedWords = (saved['lockedWords'] as List).cast<int>().toSet();
+      final savedAttempts = [
+        for (final row in (saved['attempts'] as List?) ?? const []) [for (final ok in row as List) ok == true]
+      ];
+      attemptRows = savedAttempts;
       pool = savedPool;
       guess = savedGuess;
       lockedSlots = savedLockedSlots;
@@ -429,6 +442,18 @@ class GameState extends ChangeNotifier implements TitleGrid {
   // ─── Pub ───
   DateTime levelStartTime = DateTime.now();
   Duration lastSolveDuration = Duration.zero;
+
+  // ─── Partage façon Wordle ───
+  // Une ligne par validation (un booléen par mot du titre : juste ou non) et
+  // les jokers joués sur le niveau, dans l'ordre. Sauvegardés avec le niveau.
+  List<List<bool>> attemptRows = [];
+  List<JokerKind> jokersUsed = [];
+  bool solvedWithSkip = false;
+
+  /// Niveau trouvé du premier coup, sans joker, hors tutoriel et après le
+  /// premier monde : un bon moment pour la demande d'avis store.
+  bool get isHappySolve =>
+      !inTutorial && worldIndex >= 2 && attemptRows.length == 1 && jokersUsed.isEmpty && !solvedWithSkip;
 
   // ─── Tutoriel ───
   bool orangeIntroShown = false;
@@ -650,6 +675,9 @@ class GameState extends ChangeNotifier implements TitleGrid {
     adsWatchedThisLevel = 0;
     redJokerAdWatchedThisLevel = false;
     levelStartTime = DateTime.now();
+    attemptRows = [];
+    jokersUsed = [];
+    solvedWithSkip = false;
 
     if (!orangeIntroShown && (p1State == NameColor.orange || p2State == NameColor.orange)) {
       orangeIntroShown = true;
@@ -789,6 +817,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     } else {
       characterCount--;
     }
+    jokersUsed.add(JokerKind.fromNameColor(activeNameJoker!)!);
     activeNameJoker = null;
     if (!orangeIntroShown && (p1State == NameColor.orange || p2State == NameColor.orange)) {
       orangeIntroShown = true;
@@ -876,6 +905,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       }
     }
 
+    attemptRows.add([for (var w = 0; w < wordRanges.length; w++) lockedWords.contains(w)]);
     final allLocked = List.generate(wordRanges.length, (w) => lockedWords.contains(w)).every((v) => v);
     if (allLocked) {
       failStreak = 0;
@@ -924,6 +954,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     pool[tileIdx].used = true;
     lockedSlots.add(target);
     revealCount--;
+    jokersUsed.add(JokerKind.reveal);
     notifyListeners();
     return target;
   }
@@ -944,6 +975,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       pool[i].eliminated = true;
     }
     eliminateCount--;
+    jokersUsed.add(JokerKind.eliminate);
     notifyListeners();
     return eliminated;
   }
@@ -952,6 +984,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
   String? useHintJoker() {
     if (hintCount <= 0 || hintRevealed) return null;
     hintCount--;
+    jokersUsed.add(JokerKind.hint);
     hintRevealed = true;
     revealedHintText = _hintText();
     notifyListeners();
@@ -1006,6 +1039,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       }
       if (revealed.isNotEmpty) {
         revealWordCount--;
+        jokersUsed.add(JokerKind.revealWord);
       }
       notifyListeners();
       return revealed;
@@ -1052,6 +1086,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     if (motEntierementRevele) {
       lockedWords.add(targetWord);
       revealWordCount--;
+      jokersUsed.add(JokerKind.revealWord);
     }
     notifyListeners();
     return motEntierementRevele
@@ -1346,6 +1381,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
   bool solveWithSkipJoker() {
     if (skipJokerCount <= 0 || inTutorial) return false;
     skipJokerCount--;
+    solvedWithSkip = true;
     lockedWords = {for (var w = 0; w < wordRanges.length; w++) w};
     failStreak = 0;
     lastSolveDuration = DateTime.now().difference(levelStartTime);

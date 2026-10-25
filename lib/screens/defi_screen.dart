@@ -474,7 +474,11 @@ class _ResultView extends StatelessWidget {
             style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.gold)),
             onPressed: () => ShareService.share(
               buttonContext,
-              t.shareDefiText(defi.communFor(locale), ShareService.formatDuration(defiState.totalSeconds!),
+              t.shareDefiText(
+                  defi.communFor(locale),
+                  ShareService.defiGrid(defiState.caseResults),
+                  ShareService.formatDuration(defiState.totalSeconds!),
+                  defiState.penaltySeconds > 0 ? t.sharePenalty(defiState.penaltySeconds) : '',
                   ShareService.link(ShareService.sourceDefi)),
             ),
             icon: const Icon(Icons.share, size: 16, color: AppColors.gold),

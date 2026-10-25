@@ -46,22 +46,29 @@ void main() {
   });
 
   group('consumeReviewRequestPending()', () {
-    test('true la première fois, false ensuite', () {
+    test('deux demandes au plus, à 3 semaines d\'écart', () {
       final settings = _settings();
-      expect(settings.consumeReviewRequestPending(), isTrue);
-      expect(settings.consumeReviewRequestPending(), isFalse);
-      expect(settings.consumeReviewRequestPending(), isFalse);
+      final day0 = DateTime(2026, 11, 1);
+      expect(settings.consumeReviewRequestPending(now: day0), isTrue);
+      expect(settings.consumeReviewRequestPending(now: day0.add(const Duration(days: 1))), isFalse,
+          reason: 'trop tôt après la première demande');
+      expect(settings.consumeReviewRequestPending(now: day0.add(const Duration(days: 21))), isTrue);
+      expect(settings.consumeReviewRequestPending(now: day0.add(const Duration(days: 90))), isFalse,
+          reason: 'deux demandes au plus');
     });
 
     test('reste consommé après un cycle toJson()/restore()', () async {
       final settings = _settings();
-      settings.consumeReviewRequestPending();
+      final day0 = DateTime(2026, 11, 1);
+      settings.consumeReviewRequestPending(now: day0);
 
-      final restored = _settings();
       final json = settings.toJson();
-      restored.reviewRequested = json['reviewRequested'] as bool;
+      final restored = _settings()
+        ..reviewRequestCount = json['reviewRequestCount'] as int
+        ..lastReviewRequest = DateTime.parse(json['lastReviewRequest'] as String);
 
-      expect(restored.consumeReviewRequestPending(), isFalse);
+      expect(restored.consumeReviewRequestPending(now: day0.add(const Duration(days: 2))), isFalse);
+      expect(restored.consumeReviewRequestPending(now: day0.add(const Duration(days: 22))), isTrue);
     });
   });
 

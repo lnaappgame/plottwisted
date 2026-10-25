@@ -857,7 +857,11 @@ class _SolvedPanelState extends State<_SolvedPanel> {
                 style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.gold)),
                 onPressed: () => ShareService.share(
                   buttonContext,
-                  t.shareEnigmeText(_formatDuration(context, enigmeState.solveSeconds!), enigmeState.solvedDay!,
+                  t.shareEnigmeText(
+                      ShareService.enigmeWeekNumber(enigmeState.currentWeekStart ?? DateTime.now()),
+                      ShareService.weekBar(enigmeState.solvedDay!),
+                      enigmeState.solvedDay!,
+                      _formatDuration(context, enigmeState.solveSeconds!),
                       ShareService.link(ShareService.sourceEnigme)),
                 ),
                 icon: const Icon(Icons.share, size: 16, color: AppColors.gold),

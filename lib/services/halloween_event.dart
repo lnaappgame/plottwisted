@@ -118,6 +118,13 @@ class HalloweenEvent implements TitleGrid {
   int cursorIndex = -1;
   final Random _rng = Random();
 
+  /// Partage façon Wordle : une ligne par validation (mot juste ou non) et
+  /// les jokers joués sur le pitch, comme dans le jeu principal.
+  List<List<bool>> attemptRows = [];
+  List<JokerKind> jokersUsed = [];
+  DateTime _pitchStart = DateTime.now();
+  Duration lastSolveDuration = Duration.zero;
+
   /// Pitch trouvé juste avant (écran de victoire), et ce qu'il a rapporté.
   int? lastSolvedPitch;
   EventSolveReward? lastReward;
@@ -157,6 +164,9 @@ class HalloweenEvent implements TitleGrid {
     guess = List<int?>.filled(slots.length, null);
     lockedWords = {};
     lockedSlots = {};
+    attemptRows = [];
+    jokersUsed = [];
+    _pitchStart = game.clock();
     wordRanges = [];
     var current = <int>[];
     for (var i = 0; i < slots.length; i++) {
@@ -200,6 +210,8 @@ class HalloweenEvent implements TitleGrid {
         'guess': guess,
         'lockedSlots': lockedSlots.toList(),
         'lockedWords': lockedWords.toList(),
+        'attempts': attemptRows,
+        'jokersUsed': [for (final k in jokersUsed) k.name],
       };
 
   void _applyGrid(Map<String, dynamic> saved) {
@@ -218,6 +230,14 @@ class HalloweenEvent implements TitleGrid {
       guess = savedGuess;
       lockedSlots = (saved['lockedSlots'] as List).cast<int>().toSet();
       lockedWords = (saved['lockedWords'] as List).cast<int>().toSet();
+      attemptRows = [
+        for (final row in (saved['attempts'] as List?) ?? const []) [for (final ok in row as List) ok == true]
+      ];
+      final byName = JokerKind.values.asNameMap();
+      jokersUsed = [
+        for (final n in (saved['jokersUsed'] as List?) ?? const [])
+          if (byName[n] case final kind?) kind
+      ];
       cursorIndex = _firstEmptySlotFrom(0);
     } catch (_) {
       // Sauvegarde illisible : on garde la grille neuve.
@@ -302,7 +322,9 @@ class HalloweenEvent implements TitleGrid {
         }
       }
     }
+    attemptRows.add([for (var w = 0; w < wordRanges.length; w++) lockedWords.contains(w)]);
     if (lockedWords.length == wordRanges.length) {
+      lastSolveDuration = game.clock().difference(_pitchStart);
       lastReward = _solve(index);
       return 'solved';
     }
@@ -361,6 +383,7 @@ class HalloweenEvent implements TitleGrid {
   int countOf(JokerKind kind) => game.countOf(kind);
 
   void _spend(JokerKind kind) {
+    jokersUsed.add(kind);
     switch (kind) {
       case JokerKind.reveal:
         game.revealCount--;

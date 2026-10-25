@@ -1056,18 +1056,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareInviteFriends => '📣 Invite friends';
 
   @override
-  String shareLevelText(int world, int level, String time, String link) {
-    return '🎬 Plot Twist(ed) · World $world, level $level: movie found in $time! Can you beat that? 👉 $link';
+  String shareLevelText(
+      int world, int level, String grid, String details, String link) {
+    return '🎬 Plot Twist(ed) · World $world-$level\n$grid$details\nCan you beat that? 👉 $link';
   }
 
   @override
-  String shareDefiText(String theme, String time, String link) {
-    return '🎬 Plot Twist(ed) Daily Challenge · $theme: done in $time ⏱️ Can you beat it? 👉 $link';
+  String shareDefiText(
+      String theme, String grid, String time, String penalty, String link) {
+    return '🎯 Plot Twist(ed) · Daily Challenge: $theme\n$grid⏱️ $time$penalty\nCan you beat it? 👉 $link';
   }
 
   @override
-  String shareEnigmeText(String time, int day, String link) {
-    return '🎬 Plot Twist(ed) Puzzle of the Week: solved in $time, on day $day 🕵️ Your turn! 👉 $link';
+  String shareEnigmeText(
+      int number, String bar, int day, String time, String link) {
+    return '🕵️ Plot Twist(ed) · Puzzle of the Week #$number\n$bar\nSolved on day $day/7 in $time\nYour turn! 👉 $link';
+  }
+
+  @override
+  String shareEventText(int number, String grid, String details, String link) {
+    return '🎃 Plot Twist(ed) · Halloween $number/30\n$grid$details\nYour turn 👉 $link';
+  }
+
+  @override
+  String get shareNoJoker => 'no jokers 💪';
+
+  @override
+  String get shareSkipped => '⏭️ skipped with a joker';
+
+  @override
+  String sharePenalty(int seconds) {
+    return ' (incl. $seconds s penalty)';
   }
 
   @override

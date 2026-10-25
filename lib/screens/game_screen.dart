@@ -8,6 +8,7 @@ import '../models/joker.dart';
 import '../models/puzzle.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
+import '../services/review_service.dart';
 import '../services/sound_service.dart';
 import '../services/streak_state.dart';
 import '../services/share_service.dart';
@@ -65,6 +66,7 @@ class _GameScreenState extends State<GameScreen> {
   // même quand le plateau est reconstruit après l'écran de choix de monde.
   final ScrollController _scroll = ScrollController(keepScrollOffset: false);
   final JokerFx _fx = JokerFx();
+  final ReviewService _review = ReviewService();
 
   // Jokers gagnés en fin de niveau ou de monde, montrés une fois le niveau
   // suivant affiché (leur étoile doit pouvoir rejoindre la barre de jokers).
@@ -447,6 +449,11 @@ class _GameScreenState extends State<GameScreen> {
         _revealingAnswer = false;
         _showResult = true;
       });
+      // Trouvé du premier coup, sans joker : le joueur est content, c'est le
+      // bon moment pour la demande d'avis du store (2 au plus, voir AppSettings).
+      if (context.read<GameState>().isHappySolve && settings.consumeReviewRequestPending()) {
+        _review.requestReview();
+      }
     });
   }
 

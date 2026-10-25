@@ -8,6 +8,7 @@ import '../models/joker.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
 import '../services/halloween_event.dart';
+import '../services/share_service.dart';
 import '../services/sound_service.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
@@ -515,6 +516,7 @@ class _EventPitchScreenState extends State<EventPitchScreen> {
               Positioned.fill(
                 child: _ResultOverlay(
                   pitch: pitch,
+                  number: index + 1,
                   locale: locale,
                   reward: event.lastReward,
                   hasNext: event.currentPitch != null,
@@ -582,12 +584,18 @@ class _EventJokerBar extends StatelessWidget {
 /// Pitch trouvé : le film, ce que le joueur gagne, puis le pitch suivant.
 class _ResultOverlay extends StatelessWidget {
   final EventPitch pitch;
+  final int number; // position du pitch dans l'event (1 à 30), pour le partage
   final String locale;
   final EventSolveReward? reward;
   final bool hasNext;
   final VoidCallback onNext;
   const _ResultOverlay(
-      {required this.pitch, required this.locale, required this.reward, required this.hasNext, required this.onNext});
+      {required this.pitch,
+      required this.number,
+      required this.locale,
+      required this.reward,
+      required this.hasNext,
+      required this.onNext});
 
   @override
   Widget build(BuildContext context) {
@@ -654,6 +662,29 @@ class _ResultOverlay extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: 18),
+              Builder(
+                builder: (buttonContext) => OutlinedButton.icon(
+                  key: const ValueKey('eventShare'),
+                  style: OutlinedButton.styleFrom(side: const BorderSide(color: _Hw.pumpkin)),
+                  onPressed: () {
+                    final event = context.read<GameState>().halloween;
+                    ShareService.share(
+                      buttonContext,
+                      t.shareEventText(
+                          number,
+                          ShareService.attemptGrid(event.attemptRows),
+                          ShareService.resultDetails(
+                              ShareService.formatDuration(event.lastSolveDuration.inSeconds), event.jokersUsed,
+                              skipped: false, noJoker: t.shareNoJoker, skippedLabel: t.shareSkipped),
+                          ShareService.link(ShareService.sourceEvent)),
+                    );
+                  },
+                  icon: const Icon(Icons.share, size: 16, color: _Hw.pumpkinBright),
+                  label: Text(t.shareButton,
+                      style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: _Hw.pumpkinBright)),
+                ),
+              ),
+              const SizedBox(height: 10),
               ElevatedButton(
                 key: const ValueKey('eventNext'),
                 style: ElevatedButton.styleFrom(backgroundColor: _Hw.button),

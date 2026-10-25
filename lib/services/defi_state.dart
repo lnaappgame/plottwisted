@@ -112,6 +112,9 @@ class DefiState extends ChangeNotifier {
   int currentCaseIndex = 0;
   DateTime? startTime;
   int penaltySeconds = 0;
+  // Pour le partage façon Wordle : chaque indice, dans l'ordre, trouvé du
+  // premier coup ou non.
+  List<bool> caseResults = [];
   bool solved = false;
   int? realSeconds;
   int? totalSeconds;
@@ -155,6 +158,7 @@ class DefiState extends ChangeNotifier {
     hiddenCaseIndices.clear();
     currentCaseIndex = 0;
     penaltySeconds = 0;
+    caseResults = [];
     solved = false;
     realSeconds = null;
     totalSeconds = null;
@@ -189,6 +193,7 @@ class DefiState extends ChangeNotifier {
     revealCaseIndex = estCorrect ? null : currentCaseIndex;
     _pendingResolvedIndex = currentCaseIndex;
     if (!estCorrect) penaltySeconds += 5;
+    caseResults.add(estCorrect);
     currentCaseIndex++;
     notifyListeners();
 

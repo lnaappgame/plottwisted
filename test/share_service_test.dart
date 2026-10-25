@@ -29,12 +29,12 @@ void main() {
     final fr = AppLocalizationsFr(), en = AppLocalizationsEn();
     final link = ShareService.link(ShareService.sourceLevel);
     expect(link, 'https://lnaappgame.github.io/plottwisted/go/?s=p-niveau');
-    expect(fr.shareLevelText(3, 4, '42 s', link), contains(link));
-    expect(en.shareLevelText(3, 4, '42 s', link), contains('World 3, level 4'));
+    expect(fr.shareLevelText(3, 4, '🟥🟩\n🟩🟩\n', '⏱️ 42 s · 0 joker 💪', link), contains(link));
+    expect(en.shareLevelText(3, 4, '🟩\n', '⏱️ 42 s · no jokers 💪', link), contains('World 3-4\n🟩\n⏱️ 42 s'));
     // La source reste dans ce que la page du lien accepte : [a-z0-9_-], 20 caractères au plus.
     for (final s in [ShareService.sourceLevel, ShareService.sourceDefi, ShareService.sourceEnigme,
         ShareService.sourceDuel, ShareService.sourceAskFriend, ShareService.sourceAskFriendEnigme,
-        ShareService.sourceInvite]) {
+        ShareService.sourceInvite, ShareService.sourceEvent]) {
       expect(RegExp(r'^[a-z0-9_-]{1,20}$').hasMatch(s), isTrue, reason: s);
     }
   });

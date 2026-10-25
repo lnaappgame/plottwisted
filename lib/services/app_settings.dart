@@ -19,6 +19,10 @@ const kEventAvatars = [kPumpkinAvatar, kFirePumpkinAvatar];
 
 const int kPlayerIdMaxLength = 20;
 
+/// Demandes d'avis store par installation, et écart minimal entre deux.
+const kMaxReviewRequests = 2;
+const kReviewRequestGap = Duration(days: 21);
+
 class AppSettings extends ChangeNotifier {
   final SaveService saveService;
   AppSettings({required this.saveService});
@@ -41,7 +45,10 @@ class AppSettings extends ChangeNotifier {
   String playerId = _genererPlayerId();
   String avatar = kAvatarEmojis.first;
   Set<String> unlockedAvatars = {}; // avatars d'event gagnés (kEventAvatars)
-  bool reviewRequested = false; // demande d'avis store : une seule fois par installation
+  // Demande d'avis store : au plus [kMaxReviewRequests] fois par
+  // installation, espacées d'au moins [kReviewRequestGap].
+  int reviewRequestCount = 0;
+  DateTime? lastReviewRequest;
 
   // Saisie des lettres dans le jeu principal, l'énigme et le multijoueur :
   // 'tiles' (tuiles mélangées, par défaut), 'azerty' ou 'qwerty' (clavier
@@ -111,11 +118,17 @@ class AppSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// true la toute première fois qu'on l'appelle (et seulement alors) — pour
-  /// ne déclencher la demande d'avis qu'une fois par installation.
-  bool consumeReviewRequestPending() {
-    if (reviewRequested) return false;
-    reviewRequested = true;
+  /// true si une demande d'avis peut partir maintenant (et la compte) : au
+  /// plus [kMaxReviewRequests] par installation, espacées d'au moins
+  /// [kReviewRequestGap]. Les stores filtrent aussi de leur côté (l'App
+  /// Store n'affiche la fenêtre que 3 fois par an).
+  bool consumeReviewRequestPending({DateTime? now}) {
+    final t = now ?? DateTime.now();
+    if (reviewRequestCount >= kMaxReviewRequests) return false;
+    final last = lastReviewRequest;
+    if (last != null && t.difference(last) < kReviewRequestGap) return false;
+    reviewRequestCount++;
+    lastReviewRequest = t;
     notifyListeners();
     return true;
   }
@@ -132,7 +145,8 @@ class AppSettings extends ChangeNotifier {
         'playerId': playerId,
         'avatar': avatar,
         'unlockedAvatars': unlockedAvatars.toList(),
-        'reviewRequested': reviewRequested,
+        'reviewRequestCount': reviewRequestCount,
+        'lastReviewRequest': lastReviewRequest?.toIso8601String(),
         'inputMode': inputMode,
         'inputModeTipShown': inputModeTipShown,
         'firstLaunchDay': firstLaunchDay.toIso8601String(),
@@ -169,7 +183,11 @@ class AppSettings extends ChangeNotifier {
     // Un avatar d'event jamais gagné (sauvegarde trafiquée, restauration
     // partielle) ne reste pas affiché.
     if (kEventAvatars.contains(avatar) && !unlockedAvatars.contains(avatar)) avatar = kAvatarEmojis.first;
-    reviewRequested = data['reviewRequested'] as bool? ?? reviewRequested;
+    // Avant la 1.0.11 : un simple booléen, une seule demande par installation.
+    reviewRequestCount =
+        data['reviewRequestCount'] as int? ?? (data['reviewRequested'] == true ? 1 : reviewRequestCount);
+    final lastReview = data['lastReviewRequest'] as String?;
+    lastReviewRequest = lastReview == null ? null : DateTime.tryParse(lastReview);
     final fld = data['firstLaunchDay'] as String?;
     if (fld != null) {
       final parsed = DateTime.tryParse(fld);
