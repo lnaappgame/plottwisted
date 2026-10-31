@@ -12,7 +12,7 @@ import '../lib/data/defis_data.dart';
 import '../lib/data/enigmes_data.dart';
 import '../lib/data/multiplayer_data.dart';
 
-const _xlsxPath = r'C:\Users\Neophilis\Documents\cine-devinette\exports\Base-de-donnees-PlotTwisted-2026-10-13.xlsx';
+const _xlsxPath = r'C:\Users\Neophilis\Documents\cine-devinette\exports\Base-de-donnees-PlotTwisted-2026-10-31.xlsx';
 const _extractDir = r'C:\Users\NEOPHI~1\AppData\Local\Temp\claude\C--Users-Neophilis-Documents-cine-devinette\ff928cde-e881-4c2d-9efa-ad7518acd640\scratchpad\xlsx_extract_verified';
 
 void _extractXlsx() {
@@ -181,7 +181,7 @@ void _regeneratePuzzles() {
   buf.writeln("import '../models/puzzle.dart';");
   buf.writeln();
   buf.writeln('// Fichier regenere automatiquement depuis le tableur de la base de donnees.');
-  buf.writeln('// Perimetre : tutoriel + tous les mondes places avant la ligne LIMITE (1 a 25 au 13/10/2026).');
+  buf.writeln('// Perimetre : tutoriel + tous les mondes places avant la ligne LIMITE (1 a 30 au 31/10/2026).');
   buf.writeln('// Pour regenerer, relancer tool/regenerate_from_xlsx.dart.');
   buf.writeln();
   buf.writeln('final List<Puzzle> kTutorialPuzzles = [');
