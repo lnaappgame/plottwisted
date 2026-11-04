@@ -296,12 +296,12 @@
   <article id="doc-privacy" class="doc active" role="tabpanel" aria-labelledby="tab-privacy">
     <div class="masthead">
       <span class="doctitle">Privacy Policy — Plot Twist(ed)</span>
-      <strong>LNA App</strong><br>
+      <strong>LNA App</strong> — Damien Ellena, sole trader (EI)<br>
       12 montée du Château, 13650 Meyrargues, France<br>
+      Phone: +33 6 19 56 21 68 — Contact: lna.app.game@gmail.com<br>
       SIRET (French business ID): 790 346 076 00025<br>
-      EU VAT number: FR 19790346076<br>
-      Contact: lna.app.game@gmail.com
-      <span class="updated">Last updated: September 25, 2026 (English translation: October 19, 2026)</span>
+      EU VAT number: FR 19790346076
+      <span class="updated">Last updated: November 5, 2026 (English translation: November 5, 2026)</span>
     </div>
 
     <details class="toc">
@@ -323,11 +323,13 @@
 
     <h2 id="c1">1. Publisher of the app</h2>
     <p>The mobile app <strong>Plot Twist(ed)</strong> is published by:</p>
-    <p><strong>LNA App</strong><br>
+    <p><strong>LNA App</strong>, trade name of Damien Ellena, sole trader (French <em>entrepreneur individuel</em>, EI)<br>
     12 montée du Château, 13650 Meyrargues, France<br>
+    Phone: +33 6 19 56 21 68<br>
     SIRET (French business ID): 790 346 076 00025<br>
     EU VAT number: FR 19790346076<br>
     Contact: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+    <p><strong>Hosting.</strong> The app's online data (backup, leaderboards, Multiplayer) is hosted by Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland (phone +353 1 543 1000), through the Firebase service. The pages of this website are hosted by GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (phone +1 877 448 4820).</p>
 
     <h2 id="c2">2. What data is processed?</h2>
 
@@ -344,15 +346,16 @@
     <p>This feature is strictly optional: if you never turn it on, none of this data is sent and only what is described in section 2.1 applies.</p>
 
     <h3>2.3 Online leaderboards and Multiplayer (Firestore)</h3>
-    <p>The <strong>Weekly Puzzle</strong> and <strong>Multiplayer</strong> modes rely on a leaderboard or a comparison of performances shared by several players, which requires sending some data to our <strong>Firebase Firestore</strong> servers, associated only with the anonymous technical identifier mentioned in section 2.2 (never with your name or email address, even if you have also linked a Google account):</p>
+    <p>The <strong>Weekly Puzzle</strong> and <strong>Multiplayer</strong> modes rely on a leaderboard or a comparison of performances shared by several players, which requires sending some data to our <strong>Firebase Firestore</strong> servers, attached to the anonymous technical identifier mentioned in section 2.2; neither your name nor your email address appears in it:</p>
     <ul>
-      <li>for the Weekly Puzzle: your solving time, the day you solved it, and your ranking relative to the other players of the current week;</li>
-      <li>for Multiplayer: the result of each round played (time, win or loss), used to set the reference time offered to other players and to calculate your rating (“Elo”).</li>
+      <li>for the Weekly Puzzle: your solving time, the day you solved it, and your ranking relative to the other players of the current week. No nickname is sent for this leaderboard;</li>
+      <li>for Multiplayer: the result of each round played (time, win or loss), used to set the reference time offered to other players and to calculate your rating (“Elo”), together with <strong>your nickname</strong> as you typed it in the app (“Cinephile” by default). This nickname is <strong>shown to other players</strong> who later race against your reference time, as the name of their opponent. So do not put your real name or any personal information in it; you can change it at any time from the home screen.</li>
     </ul>
-    <p>Both features require an active internet connection. Past weekly leaderboards are not automatically deleted from our servers when the next week replaces them; they simply stop being actively displayed in the app (see section 6).</p>
+    <p>Both features require an active internet connection. Leaderboard and round results are kept for at most 24 months (see section 6).</p>
 
-    <h3>2.4 Analytics and technical diagnostics (Firebase Analytics and Crashlytics)</h3>
-    <p>The app uses <strong>Firebase Analytics</strong> to measure general usage of the app (for example: which game mode is started, a level completed, an ad watched, a purchase made) and <strong>Firebase Crashlytics</strong> to receive an automatic technical report when the app crashes (type of error, technical state of the app at the time of the incident). These tools, provided by Google, collect technical data about your device (model, operating system version, installation identifier) but are not intended to identify you personally.</p>
+    <h3>2.4 Analytics, technical diagnostics and server protection (Firebase Analytics, Crashlytics and App Check)</h3>
+    <p>The app uses <strong>Firebase Analytics</strong> to measure general usage of the app (for example: which game mode is started, a level completed, an ad watched, a purchase made) and <strong>Firebase Crashlytics</strong> to receive an automatic technical report when the app crashes (type of error, technical state of the app at the time of the incident). These tools, provided by Google, collect technical data about your device (model, operating system version, installation identifier) but are not intended to identify you personally. Analytics collection is switched off when the app starts and is only enabled once you have answered the consent tool described in section 2.5.</p>
+    <p><strong>Firebase App Check</strong> verifies, on each exchange with our servers, that the request really comes from the app installed from a Store (Play Integrity on Android, DeviceCheck on iPhone). A technical token is exchanged with Google for this purpose; it contains no data about you.</p>
 
     <h3>2.5 Advertising (Google AdMob)</h3>
     <p>The app shows ads (rewarded videos and ads between levels) provided by <strong>Google AdMob</strong>. To serve, measure and personalize these ads, Google may collect technical data about your device: advertising identifier (AAID on Android, IDFA on iOS — the latter only being accessible after your explicit permission through Apple's “App Tracking Transparency” prompt), approximate IP address, device information and interactions with ads.</p>
@@ -372,13 +375,13 @@
     <ul>
       <li>Running the game and local saving (section 2.1) are based on the performance of the service requested by the user.</li>
       <li>Backup/restore linked to a Google account (section 2.2) and online leaderboards (section 2.3) are based on the performance of the service you explicitly request by turning on these optional features.</li>
-      <li>Analytics and technical diagnostics (section 2.4) are based on LNA App's legitimate interest in understanding how the app is used and fixing technical malfunctions; you can object within the limits described in section 7.</li>
+      <li>Analytics, technical diagnostics and server protection (section 2.4) are based on LNA App's legitimate interest in understanding how the app is used, fixing malfunctions and protecting its servers; analytics is only enabled after you have answered the consent tool, and you can object at any time (section 7).</li>
       <li>Personalized ads (section 2.5) are based on your <strong>consent</strong>, collected through the tool mentioned in that section; you can refuse it without losing access to the game (non-personalized ads may then be shown).</li>
       <li>In-app purchases (section 2.6) are based on the performance of the contract concluded at the time of purchase.</li>
     </ul>
 
     <h2 id="c4">4. Recipients of the data</h2>
-    <p>The recipients of the data described above are: <strong>Google</strong> (for Firebase — Authentication, Firestore, Analytics, Crashlytics; AdMob for advertising; Google Play for purchases and Google Sign-In) and <strong>Apple</strong> (App Store, for purchases on iOS), each strictly within the scope of the services described above. No data is sold or passed on to any other third party.</p>
+    <p>The recipients of the data described above are: <strong>Google</strong> (for Firebase — Authentication, Firestore, Analytics, Crashlytics, App Check; AdMob for advertising; Google Play for purchases and Google Sign-In) and <strong>Apple</strong> (App Store, for purchases on iOS), each strictly within the scope of the services described above. No data is sold or passed on to any other third party. Your nickname is also visible to other players in Multiplayer mode (section 2.3).</p>
 
     <h2 id="c5">5. Transfers outside the European Union</h2>
     <p>Google and Apple may process some data, in particular data related to Firebase and AdMob, outside the European Union (in particular in the United States). These transfers rely on the safeguards provided by these companies (including the European Commission's standard contractual clauses). See their respective privacy policies for more details: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a> for Google, <a href="https://www.apple.com/legal/privacy/en-ww/" target="_blank" rel="noopener">apple.com/legal/privacy</a> for Apple.</p>
@@ -387,7 +390,7 @@
     <ul>
       <li>Local game data (section 2.1) is kept on your device until you uninstall the app or reset it manually.</li>
       <li>Backup data linked to a Google account (section 2.2) is kept until you ask for it to be deleted (see section 7) or remove the link to your Google account yourself.</li>
-      <li>Leaderboard results (section 2.3) are kept beyond the week or period they relate to; past periods are no longer actively displayed in the app but may remain archived on our servers.</li>
+      <li>Leaderboard and Multiplayer round results, nickname included (section 2.3), are kept for at most <strong>24 months</strong> after the week or game concerned, then deleted from our servers.</li>
       <li>Analytics and diagnostic data (section 2.4) is kept for the default periods of Firebase Analytics and Crashlytics, generally several months.</li>
       <li>Data processed by Google for AdMob or Google Play is kept for the periods set by Google.</li>
     </ul>
@@ -397,12 +400,14 @@
     <ul>
       <li>for local game data (section 2.1): directly in the app (Settings → Reset save data) or by uninstalling the app;</li>
       <li>for backup or leaderboard data stored with Firebase (sections 2.2 and 2.3): by contacting us at the address given in section 11, stating the player ID shown in the app (for example “Cinephile #123456”) or the email address of the linked Google account, so that we can find and delete the corresponding data;</li>
+      <li>for your nickname (section 2.3): directly from the app's home screen; rounds already recorded with the old nickname can be deleted on request;</li>
+      <li>for analytics (section 2.4): by writing to us (section 11);</li>
       <li>for data processed by Google or Apple (AdMob, Play, App Store, analytics): directly with these companies, through their respective ad-data or account management tools.</li>
     </ul>
-    <p>You can also contact us at the address in section 11 with any question, and you have the right to lodge a complaint with the French data protection authority, the CNIL (<a href="https://www.cnil.fr/en" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
+    <p>You may also give instructions on what happens to your data after your death (Article 85 of the French Data Protection Act). You can also contact us at the address in section 11 with any question, and you have the right to lodge a complaint with the French data protection authority, the CNIL (<a href="https://www.cnil.fr/en" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
 
     <h2 id="c8">8. Children</h2>
-    <p>Plot Twist(ed) is not specifically intended for children under 13 and does not knowingly collect personal data from children beyond the technical processing described above, which applies to all users alike.</p>
+    <p>Plot Twist(ed) is not intended for children <strong>under 15</strong>, the age from which a minor can consent on their own to the processing of their data in France. If you are under 15, use the app with your parents' agreement. We do not knowingly collect personal data from children beyond the technical processing described above, which applies to all users alike; if a parent finds that a child under 15 has sent us data (for example a nickname), they can ask us to delete it (section 11).</p>
 
     <h2 id="c9">9. Security</h2>
     <p>Game data stored only locally (section 2.1) carries no risk of a server-side leak, since it never leaves your device. The data you choose to send to our servers (Google backup, leaderboards) is hosted on Google's Firebase infrastructure and benefits from the security measures Google applies to this service; LNA App's access to this data is limited to what is needed to run the features described in this policy.</p>
@@ -411,7 +416,7 @@
     <p>This privacy policy may be updated, in particular when new game modes or new data processing are added. The date of the last update is shown at the top of this document.</p>
 
     <h2 id="c11">11. Contact</h2>
-    <p>For any question about this privacy policy, or to exercise any of the rights mentioned in section 7: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+    <p>For any question about this privacy policy, or to exercise any of the rights mentioned in section 7: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — phone +33 6 19 56 21 68 — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
 
     <footer class="contact">
       LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>
@@ -423,13 +428,13 @@
   <article id="doc-terms" class="doc" role="tabpanel" aria-labelledby="tab-terms">
     <div class="masthead">
       <span class="doctitle">Terms of Use — Plot Twist(ed)</span>
-      <strong>LNA App</strong><br>
+      <strong>LNA App</strong> — Damien Ellena, sole trader (EI)<br>
       12 montée du Château, 13650 Meyrargues, France<br>
+      Phone: +33 6 19 56 21 68 — Contact: lna.app.game@gmail.com<br>
       SIRET (French business ID): 790 346 076 00025<br>
       EU VAT number: FR 19790346076<br>
-      Publication director: Damien Ellena<br>
-      Contact: lna.app.game@gmail.com
-      <span class="updated">Last updated: October 13, 2026 (English translation: October 19, 2026)</span>
+      Publication director: Damien Ellena
+      <span class="updated">Last updated: November 5, 2026 (English translation: November 5, 2026)</span>
     </div>
 
     <details class="toc">
@@ -483,15 +488,17 @@
     </ul>
 
     <h2 id="g3">3. Publisher of the App</h2>
-    <p><strong>LNA App</strong><br>
+    <p><strong>LNA App</strong>, trade name of Damien Ellena, sole trader (French <em>entrepreneur individuel</em>, EI)<br>
     12 montée du Château, 13650 Meyrargues, France<br>
+    Phone: +33 6 19 56 21 68<br>
     SIRET (French business ID): 790 346 076 00025<br>
     EU VAT number: FR 19790346076<br>
     Publication director: Damien Ellena<br>
     Contact: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+    <p><strong>Hosting.</strong> The App's online features (backup, leaderboards, Multiplayer) are hosted by Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland (phone +353 1 543 1000), through the Firebase service. This website is hosted by GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (phone +1 877 448 4820).</p>
 
     <h2 id="g4">4. Capacity to contract</h2>
-    <p>The App is intended for a family audience and contains no content reserved for adults. It is not subject to any specific age restriction beyond those imposed by the Stores themselves (indicative age rating shown on the App's store page).</p>
+    <p>The App is intended for teenagers and adults. It contains no content reserved for adults, but it is <strong>not intended for children under 15</strong>. A minor User declares that they use the App with the agreement of the person exercising parental authority. The age rating shown on the App's store page is the one set by the Stores.</p>
     <p>In-App Purchases require the User (or, for a minor, their legal representative holding the payment method associated with the Store account) to have the legal capacity to contract, or to be duly authorized by the person exercising parental authority to make such purchases. The Publisher has no means of verifying the User's age or their authorization to make a purchase: this responsibility lies with the holder of the Google Play account or Apple ID used, and is governed by the parental control tools offered by each Store.</p>
 
     <h2 id="g5">5. Description of the Service</h2>
@@ -512,7 +519,8 @@
 
     <h2 id="g7">7. Player identity and Google sign-in (optional)</h2>
     <p>By default, the App gives each User an automatically generated player ID (for example “Cinephile #123456”) and an avatar, without any information that could directly identify the User being requested or collected.</p>
-    <p>The App offers, strictly optionally and at the User's initiative (“Save with Google” button in the settings), to link the Progress to a Google account through the Google Sign-In authentication service. The sole purpose of this link is to back up the Progress on the Publisher's Firebase servers and restore it later (for example after changing device or reinstalling), and it does not create a user account in the sense of a personal space viewable by third parties, nor a public identity within the App.</p>
+    <p>The App offers, strictly optionally and at the User's initiative (“Save with Google” button in the settings), to link the Progress to a Google account through the Google Sign-In authentication service. The sole purpose of this link is to back up the Progress on the Publisher's Firebase servers and restore it later (for example after changing device or reinstalling), and it does not create a user account in the sense of a personal space viewable by third parties.</p>
+    <p><strong>Nickname.</strong> The User may replace the default identifier with a nickname of their choice (20 characters at most). This nickname is the only information designating them within the App; it is shown to other players in Multiplayer mode (section 9). The User undertakes to choose a nickname that contains neither their real name nor any personal data, and that is not insulting, discriminatory, obscene or contrary to the rights of a third party. The Publisher may replace any nickname that breaks these rules with the default identifier (section 15).</p>
     <p>The User remains free never to turn on this feature; all game modes remain available without it, the Progress then being kept locally only, as described in section 8.</p>
 
     <h2 id="g8">8. Saving and progress</h2>
@@ -522,7 +530,7 @@
 
     <h2 id="g9">9. Online features: leaderboards and multiplayer</h2>
     <p><strong>Weekly Puzzle.</strong> The User's solving time and their ranking relative to the other players of the same week are sent to and kept on the Publisher's Firebase servers, associated with an anonymous technical identifier (and not with a personal identity), in order to calculate and display a shared leaderboard. This leaderboard is reset every week; a personal history of past results remains available locally on the User's device.</p>
-    <p><strong>Multiplayer.</strong> This mode does not connect two players in real time: it compares the User's performance with a reference time, which may come from a game actually recorded by another player at a different time, or from a generic calibration time when the real data available for a given puzzle is insufficient. The result of each round played by the User (time, win/loss) is kept on the Publisher's servers to feed this mechanism for the benefit of all players, anonymously.</p>
+    <p><strong>Multiplayer.</strong> This mode does not connect two players in real time: it compares the User's performance with a reference time, which may come from a game actually recorded by another player at a different time, or from a generic calibration time when the real data available for a given puzzle is insufficient. The result of each round played by the User (time, win/loss) is kept on the Publisher's servers to feed this mechanism for the benefit of all players, together with the User's nickname (section 7), which is shown as the opponent's name to players who later race against this reference time. This data is kept for at most 24 months.</p>
     <p>The User undertakes not to artificially manipulate these mechanisms (automation, exploitation of technical flaws) in order to distort a leaderboard or obtain an undue advantage; the Publisher reserves the right to remove from a leaderboard any result obviously obtained fraudulently.</p>
     <p>These features require an active internet connection and are not available offline. The number of daily Multiplayer games may be limited, with the option of getting extra games by watching optional ads.</p>
 
@@ -532,7 +540,7 @@
     <p>The Publisher does not select or control the exact content of the ads served by this third-party network, and cannot be held liable for the content of the ads displayed, subject to the Publisher's compliance with the advertising content rules imposed by the Stores.</p>
 
     <h2 id="g11">11. In-app purchases</h2>
-    <p><strong>11.1 Description.</strong> The App offers the following optional In-App Purchases, for information (the exact list and prices, including all taxes, are those shown in the App at the time of purchase and may change):</p>
+    <p><strong>11.1 Description.</strong> The App offers the following optional In-App Purchases, for information (the exact list and prices, including all taxes and in the currency shown by the Store, are those shown in the App at the time of purchase and may change):</p>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Product</th><th>Content</th></tr></thead>
@@ -547,10 +555,11 @@
       </table>
     </div>
     <p>These are exclusively one-time purchases (no subscription is offered at this time). Should the Publisher offer a subscription in the future, these Terms would be updated accordingly to specify its renewal and cancellation terms.</p>
-    <p><strong>11.2 Payment processing.</strong> In-App Purchases are processed exclusively by the billing system of the Store used (Google Play or Apple's App Store), under the terms of sale, payment methods and refund policies specific to each of these Stores. The Publisher never collects, sees or keeps the User's payment information (card number, etc.); only the technical confirmation that a purchase was made is sent to the App in order to unlock the corresponding content.</p>
-    <p><strong>11.3 Scope of purchases.</strong> Unless a purchase restoration mechanism is offered by the relevant Store (for example when reinstalling with the same Google Play account or Apple ID), content unlocked by an In-App Purchase is tied to the device and installation on which the purchase was made, and is not automatically transferred when changing device without such a restoration or the Google backup described in section 7.</p>
-    <p><strong>11.4 No right of withdrawal.</strong> In accordance with Article L.221-28, 13° of the French Consumer Code, the 14-day right of withdrawal provided for distance contracts does not apply to contracts for the supply of digital content not supplied on a tangible medium whose performance has begun with the User's prior express consent and express waiver of their right of withdrawal. By confirming an In-App Purchase, whose content is unlocked immediately, the User expressly acknowledges and accepts that performance begins immediately and consequently waives their right of withdrawal.</p>
+    <p><strong>11.2 Seller and payment processing.</strong> In-App Purchases are sold and collected by the operator of the Store used, acting in its own name on behalf of the Publisher: Apple Distribution International Ltd (App Store, as commissionaire) or Google Commerce Ltd (Google Play, as merchant of record), under the terms of sale, payment methods and refund policies specific to each of these Stores. The Publisher supplies the unlocked Digital content and is answerable for it under section 11.6. The Publisher never collects, sees or keeps the User's payment information (card number, etc.); only the technical confirmation that a purchase was made is sent to the App in order to unlock the corresponding content.</p>
+    <p><strong>11.3 Scope of purchases.</strong> “Remove ads” and the “+ no ads” packs are non-consumable purchases: ad removal can be recovered on any device using the same Google Play account or Apple ID, with the “Restore purchases” button in the shop. Jokers, on the other hand, are credited once and for all to the Progress at the time of purchase: they follow the Progress (Google backup, section 7) but cannot be credited again by the Store if the Progress is lost.</p>
+    <p><strong>11.4 Right of withdrawal.</strong> In-App Purchases are digital content supplied without a tangible medium and unlocked immediately. When the purchase is confirmed, the Store obtains the User's express consent to immediate performance and their acknowledgement that they lose their right of withdrawal, then sends them confirmation of that consent (purchase receipt), under Articles L.221-13 and L.221-28, 13° of the French Consumer Code. The 14-day right of withdrawal therefore does not apply to these purchases; refund requests are governed by the Store's policies (section 11.5).</p>
     <p><strong>11.5 Complaints.</strong> Any complaint about the payment itself (incorrect charge, refund) must first be addressed to the customer service of the Store used, which alone is able to act on the transaction. For any question about the content unlocked by a purchase, the User may contact the Publisher using the details in section 28.</p>
+    <p><strong>11.6 Legal guarantee of conformity.</strong> The digital content supplied by the App, including content unlocked by an In-App Purchase, is covered by the legal guarantee of conformity provided for in Articles L.224-25-12 et seq. of the French Consumer Code. The Publisher is liable for any lack of conformity existing at the time of supply and appearing within two years of it, as well as for any lack of conformity resulting from a failure to supply the updates needed to keep the content in conformity during the period the User can reasonably expect. In the event of a defect (for example purchased content that is not unlocked), the User contacts the Publisher (section 28), who brings the content into conformity free of charge and within a reasonable time; failing that, the User may obtain a price reduction or termination of the contract under the conditions provided by law. This guarantee applies without prejudice to the Stores' refund policies.</p>
 
     <h2 id="g12">12. Notifications</h2>
     <p>The App may offer to send local notifications (Daily Challenge reminder, weekly Weekly Puzzle reminder), generated directly by the User's device without using a remote server. These notifications can be turned off at any time in the settings of the device's operating system.</p>
@@ -570,10 +579,10 @@
     </ul>
 
     <h2 id="g15">15. Sanctions in case of breach</h2>
-    <p>In the event of a proven breach of sections 4 or 14, the Publisher reserves the right, without notice or compensation, to suspend or revoke the User's access to the App's online features (leaderboards, Multiplayer, backup linked to a Google account), in particular by invalidating a result obtained fraudulently, without prejudice to any legal action the Publisher may consider appropriate.</p>
+    <p>In the event of a proven breach of sections 4, 7 or 14, the Publisher reserves the right, without notice or compensation, to suspend or revoke the User's access to the App's online features (leaderboards, Multiplayer, backup linked to a Google account), in particular by invalidating a result obtained fraudulently or replacing a nickname contrary to section 7, without prejudice to any legal action the Publisher may consider appropriate.</p>
 
     <h2 id="g16">16. Liability and warranties</h2>
-    <p>The App is provided “as is” and “as available”, without any guarantee that it is free of errors, bugs or interruptions. The Publisher takes reasonable measures to ensure the App works properly but cannot guarantee compatibility with all existing hardware and software configurations.</p>
+    <p>Subject to the legal guarantee of conformity (section 11.6) and to the rights the User holds under the mandatory provisions of the French Consumer Code, the App is provided “as available”, without any guarantee that it is free of errors, bugs or interruptions. The Publisher takes reasonable measures to ensure the App works properly but cannot guarantee compatibility with all existing hardware and software configurations.</p>
     <p>To the extent permitted by applicable law, the Publisher cannot be held liable for indirect damages (loss of data, time or jokers, moral or commercial harm) resulting from the use of or inability to use the App, including in the event of loss of Progress or temporary or permanent unavailability of the online features. Nothing in these Terms is intended to exclude or limit the Publisher's liability where applicable law does not allow it (in particular in the event of gross negligence or willful misconduct).</p>
 
     <h2 id="g17">17. App Store (Apple) specific terms</h2>
@@ -593,7 +602,7 @@
     <p>How personal data is collected and processed in connection with the use of the App is described in detail in the <a href="#" data-goto="privacy">Privacy Policy</a>, which forms an integral part of these Terms.</p>
 
     <h2 id="g20">20. Changes to the Terms</h2>
-    <p>The Publisher reserves the right to change these Terms at any time, in particular when new features are added, when the applicable regulations change, or when the third-party services used change. Any substantial change will be announced in the App or on its store page, and will take effect upon publication of a new version of the App incorporating these changes or on the date indicated therein. Continued use of the App after the changes take effect constitutes acceptance of the amended Terms.</p>
+    <p>The Publisher reserves the right to change these Terms at any time, in particular when new features are added, when the applicable regulations change, or when the third-party services used change. Any substantial change will be announced in the App or on its store page, and will take effect upon publication of a new version of the App incorporating these changes or on the date indicated therein. Continued use of the App after the changes take effect constitutes acceptance of the amended Terms; a User who does not accept them stops using the App (section 21).</p>
 
     <h2 id="g21">21. Term, deletion and termination</h2>
     <p>These Terms apply for as long as the User uses the App. The User may stop using the App at any time by uninstalling it from their device, which deletes the Progress saved locally (Progress saved through the Google sign-in described in section 7 remains on the Publisher's servers until deletion is requested in accordance with the Privacy Policy).</p>
@@ -619,7 +628,7 @@
     <p>In the event of a dispute, the User is invited to contact the Publisher first using the details in section 28 in order to seek an amicable solution. Failing an amicable resolution, and in accordance with Articles L.616-1 and R.616-1 of the French Consumer Code, any consumer has the right to use, free of charge, the services of a consumer mediator for the amicable resolution of the dispute: the CM2C (Centre de la Médiation de la Consommation de Conciliateurs de Justice), 49 rue de Ponthieu, 75008 Paris, France, phone +33 1 89 47 00 14. The consumer may refer the matter online at <a href="https://www.cm2c.net/declarer-un-litige.php">www.cm2c.net/declarer-un-litige.php</a>, by email to <a href="mailto:litiges@cm2c.net">litiges@cm2c.net</a> or by post to the address above. Failing an amicable agreement or recourse to mediation, the competent French courts shall have sole jurisdiction, subject to the mandatory jurisdiction rules applicable to consumers.</p>
 
     <h2 id="g28">28. Contact</h2>
-    <p>For any question about these Terms: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+    <p>For any question about these Terms: <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — phone +33 6 19 56 21 68 — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
 
     <footer class="contact">
       LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>

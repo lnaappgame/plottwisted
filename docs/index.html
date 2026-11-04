@@ -286,12 +286,12 @@
   <article id="doc-conf" class="doc active" role="tabpanel" aria-labelledby="tab-conf">
     <div class="masthead">
       <span class="doctitle">Politique de confidentialité — Plot Twist(ed)</span>
-      <strong>LNA App</strong><br>
+      <strong>LNA App</strong> — Damien Ellena, entrepreneur individuel (EI)<br>
       12 montée du Château, 13650 Meyrargues, France<br>
+      Tél. : 06 19 56 21 68 — Contact : lna.app.game@gmail.com<br>
       SIRET : 790 346 076 00025<br>
-      TVA intracommunautaire : FR 19790346076<br>
-      Contact : lna.app.game@gmail.com
-      <span class="updated">Dernière mise à jour : 25 septembre 2026</span>
+      TVA intracommunautaire : FR 19790346076
+      <span class="updated">Dernière mise à jour : 5 novembre 2026</span>
     </div>
 
     <details class="toc">
@@ -313,11 +313,13 @@
 
     <h2 id="c1">1. Éditeur de l'application</h2>
     <p>L'application mobile <strong>Plot Twist(ed)</strong> est éditée par :</p>
-    <p><strong>LNA App</strong><br>
+    <p><strong>LNA App</strong>, nom commercial de Damien Ellena, entrepreneur individuel (EI)<br>
     12 montée du Château, 13650 Meyrargues, France<br>
+    Téléphone : 06 19 56 21 68<br>
     SIRET : 790 346 076 00025<br>
     Numéro de TVA intracommunautaire : FR 19790346076<br>
     Contact : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+    <p><strong>Hébergement.</strong> Les données en ligne de l'application (sauvegarde, classements, Multijoueur) sont hébergées par Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irlande (tél. +353 1 543 1000), via le service Firebase. Les pages du présent site sont hébergées par GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis (tél. +1 877 448 4820).</p>
 
     <h2 id="c2">2. Quelles données sont traitées ?</h2>
 
@@ -334,15 +336,16 @@
     <p>Cette fonctionnalité est strictement optionnelle : si tu ne l'actives jamais, aucune de ces données n'est transmise et seul le fonctionnement décrit au point 2.1 s'applique.</p>
 
     <h3>2.3 Classements en ligne et Multijoueur (Firestore)</h3>
-    <p>Les modes <strong>L'énigme de la semaine</strong> et <strong>Multijoueur</strong> reposent sur un classement ou une comparaison de performances communs à plusieurs joueurs, ce qui suppose de transmettre certaines données à nos serveurs <strong>Firebase Firestore</strong>, associées uniquement à l'identifiant technique anonyme mentionné au point 2.2 (jamais à ton nom ou ton adresse e-mail, y compris si tu as par ailleurs lié un compte Google) :</p>
+    <p>Les modes <strong>L'énigme de la semaine</strong> et <strong>Multijoueur</strong> reposent sur un classement ou une comparaison de performances communs à plusieurs joueurs, ce qui suppose de transmettre certaines données à nos serveurs <strong>Firebase Firestore</strong>, rattachées à l'identifiant technique anonyme mentionné au point 2.2 ; ni ton nom ni ton adresse e-mail n'y figurent :</p>
     <ul>
-      <li>pour L'énigme de la semaine : ton temps de résolution, le jour de résolution, et ton classement relatif aux autres joueurs de la semaine en cours ;</li>
-      <li>pour le Multijoueur : le résultat de chaque manche jouée (temps, victoire ou défaite), utilisé pour établir le temps de référence proposé aux autres joueurs et pour calculer ton classement (« Elo »).</li>
+      <li>pour L'énigme de la semaine : ton temps de résolution, le jour de résolution, et ton classement relatif aux autres joueurs de la semaine en cours. Aucun pseudo n'est transmis pour ce classement ;</li>
+      <li>pour le Multijoueur : le résultat de chaque manche jouée (temps, victoire ou défaite), utilisé pour établir le temps de référence proposé aux autres joueurs et pour calculer ton classement (« Elo »), ainsi que <strong>ton pseudo</strong> tel que tu l'as saisi dans l'application (« Cinéphile » par défaut). Ce pseudo est <strong>affiché aux autres joueurs</strong> qui affrontent ensuite ton temps de référence, comme nom de leur adversaire. N'y mets donc ni ton vrai nom ni aucune information personnelle ; tu peux le modifier à tout moment depuis l'écran d'accueil.</li>
     </ul>
-    <p>Ces deux fonctionnalités nécessitent une connexion Internet active. Les classements hebdomadaires passés ne sont pas automatiquement supprimés de nos serveurs après leur remplacement par la semaine suivante ; ils cessent simplement d'être affichés activement dans l'application (voir point 6).</p>
+    <p>Ces deux fonctionnalités nécessitent une connexion Internet active. Les résultats de classement et de manches sont conservés au plus 24 mois (voir point 6).</p>
 
-    <h3>2.4 Mesure d'audience et diagnostic technique (Firebase Analytics et Crashlytics)</h3>
-    <p>L'application utilise <strong>Firebase Analytics</strong> pour mesurer l'usage général de l'application (par exemple : quel mode de jeu est lancé, un niveau terminé, une publicité visionnée, un achat effectué) et <strong>Firebase Crashlytics</strong> pour recevoir un rapport technique automatique en cas de plantage de l'application (type d'erreur, état technique de l'application au moment de l'incident). Ces outils, fournis par Google, collectent des données techniques sur ton appareil (modèle, version du système d'exploitation, identifiant d'installation) mais ne visent pas à t'identifier personnellement.</p>
+    <h3>2.4 Mesure d'audience, diagnostic technique et protection des serveurs (Firebase Analytics, Crashlytics et App Check)</h3>
+    <p>L'application utilise <strong>Firebase Analytics</strong> pour mesurer l'usage général de l'application (par exemple : quel mode de jeu est lancé, un niveau terminé, une publicité visionnée, un achat effectué) et <strong>Firebase Crashlytics</strong> pour recevoir un rapport technique automatique en cas de plantage de l'application (type d'erreur, état technique de l'application au moment de l'incident). Ces outils, fournis par Google, collectent des données techniques sur ton appareil (modèle, version du système d'exploitation, identifiant d'installation) mais ne visent pas à t'identifier personnellement. La collecte Analytics est coupée au lancement de l'application et n'est activée qu'une fois que tu as répondu au dispositif de consentement décrit au point 2.5.</p>
+    <p><strong>Firebase App Check</strong> vérifie, à chaque échange avec nos serveurs, que la demande provient bien de l'application installée depuis un Store (Play Integrity sur Android, DeviceCheck sur iPhone). Un jeton technique est échangé avec Google à cette fin ; il ne contient aucune donnée te concernant.</p>
 
     <h3>2.5 Publicités (Google AdMob)</h3>
     <p>L'application affiche des publicités (vidéos récompensées et publicités entre les niveaux) fournies par <strong>Google AdMob</strong>. Pour servir, mesurer et personnaliser ces publicités, Google peut collecter des données techniques sur ton appareil : identifiant publicitaire (AAID sur Android, IDFA sur iOS — ce dernier n'étant accessible qu'après ton autorisation explicite via la fenêtre de suivi imposée par Apple, « App Tracking Transparency »), adresse IP approximative, informations sur l'appareil et interactions avec les publicités.</p>
@@ -362,13 +365,13 @@
     <ul>
       <li>Le fonctionnement du jeu et la sauvegarde locale (point 2.1) reposent sur l'exécution du service demandé par l'utilisateur.</li>
       <li>La sauvegarde/restauration liée à un compte Google (point 2.2) et les classements en ligne (point 2.3) reposent sur l'exécution du service que tu demandes explicitement en activant ces fonctionnalités optionnelles.</li>
-      <li>La mesure d'audience et le diagnostic technique (point 2.4) reposent sur l'intérêt légitime de LNA App à comprendre l'usage de l'application et à corriger les dysfonctionnements techniques ; tu peux t'y opposer dans les limites décrites au point 7.</li>
+      <li>La mesure d'audience, le diagnostic technique et la protection des serveurs (point 2.4) reposent sur l'intérêt légitime de LNA App à comprendre l'usage de l'application, à corriger les dysfonctionnements et à protéger ses serveurs ; la mesure d'audience n'est activée qu'après ta réponse au dispositif de consentement, et tu peux t'y opposer à tout moment (point 7).</li>
       <li>Les publicités personnalisées (point 2.5) reposent sur ton <strong>consentement</strong>, recueilli via le dispositif mentionné à ce point ; tu peux le refuser sans perdre l'accès au jeu (des publicités non personnalisées pourront alors être affichées).</li>
       <li>Les achats intégrés (point 2.6) reposent sur l'exécution du contrat conclu au moment de l'achat.</li>
     </ul>
 
     <h2 id="c4">4. Destinataires des données</h2>
-    <p>Les destinataires des données décrites ci-dessus sont : <strong>Google</strong> (au titre de Firebase — Authentication, Firestore, Analytics, Crashlytics ; d'AdMob pour la publicité ; de Google Play pour les achats et la connexion Google Sign-In) et <strong>Apple</strong> (App Store, pour les achats sur iOS), chacun dans le cadre strict des services décrits ci-dessus. Aucune donnée n'est vendue ni transmise à d'autres tiers.</p>
+    <p>Les destinataires des données décrites ci-dessus sont : <strong>Google</strong> (au titre de Firebase — Authentication, Firestore, Analytics, Crashlytics, App Check ; d'AdMob pour la publicité ; de Google Play pour les achats et la connexion Google Sign-In) et <strong>Apple</strong> (App Store, pour les achats sur iOS), chacun dans le cadre strict des services décrits ci-dessus. Aucune donnée n'est vendue ni transmise à d'autres tiers. Ton pseudo est en outre visible des autres joueurs dans le mode Multijoueur (point 2.3).</p>
 
     <h2 id="c5">5. Transferts hors Union européenne</h2>
     <p>Google et Apple peuvent traiter certaines données, notamment celles liées à Firebase et à AdMob, en dehors de l'Union européenne (en particulier aux États-Unis). Ces transferts s'appuient sur les garanties prévues par ces sociétés (clauses contractuelles types de la Commission européenne notamment). Voir leurs politiques de confidentialité respectives pour plus de détails : <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a> pour Google, <a href="https://www.apple.com/legal/privacy/fr/" target="_blank" rel="noopener">apple.com/legal/privacy/fr</a> pour Apple.</p>
@@ -377,7 +380,7 @@
     <ul>
       <li>Les données de jeu locales (point 2.1) sont conservées sur ton appareil tant que tu ne désinstalles pas l'application ou ne les réinitialises pas manuellement.</li>
       <li>Les données de sauvegarde liées à un compte Google (point 2.2) sont conservées jusqu'à ce que tu en demandes la suppression (voir point 7) ou que tu supprimes toi-même la liaison à ton compte Google.</li>
-      <li>Les résultats de classement (point 2.3) sont conservés au-delà de la semaine ou de la période à laquelle ils se rapportent ; les périodes passées ne sont plus affichées activement dans l'application mais peuvent rester archivées sur nos serveurs.</li>
+      <li>Les résultats de classement et de manches Multijoueur, pseudo compris (point 2.3), sont conservés au plus <strong>24 mois</strong> après la semaine ou la partie concernée, puis supprimés de nos serveurs.</li>
       <li>Les données de mesure d'audience et de diagnostic (point 2.4) sont conservées selon les durées par défaut de Firebase Analytics et Crashlytics, généralement de l'ordre de plusieurs mois.</li>
       <li>Les données traitées par Google dans le cadre d'AdMob ou de Google Play sont conservées selon les durées définies par Google.</li>
     </ul>
@@ -387,12 +390,14 @@
     <ul>
       <li>pour les données de jeu locales (point 2.1) : directement depuis l'application (Paramètres → Réinitialiser la sauvegarde) ou en désinstallant l'application ;</li>
       <li>pour les données de sauvegarde ou de classement liées à Firebase (points 2.2 et 2.3) : en nous contactant à l'adresse indiquée au point 11, en précisant l'identifiant de joueur affiché dans l'application (par exemple « Cinéphile #123456 ») ou l'adresse e-mail du compte Google lié, afin que nous puissions localiser et supprimer les données correspondantes ;</li>
+      <li>pour ton pseudo (point 2.3) : directement depuis l'écran d'accueil de l'application ; les manches déjà enregistrées avec l'ancien pseudo peuvent être supprimées sur demande ;</li>
+      <li>pour la mesure d'audience (point 2.4) : en nous écrivant (point 11) ;</li>
       <li>pour les données traitées par Google ou Apple (AdMob, Play, App Store, mesure d'audience) : directement auprès de ces sociétés, via leurs outils de gestion des données publicitaires/de compte respectifs.</li>
     </ul>
-    <p>Tu peux également nous contacter à l'adresse du point 11 pour toute question, et tu disposes du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
+    <p>Tu peux aussi définir des directives sur le sort de tes données après ton décès (article 85 de la loi Informatique et Libertés). Tu peux également nous contacter à l'adresse du point 11 pour toute question, et tu disposes du droit d'introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
 
     <h2 id="c8">8. Mineurs</h2>
-    <p>Plot Twist(ed) n'est pas spécifiquement destinée à un public de moins de 13 ans et ne collecte pas sciemment de données personnelles auprès d'enfants en dehors des traitements techniques décrits ci-dessus, communs à l'ensemble des utilisateurs.</p>
+    <p>Plot Twist(ed) n'est pas destinée aux enfants de <strong>moins de 15 ans</strong>, âge à partir duquel un mineur peut consentir seul à un traitement de ses données en France. Si tu as moins de 15 ans, utilise l'application avec l'accord de tes parents. Nous ne collectons pas sciemment de données personnelles auprès d'enfants en dehors des traitements techniques décrits ci-dessus, communs à l'ensemble des utilisateurs ; si un parent constate qu'un enfant de moins de 15 ans nous a transmis des données (par exemple un pseudo), il peut nous en demander la suppression (point 11).</p>
 
     <h2 id="c9">9. Sécurité</h2>
     <p>Les données de jeu stockées uniquement en local (point 2.1) ne présentent pas de risque de fuite côté serveur, puisqu'elles ne quittent pas ton appareil. Les données que tu choisis de transmettre à nos serveurs (sauvegarde Google, classements) sont hébergées sur l'infrastructure Firebase de Google et bénéficient des mesures de sécurité mises en œuvre par Google pour ce service ; l'accès à ces données par LNA App est limité à ce qui est nécessaire au fonctionnement des fonctionnalités décrites dans cette politique.</p>
@@ -401,7 +406,7 @@
     <p>Cette politique de confidentialité peut être mise à jour, notamment lors de l'ajout de nouveaux modes de jeu ou de nouveaux traitements de données. La date de dernière mise à jour figure en haut de ce document.</p>
 
     <h2 id="c11">11. Contact</h2>
-    <p>Pour toute question relative à cette politique de confidentialité, ou pour exercer l'un des droits mentionnés au point 7 : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+    <p>Pour toute question relative à cette politique de confidentialité, ou pour exercer l'un des droits mentionnés au point 7 : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — tél. 06 19 56 21 68 — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
 
     <footer class="contact">
       LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>
@@ -413,13 +418,13 @@
   <article id="doc-cgu" class="doc" role="tabpanel" aria-labelledby="tab-cgu">
     <div class="masthead">
       <span class="doctitle">Conditions Générales d'Utilisation — Plot Twist(ed)</span>
-      <strong>LNA App</strong><br>
+      <strong>LNA App</strong> — Damien Ellena, entrepreneur individuel (EI)<br>
       12 montée du Château, 13650 Meyrargues, France<br>
+      Tél. : 06 19 56 21 68 — Contact : lna.app.game@gmail.com<br>
       SIRET : 790 346 076 00025<br>
       TVA intracommunautaire : FR 19790346076<br>
-      Directeur de la publication : Damien Ellena<br>
-      Contact : lna.app.game@gmail.com
-      <span class="updated">Dernière mise à jour : 13 octobre 2026</span>
+      Directeur de la publication : Damien Ellena
+      <span class="updated">Dernière mise à jour : 5 novembre 2026</span>
     </div>
 
     <details class="toc">
@@ -473,15 +478,17 @@
     </ul>
 
     <h2 id="g3">3. Éditeur de l'Application</h2>
-    <p><strong>LNA App</strong><br>
+    <p><strong>LNA App</strong>, nom commercial de Damien Ellena, entrepreneur individuel (EI)<br>
     12 montée du Château, 13650 Meyrargues, France<br>
+    Téléphone : 06 19 56 21 68<br>
     SIRET : 790 346 076 00025<br>
     Numéro de TVA intracommunautaire : FR 19790346076<br>
     Directeur de la publication : Damien Ellena<br>
     Contact : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a></p>
+    <p><strong>Hébergement.</strong> Les fonctionnalités en ligne de l'Application (sauvegarde, classements, Multijoueur) sont hébergées par Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irlande (tél. +353 1 543 1000), via le service Firebase. Le présent site est hébergé par GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis (tél. +1 877 448 4820).</p>
 
     <h2 id="g4">4. Capacité à contracter</h2>
-    <p>L'Application s'adresse à un public familial et ne comporte aucun contenu réservé à un public averti. Elle ne fait l'objet d'aucune restriction d'âge spécifique au-delà de celles imposées par les Stores eux-mêmes (classification indicative par tranche d'âge affichée sur la fiche de l'Application).</p>
+    <p>L'Application s'adresse à un public adolescent et adulte. Elle ne comporte aucun contenu réservé à un public averti, mais elle n'est <strong>pas destinée aux enfants de moins de 15 ans</strong>. L'Utilisateur mineur déclare utiliser l'Application avec l'accord de la personne exerçant l'autorité parentale. La classification par tranche d'âge affichée sur la fiche de l'Application est celle établie par les Stores.</p>
     <p>Les Achats Intégrés supposent que l'Utilisateur (ou, pour un mineur, son représentant légal disposant du moyen de paiement associé au compte du Store) dispose de la capacité juridique de contracter, ou soit dûment autorisé par la personne exerçant l'autorité parentale à effectuer de tels achats. L'Éditeur n'a aucun moyen de vérifier l'âge de l'Utilisateur ni son autorisation à effectuer un achat : cette responsabilité incombe au titulaire du compte Google Play ou Apple ID utilisé et est régie par les outils de contrôle parental proposés par chaque Store.</p>
 
     <h2 id="g5">5. Description du Service</h2>
@@ -502,7 +509,8 @@
 
     <h2 id="g7">7. Identité de joueur et connexion Google (optionnelle)</h2>
     <p>Par défaut, l'Application attribue à chaque Utilisateur un identifiant de joueur généré automatiquement (par exemple sous la forme « Cinéphile #123456 ») ainsi qu'un avatar, sans qu'aucune information permettant d'identifier directement l'Utilisateur ne soit demandée ni collectée.</p>
-    <p>L'Application propose, de façon strictement optionnelle et à l'initiative de l'Utilisateur (bouton « Sauvegarder avec Google » dans les réglages), de lier la Progression à un compte Google via le service d'authentification Google Sign-In. Cette liaison a pour seul objet de permettre la sauvegarde de la Progression sur les serveurs Firebase de l'Éditeur et sa restauration ultérieure (par exemple après un changement d'appareil ou une réinstallation), et ne crée pas de compte utilisateur au sens d'un espace personnel consultable par des tiers ni d'une identité publique au sein de l'Application.</p>
+    <p>L'Application propose, de façon strictement optionnelle et à l'initiative de l'Utilisateur (bouton « Sauvegarder avec Google » dans les réglages), de lier la Progression à un compte Google via le service d'authentification Google Sign-In. Cette liaison a pour seul objet de permettre la sauvegarde de la Progression sur les serveurs Firebase de l'Éditeur et sa restauration ultérieure (par exemple après un changement d'appareil ou une réinstallation), et ne crée pas de compte utilisateur au sens d'un espace personnel consultable par des tiers.</p>
+    <p><strong>Pseudo.</strong> L'Utilisateur peut remplacer l'identifiant par défaut par un pseudo de son choix (20 caractères au plus). Ce pseudo est la seule information le désignant au sein de l'Application ; il est affiché aux autres joueurs dans le mode Multijoueur (article 9). L'Utilisateur s'engage à choisir un pseudo qui ne contienne ni son nom réel ni aucune donnée personnelle, et qui ne soit ni injurieux, ni discriminatoire, ni obscène, ni contraire aux droits d'un tiers. L'Éditeur peut remplacer par l'identifiant par défaut tout pseudo contraire à ces règles (article 15).</p>
     <p>L'Utilisateur reste libre de ne jamais activer cette fonctionnalité, l'ensemble des modes de jeu restant accessibles sans elle, la Progression étant alors uniquement conservée localement comme décrit à l'article 8.</p>
 
     <h2 id="g8">8. Sauvegarde et progression</h2>
@@ -512,7 +520,7 @@
 
     <h2 id="g9">9. Fonctionnalités en ligne : classements et multijoueur</h2>
     <p><strong>L'énigme de la semaine.</strong> Le temps de résolution de l'Utilisateur ainsi que son classement relatif aux autres joueurs de la même semaine sont transmis et conservés sur les serveurs Firebase de l'Éditeur, associés à un identifiant anonyme technique (et non à une identité personnelle), afin de calculer et d'afficher un classement commun. Ce classement est réinitialisé chaque semaine ; un historique personnel des résultats passés reste consultable localement sur l'appareil de l'Utilisateur.</p>
-    <p><strong>Multijoueur.</strong> Ce mode ne met pas en relation deux joueurs en temps réel : il compare la performance de l'Utilisateur à un temps de référence, qui peut provenir d'une partie réellement enregistrée par un autre joueur à un moment différent, ou d'un temps de calibration générique lorsque les données réelles disponibles pour une énigme donnée sont insuffisantes. Le résultat de chaque manche jouée par l'Utilisateur (temps, victoire/défaite) est conservé sur les serveurs de l'Éditeur pour alimenter ce mécanisme au bénéfice de l'ensemble des joueurs, de façon anonyme.</p>
+    <p><strong>Multijoueur.</strong> Ce mode ne met pas en relation deux joueurs en temps réel : il compare la performance de l'Utilisateur à un temps de référence, qui peut provenir d'une partie réellement enregistrée par un autre joueur à un moment différent, ou d'un temps de calibration générique lorsque les données réelles disponibles pour une énigme donnée sont insuffisantes. Le résultat de chaque manche jouée par l'Utilisateur (temps, victoire/défaite) est conservé sur les serveurs de l'Éditeur pour alimenter ce mécanisme au bénéfice de l'ensemble des joueurs, avec le pseudo de l'Utilisateur (article 7), qui est affiché comme nom d'adversaire aux joueurs affrontant ensuite ce temps de référence. Ces données sont conservées au plus 24 mois.</p>
     <p>L'Utilisateur s'engage à ne pas manipuler artificiellement ces mécanismes (automatisation, exploitation de failles techniques) dans le but de fausser un classement ou d'obtenir un avantage indu ; l'Éditeur se réserve le droit de retirer d'un classement tout résultat dont l'obtention serait manifestement frauduleuse.</p>
     <p>Ces fonctionnalités nécessitent une connexion Internet active et ne sont pas disponibles hors ligne. Le nombre de parties Multijoueur quotidiennes peut être limité, avec possibilité d'obtenir des parties supplémentaires par le visionnage de publicités facultatives.</p>
 
@@ -522,7 +530,7 @@
     <p>L'Éditeur ne sélectionne pas et ne contrôle pas le contenu précis des publicités diffusées par ce réseau tiers, et ne saurait être tenu responsable du contenu des publicités affichées, sous réserve du respect par l'Éditeur des règles de contenu publicitaire imposées par les Stores.</p>
 
     <h2 id="g11">11. Achats intégrés</h2>
-    <p><strong>11.1 Description.</strong> L'Application propose les Achats Intégrés facultatifs suivants, à titre indicatif (la liste et les prix exacts, exprimés en euros toutes taxes comprises, sont ceux affichés dans l'Application au moment de l'achat et peuvent évoluer) :</p>
+    <p><strong>11.1 Description.</strong> L'Application propose les Achats Intégrés facultatifs suivants, à titre indicatif (la liste et les prix exacts, toutes taxes comprises et dans la devise affichée par le Store, sont ceux affichés dans l'Application au moment de l'achat et peuvent évoluer) :</p>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Produit</th><th>Contenu</th></tr></thead>
@@ -537,10 +545,11 @@
       </table>
     </div>
     <p>Il s'agit exclusivement d'achats uniques (aucun abonnement n'est proposé à ce jour). Si l'Éditeur venait à proposer un abonnement à l'avenir, les présentes CGU seraient mises à jour en conséquence pour en préciser les conditions de reconduction et de résiliation.</p>
-    <p><strong>11.2 Traitement des paiements.</strong> Les Achats Intégrés sont exclusivement traités par le système de facturation du Store utilisé (Google Play ou App Store d'Apple), selon les conditions générales de vente, moyens de paiement et politiques de remboursement propres à chacun de ces Stores. L'Éditeur ne collecte, ne voit ni ne conserve à aucun moment les informations de paiement de l'Utilisateur (numéro de carte bancaire, etc.) ; seule la confirmation technique qu'un achat a été effectué est transmise à l'Application afin de débloquer le contenu correspondant.</p>
-    <p><strong>11.3 Portée des achats.</strong> Sauf mécanisme de restauration d'achat proposé par le Store concerné (par exemple lors d'une réinstallation avec le même compte Google Play ou Apple ID), les contenus débloqués par un Achat Intégré sont liés à l'appareil et à l'installation sur lesquels l'achat a été effectué et ne sont pas automatiquement transférés en cas de changement d'appareil non accompagné d'une telle restauration ou de la sauvegarde Google décrite à l'article 7.</p>
-    <p><strong>11.4 Absence de droit de rétractation.</strong> Conformément à l'article L.221-28, 13°, du Code de la consommation, le droit de rétractation de 14 jours prévu pour les contrats conclus à distance ne s'applique pas aux contrats de fourniture d'un contenu numérique non fourni sur un support matériel dont l'exécution a commencé après accord préalable exprès de l'Utilisateur et renoncement exprès à son droit de rétractation. En validant un Achat Intégré, dont le contenu est débloqué immédiatement, l'Utilisateur reconnaît et accepte expressément que l'exécution commence immédiatement et renonce en conséquence à son droit de rétractation.</p>
+    <p><strong>11.2 Vendeur et traitement des paiements.</strong> Les Achats Intégrés sont vendus et encaissés par l'opérateur du Store utilisé, qui agit en son propre nom pour le compte de l'Éditeur : Apple Distribution International Ltd (App Store, en qualité de commissionnaire) ou Google Commerce Ltd (Google Play, en qualité de marchand officiel), selon les conditions générales de vente, moyens de paiement et politiques de remboursement propres à chacun de ces Stores. L'Éditeur fournit le Contenu numérique débloqué et en répond dans les conditions de l'article 11.6. L'Éditeur ne collecte, ne voit ni ne conserve à aucun moment les informations de paiement de l'Utilisateur (numéro de carte bancaire, etc.) ; seule la confirmation technique qu'un achat a été effectué est transmise à l'Application afin de débloquer le contenu correspondant.</p>
+    <p><strong>11.3 Portée des achats.</strong> « Retirer les pubs » et les packs « + sans pub » sont des achats non consommables : le retrait des publicités peut être récupéré sur tout appareil utilisant le même compte Google Play ou Apple ID, avec le bouton « Restaurer mes achats » de la boutique. Les jokers, eux, sont crédités une fois pour toutes dans la Progression au moment de l'achat : ils suivent la Progression (sauvegarde Google de l'article 7) mais ne peuvent pas être recrédités par le Store en cas de perte de celle-ci.</p>
+    <p><strong>11.4 Droit de rétractation.</strong> Les Achats Intégrés sont des contenus numériques fournis sans support matériel et débloqués immédiatement. Lors de la validation de l'achat, le Store recueille l'accord exprès de l'Utilisateur pour une exécution immédiate et sa reconnaissance de la perte de son droit de rétractation, puis lui adresse la confirmation de cet accord (reçu d'achat), dans les conditions des articles L.221-13 et L.221-28, 13°, du Code de la consommation. Le droit de rétractation de 14 jours ne s'applique donc pas à ces achats ; les demandes de remboursement relèvent des politiques du Store (article 11.5).</p>
     <p><strong>11.5 Réclamations.</strong> Toute réclamation relative au paiement lui-même (prélèvement erroné, remboursement) doit être adressée en priorité au service client du Store utilisé, seul habilité à intervenir sur la transaction. Pour toute question relative au contenu débloqué par un achat, l'Utilisateur peut contacter l'Éditeur aux coordonnées de l'article 28.</p>
+    <p><strong>11.6 Garantie légale de conformité.</strong> Les contenus numériques fournis par l'Application, y compris ceux débloqués par un Achat Intégré, bénéficient de la garantie légale de conformité prévue aux articles L.224-25-12 et suivants du Code de la consommation. L'Éditeur répond des défauts de conformité existant au moment de la fourniture et qui apparaissent dans un délai de deux ans à compter de celle-ci, ainsi que de ceux résultant d'une absence de mise à jour nécessaire au maintien de la conformité pendant la période à laquelle l'Utilisateur peut légitimement s'attendre. En cas de défaut (par exemple un contenu acheté qui n'est pas débloqué), l'Utilisateur contacte l'Éditeur (article 28), qui procède à la mise en conformité sans frais et dans un délai raisonnable ; à défaut, l'Utilisateur peut obtenir une réduction du prix ou la résolution du contrat dans les conditions prévues par la loi. Cette garantie s'exerce sans préjudice des politiques de remboursement des Stores.</p>
 
     <h2 id="g12">12. Notifications</h2>
     <p>L'Application peut proposer d'envoyer des notifications locales (rappel du Défi du jour, rappel hebdomadaire de L'énigme de la semaine), générées directement par l'appareil de l'Utilisateur sans recours à un serveur distant. Ces notifications peuvent être désactivées à tout moment depuis les réglages du système d'exploitation de l'appareil.</p>
@@ -560,10 +569,10 @@
     </ul>
 
     <h2 id="g15">15. Sanctions en cas de manquement</h2>
-    <p>En cas de manquement avéré aux articles 4 ou 14, l'Éditeur se réserve le droit, sans préavis ni indemnité, de suspendre ou de révoquer l'accès de l'Utilisateur aux fonctionnalités en ligne de l'Application (classements, Multijoueur, sauvegarde liée à un compte Google), notamment en invalidant un résultat obtenu de façon frauduleuse, sans préjudice de toute action judiciaire que l'Éditeur jugerait utile d'engager.</p>
+    <p>En cas de manquement avéré aux articles 4, 7 ou 14, l'Éditeur se réserve le droit, sans préavis ni indemnité, de suspendre ou de révoquer l'accès de l'Utilisateur aux fonctionnalités en ligne de l'Application (classements, Multijoueur, sauvegarde liée à un compte Google), notamment en invalidant un résultat obtenu de façon frauduleuse ou en remplaçant un pseudo contraire à l'article 7, sans préjudice de toute action judiciaire que l'Éditeur jugerait utile d'engager.</p>
 
     <h2 id="g16">16. Responsabilité et garanties</h2>
-    <p>L'Application est fournie « en l'état » et « selon disponibilité », sans garantie d'absence d'erreur, de bug ou d'interruption. L'Éditeur met en œuvre les moyens raisonnables pour assurer le bon fonctionnement de l'Application mais ne peut garantir une compatibilité avec l'ensemble des configurations matérielles et logicielles existantes.</p>
+    <p>Sous réserve de la garantie légale de conformité (article 11.6) et des droits que l'Utilisateur tient des dispositions impératives du Code de la consommation, l'Application est fournie « selon disponibilité », sans garantie d'absence d'erreur, de bug ou d'interruption. L'Éditeur met en œuvre les moyens raisonnables pour assurer le bon fonctionnement de l'Application mais ne peut garantir une compatibilité avec l'ensemble des configurations matérielles et logicielles existantes.</p>
     <p>Dans les limites autorisées par la loi applicable, l'Éditeur ne saurait être tenu responsable des dommages indirects (perte de données, de temps, de jokers, préjudice moral ou commercial) résultant de l'utilisation ou de l'impossibilité d'utiliser l'Application, y compris en cas de perte de Progression ou d'indisponibilité temporaire ou définitive des fonctionnalités en ligne. Rien dans les présentes CGU n'a pour objet d'exclure ou de limiter la responsabilité de l'Éditeur dans les cas où la loi applicable ne le permet pas (notamment en cas de faute lourde ou dolosive).</p>
 
     <h2 id="g17">17. Conditions spécifiques App Store (Apple)</h2>
@@ -583,7 +592,7 @@
     <p>Les modalités de collecte et de traitement des données personnelles dans le cadre de l'utilisation de l'Application sont décrites en détail dans la <a href="#" data-goto="conf">Politique de confidentialité</a>, qui fait partie intégrante des présentes CGU.</p>
 
     <h2 id="g20">20. Modification des CGU</h2>
-    <p>L'Éditeur se réserve le droit de modifier les présentes CGU à tout moment, notamment lors de l'ajout de nouvelles fonctionnalités, de l'évolution de la réglementation applicable, ou d'un changement dans les services tiers utilisés. Toute modification substantielle sera signalée dans l'Application ou sur sa fiche store, et prendra effet à la publication d'une nouvelle version de l'Application intégrant ces modifications ou à la date qui y sera indiquée. La poursuite de l'utilisation de l'Application après entrée en vigueur des modifications vaut acceptation des CGU modifiées.</p>
+    <p>L'Éditeur se réserve le droit de modifier les présentes CGU à tout moment, notamment lors de l'ajout de nouvelles fonctionnalités, de l'évolution de la réglementation applicable, ou d'un changement dans les services tiers utilisés. Toute modification substantielle sera signalée dans l'Application ou sur sa fiche store, et prendra effet à la publication d'une nouvelle version de l'Application intégrant ces modifications ou à la date qui y sera indiquée. La poursuite de l'utilisation de l'Application après entrée en vigueur des modifications vaut acceptation des CGU modifiées ; l'Utilisateur qui ne les accepte pas cesse d'utiliser l'Application (article 21).</p>
 
     <h2 id="g21">21. Durée, suppression et résiliation</h2>
     <p>Les présentes CGU s'appliquent tant que l'Utilisateur utilise l'Application. L'Utilisateur peut à tout moment cesser d'utiliser l'Application en la désinstallant de son appareil, ce qui entraîne la suppression de la Progression sauvegardée localement (la Progression sauvegardée via la connexion Google décrite à l'article 7 restant conservée sur les serveurs de l'Éditeur jusqu'à demande de suppression conformément à la Politique de confidentialité).</p>
@@ -609,7 +618,7 @@
     <p>En cas de litige, l'Utilisateur est invité à contacter en priorité l'Éditeur aux coordonnées de l'article 28 afin de rechercher une solution amiable. À défaut de résolution amiable, et conformément aux articles L.616-1 et R.616-1 du Code de la consommation, tout consommateur a le droit de recourir gratuitement au service d'un médiateur de la consommation en vue de la résolution amiable du litige : le CM2C (Centre de la Médiation de la Consommation de Conciliateurs de Justice), 49 rue de Ponthieu, 75008 Paris, tél. 01 89 47 00 14. Le consommateur peut le saisir en ligne sur <a href="https://www.cm2c.net/declarer-un-litige.php">www.cm2c.net/declarer-un-litige.php</a>, par e-mail à <a href="mailto:litiges@cm2c.net">litiges@cm2c.net</a> ou par courrier à l'adresse ci-dessus. À défaut d'accord amiable ou de recours à la médiation, les tribunaux français compétents seront seuls saisis, sous réserve des règles impératives de compétence applicables aux consommateurs.</p>
 
     <h2 id="g28">28. Contact</h2>
-    <p>Pour toute question relative aux présentes CGU : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
+    <p>Pour toute question relative aux présentes CGU : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — tél. 06 19 56 21 68 — LNA App, 12 montée du Château, 13650 Meyrargues, France.</p>
 
     <footer class="contact">
       LNA App — SIRET 790 346 076 00025 — <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a>
