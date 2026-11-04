@@ -68,6 +68,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onChanged: (_) => context.read<AppSettings>().toggleTheme(),
             ),
             _SettingsRow(
+              label: t.settingsPosterHome, colors: colors,
+              value: settings.posterHome,
+              onChanged: (_) => context.read<AppSettings>().togglePosterHome(),
+            ),
+            _SettingsRow(
               label: t.settingsSfx, colors: colors,
               value: settings.sfxOn,
               onChanged: (_) => context.read<AppSettings>().toggleSfx(),

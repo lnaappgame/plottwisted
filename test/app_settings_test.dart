@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,6 +71,32 @@ void main() {
 
       expect(restored.consumeReviewRequestPending(now: day0.add(const Duration(days: 2))), isFalse);
       expect(restored.consumeReviewRequestPending(now: day0.add(const Duration(days: 22))), isTrue);
+    });
+  });
+
+  group('posterHome (accueil jaune)', () {
+    test('activé pour une toute nouvelle installation (aucune sauvegarde)', () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = _settings();
+      await settings.restore();
+      expect(settings.posterHome, isTrue);
+    });
+
+    test("désactivé pour une sauvegarde d'avant la 1.0.12 (clé absente)", () async {
+      SharedPreferences.setMockInitialValues(
+          {'cine_devinette_settings_v1': jsonEncode({'isLightTheme': false, 'locale': 'fr'})});
+      final settings = _settings();
+      await settings.restore();
+      expect(settings.posterHome, isFalse);
+    });
+
+    test('garde le choix du joueur après un cycle toJson()/restore()', () async {
+      final settings = _settings()..togglePosterHome();
+      expect(settings.posterHome, isFalse);
+      SharedPreferences.setMockInitialValues({'cine_devinette_settings_v1': jsonEncode(settings.toJson())});
+      final restored = _settings();
+      await restored.restore();
+      expect(restored.posterHome, isFalse);
     });
   });
 

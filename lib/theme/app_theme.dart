@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/puzzle.dart';
+
+/// Icônes de la barre d'état claires (sur fond sombre) ou foncées (sur fond
+/// clair). Seuls les champs de la barre d'état sont fixés : la barre de
+/// navigation Android reste telle quelle.
+const kStatusBarLightIcons =
+    SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarBrightness: Brightness.dark);
+const kStatusBarDarkIcons =
+    SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark, statusBarBrightness: Brightness.light);
 
 class AppColors {
   final bool isLight;

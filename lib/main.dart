@@ -301,24 +301,29 @@ class CineDevinetteApp extends StatelessWidget {
             theme: buildAppTheme(isLight: settings.isLightTheme, dyslexicMode: settings.dyslexicMode),
             // Sur tablette, toute l'interface est d'abord agrandie (TabletScale),
             // puis mise en page comme sur un grand téléphone.
-            builder: (context, child) => Container(
-              color: AppColors(settings.isLightTheme).bgDeep,
-              child: TabletScale(
-                scale: tabletScaleFor(MediaQuery.of(context).size),
-                child: Builder(
-                  builder: (context) => MediaQuery(
-                    data: MediaQuery.of(context).copyWith(
-                      textScaler: TextScaler.linear(settings.largeText ? 1.3 : 1.0),
-                    ),
-                    // Le jeu est pensé pour un écran de téléphone en portrait : au-delà
-                    // d'une certaine largeur (tablette, écran dépliable), on centre le
-                    // contenu dans une colonne de largeur raisonnable plutôt que de
-                    // l'étirer bord à bord, avec le fond de la couleur du thème de
-                    // part et d'autre.
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 520),
-                        child: child!,
+            // Icônes de la barre d'état selon le thème ; l'accueil jaune pose
+            // sa propre région par-dessus.
+            builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+              value: settings.isLightTheme ? kStatusBarDarkIcons : kStatusBarLightIcons,
+              child: Container(
+                color: AppColors(settings.isLightTheme).bgDeep,
+                child: TabletScale(
+                  scale: tabletScaleFor(MediaQuery.of(context).size),
+                  child: Builder(
+                    builder: (context) => MediaQuery(
+                      data: MediaQuery.of(context).copyWith(
+                        textScaler: TextScaler.linear(settings.largeText ? 1.3 : 1.0),
+                      ),
+                      // Le jeu est pensé pour un écran de téléphone en portrait : au-delà
+                      // d'une certaine largeur (tablette, écran dépliable), on centre le
+                      // contenu dans une colonne de largeur raisonnable plutôt que de
+                      // l'étirer bord à bord, avec le fond de la couleur du thème de
+                      // part et d'autre.
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 520),
+                          child: child!,
+                        ),
                       ),
                     ),
                   ),

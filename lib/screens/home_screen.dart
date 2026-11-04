@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/app_settings.dart';
@@ -18,6 +20,13 @@ import 'settings_screen.dart';
 import 'shop_screen.dart';
 import 'instructions_screen.dart';
 import 'streak_calendar_screen.dart';
+
+// Accueil « Affiche » (réglage posterHome) : les couleurs de la fiche des
+// stores et du logo.
+const _kPosterYellow = Color(0xFFFFC93C);
+const _kPosterInk = Color(0xFF161210);
+const _kPosterRed = Color(0xFFB3202E);
+const _kPosterFrame = Color(0xFF2A231C);
 
 Map<int, String> _streakRecompenses(AppLocalizations t) => {
       3: t.homeStreakReward3,
@@ -98,11 +107,25 @@ class _HomeScreenState extends State<HomeScreen> {
     final streak = context.watch<StreakState>();
     final onPlay = widget.onPlay;
     final t = AppLocalizations.of(context);
+    final poster = settings.posterHome;
+    final modeStyle = poster
+        ? OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            backgroundColor: _kPosterInk,
+            side: const BorderSide(color: _kPosterInk),
+          )
+        : OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            side: const BorderSide(color: AppColors.gold),
+          );
+    final modeText =
+        AppTextStyles.body(size: 12, weight: FontWeight.w700, color: poster ? _kPosterYellow : AppColors.goldBright);
 
-    return Scaffold(
+    final scaffold = Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(child: SciFiBackground(baseColor: colors.bgDeep)),
+          Positioned.fill(
+              child: poster ? const ColoredBox(color: _kPosterYellow) : SciFiBackground(baseColor: colors.bgDeep)),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -114,6 +137,9 @@ class _HomeScreenState extends State<HomeScreen> {
               // débordait de 40px derrière Shop/Help).
               child: LayoutBuilder(
                 builder: (context, constraints) => SingleChildScrollView(
+                  // En mode affiche, le bandeau de pellicule déborde jusqu'aux
+                  // bords de l'écran.
+                  clipBehavior: poster ? Clip.none : Clip.hardEdge,
                   child: ConstrainedBox(
                     constraints: BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
@@ -128,9 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Container(
                                   padding: const EdgeInsets.fromLTRB(6, 6, 14, 6),
                                   decoration: BoxDecoration(
-                                    color: colors.bgPanel,
+                                    color: poster ? _kPosterInk : colors.bgPanel,
                                     borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: AppColors.gold.withOpacity(0.3)),
+                                    border: poster ? null : Border.all(color: AppColors.gold.withOpacity(0.3)),
                                   ),
                                   child: Row(
                                     children: [
@@ -192,20 +218,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                           const Spacer(),
-                          Text('PLOT TWIST(ed)', style: AppTextStyles.display(size: 42)),
-                          Text(t.homeTagline,
-                              style: AppTextStyles.body(size: 11, color: colors.muted).copyWith(letterSpacing: 2)),
+                          if (poster) ...[
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text('PLOT TWIST(ed)', style: AppTextStyles.display(size: 56, color: _kPosterInk)),
+                            ),
+                            Text(t.homeTagline,
+                                textAlign: TextAlign.center,
+                                style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: _kPosterInk)
+                                    .copyWith(letterSpacing: 2)),
+                            // Le bandeau penché remonte à droite : de la marge
+                            // pour ne pas mordre sur le slogan.
+                            const SizedBox(height: 30),
+                            const _PosterFilmBand(),
+                          ] else ...[
+                            Text('PLOT TWIST(ed)', style: AppTextStyles.display(size: 42)),
+                            Text(t.homeTagline,
+                                style: AppTextStyles.body(size: 11, color: colors.muted).copyWith(letterSpacing: 2)),
+                          ],
                           const Spacer(),
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.crimson,
+                                backgroundColor: poster ? _kPosterRed : AppColors.crimson,
                                 padding: const EdgeInsets.symmetric(vertical: 18),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                               ),
                               onPressed: () => _enterMode(onPlay),
-                              child: Text(t.homePlay, style: AppTextStyles.display(size: 22, color: colors.cream)),
+                              child: Text(t.homePlay,
+                                  style: AppTextStyles.display(size: 22, color: poster ? Colors.white : colors.cream)),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -218,13 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: OutlinedButton(
                               onPressed: () => _enterMode(() =>
                                   Navigator.of(context).push(MaterialPageRoute(builder: (_) => const EnigmeScreen()))),
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                side: const BorderSide(color: AppColors.gold),
-                              ),
-                              child: Text(t.homeWeeklyPuzzle,
-                                  style: AppTextStyles.body(
-                                      size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                              style: modeStyle,
+                              child: Text(t.homeWeeklyPuzzle, style: modeText),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -233,13 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: OutlinedButton(
                               onPressed: () => _enterMode(() =>
                                   Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DefiScreen()))),
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                side: const BorderSide(color: AppColors.gold),
-                              ),
-                              child: Text(t.homeDailyChallenge,
-                                  style: AppTextStyles.body(
-                                      size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                              style: modeStyle,
+                              child: Text(t.homeDailyChallenge, style: modeText),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -248,13 +280,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: OutlinedButton(
                               onPressed: () => _enterMode(() => Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (_) => const MultiplayerScreen()))),
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                side: const BorderSide(color: AppColors.gold),
-                              ),
-                              child: Text(t.homeMultiplayer,
-                                  style: AppTextStyles.body(
-                                      size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                              style: modeStyle,
+                              child: Text(t.homeMultiplayer, style: modeText),
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -264,12 +291,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               _SecondaryButton(
                                 label: t.homeShop,
                                 colors: colors,
+                                poster: poster,
                                 onTap: () => showDialog(context: context, builder: (_) => const ShopScreen()),
                               ),
                               const SizedBox(width: 10),
                               _SecondaryButton(
                                 label: t.homeHelp,
                                 colors: colors,
+                                poster: poster,
                                 onTap: () => showDialog(context: context, builder: (_) => const InstructionsScreen()),
                               ),
                             ],
@@ -282,6 +311,87 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+    // Sur le jaune, icônes de la barre d'état foncées ; ailleurs, la région
+    // posée à la racine (main.dart) reprend la main.
+    return poster
+        ? AnnotatedRegion<SystemUiOverlayStyle>(value: kStatusBarDarkIcons, child: scaffold)
+        : scaffold;
+  }
+}
+
+/// Bandeau de pellicule de l'accueil « Affiche » : trois faux noms, comme sur
+/// la fiche des stores et le logo. Il déborde à gauche et à droite jusqu'aux
+/// bords de l'écran.
+class _PosterFilmBand extends StatelessWidget {
+  const _PosterFilmBand();
+
+  @override
+  Widget build(BuildContext context) {
+    final names = AppLocalizations.of(context).homePosterNames.split('|');
+    // Pas de LayoutBuilder ici : l'accueil est sous un IntrinsicHeight.
+    // 520 = largeur maximale du contenu (main.dart).
+    final width = math.min(MediaQuery.sizeOf(context).width, 520.0) + 160;
+    return SizedBox(
+      height: 150,
+      child: OverflowBox(
+        minWidth: width,
+        maxWidth: width,
+        child: Transform.rotate(
+          angle: -0.12,
+          child: Container(
+            height: 100,
+            color: _kPosterInk,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _Sprockets(width: width),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (final name in names)
+                        Container(
+                          width: 160,
+                          height: 56,
+                          margin: const EdgeInsets.symmetric(horizontal: 7),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          alignment: Alignment.center,
+                          color: _kPosterFrame,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(name, maxLines: 1, style: AppTextStyles.display(size: 22)),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                _Sprockets(width: width),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Une rangée de perforations de pellicule.
+class _Sprockets extends StatelessWidget {
+  final double width;
+  const _Sprockets({required this.width});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          for (var i = 0; i < width ~/ 30; i++)
+            Container(width: 14, height: 9, margin: const EdgeInsets.only(right: 16), color: _kPosterYellow),
         ],
       ),
     );
@@ -601,16 +711,22 @@ class _WheelButtonState extends State<_WheelButton> with SingleTickerProviderSta
 class _SecondaryButton extends StatelessWidget {
   final String label;
   final AppColors colors;
+  final bool poster;
   final VoidCallback onTap;
-  const _SecondaryButton({required this.label, required this.colors, required this.onTap});
+  const _SecondaryButton({required this.label, required this.colors, required this.onTap, this.poster = false});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: OutlinedButton(
         onPressed: onTap,
-        style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 12)),
-        child: Text(label, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          side: poster ? const BorderSide(color: _kPosterInk, width: 2) : null,
+        ),
+        child: Text(label,
+            style: AppTextStyles.body(
+                size: 12, weight: FontWeight.w700, color: poster ? _kPosterInk : AppColors.goldBright)),
       ),
     );
   }

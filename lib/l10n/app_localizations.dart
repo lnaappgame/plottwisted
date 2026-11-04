@@ -116,6 +116,18 @@ abstract class AppLocalizations {
   /// **'🌗 Mode clair'**
   String get settingsLightMode;
 
+  /// Écran d'accueil en jaune, façon affiche (comme la fiche des stores)
+  ///
+  /// In fr, this message translates to:
+  /// **'🎞️ Accueil jaune'**
+  String get settingsPosterHome;
+
+  /// Faux noms du bandeau de pellicule de l'accueil jaune, séparés par |
+  ///
+  /// In fr, this message translates to:
+  /// **'SHERLOCK HOLMES ?|THE DUDE ?|ONCLE FÉTIDE ?'**
+  String get homePosterNames;
+
   /// No description provided for @settingsSfx.
   ///
   /// In fr, this message translates to:

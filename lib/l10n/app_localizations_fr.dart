@@ -18,6 +18,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLightMode => '🌗 Mode clair';
 
   @override
+  String get settingsPosterHome => '🎞️ Accueil jaune';
+
+  @override
+  String get homePosterNames => 'SHERLOCK HOLMES ?|THE DUDE ?|ONCLE FÉTIDE ?';
+
+  @override
   String get settingsSfx => '🔊 Effets sonores';
 
   @override

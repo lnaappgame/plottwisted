@@ -5,6 +5,10 @@
 
   "settingsTitle": "PARAMÈTRES",
   "settingsLightMode": "🌗 Mode clair",
+  "settingsPosterHome": "🎞️ Accueil jaune",
+  "@settingsPosterHome": {"description": "Écran d'accueil en jaune, façon affiche (comme la fiche des stores)"},
+  "homePosterNames": "SHERLOCK HOLMES ?|THE DUDE ?|ONCLE FÉTIDE ?",
+  "@homePosterNames": {"description": "Faux noms du bandeau de pellicule de l'accueil jaune, séparés par |"},
   "settingsSfx": "🔊 Effets sonores",
   "settingsVibrations": "📳 Vibrations",
   "settingsColorblind": "👁️ Mode daltonien",

@@ -28,6 +28,10 @@ class AppSettings extends ChangeNotifier {
   AppSettings({required this.saveService});
 
   bool isLightTheme = false;
+  // Accueil « Affiche » : l'écran d'accueil en jaune, comme la fiche des
+  // stores (le reste du jeu garde son thème). Activé pour une nouvelle
+  // installation ; une sauvegarde d'avant la 1.0.12 le garde désactivé.
+  bool posterHome = true;
   bool sfxOn = true;
   bool vibrationsOn = true;
   bool colorblindMode = false; // palette accessible + repères en formes, pas seulement en couleur
@@ -92,6 +96,7 @@ class AppSettings extends ChangeNotifier {
   }
 
   void toggleTheme() { isLightTheme = !isLightTheme; notifyListeners(); }
+  void togglePosterHome() { posterHome = !posterHome; notifyListeners(); }
   void toggleSfx() { sfxOn = !sfxOn; notifyListeners(); }
   void toggleVibrations() { vibrationsOn = !vibrationsOn; notifyListeners(); }
   void toggleColorblindMode() { colorblindMode = !colorblindMode; notifyListeners(); }
@@ -135,6 +140,7 @@ class AppSettings extends ChangeNotifier {
 
   Map<String, dynamic> toJson() => {
         'isLightTheme': isLightTheme,
+        'posterHome': posterHome,
         'sfxOn': sfxOn,
         'vibrationsOn': vibrationsOn,
         'colorblindMode': colorblindMode,
@@ -167,6 +173,9 @@ class AppSettings extends ChangeNotifier {
     if (data == null) return;
     _restoring = true;
     isLightTheme = data['isLightTheme'] as bool? ?? isLightTheme;
+    // Absent d'une sauvegarde d'avant la 1.0.12 : le joueur garde l'accueil
+    // qu'il connaît.
+    posterHome = data['posterHome'] as bool? ?? false;
     sfxOn = data['sfxOn'] as bool? ?? sfxOn;
     vibrationsOn = data['vibrationsOn'] as bool? ?? vibrationsOn;
     colorblindMode = data['colorblindMode'] as bool? ?? colorblindMode;
