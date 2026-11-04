@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 240 240">
+  <!-- Logo L14 : loupe sur une pellicule, point d'interrogation rouge, fond jaune.
+       Carré plein (iOS et le store appliquent leur propre masque arrondi). -->
+  <rect x="0" y="0" width="240" height="240" fill="#FFC93C"/>
+  <g transform="rotate(-12 120 126)">
+    <rect x="-40" y="92" width="320" height="68" fill="#1D1D1F"/>
+    <g fill="#FFC93C">
+      <rect x="0" y="98" width="10" height="8"/><rect x="24" y="98" width="10" height="8"/>
+      <rect x="48" y="98" width="10" height="8"/><rect x="72" y="98" width="10" height="8"/>
+      <rect x="96" y="98" width="10" height="8"/><rect x="120" y="98" width="10" height="8"/>
+      <rect x="144" y="98" width="10" height="8"/><rect x="168" y="98" width="10" height="8"/>
+      <rect x="192" y="98" width="10" height="8"/><rect x="216" y="98" width="10" height="8"/>
+      <rect x="0" y="146" width="10" height="8"/><rect x="24" y="146" width="10" height="8"/>
+      <rect x="48" y="146" width="10" height="8"/><rect x="72" y="146" width="10" height="8"/>
+      <rect x="96" y="146" width="10" height="8"/><rect x="120" y="146" width="10" height="8"/>
+      <rect x="144" y="146" width="10" height="8"/><rect x="168" y="146" width="10" height="8"/>
+      <rect x="192" y="146" width="10" height="8"/><rect x="216" y="146" width="10" height="8"/>
+    </g>
+    <rect x="10" y="112" width="40" height="28" rx="3" fill="#3A3A3E"/>
+    <rect x="190" y="112" width="40" height="28" rx="3" fill="#3A3A3E"/>
+  </g>
+  <path d="M 166 152 L 206 194" stroke="#1D1D1F" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="128" cy="114" r="54" fill="#FFF5D6" stroke="#1D1D1F" stroke-width="14"/>
+  <text x="128" y="144" text-anchor="middle" font-family="Bebas Neue" font-size="84" fill="#E63946">?</text>
+</svg>

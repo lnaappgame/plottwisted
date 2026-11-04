@@ -4,4 +4,5 @@
          et values-v31/styles.xml) — identique au fond de l'animation Flutter
          (IntroTeaserPainter) pour une transition invisible. -->
     <color name="launch_background_color">#14100C</color>
+    <color name="ic_launcher_background">#FFC93C</color>
 </resources>

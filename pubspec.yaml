@@ -49,12 +49,18 @@ flutter:
     - assets/icon/
     - assets/video/
 
-# Génère les icônes d'app pour Android/iOS depuis assets/icon/icon.png :
+# Génère les icônes d'app pour Android/iOS depuis assets/icon/*.png
+# (rendus depuis tool/icon/*.svg par tool/icon/render.ps1) :
 # `dart run flutter_launcher_icons`
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon.png"
+  # Icône adaptative (Android 8+) : le calque avant est déjà cadré sur 108 dp.
+  adaptive_icon_background: "#FFC93C"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  adaptive_icon_monochrome: "assets/icon/icon_monochrome.png"
+  adaptive_icon_foreground_inset: 0
   min_sdk_android: 21
   remove_alpha_ios: true
 
