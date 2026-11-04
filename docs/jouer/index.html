@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plot Twisted — L'énigme du jour</title>
+<meta name="description" content="Chaque jour, un pitch de film dont les noms mentent. Retrouve le film en 4 essais, puis compare ta grille avec tes amis.">
+<meta property="og:title" content="Plot Twisted — L'énigme du jour">
+<meta property="og:description" content="Tout est vrai… sauf les noms. Retrouve le film du jour en 4 essais.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lnaappgame.github.io/plottwisted/jouer/">
+<meta property="og:image" content="https://lnaappgame.github.io/plottwisted/jouer/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="alternate" hreflang="fr" href="https://lnaappgame.github.io/plottwisted/jouer/">
+<link rel="alternate" hreflang="en" href="https://lnaappgame.github.io/plottwisted/jouer/?lang=en">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Franklin:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root {
+    --bg: #0C0906; --panel: #1A1410; --panel-2: #241C15; --fg: #ECE3D2; --muted: #9C8D78;
+    --gold: #C9A24B; --gold-hi: #F0CF7A; --yellow: #FFC93C; --ink: #161210;
+    --green: #7FB37F; --blue: #7AA8D1; --red: #C8536A; --orange: #D99B5C; --violet: #B48AD6;
+    --ok: #3E8E5A; --ko: #A3283A; --line: rgba(201,162,75,0.35);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: "Libre Franklin", Arial, sans-serif; line-height: 1.5;
+    padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background-image: radial-gradient(ellipse at 50% -20%, rgba(255,201,60,0.14), transparent 55%);
+  }
+  main { width: min(560px, 100%); margin: 0 auto; display: grid; gap: 16px; }
+  header { text-align: center; display: grid; gap: 4px; }
+  .lang { font-size: 13px; color: var(--muted); }
+  .lang a { color: var(--muted); }
+  h1 { font-family: "Bebas Neue", Impact, sans-serif; font-weight: 400; font-size: clamp(44px, 13vw, 64px); letter-spacing: 0.06em; color: var(--gold-hi); margin: 6px 0 0; line-height: 0.9; }
+  h1 span { color: var(--red); }
+  .kicker { font-family: "Bebas Neue", Impact, sans-serif; letter-spacing: 0.12em; font-size: 20px; color: var(--yellow); }
+  .tagline { margin: 0; color: var(--muted); font-size: 15px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; }
+  .pitch { font-size: 19px; line-height: 1.55; margin: 0; }
+  .name { font-weight: 700; padding: 0 2px; border-bottom: 2px solid currentColor; }
+  .name.green { color: var(--green); } .name.blue { color: var(--blue); } .name.red { color: var(--red); }
+  .name.orange { color: var(--orange); } .name.violet { color: var(--violet); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 12.5px; color: var(--muted); }
+  .legend li::before { content: "●"; margin-right: 5px; }
+  .legend .green::before { color: var(--green); } .legend .blue::before { color: var(--blue); } .legend .red::before { color: var(--red); }
+  .legend .orange::before { color: var(--orange); } .legend .violet::before { color: var(--violet); }
+  .hints { display: grid; gap: 8px; }
+  .hint { background: var(--panel-2); border-left: 3px solid var(--gold); border-radius: 8px; padding: 10px 12px; font-size: 15px; }
+  .hint b { color: var(--gold-hi); font-weight: 600; }
+  form { display: grid; gap: 10px; }
+  .row { display: flex; gap: 8px; }
+  input[type=text] { flex: 1; min-width: 0; font: inherit; font-size: 17px; padding: 13px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+  input[type=text]:focus { outline: 2px solid var(--gold); border-color: transparent; }
+  button { font: inherit; font-weight: 700; cursor: pointer; border-radius: 12px; border: none; padding: 13px 18px; }
+  .primary { background: var(--yellow); color: var(--ink); }
+  .primary:disabled { opacity: 0.5; cursor: default; }
+  .ghost { background: transparent; color: var(--gold-hi); border: 1px solid var(--line); }
+  .tries { display: flex; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); }
+  .tries i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; background: var(--panel-2); border: 1px solid var(--line); }
+  .tries i.ko { background: var(--ko); border-color: var(--ko); } .tries i.ok { background: var(--ok); border-color: var(--ok); }
+  .guesses { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 14px; color: var(--muted); }
+  .guesses li::before { content: "✕ "; color: var(--red); }
+  .result h2 { font-family: "Bebas Neue", Impact, sans-serif; font-weight: 400; letter-spacing: 0.05em; font-size: 30px; margin: 0 0 4px; color: var(--gold-hi); }
+  .result .title { font-size: 22px; font-weight: 700; margin: 0 0 10px; }
+  .result .title small { font-weight: 400; color: var(--muted); font-size: 15px; }
+  .reveal { margin: 0 0 10px; padding-left: 18px; font-size: 15px; }
+  .reveal li { margin-bottom: 4px; }
+  .note { font-style: italic; color: var(--muted); font-size: 14.5px; margin: 0 0 14px; }
+  .grid { font-size: 22px; letter-spacing: 2px; margin: 0 0 12px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cta { background: linear-gradient(180deg, #2A2118, #1A1410); border: 1px solid var(--gold); text-align: center; }
+  .cta p { margin: 0 0 10px; font-size: 15.5px; }
+  .cta a { display: inline-block; background: var(--yellow); color: var(--ink); font-weight: 700; text-decoration: none; padding: 12px 20px; border-radius: 12px; }
+  .cta small { display: block; margin-top: 8px; color: var(--muted); font-size: 12.5px; }
+  .stats { display: flex; justify-content: center; gap: 22px; font-size: 13px; color: var(--muted); text-align: center; }
+  .stats b { display: block; font-size: 20px; color: var(--fg); font-weight: 700; }
+  .next { text-align: center; font-size: 13.5px; color: var(--muted); }
+  footer { text-align: center; font-size: 12px; color: var(--muted); line-height: 1.8; }
+  footer a { color: var(--muted); }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--yellow); color: var(--ink); font-weight: 600; padding: 10px 16px; border-radius: 10px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: no-preference) { .card { animation: in .25s ease-out; } @keyframes in { from { opacity: 0; transform: translateY(6px); } } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="lang"><a id="langLink" href="?lang=en" hreflang="en">English</a></div>
+    <h1>PLOT TWIST<span>(ED)</span></h1>
+    <div class="kicker" id="kicker">L'énigme du jour</div>
+    <p class="tagline" id="tagline">Tout est vrai… sauf les noms. Retrouve le film !</p>
+  </header>
+
+  <section class="card" id="pitchCard">
+    <p class="pitch" id="pitch">…</p>
+    <ul class="legend" id="legend"></ul>
+  </section>
+
+  <section class="hints" id="hints"></section>
+
+  <form id="form" autocomplete="off">
+    <div class="row">
+      <input type="text" id="guess" placeholder="Titre du film" maxlength="80" autocapitalize="words" enterkeyhint="go" required>
+      <button type="submit" class="primary" id="submit">Valider</button>
+    </div>
+    <div class="tries" id="tries"></div>
+    <ul class="guesses" id="guesses"></ul>
+  </form>
+
+  <section class="card result" id="result" hidden>
+    <h2 id="resultTitle"></h2>
+    <p class="title"><span id="answer"></span> <small id="answerYear"></small></p>
+    <ul class="reveal" id="reveal"></ul>
+    <p class="note" id="note"></p>
+    <p class="grid" id="grid"></p>
+    <div class="actions">
+      <button type="button" class="primary" id="share">Partager ma grille</button>
+      <a class="ghost" id="filmLink" target="_blank" rel="noopener" style="padding:13px 18px;border-radius:12px;text-decoration:none;display:none" href="#">Fiche du film</a>
+    </div>
+  </section>
+
+  <section class="card cta" id="cta" hidden>
+    <p id="ctaText">Il y a <b>300 autres énigmes</b>, des jokers et un multijoueur dans l'appli.</p>
+    <a id="ctaLink" href="../go/?s=web-jour">Gratuit sur iPhone et Android</a>
+    <small id="ctaSmall">Plot Twisted, le quiz ciné où les noms mentent.</small>
+  </section>
+
+  <div class="stats" id="stats"></div>
+  <div class="next" id="next"></div>
+
+  <footer>
+    <a href="../" id="legal">Mentions légales et confidentialité</a> · LNA App<br>
+    <a href="https://www.instagram.com/plottwisted.game/">Instagram</a> · <a href="https://www.tiktok.com/@plottwisted.game">TikTok</a> · <a href="https://www.youtube.com/@plottwistedgame">YouTube</a>
+  </footer>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  var MAX = 4;
+  var params = new URLSearchParams(location.search);
+  var lang = params.get('lang') || (/^fr/i.test(navigator.language || 'fr') ? 'fr' : 'en');
+  if (lang !== 'en') lang = 'fr';
+  var fr = lang === 'fr';
+  var T = fr ? {
+    kicker: "L'énigme du jour n° ", title: "Plot Twisted — L'énigme du jour",
+    legend: { green: 'vrai personnage', blue: 'vrai acteur', red: 'rôle de cet acteur dans un autre film', orange: 'autre acteur du même rôle', violet: 'lien avec le personnage' },
+    hintYear: function (y, c) { return '<b>Indice 1</b> · Film de ' + y + ' · ' + c; },
+    hintText: function (h) { return '<b>Indice 2</b> · ' + h; },
+    hintActors: function (a) { return '<b>Indice 3</b> · Avec ' + a.join(' et '); },
+    tries: function (n) { return n + ' essai' + (n > 1 ? 's' : '') + ' sur ' + MAX; },
+    won: ['Du premier coup !', 'Bien joué !', 'Trouvé !', 'De justesse !'], lost: 'Raté… c\'était',
+    share: 'Partager ma grille', copied: 'Grille copiée !', film: 'Fiche Allociné',
+    shareHead: function (n) { return '🎬 Plot Twisted — Énigme du jour n° ' + n; },
+    stats: ['Jouées', 'Trouvées', 'Série', 'Record'],
+    next: function (h, m) { return 'Prochaine énigme dans ' + h + ' h ' + (m < 10 ? '0' : '') + m; },
+    wrong: 'Ce n\'est pas ça.', dup: 'Déjà essayé.', placeholder: 'Titre du film',
+    cta: 'Il y a <b>300 autres énigmes</b>, des jokers et un multijoueur dans l\'appli.',
+    ctaBtn: 'Gratuit sur iPhone et Android', ctaSmall: 'Plot Twisted, le quiz ciné où les noms mentent.',
+    legal: 'Mentions légales et confidentialité', other: 'English', otherHref: '?lang=en'
+  } : {
+    kicker: 'Riddle of the day #', title: 'Plot Twisted — Riddle of the day',
+    legend: { green: 'real character', blue: 'real actor', red: 'this actor\'s role in another movie', orange: 'another actor who played this role', violet: 'linked to the character' },
+    hintYear: function (y, c) { return '<b>Hint 1</b> · ' + y + ' movie · ' + c; },
+    hintText: function (h) { return '<b>Hint 2</b> · ' + h; },
+    hintActors: function (a) { return '<b>Hint 3</b> · Starring ' + a.join(' and '); },
+    tries: function (n) { return n + ' guess' + (n > 1 ? 'es' : '') + ' of ' + MAX; },
+    won: ['First try!', 'Nice!', 'Got it!', 'Close call!'], lost: 'Missed… it was',
+    share: 'Share my grid', copied: 'Grid copied!', film: 'IMDb page',
+    shareHead: function (n) { return '🎬 Plot Twisted — Riddle of the day #' + n; },
+    stats: ['Played', 'Solved', 'Streak', 'Best'],
+    next: function (h, m) { return 'Next riddle in ' + h + 'h ' + (m < 10 ? '0' : '') + m; },
+    wrong: 'Not this one.', dup: 'Already tried.', placeholder: 'Movie title',
+    cta: 'There are <b>300 more riddles</b>, jokers and a multiplayer mode in the app.',
+    ctaBtn: 'Free on iPhone and Android', ctaSmall: 'Plot Twisted, the movie quiz where names lie.',
+    legal: 'Legal notice and privacy', other: 'Français', otherHref: '?lang=fr'
+  };
+  if (!fr) { document.documentElement.lang = 'en'; document.title = T.title; }
+  var $ = function (id) { return document.getElementById(id); };
+  $('langLink').textContent = T.other; $('langLink').href = T.otherHref;
+  $('tagline').textContent = fr ? 'Tout est vrai… sauf les noms. Retrouve le film !' : 'Everything’s true… except the names. Find the movie!';
+  $('guess').placeholder = T.placeholder; $('submit').textContent = fr ? 'Valider' : 'Guess';
+  $('share').textContent = T.share; $('ctaText').innerHTML = T.cta; $('ctaLink').textContent = T.ctaBtn;
+  $('ctaSmall').textContent = T.ctaSmall; $('legal').textContent = T.legal;
+  $('ctaLink').href = '../go/?s=web-jour' + (fr ? '' : '-en');
+
+  // Jour local, comme Wordle : tout le monde change d'énigme à minuit chez soi.
+  function dayNumber(epoch) {
+    var e = epoch.split('-'), now = new Date();
+    var a = Date.UTC(+e[0], +e[1] - 1, +e[2]);
+    var b = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.max(0, Math.round((b - a) / 86400000));
+  }
+  function strip(s) {
+    return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase()
+      .replace(/&/g, ' ET ').replace(/[^A-Z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function noArticle(s) { return s.replace(/^(LE|LA|LES|L|UN|UNE|DES|THE|A|AN) /, ''); }
+  function variants(title) {
+    var v = {}, base = strip(title);
+    [base, noArticle(base), base.split(' ET ')[0]].forEach(function (x) { if (x) v[x] = 1; });
+    var sub = strip(title.replace(/\s*[:\-–—].*$/, ''));
+    if (sub && sub.length >= 4) { v[sub] = 1; v[noArticle(sub)] = 1; }
+    return Object.keys(v);
+  }
+  function lev(a, b) {
+    if (Math.abs(a.length - b.length) > 2) return 9;
+    var m = [], i, j;
+    for (i = 0; i <= a.length; i++) { m[i] = [i]; }
+    for (j = 0; j <= b.length; j++) { m[0][j] = j; }
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++)
+      m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return m[a.length][b.length];
+  }
+  function matches(guess, p) {
+    var g = strip(guess).replace(/ (19|20)\d\d$/, ''); if (!g) return false;
+    var g2 = noArticle(g);
+    var all = variants(p.fr.title).concat(variants(p.en.title));
+    for (var i = 0; i < all.length; i++) {
+      var t = all[i];
+      if (g === t || g2 === t) return true;
+      var tol = t.length >= 12 ? 2 : (t.length >= 6 ? 1 : 0);
+      if (tol && (lev(g, t) <= tol || lev(g2, t) <= tol)) return true;
+    }
+    return false;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  var KEY = 'pt_jour_v1';
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+
+  fetch('enigmes.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (data) {
+    var day = dayNumber(data.epoch);
+    var idx = data.order[day % data.order.length];
+    var p = data.puzzles[idx], L = p[lang], n = day + 1;
+    $('kicker').textContent = T.kicker + n;
+
+    var html = esc(L.pitch).replace('{p1}', '<span class="name ' + p.c1 + '">' + esc(L.p1) + '</span>');
+    if (L.p2) html = html.replace('{p2}', '<span class="name ' + p.c2 + '">' + esc(L.p2) + '</span>');
+    $('pitch').innerHTML = html;
+    var used = {}; used[p.c1] = 1; if (p.c2) used[p.c2] = 1;
+    $('legend').innerHTML = Object.keys(used).map(function (c) { return '<li class="' + c + '">' + T.legend[c] + '</li>'; }).join('');
+
+    var store = load(); store.days = store.days || {}; store.stats = store.stats || { played: 0, won: 0, streak: 0, best: 0, last: -1 };
+    var st = store.days[day] || { g: [], done: false, won: false };
+
+    function hintsFor(k) {
+      var h = [];
+      if (k >= 1) h.push(T.hintYear(p.year, L.category));
+      if (k >= 2 && L.hint) h.push(T.hintText(esc(L.hint)));
+      if (k >= 3) h.push(T.hintActors(L.actors.map(esc)));
+      return h;
+    }
+    function render() {
+      var k = st.g.length;
+      $('hints').innerHTML = hintsFor(st.done && st.won ? k - 1 : k).map(function (h) { return '<div class="hint">' + h + '</div>'; }).join('');
+      var dots = '';
+      for (var i = 0; i < MAX; i++) dots += '<i class="' + (i < st.g.length ? (st.won && i === st.g.length - 1 ? 'ok' : 'ko') : '') + '"></i>';
+      $('tries').innerHTML = dots + '<span>' + T.tries(st.g.length) + '</span>';
+      $('guesses').innerHTML = st.g.filter(function (x, i) { return !(st.won && i === st.g.length - 1); }).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('');
+      $('form').hidden = st.done;
+      $('result').hidden = !st.done; $('cta').hidden = !st.done;
+      if (st.done) {
+        $('resultTitle').textContent = st.won ? T.won[st.g.length - 1] : T.lost;
+        $('answer').textContent = L.title; $('answerYear').textContent = '(' + p.year + ')';
+        $('reveal').innerHTML = L.reveal.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('');
+        $('note').textContent = L.note || ''; $('note').hidden = !L.note;
+        $('grid').textContent = gridText();
+        if (L.link) { $('filmLink').href = L.link; $('filmLink').textContent = T.film; $('filmLink').style.display = 'inline-block'; }
+      }
+      var s = store.stats;
+      $('stats').innerHTML = [s.played, s.won, s.streak, s.best].map(function (v, i) { return '<div><b>' + v + '</b>' + T.stats[i] + '</div>'; }).join('');
+      countdown();
+    }
+    function gridText() {
+      var g = '';
+      for (var i = 0; i < st.g.length; i++) g += (st.won && i === st.g.length - 1) ? '🟩' : '🟥';
+      return g + (st.won ? ' ' + st.g.length + '/' + MAX : ' ✗/' + MAX);
+    }
+    function finish(won) {
+      st.done = true; st.won = won;
+      var s = store.stats;
+      s.played++; if (won) s.won++;
+      s.streak = won ? (s.last === day - 1 ? s.streak + 1 : 1) : 0;
+      s.best = Math.max(s.best, s.streak); s.last = day;
+    }
+    $('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = $('guess').value.trim(); if (!v) return;
+      if (st.g.some(function (x) { return strip(x) === strip(v); })) { toast(T.dup); return; }
+      st.g.push(v); $('guess').value = '';
+      if (matches(v, p)) finish(true);
+      else if (st.g.length >= MAX) finish(false);
+      else toast(T.wrong);
+      store.days[day] = st; save(store); render();
+      if (!st.done) $('guess').focus();
+    });
+    $('share').addEventListener('click', function () {
+      var text = T.shareHead(n) + '\n' + gridText() + '\n' + 'https://lnaappgame.github.io/plottwisted/jouer/' + (fr ? '' : '?lang=en');
+      if (navigator.share) navigator.share({ text: text }).catch(function () {});
+      else if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { toast(T.copied); });
+    });
+    function countdown() {
+      var now = new Date(), mid = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+      var min = Math.max(0, Math.round((mid - now) / 60000));
+      $('next').textContent = T.next(Math.floor(min / 60), min % 60);
+    }
+    setInterval(countdown, 60000);
+    store.days[day] = st; save(store); render();
+  }).catch(function () { $('pitch').textContent = fr ? 'Impossible de charger l\'énigme. Réessaie dans un instant.' : 'Could not load the riddle. Please try again shortly.'; });
+
+  var toastTimer;
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove('show'); }, 1400); }
+})();
+</script>
+</body>
+</html>
