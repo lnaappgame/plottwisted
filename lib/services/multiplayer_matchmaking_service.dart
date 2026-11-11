@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'data_retention.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform, debugPrint;
 
 /// Un enregistrement de partie fantôme trouvé pour une énigme donnée.
@@ -94,6 +95,7 @@ class MultiplayerMatchmakingService {
         'solveSeconds': solveSeconds,
         'nomJoueur': nomJoueur,
         'timestamp': FieldValue.serverTimestamp(),
+        'expireAt': dataExpiryTimestamp(),
       });
     } catch (_) {
       // Jamais bloquant pour le joueur.
@@ -137,6 +139,7 @@ class MultiplayerMatchmakingService {
       await db.collection('multiplayer_players').doc(uid).set({
         'elo': elo,
         'updatedAt': FieldValue.serverTimestamp(),
+        'expireAt': dataExpiryTimestamp(),
       });
     } catch (_) {}
   }

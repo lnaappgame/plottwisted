@@ -56,6 +56,13 @@ class WorldIntroOverlay extends StatelessWidget {
                           .copyWith(letterSpacing: 3)),
                   const SizedBox(height: 6),
                   Text(w.categoryLabelFor(locale), textAlign: TextAlign.center, style: AppTextStyles.display(size: 30)),
+                  if (w.extraRuleFor(locale).isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Text(w.extraRuleFor(locale),
+                        key: const ValueKey('world-extra-rule'),
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: AppColors.goldBright)),
+                  ],
                   const SizedBox(height: 14),
                   Text(
                     t.worldStartHint(w.puzzles.length),
@@ -111,6 +118,11 @@ class _WorldChoiceCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(world.categoryLabelFor(context.watch<AppSettings>().locale),
                 style: AppTextStyles.display(size: 22, color: AppColors.goldBright)),
+            if (world.extraRuleFor(context.watch<AppSettings>().locale).isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(world.extraRuleFor(context.watch<AppSettings>().locale),
+                  textAlign: TextAlign.center, style: AppTextStyles.body(size: 12, color: colors.cream)),
+            ],
           ],
         ),
       ),

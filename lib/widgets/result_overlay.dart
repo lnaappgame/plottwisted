@@ -114,6 +114,9 @@ class ResultOverlay extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(puzzle.titleFor(game.locale), textAlign: TextAlign.center, style: AppTextStyles.display(size: 28)),
+              if (puzzle.extraAnswerFor(game.locale).isNotEmpty)
+                Text('+ ${puzzle.extraAnswerFor(game.locale)}',
+                    textAlign: TextAlign.center, style: AppTextStyles.display(size: 20, color: AppColors.goldBright)),
               Text(puzzle.year, style: AppTextStyles.body(size: 12, color: colors.muted)),
               const SizedBox(height: 14),
               Container(

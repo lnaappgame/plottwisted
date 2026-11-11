@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'data_retention.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform, debugPrint;
 
 /// Identifiant de semaine stable (YYYY-MM-DD, correspondant au lundi 00h00
@@ -60,6 +61,7 @@ class LeaderboardService {
         'solveSeconds': solveSeconds,
         'solvedDay': solvedDay,
         'timestamp': FieldValue.serverTimestamp(),
+        'expireAt': dataExpiryTimestamp(),
       }).timeout(delai);
       return true;
     } catch (_) {

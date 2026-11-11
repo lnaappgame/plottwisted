@@ -1,7 +1,7 @@
 name: cine_devinette
 description: "Plot Twist(ed) — devine le film derrière le pitch détourné."
 publish_to: 'none'
-version: 1.0.12+18
+version: 1.0.13+19
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -16,6 +16,7 @@ dependencies:
   audioplayers: ^6.1.0      # effets sonores (lettre, bonne/mauvaise réponse)
   google_mobile_ads: ^9.1.0 # pubs AdMob (forcées + volontaires) — Android/iOS uniquement
   shared_preferences: ^2.3.2 # sauvegarde locale de la progression
+  shared_preferences_android: ^2.4.0 # lecture du consentement TCF ecrit par UMP (TcfConsent)
   in_app_purchase: ^3.2.3   # boutique (jokers, retrait des pubs)
   firebase_core: ^3.8.0     # classement de L'énigme de la semaine
   firebase_auth: ^5.3.3     # identifiant anonyme par appareil, sans compte joueur

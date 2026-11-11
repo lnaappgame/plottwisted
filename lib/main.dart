@@ -16,6 +16,7 @@ import 'screens/intro_teaser_screen.dart';
 import 'services/ad_service.dart';
 import 'services/analytics_service.dart';
 import 'services/app_settings.dart';
+import 'services/tcf_consent.dart';
 import 'services/cloud_sync_service.dart';
 import 'services/defi_state.dart';
 import 'services/enigme_state.dart';
@@ -221,12 +222,12 @@ Future<void> _initBackgroundServices({
     // l'IP). Le même geste de consentement gouverne aussi Firebase
     // Analytics ci-dessous, plutôt que d'imposer un second popup distinct.
     final canRequestAds = await adService.requestConsentAndPrepareAds();
-    try {
-      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(canRequestAds);
-    } catch (_) {}
+    // Analytics : seulement si le joueur soumis au RGPD a accepté la
+    // finalité « mesure » (TCF 1 + 8), voir TcfConsent.
+    await TcfConsent.applyToAnalytics(canRequestAds: canRequestAds);
     if (canRequestAds) {
       await MobileAds.instance.initialize();
-      adService.preload();
+      adService.enableAds();
     }
   }
 

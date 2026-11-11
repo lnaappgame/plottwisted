@@ -73,6 +73,11 @@ class PersonRef {
   String violetFor(String locale) => locale == 'en' ? violetUs : violet;
 }
 
+/// Sépare le titre de la réponse bonus dans la grille (« LÉON · NATALIE
+/// PORTMAN »). Jamais présent dans un titre : AnswerRow le reconnaît et
+/// passe à la ligne à cet endroit au lieu d'afficher une case.
+const String kAnswerSeparator = '·';
+
 /// Une devinette complète.
 class Puzzle {
   final String title;
@@ -95,6 +100,11 @@ class Puzzle {
   final String revealNoteUs;
   final String imdbUrl; // équivalent US du lien Allociné, pas de version FR
 
+  // Réponse bonus à trouver en plus du titre (monde « Enfants stars » : le
+  // nom de l'enfant star). Vide pour une devinette ordinaire.
+  final String extraAnswer;
+  final String extraAnswerUs;
+
   const Puzzle({
     required this.title,
     required this.year,
@@ -111,11 +121,21 @@ class Puzzle {
     this.extraHintUs = '',
     this.revealNoteUs = '',
     this.imdbUrl = '',
+    this.extraAnswer = '',
+    this.extraAnswerUs = '',
   });
 
   bool get hasP2 => p2.real.isNotEmpty;
 
   String titleFor(String locale) => locale == 'en' ? titleUs : title;
+  String extraAnswerFor(String locale) => locale == 'en' ? extraAnswerUs : extraAnswer;
+
+  /// Ce que le joueur doit écrire dans la grille : le titre, suivi de la
+  /// réponse bonus quand il y en a une.
+  String answerFor(String locale) {
+    final extra = extraAnswerFor(locale);
+    return extra.isEmpty ? titleFor(locale) : '${titleFor(locale)} $kAnswerSeparator $extra';
+  }
   String pitchTemplateFor(String locale) => locale == 'en' ? pitchTemplateUs : pitchTemplate;
   String extraHintFor(String locale) => locale == 'en' ? extraHintUs : extraHint;
   String revealNoteFor(String locale) => locale == 'en' ? revealNoteUs : revealNote;
@@ -131,14 +151,31 @@ class GameWorld {
   final String categoryLabelUs;
   final List<Puzzle> puzzles;
 
+  // Ce que désigne la réponse bonus des devinettes de ce monde (« l'enfant
+  // star »), affiché dans la grille et à l'entrée du monde. Vide si le monde
+  // n'en a pas.
+  final String extraLabel;
+  final String extraLabelUs;
+
   const GameWorld({
     required this.number,
     required this.categoryLabel,
     required this.puzzles,
     this.categoryLabelUs = '',
+    this.extraLabel = '',
+    this.extraLabelUs = '',
   });
 
   String categoryLabelFor(String locale) => locale == 'en' ? categoryLabelUs : categoryLabel;
+  String extraLabelFor(String locale) => locale == 'en' ? extraLabelUs : extraLabel;
+
+  /// La règle du monde en une ligne (« Trouve le film + l'enfant star »),
+  /// vide pour un monde ordinaire.
+  String extraRuleFor(String locale) {
+    final label = extraLabelFor(locale);
+    if (label.isEmpty) return '';
+    return locale == 'en' ? 'Find the movie + $label' : 'Trouve le film + $label';
+  }
 }
 
 // Palier de difficulté par position dans le monde (1 à 10) — vocabulaire fixe

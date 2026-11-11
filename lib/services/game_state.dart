@@ -66,7 +66,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     }
     // Même réponse dans les deux langues (ou niveau déjà trouvé, grille plus
     // affichée) : on garde la grille commencée et on ne change que les textes.
-    if (hasPendingSolve || normalize(currentPuzzle.titleFor(locale)) == normalize(currentPuzzle.titleFor(next))) {
+    if (hasPendingSolve || normalize(currentPuzzle.answerFor(locale)) == normalize(currentPuzzle.answerFor(next))) {
       locale = next;
       p1Colors = _shownColors('p1', p1Colors);
       p2Colors = _shownColors('p2', p2Colors);
@@ -240,7 +240,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       pool = savedPool;
       guess = savedGuess;
       lockedSlots = savedLockedSlots;
-      lockedWords = savedLockedWords;
+      lockedWords = {...savedLockedWords, ..._punctuationOnlyWords()};
       cursorIndex = _firstEmptySlotFrom(0);
     } catch (_) {
       // Sauvegarde illisible : on garde la grille neuve.
@@ -679,6 +679,11 @@ class GameState extends ChangeNotifier implements TitleGrid {
     jokersUsed = [];
     solvedWithSkip = false;
 
+    // Pub forcée : l'interstitielle n'est chargée que si ce niveau en
+    // déclenchera une à sa résolution (voir AdService.prepareForcedAd), le
+    // temps de la partie suffit largement au chargement.
+    if (mustShowForcedAd) adService.prepareForcedAd();
+
     if (!orangeIntroShown && (p1State == NameColor.orange || p2State == NameColor.orange)) {
       orangeIntroShown = true;
       orangeIntroPending = true;
@@ -690,7 +695,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       colorsSeen.add('violet');
     }
 
-    final titleClean = normalize(currentPuzzle.titleFor(locale));
+    final titleClean = normalize(currentPuzzle.answerFor(locale));
     slots = titleClean.split('').map((c) => AnswerSlot.fromChar(c)).toList();
     guess = List<int?>.filled(slots.length, null);
 
@@ -705,6 +710,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       }
     }
     if (current.isNotEmpty) wordRanges.add(current);
+    lockedWords = _punctuationOnlyWords();
 
     final correctLetters = <String>[];
     final correctDigits = <String>[];
@@ -770,6 +776,23 @@ class GameState extends ChangeNotifier implements TitleGrid {
       if (!slots[i].isSpace && !slots[i].isAuto && guess[i] == null) return i;
     }
     return -1;
+  }
+
+  /// Les « mots » faits seulement de ponctuation (« : », « & », le séparateur
+  /// titre · réponse bonus) : rien à y trouver. Verrouillés dès le chargement,
+  /// pour que le joker « Révéler un mot » ne se dépense jamais dessus, et
+  /// absents des lignes de tentative partagées.
+  Set<int> _punctuationOnlyWords() => {
+        for (var w = 0; w < wordRanges.length; w++)
+          if (wordRanges[w].every((i) => slots[i].isAuto)) w
+      };
+
+  /// Ce que désigne la réponse bonus du niveau en cours (« l'enfant star »),
+  /// ou null pour une devinette ordinaire.
+  String? get extraAnswerCaption {
+    if (!puzzleLoaded || currentPuzzle.extraAnswerFor(locale).isEmpty) return null;
+    final label = currentWorld.extraLabelFor(locale);
+    return label.isEmpty ? null : label;
   }
 
   bool _isSlotLocked(int i) {
@@ -905,7 +928,11 @@ class GameState extends ChangeNotifier implements TitleGrid {
       }
     }
 
-    attemptRows.add([for (var w = 0; w < wordRanges.length; w++) lockedWords.contains(w)]);
+    final punctuation = _punctuationOnlyWords();
+    attemptRows.add([
+      for (var w = 0; w < wordRanges.length; w++)
+        if (!punctuation.contains(w)) lockedWords.contains(w)
+    ]);
     final allLocked = List.generate(wordRanges.length, (w) => lockedWords.contains(w)).every((v) => v);
     if (allLocked) {
       failStreak = 0;

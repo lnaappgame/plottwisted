@@ -40,6 +40,9 @@ class AnswerRow extends StatelessWidget {
     // retour à la ligne : chaque mot est un Wrap-item à part entière.
     final wordWidgets = <Widget>[];
     final wordTileCounts = <int>[];
+    // Index (dans wordWidgets) du premier mot de la réponse bonus : la grille
+    // passe à la ligne juste avant, avec une légende (« + l'enfant star »).
+    int? extraStartsAt;
     List<Widget> currentWord = [];
 
     void flushWord() {
@@ -54,6 +57,11 @@ class AnswerRow extends StatelessWidget {
       final slot = game.slots[i];
       if (slot.isSpace) {
         flushWord();
+        continue;
+      }
+      if (slot.isAuto && slot.char == kAnswerSeparator) {
+        flushWord();
+        extraStartsAt = wordWidgets.length;
         continue;
       }
       if (slot.isAuto) {
@@ -99,7 +107,20 @@ class AnswerRow extends StatelessWidget {
           spacing: 14,
           runSpacing: 10,
           children: [
-            for (var w = 0; w < wordWidgets.length; w++)
+            for (var w = 0; w < wordWidgets.length; w++) ...[
+              // Une ligne pleine largeur force le retour à la ligne du Wrap :
+              // le titre au-dessus, la réponse bonus en dessous.
+              if (w == extraStartsAt)
+                SizedBox(
+                  width: constraints.maxWidth,
+                  child: Text(
+                    '+ ${grid == null ? (state.extraAnswerCaption ?? '') : ''}'.trim(),
+                    key: const ValueKey('extra-answer-caption'),
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: AppColors.goldBright)
+                        .copyWith(letterSpacing: 1),
+                  ),
+                ),
               if (wordTileCounts[w] * tileSpan > constraints.maxWidth)
                 ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: constraints.maxWidth),
@@ -107,6 +128,7 @@ class AnswerRow extends StatelessWidget {
                 )
               else
                 wordWidgets[w],
+            ],
           ],
         );
       },

@@ -9,6 +9,7 @@ import 'app_settings.dart';
 import 'elo_service.dart';
 import 'game_state.dart' show normalize;
 import 'multiplayer_matchmaking_service.dart';
+import 'nickname_filter.dart';
 import 'save_service.dart';
 import 'streak_state.dart';
 
@@ -541,7 +542,12 @@ class MultiplayerState extends ChangeNotifier {
       enigmeId: currentEnigme!.id,
       elo: eloRating,
       solveSeconds: valide,
-      nomJoueur: _monNom ?? (locale == 'en' ? 'Cinephile' : 'Cinéphile'),
+      // Filtre basique (politique de confidentialité, 1.0.13) : un pseudo
+      // jugé inacceptable n'est jamais montré aux autres joueurs, il part
+      // sous le nom par défaut. Le joueur garde le sien chez lui.
+      nomJoueur: (_monNom != null && isNicknameAcceptable(_monNom!))
+          ? _monNom!
+          : (locale == 'en' ? 'Cinephile' : 'Cinéphile'),
     );
 
     notifyListeners();
