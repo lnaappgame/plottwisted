@@ -354,7 +354,7 @@
     <p>Both features require an active internet connection. Leaderboard and round results are kept for at most 24 months (see section 6).</p>
 
     <h3>2.4 Analytics, technical diagnostics and server protection (Firebase Analytics, Crashlytics and App Check)</h3>
-    <p>The app uses <strong>Firebase Analytics</strong> to measure general usage of the app (for example: which game mode is started, a level completed, an ad watched, a purchase made) and <strong>Firebase Crashlytics</strong> to receive an automatic technical report when the app crashes (type of error, technical state of the app at the time of the incident). These tools, provided by Google, collect technical data about your device (model, operating system version, installation identifier) but are not intended to identify you personally. Analytics collection is switched off when the app starts and is only enabled once you have answered the consent tool described in section 2.5.</p>
+    <p>The app uses <strong>Firebase Analytics</strong> to measure general usage of the app (for example: which game mode is started, a level completed, an ad watched, a purchase made) and <strong>Firebase Crashlytics</strong> to receive an automatic technical report when the app crashes (type of error, technical state of the app at the time of the incident). These tools, provided by Google, collect technical data about your device (model, operating system version, installation identifier) but are not intended to identify you personally. Analytics collection is switched off when the app starts. In the European Union, the European Economic Area, the United Kingdom and Switzerland, it is only enabled if you accept, in the consent tool described in section 2.5, the purposes “Store and/or access information on a device” and “Measure content performance”; if you refuse them, no analytics is collected. Elsewhere, it is enabled once this tool has been shown. Crashlytics and App Check remain active in all cases (see section 3).</p>
     <p><strong>Firebase App Check</strong> verifies, on each exchange with our servers, that the request really comes from the app installed from a Store (Play Integrity on Android, DeviceCheck on iPhone). A technical token is exchanged with Google for this purpose; it contains no data about you.</p>
 
     <h3>2.5 Advertising (Google AdMob)</h3>
@@ -375,7 +375,8 @@
     <ul>
       <li>Running the game and local saving (section 2.1) are based on the performance of the service requested by the user.</li>
       <li>Backup/restore linked to a Google account (section 2.2) and online leaderboards (section 2.3) are based on the performance of the service you explicitly request by turning on these optional features.</li>
-      <li>Analytics, technical diagnostics and server protection (section 2.4) are based on LNA App's legitimate interest in understanding how the app is used, fixing malfunctions and protecting its servers; analytics is only enabled after you have answered the consent tool, and you can object at any time (section 7).</li>
+      <li>Analytics (Firebase Analytics, section 2.4) is based on your <strong>consent</strong> where the law requires it (European Union, European Economic Area, United Kingdom, Switzerland), and on LNA App's legitimate interest in understanding how the app is used elsewhere; you can withdraw your consent or object at any time (section 7).</li>
+      <li>Technical diagnostics (Crashlytics) and server protection (App Check, section 2.4) are based on LNA App's legitimate interest in fixing malfunctions and protecting its servers.</li>
       <li>Personalized ads (section 2.5) are based on your <strong>consent</strong>, collected through the tool mentioned in that section; you can refuse it without losing access to the game (non-personalized ads may then be shown).</li>
       <li>In-app purchases (section 2.6) are based on the performance of the contract concluded at the time of purchase.</li>
     </ul>
@@ -401,7 +402,7 @@
       <li>for local game data (section 2.1): directly in the app (Settings → Reset save data) or by uninstalling the app;</li>
       <li>for backup or leaderboard data stored with Firebase (sections 2.2 and 2.3): by contacting us at the address given in section 11, stating the player ID shown in the app (for example “Cinephile #123456”) or the email address of the linked Google account, so that we can find and delete the corresponding data;</li>
       <li>for your nickname (section 2.3): directly from the app's home screen; rounds already recorded with the old nickname can be deleted on request;</li>
-      <li>for analytics (section 2.4): by writing to us (section 11);</li>
+      <li>for analytics (section 2.4): at any time from the app (Settings → “Ad privacy options”, refusing the measurement purpose), or by writing to us (section 11);</li>
       <li>for data processed by Google or Apple (AdMob, Play, App Store, analytics): directly with these companies, through their respective ad-data or account management tools.</li>
     </ul>
     <p>You may also give instructions on what happens to your data after your death (Article 85 of the French Data Protection Act). You can also contact us at the address in section 11 with any question, and you have the right to lodge a complaint with the French data protection authority, the CNIL (<a href="https://www.cnil.fr/en" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
