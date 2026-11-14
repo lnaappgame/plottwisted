@@ -336,8 +336,43 @@ class GameState extends ChangeNotifier implements TitleGrid {
     wheelFreeSpinDay = data['wheelFreeSpinDay'] as String?;
     wheelAdSpinDay = data['wheelAdSpinDay'] as String?;
     halloween.restore(data['halloween']);
+    final migrated = _unblockAfterNewWorlds();
     if (hasPendingSolve) loadPuzzle();
     _restoring = false;
+    if (migrated) await flushSave();
+  }
+
+  /// Débloque les joueurs touchés par l'ancien calcul du monde suivant
+  /// (corrigé le 13/11/2026) : ayant fini tout le contenu d'une version, ils
+  /// se retrouvaient, après une mise à jour ajoutant des mondes, soit à
+  /// REJOUER un monde déjà fini, soit sur la page « prochainement » sans que
+  /// les nouveaux mondes leur soient proposés. On les renvoie à l'écran de
+  /// choix, qui propose désormais les deux mondes après le plus haut ouvert.
+  /// Retourne vrai si la sauvegarde a été modifiée.
+  bool _unblockAfterNewWorlds() {
+    if (!allWorldsCompleted || worldIndex == 0) return false;
+    if (_highestWorldPlayed >= _maxWorldNumber) return false; // rien de neuf
+    final replaying = worldIndex <= _allWorldsCompletedAtMax; // monde fini rejoué
+    final blocked = _maxWorldNumber <= _allWorldsCompletedAtMax; // « prochainement » à tort
+    if (!replaying && !blocked) return false;
+    allWorldsCompleted = false;
+    _worldChoicesExhausted = false;
+    worldChoiceReserve = null;
+    remainingLevels = [];
+    _solvedPendingKey = null;
+    _savedLevel = null;
+    _postponedLevels = {};
+    puzzleLoaded = false;
+    return true;
+  }
+
+  /// Plus aucun monde à proposer alors qu'aucun niveau ne reste : tout le
+  /// contenu est fini. Sans notification (appelé pendant la construction de
+  /// l'écran de jeu) ; la page « prochainement » lit ces champs directement.
+  void markAllContentCompleted() {
+    allWorldsCompleted = true;
+    _allWorldsCompletedAtMax = _maxWorldNumber;
+    flushSave();
   }
 
   /// Ajoute les jokers d'un [JokerGrant] (achat boutique, récompense, etc.).
@@ -549,6 +584,19 @@ class GameState extends ChangeNotifier implements TitleGrid {
 
   int get _maxWorldNumber => kWorlds.map((w) => w.number).fold(0, max);
 
+  /// Le plus haut monde déjà ouvert (terminé ou en cours). C'est lui, et non
+  /// le dernier monde joué ([worldIndex]), qui sert de point de départ quand
+  /// une mise à jour ajoute des mondes : avec la réserve, le dernier monde
+  /// joué est souvent un monde laissé de côté plus tôt (ex. 28 alors que 30
+  /// est fini), et partir de lui reproposait des mondes déjà faits
+  /// (signalé le 13/11/2026 après la 1.0.13). Seuls les mondes présents dans
+  /// cette version comptent : une sauvegarde venue d'une version plus récente
+  /// (iPhone en retard sur Android) ne doit pas faire croire au bout du jeu.
+  int get _highestWorldPlayed {
+    final maxN = _maxWorldNumber;
+    return worldsPlayedHistory.where((n) => n <= maxN).fold(worldIndex, max);
+  }
+
   /// Vrai si le joueur a déjà fini tout le contenu disponible et qu'aucune
   /// mise à jour n'a depuis ajouté de nouveaux mondes.
   bool get shouldShowComingSoonPage => allWorldsCompleted && _maxWorldNumber <= _allWorldsCompletedAtMax;
@@ -563,17 +611,23 @@ class GameState extends ChangeNotifier implements TitleGrid {
   /// (ex. monde 15 déjà en cours) plutôt que juste après le monde 1.
   List<int> get worldChoiceOptions {
     final maxN = _maxWorldNumber;
+    final highest = _highestWorldPlayed;
     if (_worldChoicesExhausted) {
-      if (allWorldsCompleted && maxN > _allWorldsCompletedAtMax) {
-        // Du nouveau contenu est arrivé depuis : on redonne une chance au
-        // mécanisme de choix plutôt que de rester bloqué indéfiniment.
-        _worldChoicesExhausted = false;
-      } else {
-        return [];
-      }
+      // Du nouveau contenu est arrivé depuis (au-delà du plus haut monde
+      // ouvert) : on redonne une chance au mécanisme de choix plutôt que de
+      // rester bloqué. Y compris si la mise à jour est arrivée PENDANT le
+      // dernier monde (allWorldsCompleted encore faux) : sans ça, les
+      // nouveaux mondes n'étaient jamais proposés.
+      if (maxN <= highest) return [];
+      _worldChoicesExhausted = false;
+    }
+    // Une réserve déjà jouée n'en est plus une (sauvegardes faites avec
+    // l'ancien calcul, qui pouvait mettre en réserve un monde déjà fini).
+    if (worldChoiceReserve != null && worldsPlayedHistory.contains(worldChoiceReserve)) {
+      worldChoiceReserve = null;
     }
     if (worldChoiceReserve == null) {
-      return [worldIndex + 1, worldIndex + 2].where((n) => n <= maxN).toList();
+      return [highest + 1, highest + 2].where((n) => n <= maxN).toList();
     }
     final options = <int>[];
     if (worldChoiceReserve! <= maxN) options.add(worldChoiceReserve!);
@@ -587,7 +641,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
   void chooseNextWorld(int chosen) {
     final options = worldChoiceOptions;
     final wasBootstrap = worldChoiceReserve == null;
-    final justFinished = worldIndex;
+    final base = _highestWorldPlayed; // même point de départ que worldChoiceOptions
     final notChosen = options.where((w) => w != chosen).toList();
     if (notChosen.isEmpty) {
       // Il ne restait qu'un seul monde à proposer et il vient d'être choisi :
@@ -598,10 +652,14 @@ class GameState extends ChangeNotifier implements TitleGrid {
       worldChoiceReserve = notChosen.first;
     }
     if (wasBootstrap) {
-      _worldChoiceFrontier = justFinished + 3; // après les 2 mondes déjà proposés
+      _worldChoiceFrontier = base + 3; // après les 2 mondes déjà proposés
     } else {
       _worldChoiceFrontier++;
     }
+    // Choisir un monde, c'est qu'il reste du contenu : l'indicateur « tout
+    // fini » d'une ancienne fin de contenu ne doit pas survivre (il restait
+    // vrai pour toujours chez les joueurs arrivés au bout une fois).
+    allWorldsCompleted = false;
     enterWorld(chosen);
   }
 

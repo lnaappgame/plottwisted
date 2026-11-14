@@ -91,6 +91,12 @@ class _GameScreenState extends State<GameScreen> {
       } else if (game.worldChoiceOptions.isNotEmpty) {
         _pendingWorldChoice = game.worldChoiceOptions;
         return;
+      } else {
+        // Plus rien à proposer : c'est la fin du contenu. Surtout pas
+        // [currentWorld] ci-dessous, qui ferait rejouer un monde déjà fini.
+        game.markAllContentCompleted();
+        _pendingWorldChoice = null;
+        return;
       }
     }
     _pendingWorldChoice = game.puzzleLoaded ? null : [game.currentWorld.number];

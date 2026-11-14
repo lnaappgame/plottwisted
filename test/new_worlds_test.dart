@@ -73,6 +73,142 @@ void main() {
     expect(game.worldChoiceOptions, [31, 32]);
   });
 
+  // Signalé le 13/11/2026 après la 1.0.13 (Marie, Sybil) : « en arrivant à
+  // la fin des mondes de la version précédente, quand on télécharge la mise
+  // à jour, on se refait le dernier monde ». Avec la réserve, le dernier
+  // monde joué n'est souvent pas le 30 : l'ancien calcul partait de lui.
+  group('nouveaux mondes après une fin de contenu atteinte par la réserve', () {
+    List<int> upTo(int n) => [for (var i = 1; i <= n; i++) i];
+
+    Future<GameState> restored(Map<String, dynamic> overrides) async {
+      final saveService = SaveService();
+      await saveService.save(_game(saveService).toJson()..addAll(overrides));
+      final game = _game(saveService);
+      await game.restore();
+      return game;
+    }
+
+    Map<String, dynamic> finished30({required int lastPlayed}) => {
+          'worldIndex': lastPlayed,
+          'currentLevelNumber': 10,
+          'remainingLevels': <int>[],
+          'worldsPlayedHistory': upTo(30),
+          'allWorldsCompleted': true,
+          'allWorldsCompletedAtMax': 30,
+          'worldChoicesExhausted': true,
+          'worldChoiceReserve': null,
+          'gameStarted': true,
+        };
+
+    for (final lastPlayed in [29, 28, 25]) {
+      test('fini sur le monde $lastPlayed (30 déjà fait) : on propose 31 et 32, pas un monde fini', () async {
+        final game = await restored(finished30(lastPlayed: lastPlayed));
+        expect(game.shouldShowComingSoonPage, isFalse);
+        expect(game.worldChoiceOptions, [31, 32]);
+      });
+    }
+
+    test('le choix suivant continue après les nouveaux mondes', () async {
+      final game = await restored(finished30(lastPlayed: 29));
+      game.chooseNextWorld(31);
+      expect(game.worldIndex, 31);
+      expect(game.worldChoiceReserve, 32);
+      expect(game.allWorldsCompleted, isFalse, reason: 'plus de « tout fini » périmé');
+      expect(game.worldChoiceOptions, [32, 33]); // fin du monde 31
+    });
+
+    test('mise à jour reçue PENDANT le dernier monde : les nouveaux mondes sont proposés à sa fin', () async {
+      final game = await restored({
+        'worldIndex': 28,
+        'currentLevelNumber': 10,
+        'remainingLevels': [10],
+        'worldsPlayedHistory': upTo(30),
+        'allWorldsCompleted': false,
+        'worldChoicesExhausted': true,
+        'worldChoiceReserve': null,
+        'gameStarted': true,
+      });
+      final status = game.advanceAfterSolve();
+      expect(status, startsWith('world-choice'), reason: 'et non « tout le contenu est fini »');
+      expect(game.shouldShowComingSoonPage, isFalse);
+      expect(game.worldChoiceOptions, [31, 32]);
+    });
+
+    test('une joueuse déjà en train de rejouer le monde 30 revient au choix 31 / 32', () async {
+      // État laissé par l'ancien calcul : [30, 31] proposés, 30 choisi.
+      final game = await restored({
+        'worldIndex': 30,
+        'currentLevelNumber': 3,
+        'remainingLevels': [3, 4, 5, 6, 7, 8, 9, 10],
+        'worldsPlayedHistory': upTo(30),
+        'allWorldsCompleted': true,
+        'allWorldsCompletedAtMax': 30,
+        'worldChoicesExhausted': false,
+        'worldChoiceReserve': 31,
+        'worldChoiceFrontier': 32,
+        'solvedPending': '30-3',
+        'gameStarted': true,
+      });
+      expect(game.remainingLevels, isEmpty);
+      expect(game.hasPendingSolve, isFalse);
+      expect(game.worldChoiceOptions, [31, 32]);
+    });
+
+    test('une joueuse bloquée sur « prochainement » sans avoir vu 31-35 revient au choix', () async {
+      final game = await restored({
+        ...finished30(lastPlayed: 28),
+        'allWorldsCompletedAtMax': 35, // l'ancien calcul l'a déclarée au bout
+      });
+      expect(game.shouldShowComingSoonPage, isFalse);
+      expect(game.worldChoiceOptions, [31, 32]);
+    });
+
+    test('une joueuse déjà dans un nouveau monde n\'est pas touchée', () async {
+      final game = await restored({
+        'worldIndex': 31,
+        'currentLevelNumber': 5,
+        'remainingLevels': [5, 6, 7, 8, 9, 10],
+        'worldsPlayedHistory': [...upTo(30), 31],
+        'allWorldsCompleted': true, // indicateur périmé de la fin des 30 mondes
+        'allWorldsCompletedAtMax': 30,
+        'worldChoicesExhausted': false,
+        'worldChoiceReserve': 32,
+        'worldChoiceFrontier': 33,
+        'gameStarted': true,
+      });
+      expect(game.worldIndex, 31);
+      expect(game.remainingLevels, [5, 6, 7, 8, 9, 10]);
+    });
+
+    test('une sauvegarde venue d\'une version plus récente ne fait pas croire au bout du jeu', () async {
+      final game = await restored({
+        'worldIndex': 1,
+        'currentLevelNumber': 10,
+        'remainingLevels': <int>[],
+        'worldsPlayedHistory': [1, 38, 39], // mondes d'une version à venir
+        'worldChoiceReserve': null,
+        'gameStarted': true,
+      });
+      expect(game.worldChoiceOptions, [2, 3]);
+    });
+
+    test('tout le contenu vraiment fini : toujours la page « prochainement »', () async {
+      final game = await restored({
+        'worldIndex': 34,
+        'currentLevelNumber': 10,
+        'remainingLevels': <int>[],
+        'worldsPlayedHistory': upTo(35),
+        'allWorldsCompleted': true,
+        'allWorldsCompletedAtMax': 35,
+        'worldChoicesExhausted': true,
+        'worldChoiceReserve': null,
+        'gameStarted': true,
+      });
+      expect(game.shouldShowComingSoonPage, isTrue);
+      expect(game.worldChoiceOptions, isEmpty);
+    });
+  });
+
   test('les 5 mondes de la 1.0.13 : aucun film déjà en jeu, tous les champs FR et US remplis', () {
     String norm(String s) => normalize(s).replaceAll(RegExp(r'[^A-Z0-9]'), '');
     final before = <String, String>{};
