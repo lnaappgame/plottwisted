@@ -11,6 +11,10 @@ import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, Tar
 /// vit dans main.dart, pas ici : `logEvent` appelé pendant que la collecte
 /// est coupée est un no-op silencieux côté SDK Firebase, donc cette classe
 /// n'a pas besoin de connaître l'état du consentement.
+/// Nom de l'événement d'une case du calendrier de l'Avent trouvée (jamais un
+/// nom réservé par Firebase : voir test/advent_calendar_test.dart).
+const kAdventCaseSolvedEvent = 'advent_case_solved';
+
 class AnalyticsService {
   bool get _supported =>
       !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
@@ -44,6 +48,11 @@ class AnalyticsService {
   /// Un pitch de l'event Halloween trouvé ([pitch] = index de 0 à 29, [solved] = total trouvé).
   Future<void> logHalloweenPitchSolved({required int pitch, required int solved}) =>
       _log('halloween_pitch_solved', {'pitch': pitch, 'solved': solved});
+
+  /// Une case du calendrier de l'Avent trouvée : [day] = numéro de la case (1
+  /// à 25), [onTime] = trouvée le jour même (1) ou rattrapée plus tard (0).
+  Future<void> logAdventCaseSolved({required int day, required bool onTime}) =>
+      _log(kAdventCaseSolvedEvent, {'day': day, 'on_time': onTime ? 1 : 0});
 
   /// Un tour de la bobine du jour : [segment] = index dans kWheelSegments.
   Future<void> logWheelSpin({required bool afterAd, required int segment}) =>

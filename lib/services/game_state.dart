@@ -7,6 +7,7 @@ import '../models/joker.dart';
 import '../models/puzzle.dart';
 import 'ad_service.dart';
 import 'analytics_service.dart';
+import 'advent_calendar.dart';
 import 'app_settings.dart';
 import 'halloween_event.dart';
 import 'save_service.dart';
@@ -146,14 +147,17 @@ class GameState extends ChangeNotifier implements TitleGrid {
         'wheelFreeSpinDay': wheelFreeSpinDay,
         'wheelAdSpinDay': wheelAdSpinDay,
         'halloween': halloween.toJson(),
+        'advent': advent.toJson(),
       };
 
-  // ─── Event Halloween ───
-  // Son état vit dans la même sauvegarde (et la même sauvegarde cloud) que
-  // le jeu principal, dont il alimente le stock de jokers.
+  // ─── Events (Halloween, calendrier de l'Avent) ───
+  // Leur état vit dans la même sauvegarde (et la même sauvegarde cloud) que
+  // le jeu principal, dont ils alimentent le stock de jokers.
   late final HalloweenEvent halloween = HalloweenEvent(this);
+  late final AdventCalendar advent = AdventCalendar(this);
 
-  /// Appelé par [halloween] à chaque changement (sauvegarde + affichage).
+  /// Appelé par [halloween] et [advent] à chaque changement (sauvegarde +
+  /// affichage).
   void eventChanged() => notifyListeners();
 
   // ─── Niveau en cours ───
@@ -336,6 +340,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     wheelFreeSpinDay = data['wheelFreeSpinDay'] as String?;
     wheelAdSpinDay = data['wheelAdSpinDay'] as String?;
     halloween.restore(data['halloween']);
+    advent.restore(data['advent']);
     final migrated = _unblockAfterNewWorlds();
     if (hasPendingSolve) loadPuzzle();
     _restoring = false;
@@ -692,6 +697,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     _savedLevel = null;
     _postponedLevels = {};
     halloween.reset();
+    advent.reset();
     worldChoiceReserve = null;
     _worldChoiceFrontier = 4;
     _worldChoicesExhausted = false;
@@ -1232,6 +1238,15 @@ class GameState extends ChangeNotifier implements TitleGrid {
     notifyListeners();
   }
 
+  /// Accorde un joker de chaque sorte listée (une sorte répétée compte
+  /// plusieurs fois), sans toucher aux paliers de la campagne principale.
+  void grantJokerKinds(List<JokerKind> kinds) {
+    for (final kind in kinds) {
+      _addJoker(kind, 1);
+    }
+    notifyListeners();
+  }
+
   static const kMinorJokers = [JokerKind.reveal, JokerKind.eliminate, JokerKind.character];
   static const kMajorJokers = [JokerKind.actor, JokerKind.hint, JokerKind.revealWord];
 
@@ -1322,7 +1337,8 @@ class GameState extends ChangeNotifier implements TitleGrid {
   String? wheelFreeSpinDay;
   String? wheelAdSpinDay;
 
-  /// Horloge de la bobine et de l'event Halloween, remplaçable dans les tests.
+  /// Horloge de la bobine et des events (Halloween, calendrier de l'Avent),
+  /// remplaçable dans les tests.
   DateTime Function() clock = DateTime.now;
 
   String get _todayKey {

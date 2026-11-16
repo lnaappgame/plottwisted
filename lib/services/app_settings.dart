@@ -12,10 +12,15 @@ const List<String> kAvatarEmojis = [
 // fournie à part pour la version dessinée de ces avatars.
 
 /// Avatars dessinés (voir AvatarView) gagnés pendant l'event Halloween :
-/// tête de citrouille au premier film trouvé, citrouille en feu pour les 10.
+/// tête de citrouille au premier film trouvé, citrouille en feu pour les 30.
 const kPumpkinAvatar = 'pumpkin';
 const kFirePumpkinAvatar = 'pumpkin_fire';
-const kEventAvatars = [kPumpkinAvatar, kFirePumpkinAvatar];
+
+/// Avatars dessinés du calendrier de l'Avent : bonnet de Noël à la première
+/// case trouvée, bonnet sous la neige (animé) pour les 25 cases.
+const kSantaHatAvatar = 'santa_hat';
+const kSnowHatAvatar = 'santa_hat_snow';
+const kEventAvatars = [kPumpkinAvatar, kFirePumpkinAvatar, kSantaHatAvatar, kSnowHatAvatar];
 
 const int kPlayerIdMaxLength = 20;
 
