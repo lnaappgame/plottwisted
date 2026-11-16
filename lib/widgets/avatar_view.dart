@@ -16,13 +16,15 @@ class AvatarView extends StatelessWidget {
     final size = radius * 2;
     if (avatar == kSantaHatAvatar || avatar == kSnowHatAvatar) {
       final snow = avatar == kSnowHatAvatar;
-      return Container(
+      final hat = Container(
         width: size,
         height: size,
         decoration: BoxDecoration(color: snow ? const Color(0xFF14243A) : background, shape: BoxShape.circle),
         padding: EdgeInsets.all(radius * 0.14),
         child: snow ? const SnowyHat() : const CustomPaint(painter: SantaHatPainter()),
       );
+      // Les flocons restent dans le rond.
+      return snow ? ClipOval(child: hat) : hat;
     }
     if (avatar == kPumpkinAvatar || avatar == kFirePumpkinAvatar) {
       return Container(
