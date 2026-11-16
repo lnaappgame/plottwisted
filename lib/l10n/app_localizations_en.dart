@@ -1252,5 +1252,104 @@ class AppLocalizationsEn extends AppLocalizations {
   String get evtBackToEvent => 'BACK TO THE EVENT';
 
   @override
-  String get avatarEventLocked => 'Halloween event avatars';
+  String get avatarEventLocked => 'Event avatars';
+
+  @override
+  String get homeAdventEvent => '🎄 ADVENT CALENDAR';
+
+  @override
+  String get advTitle => 'ADVENT CALENDAR';
+
+  @override
+  String get advUntil => 'December 1–25 · catch up until January 3';
+
+  @override
+  String get advIntroTitle => 'SANTA GOES TO THE MOVIES';
+
+  @override
+  String get advIntro =>
+      'This year, Santa is the storyteller! Every day in December, he tells you about a Christmas movie his own way: his rounds, his elves, his nice list… Can you find the title?';
+
+  @override
+  String get advIntro2 =>
+      '24 Christmas movies, plus a bonus door on the 25th: one door to open every day!';
+
+  @override
+  String get advRules =>
+      'A new door opens every day at midnight. Solve it the same day to win a joker. Missed doors can be caught up until January 3, without the joker. Jokers: Reveal, Eliminate and Reveal a word.';
+
+  @override
+  String get advSkinHat => 'Santa hat: solve your first door';
+
+  @override
+  String get advSkinFinal => 'Snowy Santa hat: solve all 25 doors';
+
+  @override
+  String advProgress(int found, int total) {
+    return '$found/$total doors solved';
+  }
+
+  @override
+  String get advToday => 'TODAY';
+
+  @override
+  String advCaseNumber(int day) {
+    return 'DOOR $day';
+  }
+
+  @override
+  String get advCaseBonus => 'BONUS DOOR';
+
+  @override
+  String advCaseLocked(int day) {
+    return 'Patience! This door opens on December $day.';
+  }
+
+  @override
+  String advPlayDay(int day) {
+    return 'PLAY DOOR $day';
+  }
+
+  @override
+  String get advSantaSays => '🎅 SANTA SAYS';
+
+  @override
+  String get advOnTimeHint => 'Solve it today: +1 joker!';
+
+  @override
+  String get advLateHint =>
+      'Catch-up door: the joker is only given on the day itself.';
+
+  @override
+  String get advAvatarUnlocked => 'New avatar unlocked: Santa hat!';
+
+  @override
+  String get advFinalReward =>
+      'All 25 doors! Jackpot: 5 jokers and the Snowy Santa hat avatar!';
+
+  @override
+  String get advComeBack =>
+      'You\'re all caught up! The next door opens tomorrow.';
+
+  @override
+  String get advAllDone =>
+      'Well done, you solved all 25 doors! Merry Christmas!';
+
+  @override
+  String get advNotYet => 'The calendar opens on December 1. See you soon!';
+
+  @override
+  String get advOver =>
+      'The Advent calendar is over. Thanks for playing, and happy new year!';
+
+  @override
+  String get advNext => 'NEXT DOOR';
+
+  @override
+  String get advBackToCalendar => 'BACK TO THE CALENDAR';
+
+  @override
+  String shareAdventText(int day, String grid, String details, String link) {
+    return '🎄 Plot Twist(ed) · Advent Calendar, door $day\n$grid$details\nYour turn 👉 $link';
+  }
 }

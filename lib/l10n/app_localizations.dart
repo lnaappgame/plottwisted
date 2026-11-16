@@ -2224,8 +2224,170 @@ abstract class AppLocalizations {
   /// No description provided for @avatarEventLocked.
   ///
   /// In fr, this message translates to:
-  /// **'Avatars de l\'event Halloween'**
+  /// **'Avatars des events'**
   String get avatarEventLocked;
+
+  /// No description provided for @homeAdventEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎄 CALENDRIER DE L\'AVENT'**
+  String get homeAdventEvent;
+
+  /// No description provided for @advTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'CALENDRIER DE L\'AVENT'**
+  String get advTitle;
+
+  /// No description provided for @advUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Du 1er au 25 décembre · rattrapage jusqu\'au 3 janvier'**
+  String get advUntil;
+
+  /// No description provided for @advIntroTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'LE PÈRE NOËL FAIT SON CINÉMA'**
+  String get advIntroTitle;
+
+  /// No description provided for @advIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de retrouver le titre.'**
+  String get advIntro;
+
+  /// No description provided for @advIntro2.
+  ///
+  /// In fr, this message translates to:
+  /// **'24 films de Noël, plus une case bonus le 25 : une case à ouvrir chaque jour !'**
+  String get advIntro2;
+
+  /// No description provided for @advRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une case s\'ouvre chaque jour à minuit. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Jokers : Révéler, Éliminer et Révéler un mot.'**
+  String get advRules;
+
+  /// No description provided for @advSkinHat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonnet de Noël : trouve ta première case'**
+  String get advSkinHat;
+
+  /// No description provided for @advSkinFinal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonnet sous la neige : trouve les 25 cases'**
+  String get advSkinFinal;
+
+  /// No description provided for @advProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{found}/{total} cases trouvées'**
+  String advProgress(int found, int total);
+
+  /// No description provided for @advToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'AUJOURD\'HUI'**
+  String get advToday;
+
+  /// No description provided for @advCaseNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'CASE {day}'**
+  String advCaseNumber(int day);
+
+  /// No description provided for @advCaseBonus.
+  ///
+  /// In fr, this message translates to:
+  /// **'CASE BONUS'**
+  String get advCaseBonus;
+
+  /// No description provided for @advCaseLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Patience ! Cette case s\'ouvre le {day} décembre.'**
+  String advCaseLocked(int day);
+
+  /// No description provided for @advPlayDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'JOUER LA CASE {day}'**
+  String advPlayDay(int day);
+
+  /// No description provided for @advSantaSays.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎅 LE PÈRE NOËL RACONTE'**
+  String get advSantaSays;
+
+  /// No description provided for @advOnTimeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trouve-la aujourd\'hui : +1 joker !'**
+  String get advOnTimeHint;
+
+  /// No description provided for @advLateHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Case rattrapée : le joker n\'est donné que le jour même.'**
+  String get advLateHint;
+
+  /// No description provided for @advAvatarUnlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel avatar débloqué : Bonnet de Noël !'**
+  String get advAvatarUnlocked;
+
+  /// No description provided for @advFinalReward.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les 25 cases ! Gros lot : 5 jokers et l\'avatar Bonnet sous la neige !'**
+  String get advFinalReward;
+
+  /// No description provided for @advComeBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu es à jour ! La prochaine case s\'ouvre demain.'**
+  String get advComeBack;
+
+  /// No description provided for @advAllDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bravo, tu as trouvé les 25 cases du calendrier ! Joyeux Noël !'**
+  String get advAllDone;
+
+  /// No description provided for @advNotYet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le calendrier s\'ouvre le 1er décembre. À très vite !'**
+  String get advNotYet;
+
+  /// No description provided for @advOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le calendrier de l\'Avent est terminé. Merci d\'avoir joué, et bonne année !'**
+  String get advOver;
+
+  /// No description provided for @advNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'CASE SUIVANTE'**
+  String get advNext;
+
+  /// No description provided for @advBackToCalendar.
+  ///
+  /// In fr, this message translates to:
+  /// **'RETOUR AU CALENDRIER'**
+  String get advBackToCalendar;
+
+  /// No description provided for @shareAdventText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎄 Plot Twist(ed) · Calendrier de l\'Avent, case {day}\n{grid}{details}\nÀ ton tour 👉 {link}'**
+  String shareAdventText(int day, String grid, String details, String link);
 }
 
 class _AppLocalizationsDelegate

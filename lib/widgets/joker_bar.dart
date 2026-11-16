@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/joker.dart';
 import '../services/app_settings.dart';
+import '../services/event_grid.dart';
 import '../services/game_state.dart';
 import '../theme/app_theme.dart';
 import 'joker_fx.dart';
@@ -130,7 +131,59 @@ class JokerBar extends StatelessWidget {
   }
 }
 
-/// Bouton « Gagner un joker » (une pub), aussi utilisé par l'event Halloween.
+/// Barre de jokers des events (Halloween, calendrier de l'Avent) : Révéler,
+/// Éliminer et Révéler un mot (stock du jeu principal), et la pub « Gagner
+/// un joker ».
+class EventJokerBar extends StatelessWidget {
+  final JokerFx fx;
+  final GameState game;
+  final void Function(JokerKind kind, Color color) onJoker;
+  final VoidCallback onWatchAd;
+  const EventJokerBar({super.key, required this.fx, required this.game, required this.onJoker, required this.onWatchAd});
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    return ListenableBuilder(
+      listenable: fx,
+      builder: (context, _) => Column(
+        children: [
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 12,
+            children: [
+              for (final kind in kEventJokers)
+                Builder(builder: (context) {
+                  final shown = (game.countOf(kind) - fx.pending(kind)).clamp(0, 999).toInt();
+                  final color = jokerColor(kind, colors);
+                  return JokerButton(
+                    key: fx.key('joker:${kind.name}'),
+                    label: jokerName(kind, t),
+                    icon: kind.icon,
+                    count: shown,
+                    color: color,
+                    colors: colors,
+                    active: false,
+                    disabled: false,
+                    tappable: shown > 0,
+                    subtitle: null,
+                    onTap: () => onJoker(kind, color),
+                  );
+                }),
+            ],
+          ),
+          const SizedBox(height: 10),
+          WinJokerButton(key: const ValueKey('eventWinJoker'), label: t.jokerWinOne, colors: colors, onTap: onWatchAd),
+        ],
+      ),
+    );
+  }
+}
+
+/// Bouton « Gagner un joker » (une pub), aussi utilisé par les events.
 class WinJokerButton extends StatelessWidget {
   final String label;
   final AppColors colors;

@@ -12,6 +12,7 @@ import '../widgets/avatar_view.dart';
 import '../widgets/clapper_transition.dart';
 import '../widgets/daily_wheel_dialog.dart';
 import '../widgets/scifi_background.dart';
+import 'advent_calendar_screen.dart';
 import 'defi_screen.dart';
 import 'enigme_screen.dart';
 import 'halloween_event_screen.dart';
@@ -255,6 +256,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             const _HalloweenEventButton(),
                             const SizedBox(height: 12),
                           ],
+                          if (context.watch<GameState>().advent.isActive) ...[
+                            const _AdventButton(),
+                            const SizedBox(height: 12),
+                          ],
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton(
@@ -447,7 +452,7 @@ class _ProfilDialogState extends State<_ProfilDialog> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                // Avatars de l'event Halloween : en tête une fois gagnés.
+                // Avatars des events (Halloween, Avent) : en tête une fois gagnés.
                 for (final a in kEventAvatars)
                   if (settings.isAvatarUnlocked(a))
                     InkWell(
@@ -498,7 +503,9 @@ class _ProfilDialogState extends State<_ProfilDialog> {
                         ),
                       ),
                   const SizedBox(width: 6),
-                  Text(t.avatarEventLocked, style: AppTextStyles.body(size: 11, color: colors.muted)),
+                  // Flexible : avec les avatars des deux events, la ligne
+                  // déborderait sur un petit téléphone.
+                  Flexible(child: Text(t.avatarEventLocked, style: AppTextStyles.body(size: 11, color: colors.muted))),
                 ],
               ),
             ],
@@ -595,6 +602,58 @@ class _HalloweenEventButton extends StatelessWidget {
                 decoration: BoxDecoration(color: const Color(0xFFF28C28), borderRadius: BorderRadius.circular(10)),
                 child: Text('$toPlay',
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF1B1326))),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Entrée du calendrier de l'Avent (du 1er décembre au 3 janvier), avec le
+/// nombre de cases ouvertes pas encore trouvées.
+class _AdventButton extends StatelessWidget {
+  const _AdventButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final advent = context.watch<GameState>().advent;
+    final t = AppLocalizations.of(context);
+    final toPlay = advent.toPlayCount;
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        key: const ValueKey('homeAdventCalendar'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF14432B),
+          padding: const EdgeInsets.symmetric(vertical: 13),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: const BorderSide(color: Color(0xFFD7262E), width: 1.5),
+          ),
+        ),
+        onPressed: () => ClapperTransition.play(context, () {
+          if (context.mounted) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AdventCalendarScreen()));
+          }
+        }),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(t.homeAdventEvent,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.display(size: 18, color: const Color(0xFFF2C14E))),
+            ),
+            if (toPlay > 0) ...[
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                decoration: BoxDecoration(color: const Color(0xFFD7262E), borderRadius: BorderRadius.circular(10)),
+                child: Text('$toPlay',
+                    key: const ValueKey('homeAdventBadge'),
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Colors.white)),
               ),
             ],
           ],
