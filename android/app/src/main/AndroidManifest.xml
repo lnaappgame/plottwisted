@@ -40,6 +40,12 @@
         <meta-data
             android:name="firebase_analytics_collection_enabled"
             android:value="false"/>
+        <!-- Rappels planifiés (Défi du jour, énigme de la semaine) : depuis la
+             v16, flutter_local_notifications ne déclare plus ce récepteur, et
+             sans lui l'alarme se déclenche sans jamais afficher la notification.
+             Pas de récepteur de redémarrage : main.dart replanifie à chaque
+             ouverture. -->
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
