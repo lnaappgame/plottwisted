@@ -273,6 +273,40 @@ details.legend ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px}
   .phone{border-radius:0;box-shadow:none;min-height:100vh;min-height:100dvh;padding-top:max(18px,env(safe-area-inset-top,0px))}
   .foot{padding:14px 16px 22px}
 }
+
+/* ---------- la grille du jour : cinq pitchs, cinq titres en cases, un clavier collé en bas ---------- */
+/* --n = le plus long mot des 5 titres du jour : la case rétrécit pour que ce mot tienne sur une ligne (18 px à 360 px pour 15 lettres). */
+.g-rows{display:flex;flex-direction:column;gap:10px;--cw:clamp(14px,calc((100vw - 60px - (var(--n,15) - 1) * 2px) / var(--n,15)),24px)}
+/* navigateurs récents : la case se règle sur la largeur réelle de la grille plutôt que sur celle de l'écran */
+@supports (width:1cqw){.g-rows{container-type:inline-size;--cw:clamp(14px,calc((100cqw - 28px - (var(--n,15) - 1) * 2px) / var(--n,15)),24px)}}
+.g-row{background:var(--g-surface);border:1px solid var(--g-line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.g-row.sel{border-color:var(--g-accent);box-shadow:inset 0 0 0 1px var(--g-accent)}
+.g-row.ok{border-color:var(--ok)}
+.g-row.rev{border-color:var(--g-line);border-style:dashed}
+.g-top{background:none;border:0;padding:0;margin:0;display:flex;flex-direction:column;align-items:stretch;gap:8px;width:100%;min-width:0;text-align:left}
+.g-hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.g-hint{font-size:.76rem;font-weight:600;color:var(--g-muted);text-decoration:underline;text-underline-offset:3px}
+.g-ok{font-size:.8rem;font-weight:700;color:var(--ok)}
+.g-ok.rev{color:var(--g-muted)}
+.g-pitch{display:block;font-family:var(--f-display);font-weight:500;font-size:1rem;line-height:1.45;overflow-wrap:break-word}
+.g-title{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.g-word{display:inline-flex;flex-wrap:wrap;gap:4px 2px;max-width:100%}
+.g-cell,.g-fix{display:inline-flex;align-items:center;justify-content:center;height:calc(var(--cw) + 8px);font-family:var(--f-display);font-weight:800;font-size:calc(var(--cw) * .76);line-height:1}
+.g-cell{flex:0 0 var(--cw);width:var(--cw);border-radius:5px;background:var(--g-bg);box-shadow:inset 0 0 0 1px var(--g-line)}
+.g-cell.on{background:var(--g-surface2);box-shadow:none}
+.g-fix{min-width:6px}
+.g-more{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 12px}
+.g-more .link{min-height:40px;padding:8px 2px;align-self:auto;font-size:.86rem}
+.g-kb{position:sticky;bottom:0;margin-top:auto;background:var(--g-bg);display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;
+  padding:10px 0 max(10px,env(safe-area-inset-bottom,0px));box-shadow:0 -12px 12px -8px var(--g-bg)}
+.g-stat{grid-column:1/-1;text-align:center;font-size:.8rem;font-weight:600;color:var(--g-muted);font-variant-numeric:tabular-nums}
+.g-key{min-height:42px;padding:0;border-radius:10px;border:1px solid var(--g-line);background:var(--g-surface2);font-family:var(--f-display);font-weight:800;font-size:1.05rem;touch-action:manipulation}
+.g-key:disabled{cursor:default}
+.g-key.hit{background:color-mix(in oklab,var(--ok) 26%,transparent);border-color:var(--ok);color:var(--ok)}
+.g-key.miss{background:transparent;border-style:dashed;color:var(--g-muted);opacity:.55;text-decoration:line-through}
+/* le message court ne doit ni bloquer ni cacher le clavier de la grille */
+#toast{pointer-events:none}
+#app:has(.g-kb)+#toast{bottom:236px}
 </style>
 </head>
 <body>
@@ -305,7 +339,7 @@ const EPOCH="2026-11-19";
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const links=id=>{const f=F[id],e=encodeURIComponent;const a=f.allocine&&f.allocine.indexOf("allocine.fr")>0?f.allocine:"https://www.allocine.fr/rechercher/?q="+e(f.t);return [["AlloCiné",a],["IMDb","https://www.imdb.com/find/?q="+e(f.t+" "+f.y)],["Google","https://www.google.com/search?q="+e(f.t+" film "+f.y)]];};
 
-const fresh=()=>({screen:"play",first:true,consent:true,dayKey:null,days:0,opened:2,jokers:3,serie:0,gel:1,cards:{},rubans:{},done:{},run:null,cur:null,salle:null,filmo:null,filmoDone:{},adLeft:2,legendSeen:false,jourCounted:false,bonusUsed:false,eclair:null,shareTxt:"",avis:{note:0,plu:"",agace:"",demain:""}});
+const fresh=()=>({screen:"play",first:true,consent:true,dayKey:null,days:0,opened:2,jokers:3,serie:0,gel:1,cards:{},rubans:{},done:{},run:null,cur:null,salle:null,filmo:null,filmoDone:{},adLeft:2,legendSeen:false,jourCounted:false,bonusUsed:false,eclair:null,shareTxt:"",avis:{note:0,plu:"",agace:"",demain:""},grille:null,hist:{}});
 let S=fresh();
 
 const $=id=>document.getElementById(id);
@@ -347,6 +381,10 @@ const linksHTML=id=>`<div class="fiche-links"><span class="eyebrow">Voir la fich
 function vHome(){const t=totals(),rb=Object.keys(S.rubans).length,r=rankInfo(t.st);
  const jour=S.done.jour?`<p class="small muted">Faite aujourd’hui. Reviens demain pour 5 nouveaux films.</p>${S.bonusUsed?"":`<button class="btn" data-act="bonusSeance">Séance bonus : 5 films de plus (vidéo)</button>`}`
   :`<p class="small muted">5 films, les mêmes pour tout le monde. Elle fait avancer ta série.</p><button class="btn" data-act="start" data-arg="jour">Jouer la séance du jour</button>`;
+ const g=gToday(),gn=g?gFound(g):0;
+ const grille=g&&g.done?`<p class="small muted">Terminée en ${plur(g.coups,"coup")}. Reviens demain pour une nouvelle grille.</p><button class="btn soft" data-act="grille">Revoir mon bilan</button>`
+  :g&&(g.coups||gn)?`<p class="small muted">En cours : ${plur(gn,"film")} sur 5, ${plur(g.coups,"coup")}.</p><button class="btn" data-act="grille">Reprendre la grille</button>`
+  :`<p class="small muted">5 titres à compléter lettre par lettre, les mêmes pour tout le monde. À finir en un minimum de coups.</p><button class="btn" data-act="grille">Jouer la grille du jour</button>`;
  const tiles=SALLES.map((s,ix)=>{const ids=inSalle(s.id),got=ids.filter(k=>S.cards[k]>0).length;
   if(ix>=S.opened)return `<div class="salle lock"><strong>${s.n}</strong><span class="meta"><span>S’ouvre en finissant une séance</span></span></div>`;
   return `<button class="salle live" data-act="salle" data-arg="${s.id}"><strong>${s.n}</strong><span class="meta"><span class="dots">${dots(ids)}</span><span>${got}/10 films</span></span></button>`;}).join("");
@@ -354,6 +392,7 @@ function vHome(){const t=totals(),rb=Object.keys(S.rubans).length,r=rankInfo(t.s
  return header()+`
  <div class="box rankbox"><div class="hd"><span><span class="eyebrow">Ton rang</span><b class="rank-n">${r.name}</b></span><span class="small muted">${t.st} ★${r.next?` · ${r.next.name} à ${r.next.at} ★`:""}</span></div><div class="pbar" aria-hidden="true"><i style="width:${r.pct}%"></i></div></div>
  <div class="jour"><span class="eyebrow">${dayLabel()}</span><h2 class="t-l">Séance du jour</h2>${jour}</div>
+ <div class="jour"><span class="eyebrow">Nouveau · n° ${GJ.n}</span><h2 class="t-l">La grille du jour</h2>${grille}</div>
  <div class="coll"><h3>Ta cinémathèque</h3><span class="counts"><span>${t.films} / ${ORDER.length} films</span><span><span class="gold">★</span> ${t.st}</span><span>${rb} bonus</span></span></div>
  <div class="salles">${tiles}</div>
  <span class="eyebrow">Dans le jeu complet</span>
@@ -374,8 +413,9 @@ function vSalle(){const s=salleOf(S.salle);
 /* Le pitch se lit comme une phrase : les noms piégés sont surlignés dans le texte (ils se coupent en fin de ligne comme des mots) et se touchent. */
 const LEG={red:"un autre rôle du même acteur",orange:"un autre acteur du même rôle",violet:"un proche de l’acteur",blue:"le nom de l’acteur",green:"le vrai nom du personnage"};
 function chip(p,k,first,d){const col=S.cur[k];let txt=col==="red"?p.decoy:col==="orange"?p.other:col==="violet"?p.violet:col==="blue"?p.actor:p.real;if(first)txt=cap(txt);
- const act=col==="green"?"":` data-act="unmask" data-arg="${k}" role="button" tabindex="0" aria-label="${txt} : toucher pour démasquer"`;
- return `<span class="mask c-${col}${S.cur.flip===k?" flip":""}${col==="green"?" done":""}${d?" w":""}"${d?` style="--k:${d}"`:""}${act}>${txt}</span>`;}
+ const ro=col==="green"||S.cur.ro; /* ro : pitch en lecture seule (la grille du jour), les noms ne se démasquent pas */
+ const act=ro?"":` data-act="unmask" data-arg="${k}" role="button" tabindex="0" aria-label="${txt} : toucher pour démasquer"`;
+ return `<span class="mask c-${col}${S.cur.flip===k?" flip":""}${ro?" done":""}${d?" w":""}"${d?` style="--k:${d}"`:""}${act}>${txt}</span>`;}
 function pitchHTML(f){const c=S.cur,anim=!c.pitchShown;c.pitchShown=true;let k=0;
  return f.pitch.split(/(\{p1\}|\{p2\})/).map(seg=>{
   if(seg==="{p1}"||seg==="{p2}"){k++;return chip(seg==="{p1}"?f.p1:f.p2,seg==="{p1}"?"c1":"c2",f.pitch.startsWith(seg),anim?k:0);}
@@ -498,9 +538,87 @@ function vShop(){const items=[["Sans pub","3,99 €","Plus aucune pub imposée. 
  <div class="box shop-item"><div><b>Gel de série</b><p class="small muted">Protège ta série un jour où tu ne joues pas. Tu en as ${S.gel}.</p></div><button class="btn soft price" data-act="gelad">1 vidéo</button></div>
  <p class="small muted">Chaque achat dit exactement ce qu’on reçoit. Aucun tirage au hasard.</p>`;}
 
+/* ---------- la grille du jour ---------- */
+/* Cinq films du jour, les mêmes pour tous. Chaque ligne : le pitch piégé et le titre en cases (accents ignorés : É = E).
+   Une lettre se dévoile dans les 5 titres à la fois : 1 coup, présente ou non. Un titre entier proposé : 0 coup s'il est bon, 2 sinon.
+   « Révéler ce film » : 5 coups. La grille ne touche ni aux étoiles, ni aux jokers, ni à la cinémathèque. */
+let GJ={n:1,films:[]},gT0=0;
+const G_ST=["","Trouvé au titre","Complété aux lettres","Révélé"];
+const G_PALIERS=[[6,"Chef-d’œuvre","Tu lis les pitchs comme un livre ouvert."],[12,"Grand film","Peu de lettres, beaucoup de flair."],
+ [18,"Bonne séance","Les lettres t’ont bien aidé."],[Infinity,"Séance de rattrapage","La grille est finie, c’est l’essentiel. Demain, tente plus de titres entiers."]];
+const gBase=ch=>ch.normalize("NFD").charAt(0).toUpperCase(); /* la lettre sans son accent : É → E */
+const gIsL=b=>b.length===1&&b>="A"&&b<="Z";
+const gToday=()=>{const g=S.grille;return g&&g.n===GJ.n&&Array.isArray(g.st)&&Array.isArray(g.films)&&typeof g.letters==="string"?g:null;};
+const gFound=g=>g.st.filter(x=>x>0).length;
+const gFull=(f,g)=>[...f.t].every(ch=>{const b=gBase(ch);return !gIsL(b)||g.letters.includes(b);});
+const gPalier=c=>G_PALIERS.find(p=>c<=p[0]);
+function gDur(ms){const s=Math.round(ms/1000),m=Math.floor(s/60),p=n=>String(n).padStart(2,"0");
+ return m>=60?`${Math.floor(m/60)} h ${p(m%60)} min`:m?`${m} min ${p(s%60)} s`:`${s} s`;}
+const gShare=g=>`Plot Twisted, grille du jour n° ${g.n} : 5 films en ${plur(g.coups,"coup")}, ${gDur(g.ms)}`;
+/* Chronomètre de jeu actif : il ne tourne que sur l'écran de la grille, onglet visible. Une seconde figée (veille, onglet gelé) compte 10 s au plus. */
+function gTick(){const g=S.grille;if(gT0&&g&&!g.done){const now=Date.now();g.ms=(g.ms||0)+Math.max(0,Math.min(now-gT0,10000));gT0=now;}}
+function gRun(){gTick();gT0=S.screen==="grille"&&S.grille&&!S.grille.done&&!document.hidden?Date.now():0;}
+setInterval(()=>{if(!gT0||!S.grille)return;gTick();const el=$("g-time");if(el)el.textContent=gDur(S.grille.ms);},1000);
+
+function gPitch(f,open){const keep=S.cur;S.cur={c1:open?"green":f.p1.c,c2:open?"green":f.p2.c,flip:null,pitchShown:true,ro:true};
+ const h=pitchHTML(f);S.cur=keep;return h;}
+/* Le titre en cases : un bloc par mot (les mots ne se coupent pas), chiffres et ponctuation visibles. */
+function gTitle(f,g,open){return f.t.split(" ").map(w=>`<span class="g-word">${[...w].map(ch=>{const b=gBase(ch);
+  if(!gIsL(b))return /\d/.test(ch)?`<span class="g-cell on">${ch}</span>`:`<span class="g-fix">${esc(ch)}</span>`;
+  const on=open||g.letters.includes(b);return `<span class="g-cell${on?" on":""}">${on?ch.toUpperCase():""}</span>`;}).join("")}</span>`).join("");}
+
+function vGrille(){const g=S.grille,nf=gFound(g),cols=new Set(),inG=new Set();
+ const n=Math.max(9,...g.films.map(id=>Math.max(...F[id].t.split(" ").map(w=>w.length))));
+ const rows=g.films.map((id,i)=>{const f=F[id],st=g.st[i],open=st>0,sel=g.sel===i;
+  [...f.t].forEach(ch=>inG.add(gBase(ch)));cols.add(open?"green":f.p1.c);cols.add(open?"green":f.p2.c);
+  const body=`<span class="g-hd"><span class="eyebrow">Film ${i+1}${open?" · "+f.y:""}</span>${open?`<span class="g-ok${st===3?" rev":""}">${G_ST[st]}</span>`:`<span class="g-hint">${sel?"Fermer":"Proposer le titre"}</span>`}</span>
+   <span class="g-pitch">${gPitch(f,open)}</span><span class="g-title">${gTitle(f,g,open)}</span>`;
+  if(open)return `<div class="g-row ok${st===3?" rev":""}"><div class="g-top">${body}</div></div>`;
+  return `<div class="g-row${sel?" sel":""}"><button class="g-top" data-act="gSel" data-arg="${i}" aria-expanded="${sel}">${body}</button>${sel?`
+   <form class="direct" id="g-form" autocomplete="off"><input id="g-input" type="text" placeholder="Le titre du film" aria-label="Le titre du film ${i+1}" enterkeyhint="done"><button class="btn" type="submit">Valider</button></form>
+   ${g.msg?`<p class="msg" role="alert">${g.msg}</p>`:`<p class="small muted">Bon titre : 0 coup. Erreur : 2 coups. Les petites fautes de frappe passent.</p>`}
+   <div class="g-more"><button class="link" data-act="gReveal" data-arg="${i}">Révéler ce film (+5 coups)</button><button class="link" data-act="gSel" data-arg="${i}">Revenir aux lettres</button></div>`:""}</div>`;}).join("");
+ const intro=g.coups||nf?"":`<p class="small muted">Cinq pitchs piégés, cinq titres à compléter en un minimum de coups. Une lettre se dévoile dans les 5 titres à la fois : 1 coup. Tu reconnais un film ? Touche sa ligne et propose son titre : 0 coup si c’est le bon, 2 sinon.</p>`;
+ const legend=`<p class="legend-line">${Object.keys(LEG).filter(k=>cols.has(k)).map(k=>`<span><i class="sw" style="--nc:var(--n-${k})"></i>${LEG[k]}</span>`).join("")}</p>`;
+ /* Le clavier s'efface quand une ligne est ouverte : le champ de saisie et le clavier du téléphone ont alors toute la place. */
+ const kb=g.sel!=null?"":`<div class="g-kb"><span class="g-stat">${plur(nf,"film")} sur 5 · ${plur(g.coups,"coup")}</span>${"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(L=>{const used=g.letters.includes(L),hit=inG.has(L);
+   return `<button class="g-key${used?(hit?" hit":" miss"):""}" data-act="gKey" data-arg="${L}"${L==="V"?` style="grid-column-start:2"`:""}${used?` disabled aria-label="${L} : ${hit?"présente":"absente"}"`:""}>${L}</button>`;}).join("")}</div>`;
+ return `<div class="hd"><button class="back" data-act="home">‹ Cinémathèque</button><div class="pills"><span class="pill"><b>${g.coups}</b> coup${g.coups>1?"s":""}</span><span class="pill" id="g-time">${gDur(g.ms)}</span></div></div>
+ <div><span class="eyebrow">${dayLabel()} · n° ${g.n}</span><h2 class="t-l">La grille du jour</h2>${intro}</div>
+ ${legend}
+ <div class="g-rows" style="--n:${n}">${rows}</div>
+ ${kb}`;}
+
+function vGBilan(){const g=S.grille,p=gPalier(g.coups);S.shareTxt=gShare(g);
+ return header()+`
+ <div><span class="eyebrow">La grille du jour · n° ${g.n}</span><h2 class="t-xl">Finie en ${plur(g.coups,"coup")}</h2><p class="small muted">5 films en ${gDur(g.ms)}.</p></div>
+ <div class="box"><b class="levelup">${p[1]}</b><span class="small muted">${p[2]}</span></div>
+ <ul class="who">${g.films.map((id,i)=>`<li><b>${F[id].t}</b> <span class="muted">(${F[id].y})</span> : ${G_ST[g.st[i]].toLowerCase()}</li>`).join("")}</ul>
+ <div class="box share"><span class="eyebrow">Ton résultat, sans spoiler</span><pre id="share-txt">${S.shareTxt}</pre><button class="btn" data-act="share">Copier mon résultat</button></div>
+ <p class="small muted">Une grille par jour : la prochaine t’attend demain.</p>
+ <button class="btn ghost" data-act="home">Retour à la cinémathèque</button>`;}
+function gEnd(){const g=S.grille;if(g.st.every(x=>x>0)){gTick();g.done=true;mark("g",2);hist().gc=g.coups;S.screen="gbilan";render();}else render(true);}
+
+/* ---------- historique local des retours ---------- */
+/* Par jour du test (J1 = 19/11) : séance du jour et grille commencées (1) ou finies (2), le premier des deux formats ouvert (p),
+   les autres séances (a : commencée, o : nombre de finies). Tout reste dans le navigateur ; seul l'avis copié par le testeur le résume. */
+const jourN=k=>Math.max(0,Math.round((Date.parse(k||todayKey())-Date.parse(EPOCH))/864e5));
+function hist(){if(!S.hist||typeof S.hist!=="object"||Array.isArray(S.hist))S.hist={};const j=jourN()+1;return S.hist[j]||(S.hist[j]={s:0,g:0,p:"",a:0,o:0});}
+function mark(k,v){const h=hist();if(k==="o")h.o=(h.o||0)+1;else if(!(h[k]>=v))h[k]=v;if((k==="s"||k==="g")&&!h.p)h.p=k;}
+function histTxt(){const H=S.hist&&typeof S.hist==="object"?S.hist:{},js=Object.keys(H).map(Number).filter(j=>j>0).sort((a,b)=>a-b);if(!js.length)return "";
+ const et=v=>v>1?"finie":"commencée",now=Math.max(jourN()+1,js[js.length-1]);
+ const lignes=js.map(j=>{const h=H[j]||{},p=[];
+  if(h.s)p.push("séance "+et(h.s));
+  if(h.g)p.push("grille "+et(h.g)+(h.g>1&&h.gc!=null?" en "+plur(h.gc,"coup"):""));
+  let t=p.join(" + ");if(h.s&&h.g&&h.p)t+=` (${h.p==="g"?"grille":"séance"} d’abord)`;
+  const o=h.o>1?h.o+" séances en salle":h.o===1?"1 séance en salle":h.a?"séance en salle commencée":"";
+  if(o)t+=(t?" + ":"")+o;
+  return "J"+j+" "+(t||"visite seule");});
+ return `\nJours : ${lignes.join(" ; ")}\nRetours : ${plur(js.length,"jour")} différent${js.length>1?"s":""} sur ${now-js[0]+1} (${now===js[0]?"J"+now:"du J"+js[0]+" au J"+now})`;}
+
 /* Avis : rien n'est envoyé. Le testeur copie son avis et le colle dans la discussion des testeurs. */
 function avisTxt(){const t=totals(),a=S.avis;
- return `Mon avis sur Plot Twisted (version test)\nNote : ${a.note||"?"}/5\nCe qui m’a plu : ${a.plu||"-"}\nCe qui m’a agacé ou manqué : ${a.agace||"-"}\nJe reviendrais demain : ${a.demain||"?"}\n(${plur(t.films,"film")} trouvé${t.films>1?"s":""}, ${t.st} étoiles, ${plur(S.days||1,"jour")} de jeu, série de ${S.serie})`;}
+ return `Mon avis sur Plot Twisted (version test)\nNote : ${a.note||"?"}/5\nCe qui m’a plu : ${a.plu||"-"}\nCe qui m’a agacé ou manqué : ${a.agace||"-"}\nJe reviendrais demain : ${a.demain||"?"}\n(${plur(t.films,"film")} trouvé${t.films>1?"s":""}, ${t.st} étoiles, ${plur(S.days||1,"jour")} de jeu, série de ${S.serie})`+histTxt();}
 function vAvis(){const a=S.avis;
  return `<button class="back" data-act="home">‹ Cinémathèque</button><h2 class="t-xl">Ton avis</h2>
  <p class="small muted">Cette version est un essai. Dis franchement ce que tu en penses : c’est ce qui décidera de la suite.</p>
@@ -511,14 +629,15 @@ function vAvis(){const a=S.avis;
  <div class="box share"><span class="eyebrow">Ton message</span><pre id="avis-txt">${esc(avisTxt())}</pre><button class="btn" data-act="avisCopy">Copier mon avis</button></div>
  <p class="small muted">Colle-le ensuite dans la discussion des testeurs. Rien n’est envoyé automatiquement.</p>`;}
 
-const VIEWS={home:vHome,salle:vSalle,play:vPlay,reveal:vReveal,secret:vSecret,consent:vConsent,eclair:vEclair,bilan:vBilan,filmo:vFilmo,shop:vShop,avis:vAvis};
-function render(keep){save();$("app").innerHTML=VIEWS[S.screen]();
+const VIEWS={home:vHome,salle:vSalle,play:vPlay,reveal:vReveal,secret:vSecret,consent:vConsent,eclair:vEclair,bilan:vBilan,filmo:vFilmo,shop:vShop,avis:vAvis,grille:vGrille,gbilan:vGBilan};
+function render(keep){gRun();save();$("app").innerHTML=VIEWS[S.screen]();
  if(S.cur)S.cur.flip=null;
  clearTimeout(waitT);const left=S.cur&&S.cur.lockUntil?S.cur.lockUntil-Date.now():0;
  if(left>0)waitT=setTimeout(()=>{document.querySelectorAll(".wait").forEach(b=>b.classList.remove("wait"));},left);
  /* Filet : si le navigateur fige les animations (onglet en arrière-plan), rien ne doit rester invisible. */
  clearTimeout(animT);animT=setTimeout(()=>{document.querySelectorAll(".w,.pop,.secret-txt,.ticker,.mask.flip,.stars.anim i").forEach(e=>{e.style.animation="none";});},1800);
  const inp=$("direct-input");if(inp)inp.focus({preventScroll:true});
+ const gi=$("g-input");if(gi)gi.focus();
  if(!keep){const r=$("phone").getBoundingClientRect();if(r.top<0)window.scrollBy({top:r.top-12});}}
 
 /* ---------- actions ---------- */
@@ -538,6 +657,7 @@ function startEclair(){const ids=SEANCES[S.run.key].films.slice(0,3),pairs=[];
  const p=shuffle(pairs)[0],o=shuffle(p);S.eclair={a:o[0],b:o[1],res:null,ms:8000};S.cur=null;S.screen="eclair";render();
  clearTimeout(eclairT);eclairT=setTimeout(()=>{if(S.screen==="eclair"&&S.eclair&&S.eclair.res==null){S.eclair.res="late";render(true);}},8000);return true;}
 function finishSeance(){const key=S.run.key,deja=S.done[key];S.done[key]=true;
+ if(key==="jour")mark("s",2);else mark("o");
  if(key==="jour"&&!S.jourCounted){S.serie++;S.jourCounted=true;}
  if(key==="bonus")S.bonusUsed=true;
  if(key!=="jour"&&key!=="bonus"&&!deja&&S.opened<SALLES.length){S.opened++;S.run.newSalle=SALLES[S.opened-1].n;}
@@ -546,7 +666,7 @@ const ACT={
  home(){if(S.run&&S.run.first)S.first=false;S.screen="home";S.run=null;S.cur=null;render();},
  salle(id){if(S.run&&S.run.first)S.first=false;S.salle=id;S.run=null;S.cur=null;S.screen="salle";render();},
  demo(){toast("Dans la maquette, seule la salle Blockbusters est ouverte.");},
- start(key){if(SEANCES[key].salle)S.salle=SEANCES[key].salle;S.run={key,i:0,res:[],rankBefore:rankInfo(totals().st).name};S.adLeft=2;newFilm();render();},
+ start(key){mark(key==="jour"?"s":"a",1);if(SEANCES[key].salle)S.salle=SEANCES[key].salle;S.run={key,i:0,res:[],rankBefore:rankInfo(totals().st).name};S.adLeft=2;newFilm();render();},
  quit(){const back=S.run&&S.run.key!=="jour"&&S.run.key!=="bonus"&&!S.run.first?"salle":"home";if(S.run&&S.run.first)S.first=false;S.screen=back;S.run=null;S.cur=null;render();},
  choose(mode){S.cur.msg="";setMode(mode);render(true);},
  direct(val){const f=film();if(!norm(val)){toast("Écris un titre avant de valider.");return;}
@@ -590,13 +710,34 @@ const ACT={
  demain(v){S.avis.demain=v;render(true);},
  avisCopy(){const txt=avisTxt();const fallback=()=>{const p=$("avis-txt");if(p){const r=document.createRange();r.selectNodeContents(p);const s=getSelection();s.removeAllRanges();s.addRange(r);}toast("Le texte est sélectionné : copie-le.");};
   try{navigator.clipboard.writeText(txt).then(()=>toast("Avis copié : colle-le dans la discussion des testeurs."),fallback);}catch(e){fallback();}},
- reset(){if(Date.now()-(ACT._rz||0)>4000){ACT._rz=Date.now();toast("Touche encore une fois pour effacer ta partie.");return;}ACT._rz=0;S=fresh();boot();toast("Partie remise à zéro.");},
+ /* La remise à zéro efface la partie (grille du jour comprise), pas l'historique des jours de visite : c'est lui qui mesure les retours. */
+ reset(){if(Date.now()-(ACT._rz||0)>4000){ACT._rz=Date.now();toast("Touche encore une fois pour effacer ta partie.");return;}ACT._rz=0;const h=S.hist;S=fresh();if(h)S.hist=h;boot();toast("Partie remise à zéro.");},
+ /* la grille du jour */
+ grille(){if(!GJ.films.length)return;
+  if(!gToday()||S.grille.films.length!==5||!S.grille.films.every(id=>F[id]))S.grille={n:GJ.n,films:GJ.films.slice(),letters:"",st:[0,0,0,0,0],coups:0,ms:0,done:false,sel:null,msg:""};
+  const g=S.grille;g.sel=null;g.msg="";S.run=null;S.cur=null;
+  if(!g.done)mark("g",1);
+  S.screen=g.done?"gbilan":"grille";render();},
+ gSel(i){const g=S.grille;i=+i;if(!g||g.done||g.st[i])return;g.sel=g.sel===i?null:i;g.msg="";render(true);},
+ gKey(L){const g=S.grille;if(!g||g.done||S.screen!=="grille"||g.letters.includes(L))return;
+  g.letters+=L;g.coups++;const fini=[];
+  g.films.forEach((id,i)=>{if(!g.st[i]&&gFull(F[id],g)){g.st[i]=2;fini.push(F[id].t);}});
+  if(fini.length)toast((fini.length>1?"Films complétés : ":"Film complété : ")+fini.join(", ")+".");
+  gEnd();},
+ gGuess(val){const g=S.grille,i=g?g.sel:null;if(i==null||g.done||g.st[i])return;const f=F[g.films[i]];
+  if(!norm(val)){toast("Écris un titre avant de valider.");return;}
+  if(matches(f,val)){g.st[i]=1;g.sel=null;g.msg="";toast("Bien vu : "+f.t+", 0 coup.");gEnd();return;}
+  g.coups+=2;g.msg="Ce n’est pas ce film : +2 coups.";toast(g.msg);render(true);},
+ gReveal(i){const g=S.grille;i=+i;if(!g||g.done||g.st[i])return;g.st[i]=3;g.coups+=5;g.sel=null;g.msg="";toast(F[g.films[i]].t+" révélé : +5 coups.");gEnd();},
  amb(name){setAmb(name);try{localStorage.setItem("pt2-amb",name);}catch(e){}}
 };
 function setAmb(name){$("phone").dataset.amb=name;document.querySelectorAll("[data-act=amb]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.arg===name)));}
 document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b||b.disabled||b.classList.contains("wait"))return;const fn=ACT[b.dataset.act];if(fn)fn(b.dataset.arg);});
 document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("span[role=button][data-act]")){e.preventDefault();e.target.click();}});
-document.addEventListener("submit",e=>{if(e.target.id==="direct-form"){e.preventDefault();ACT.direct($("direct-input").value);}});
+document.addEventListener("submit",e=>{if(e.target.id==="direct-form"){e.preventDefault();ACT.direct($("direct-input").value);}
+ else if(e.target.id==="g-form"){e.preventDefault();ACT.gGuess($("g-input").value);}});
+/* Grille du jour : sur ordinateur, les lettres du clavier jouent comme les touches à l'écran (sauf pendant la saisie d'un titre). */
+document.addEventListener("keydown",e=>{const g=S.grille;if(S.screen!=="grille"||!g||g.sel!=null||e.ctrlKey||e.metaKey||e.altKey||!/^[a-zA-Z]$/.test(e.key)||(e.target.matches&&e.target.matches("input,textarea")))return;ACT.gKey(e.key.toUpperCase());});
 
 document.addEventListener("input",e=>{const id=e.target.id;if(id==="avis-plu"||id==="avis-agace"){S.avis[id==="avis-plu"?"plu":"agace"]=e.target.value;const p=$("avis-txt");if(p)p.textContent=avisTxt();save();}});
 
@@ -604,25 +745,37 @@ document.addEventListener("input",e=>{const id=e.target.id;if(id==="avis-plu"||i
 const KEY="pt2-test-v1";
 function save(){try{localStorage.setItem(KEY,JSON.stringify(Object.assign({},S,{run:null,cur:null,eclair:null,filmo:null})));}catch(e){}}
 function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-/* La séance du jour : 5 films, les mêmes pour tout le monde, 12 jours sans redite. */
-function buildJour(){const n=Math.max(0,Math.round((Date.parse(todayKey())-Date.parse(EPOCH))/864e5)),k=(n*5)%ORDER.length;
- SEANCES.jour={n:"Séance du jour",short:"Séance du jour",films:ORDER.slice(k,k+5)};}
+/* La séance du jour : 5 films, les mêmes pour tout le monde, 12 jours sans redite.
+   La grille du jour prend le bloc situé une demi-boucle plus loin dans le même ordre : jamais les films de la séance du même jour,
+   12 jours sans redite elle aussi, et un film passe d'un format à l'autre à 6 jours d'écart. */
+function buildJour(){const n=jourN(),k=(n*5)%ORDER.length,kg=(k+Math.floor(ORDER.length/10)*5)%ORDER.length;
+ SEANCES.jour={n:"Séance du jour",short:"Séance du jour",films:ORDER.slice(k,k+5)};
+ GJ={n:n+1,films:ORDER.slice(kg,kg+5)};}
 function rollDay(){const t=todayKey();if(S.dayKey===t)return false;
  if(S.dayKey&&S.serie>0){const gap=Math.max(1,Math.round((Date.parse(t)-Date.parse(S.dayKey))/864e5));let manques=(S.done.jour?0:1)+(gap-1);
   while(manques>0&&S.gel>0){S.gel--;manques--;}if(manques>0)S.serie=0;}
  S.dayKey=t;S.days=(S.days||0)+1;S.done.jour=false;S.jourCounted=false;S.bonusUsed=false;return true;}
-function boot(){rollDay();buildJour();
- if(S.first){S.run={key:SALLES[0].id+"1",i:0,res:[],first:true,rankBefore:rankInfo(0).name};S.adLeft=2;newFilm();}
+function boot(){rollDay();buildJour();hist();
+ if(S.first){mark("a",1);S.run={key:SALLES[0].id+"1",i:0,res:[],first:true,rankBefore:rankInfo(0).name};S.adLeft=2;newFilm();}
  else{S.screen="home";S.run=null;S.cur=null;}
  render(true);}
 function load(data){SALLES=data.salles.map(s=>({id:s.id,n:s.nom,hue:HUES[s.id]||200}));F=data.films;
  data.salles.forEach(s=>{SEANCES[s.id+"1"]={n:s.nom+" · séance 1",short:"Séance 1",salle:s.id,films:s.s1,bonus:FILMO_DE[s.id]};
   SEANCES[s.id+"2"]={n:s.nom+" · séance 2",short:"Séance 2",salle:s.id,films:s.s2};});
  const rnd=mulberry(20261119),ids=Object.keys(F).sort();for(let i=ids.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}ORDER=ids;
- try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(fresh(),JSON.parse(raw));}catch(e){}
+ try{const raw=localStorage.getItem(KEY);if(raw){const old=JSON.parse(raw);S=Object.assign(fresh(),old);
+   /* sauvegarde d'avant la grille du jour : on ne connaît que le dernier jour de visite, on le reporte dans l'historique */
+   if(old&&!old.hist&&old.dayKey){const fait=old.done&&old.done.jour;S.hist={};S.hist[jourN(old.dayKey)+1]={s:fait?2:0,g:0,p:fait?"s":"",a:0,o:0};}}}catch(e){}
  if(!S.avis)S.avis=fresh().avis;
+ if(!S.hist||typeof S.hist!=="object"||Array.isArray(S.hist))S.hist={};
+ if(!S.grille||typeof S.grille!=="object")S.grille=null;
  boot();}
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&ORDER.length&&!S.run&&rollDay()){buildJour();S.screen="home";render();}});
+/* Onglet caché : le chronomètre de la grille s'arrête et la partie est enregistrée. Onglet revenu : la visite du jour est notée. */
+document.addEventListener("visibilitychange",()=>{if(!ORDER.length)return;
+ if(document.hidden){gRun();save();return;}
+ hist();
+ if(!S.run&&rollDay()){buildJour();S.screen="home";render();}else{gRun();save();}});
+window.addEventListener("pagehide",()=>{if(!ORDER.length)return;gTick();gT0=0;save();});
 fetch("films.json").then(r=>r.json()).then(load).catch(()=>{$("app").innerHTML="<p>Le jeu n’a pas pu se charger. Vérifie ta connexion, puis recharge la page.</p>";});
 </script>
 
