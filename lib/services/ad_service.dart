@@ -35,7 +35,7 @@ class AdService {
   /// Flux de consentement RGPD (UMP) — obligatoire avant toute requête
   /// publicitaire pour les utilisateurs UE/UK/Suisse (détecté automatiquement
   /// par Google via l'IP, aucune détection à coder ici). À appeler une seule
-  /// fois au démarrage, avant [preload] et avant `MobileAds.instance.initialize()`.
+  /// fois au démarrage, avant [enableAds] et avant `MobileAds.instance.initialize()`.
   /// Retourne `false` (jamais bloquant) en cas d'erreur ou de refus — l'app
   /// continue simplement sans pub.
   Future<bool> requestConsentAndPrepareAds() async {
@@ -115,128 +115,121 @@ class AdService {
           ? 'ca-app-pub-7543651245365030/7785055396'
           : 'ca-app-pub-3940256099942544/5224354917';
 
-  // Chargement « à la demande » (08/11/2026). Avant, preload() chargeait au
-  // lancement une interstitielle ET une pub à récompense, souvent jamais
-  // affichées (paliers de fréquence, bouton joker pas touché) : 125 demandes
-  // AdMob pour 56 impressions le 07/11, autant de mégaoctets et de batterie
-  // dépensés pour rien chez les joueurs. Désormais :
-  //  - l'interstitielle n'est chargée que lorsque le niveau qui démarre en
-  //    déclenchera une à sa résolution (GameState.loadPuzzle → prepareForcedAd) ;
-  //  - la pub à récompense n'est chargée qu'au moment où le joueur la
-  //    demande, et l'appel attend son chargement (quelques secondes) ;
-  //  - un chargement en cours est partagé : un double tap ne déclenche pas
-  //    une deuxième requête ;
-  //  - aucun rechargement « pour la prochaine fois » après un affichage.
+  // Préchargement, rétabli le 20/11/2026 (décision de Damien). Une
+  // interstitielle et une pub à récompense sont gardées prêtes : chargées au
+  // lancement, puis rechargées après chaque affichage.
+  //
+  // Règle : une pub n'est montrée que si elle est DÉJÀ prête à l'instant où
+  // elle est demandée. On n'attend jamais un chargement, pour qu'aucune pub
+  // plein écran n'apparaisse en retard, sous le doigt du joueur.
+  //
+  // Historique : la 1.0.13 chargeait les pubs à la demande, pour économiser
+  // des requêtes (125 demandes pour 56 impressions le 07/11), et attendait
+  // jusqu'à 3 s l'interstitielle et 8 s la pub à récompense, écran de jeu
+  // visible dessous. La semaine suivante, le taux de clics de l'interstitielle
+  // Android en France est passé d'environ 6 % à 17 % (relevé AdMob du 20/11,
+  // lien de cause non démontré). Un clic accidentel met en danger le compte
+  // AdMob commun à tous les jeux : on préfère quelques requêtes en trop.
   bool _enabled = false;
-  Future<InterstitialAd?>? _interstitialLoading;
-  Future<RewardedAd?>? _rewardedLoading;
-
-  /// Attente maximale d'un chargement demandé par le joueur (pub à récompense).
-  static const Duration _rewardedLoadTimeout = Duration(seconds: 8);
-
-  /// Attente maximale de l'interstitielle préparée en avance, si elle n'est
-  /// pas encore arrivée au moment de la montrer.
-  static const Duration _interstitialGrace = Duration(seconds: 3);
+  bool _interstitialLoading = false;
+  bool _rewardedLoading = false;
 
   bool get _canRequest => _enabled && _adsSupported;
 
   /// À appeler une fois au démarrage, après le consentement et
-  /// `MobileAds.instance.initialize()` : autorise les requêtes publicitaires.
-  /// Ne charge rien par lui-même.
+  /// `MobileAds.instance.initialize()` : autorise les requêtes publicitaires
+  /// et précharge une pub de chaque format.
   void enableAds() {
     if (!_adsSupported) return;
     _enabled = true;
+    preload();
   }
 
-  /// Charge l'interstitielle en avance, à appeler quand démarre un niveau qui
-  /// en déclenchera une à sa résolution (voir GameState.loadPuzzle). Sans
-  /// effet si une pub est déjà prête ou en cours de chargement, si le joueur
-  /// est sans pub, ou si les pubs ne sont pas activées (tests, web,
-  /// consentement refusé).
+  /// Garde une pub de chaque format prête. Sans effet pour un format déjà
+  /// prêt ou en cours de chargement, ni si les pubs ne sont pas activées
+  /// (tests, web, consentement refusé).
+  void preload() {
+    prepareForcedAd();
+    _preloadRewarded();
+  }
+
+  /// S'assure qu'une interstitielle est prête ou en cours de chargement.
+  /// Appelé au lancement, après chaque affichage, et en filet quand démarre
+  /// un niveau qui en déclenchera une à sa résolution (GameState.loadPuzzle),
+  /// au cas où le chargement précédent aurait échoué. Rien n'est chargé pour
+  /// un joueur sans pub.
   void prepareForcedAd() {
     if (!_canRequest || isCurrentlyAdFree) return;
-    if (_interstitialAd != null || _interstitialLoading != null) return;
-    _interstitialLoading = _loadInterstitial();
-  }
-
-  Future<InterstitialAd?> _loadInterstitial() async {
-    final completer = Completer<InterstitialAd?>();
+    if (_interstitialAd != null || _interstitialLoading) return;
+    _interstitialLoading = true;
     try {
-      await InterstitialAd.load(
+      unawaited(InterstitialAd.load(
         adUnitId: _interstitialUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
             _interstitialAd = ad;
-            if (!completer.isCompleted) completer.complete(ad);
+            _interstitialLoading = false;
           },
-          onAdFailedToLoad: (_) {
-            if (!completer.isCompleted) completer.complete(null);
-          },
+          onAdFailedToLoad: (_) => _interstitialLoading = false,
         ),
-      );
+      ).catchError((Object _) {
+        _interstitialLoading = false;
+      }));
     } catch (_) {
-      if (!completer.isCompleted) completer.complete(null);
+      _interstitialLoading = false;
     }
-    final ad = await completer.future;
-    _interstitialLoading = null;
-    return ad;
   }
 
-  Future<RewardedAd?> _loadRewarded() async {
-    final completer = Completer<RewardedAd?>();
+  /// S'assure qu'une pub à récompense est prête ou en cours de chargement.
+  /// Chargée même pour un joueur « sans pub » : il garde le droit de regarder
+  /// une vidéo pour gagner un joker.
+  void _preloadRewarded() {
+    if (!_canRequest) return;
+    if (_rewardedAd != null || _rewardedLoading) return;
+    _rewardedLoading = true;
     try {
-      await RewardedAd.load(
+      unawaited(RewardedAd.load(
         adUnitId: _rewardedUnitId,
         request: const AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (ad) {
             _rewardedAd = ad;
-            if (!completer.isCompleted) completer.complete(ad);
+            _rewardedLoading = false;
           },
-          onAdFailedToLoad: (_) {
-            if (!completer.isCompleted) completer.complete(null);
-          },
+          onAdFailedToLoad: (_) => _rewardedLoading = false,
         ),
-      );
+      ).catchError((Object _) {
+        _rewardedLoading = false;
+      }));
     } catch (_) {
-      if (!completer.isCompleted) completer.complete(null);
-    }
-    final ad = await completer.future;
-    _rewardedLoading = null;
-    return ad;
-  }
-
-  /// Attend (au plus [timeout]) un chargement déjà en cours, sans en lancer
-  /// un nouveau. Un dépassement n'annule pas le chargement : la pub arrivée
-  /// en retard reste prête pour la prochaine demande.
-  Future<T?> _awaitPending<T>(Future<T?>? pending, Duration timeout) async {
-    if (pending == null) return null;
-    try {
-      return await pending.timeout(timeout);
-    } catch (_) {
-      return null;
+      _rewardedLoading = false;
     }
   }
 
-  /// Pub interstitielle forcée. Si la pub préparée par [prepareForcedAd]
-  /// n'est pas encore arrivée, on l'attend brièvement ; sinon le niveau
-  /// suivant démarre simplement sans pub cette fois-ci (aucun blocage maison
-  /// de secours, et aucun chargement « pour la prochaine fois »).
+  /// Pub interstitielle forcée. Affichée seulement si elle est déjà prête ;
+  /// sinon le niveau suivant démarre sans pub cette fois-ci (aucune attente,
+  /// aucun blocage maison de secours) et un chargement part pour la
+  /// prochaine occasion.
   Future<void> showForcedAd() async {
     if (isCurrentlyAdFree || !_canRequest) return;
-    final ad = _interstitialAd ?? await _awaitPending(_interstitialLoading, _interstitialGrace);
-    if (ad == null) return;
+    final ad = _interstitialAd;
+    if (ad == null) {
+      prepareForcedAd();
+      return;
+    }
     _interstitialAd = null;
     final completer = Completer<void>();
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
         if (!completer.isCompleted) completer.complete();
+        prepareForcedAd();
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
         ad.dispose();
         if (!completer.isCompleted) completer.complete();
+        prepareForcedAd();
       },
     );
     try {
@@ -247,28 +240,25 @@ class AdService {
       // éventuel indicateur "pub en cours" côté appelant resterait bloqué.
       ad.dispose();
       if (!completer.isCompleted) completer.complete();
+      prepareForcedAd();
       return;
     }
     await completer.future;
     analytics.logAdWatched(type: 'interstitial');
   }
 
-  /// Pub à récompense pour le bouton "Gagner un joker", chargée à la demande :
-  /// l'appel attend le chargement (au plus [_rewardedLoadTimeout]) puis
-  /// affiche la pub. Retourne true seulement si la récompense a effectivement
-  /// été gagnée (pub regardée jusqu'au bout) ; false si rien n'a pu être
-  /// chargé à temps (l'appelant affiche « pub indisponible »).
+  /// Pub à récompense pour le bouton "Gagner un joker". Affichée seulement si
+  /// elle est déjà prête. Retourne true seulement si la récompense a
+  /// effectivement été gagnée (pub regardée jusqu'au bout) ; false si aucune
+  /// pub n'est prête : l'appelant affiche « pub indisponible », un chargement
+  /// part, et le joueur peut retoucher le bouton quelques secondes plus tard.
   Future<bool> showRewardedAdForJoker() async {
     if (!_canRequest) return false;
-    var ad = _rewardedAd;
+    final ad = _rewardedAd;
     if (ad == null) {
-      _rewardedLoading ??= _loadRewarded();
-      ad = await _awaitPending(_rewardedLoading, _rewardedLoadTimeout);
-      if (ad == null) return false;
+      _preloadRewarded();
+      return false;
     }
-    // Deux taps pendant le même chargement reçoivent la même pub : seul le
-    // premier arrivé ici l'affiche, l'autre repart sans rien demander.
-    if (!identical(_rewardedAd, ad)) return false;
     _rewardedAd = null;
     var earned = false;
     final completer = Completer<bool>();
@@ -276,10 +266,12 @@ class AdService {
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
         if (!completer.isCompleted) completer.complete(earned);
+        _preloadRewarded();
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
         ad.dispose();
         if (!completer.isCompleted) completer.complete(false);
+        _preloadRewarded();
       },
     );
     try {
@@ -289,6 +281,7 @@ class AdService {
       // doit jamais laisser un bouton "pub en cours" bloqué côté appelant.
       ad.dispose();
       if (!completer.isCompleted) completer.complete(false);
+      _preloadRewarded();
       return false;
     }
     final result = await completer.future;

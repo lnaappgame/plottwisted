@@ -737,9 +737,10 @@ class GameState extends ChangeNotifier implements TitleGrid {
     jokersUsed = [];
     solvedWithSkip = false;
 
-    // Pub forcée : l'interstitielle n'est chargée que si ce niveau en
-    // déclenchera une à sa résolution (voir AdService.prepareForcedAd), le
-    // temps de la partie suffit largement au chargement.
+    // Pub forcée : l'interstitielle est préchargée au lancement et après
+    // chaque affichage (voir AdService.preload). Filet : si ce niveau en
+    // déclenchera une à sa résolution et qu'aucune n'est prête (chargement
+    // échoué), on en redemande une, le temps de la partie suffit largement.
     if (mustShowForcedAd) adService.prepareForcedAd();
 
     if (!orangeIntroShown && (p1State == NameColor.orange || p2State == NameColor.orange)) {
