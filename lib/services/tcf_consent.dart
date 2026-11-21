@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_android/shared_preferences_android.dart';
+import 'analytics_service.dart';
 
 /// Consentement Analytics lu dans la réponse du joueur à la fenêtre RGPD
 /// (UMP de Google, norme IAB TCF v2.2) — 1.0.13.
@@ -52,10 +53,13 @@ class TcfConsent {
   /// Active ou coupe la collecte Analytics selon le consentement courant.
   /// Appelé au démarrage (après le popup) et à la fermeture du formulaire
   /// « Options de confidentialité des pubs » des Réglages.
-  static Future<void> applyToAnalytics({required bool canRequestAds}) async {
+  static Future<bool> applyToAnalytics({required bool canRequestAds}) async {
     final enabled = canRequestAds && await analyticsAllowed();
     try {
       await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(enabled);
     } catch (_) {}
+    // Ce qui attendait la réponse part (accord) ou est effacé (refus), 1.0.16.
+    AnalyticsService.consentDecided(enabled);
+    return enabled;
   }
 }

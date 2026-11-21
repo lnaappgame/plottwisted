@@ -1,7 +1,10 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform, debugPrint;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'ad_click_guard.dart';
 import 'analytics_service.dart';
+import 'consent_flow.dart';
 import 'tcf_consent.dart';
 
 /// Service publicitaire branché sur AdMob (google_mobile_ads).
@@ -19,7 +22,16 @@ import 'tcf_consent.dart';
 /// sont simplement indisponibles (aucune récompense, aucun blocage).
 class AdService {
   final AnalyticsService analytics;
-  AdService({AnalyticsService? analytics}) : analytics = analytics ?? AnalyticsService();
+  AdService({AnalyticsService? analytics, AdClickGuard? clickGuard})
+      : analytics = analytics ?? AnalyticsService(),
+        clickGuard = clickGuard ?? AdClickGuard();
+
+  /// Plafond de clics par jour (voir [AdClickGuard]).
+  final AdClickGuard clickGuard;
+
+  /// Vrai tant que le premier lancement n'est pas terminé : aucune pub n'est
+  /// montrée avant la fin du tutoriel (1.0.16).
+  bool adsHeld = false;
 
   bool isAdFree = false; // achat "retrait des pubs" (définitif)
   DateTime? adFreeUntil; // retrait temporaire (ex. pack "30 jokers + no ads 24h")
@@ -50,19 +62,74 @@ class AdService {
         ConsentRequestParameters(),
         () async {
           try {
-            await ConsentForm.loadAndShowConsentFormIfRequired((_) async {
+            await ConsentForm.loadAndShowConsentFormIfRequired((formError) async {
+              if (formError != null) reportUmpError('form', formError.errorCode, formError.message);
               resolve(await ConsentInformation.instance.canRequestAds());
             });
-          } catch (_) {
+          } catch (e) {
+            reportUmpError('form', 0, '$e');
             resolve(false);
           }
         },
-        (_) => resolve(false),
+        (error) {
+          reportUmpError('update', error.errorCode, error.message);
+          resolve(false);
+        },
       );
-    } catch (_) {
+    } catch (e) {
+      reportUmpError('update', 0, '$e');
       resolve(false);
     }
     return completer.future;
+  }
+
+  /// Règle C7 (1.0.16) : mise à jour UMP sans fenêtre au lancement. Vrai si
+  /// rien n'est à demander (accord déjà donné, ou pays où le consentement
+  /// n'est pas requis) : la mesure et les pubs peuvent démarrer tout de suite.
+  /// Faux en cas d'erreur : la fenêtre suit alors son moment habituel.
+  Future<bool> consentAlreadySettled() async {
+    if (!_adsSupported) return false;
+    final done = Completer<bool>();
+    void resolve(bool v) {
+      if (!done.isCompleted) done.complete(v);
+    }
+
+    try {
+      ConsentInformation.instance.requestConsentInfoUpdate(
+        ConsentRequestParameters(),
+        () async {
+          try {
+            final status = await ConsentInformation.instance.getConsentStatus();
+            final settled = status == ConsentStatus.notRequired || status == ConsentStatus.obtained;
+            resolve(settled && await ConsentInformation.instance.canRequestAds());
+          } catch (e) {
+            reportUmpError('status', 0, '$e');
+            resolve(false);
+          }
+        },
+        (error) {
+          reportUmpError('update', error.errorCode, error.message);
+          resolve(false);
+        },
+      );
+    } catch (e) {
+      reportUmpError('update', 0, '$e');
+      resolve(false);
+    }
+    return done.future;
+  }
+
+  /// Une erreur de la fenêtre de consentement ne reste jamais invisible :
+  /// erreur non fatale dans Crashlytics (hors consentement, comme les
+  /// plantages), jamais d'événement Analytics `ump_error`.
+  void reportUmpError(String stage, int code, String message) {
+    debugPrint('UMP en erreur ($stage, $code) : $message');
+    try {
+      unawaited(FirebaseCrashlytics.instance
+          .recordError(StateError('UMP $stage $code : $message'), null,
+              reason: 'consentement UMP en erreur', fatal: false)
+          .catchError((Object _) {}));
+    } catch (_) {}
   }
 
   /// `true` si un bouton "Options de confidentialité des pubs" doit être
@@ -142,7 +209,7 @@ class AdService {
   void enableAds() {
     if (!_adsSupported) return;
     _enabled = true;
-    preload();
+    unawaited(clickGuard.load().whenComplete(preload));
   }
 
   /// Garde une pub de chaque format prête. Sans effet pour un format déjà
@@ -212,7 +279,7 @@ class AdService {
   /// aucun blocage maison de secours) et un chargement part pour la
   /// prochaine occasion.
   Future<void> showForcedAd() async {
-    if (isCurrentlyAdFree || !_canRequest) return;
+    if (isCurrentlyAdFree || !_canRequest || adsHeld || clickGuard.interstitialsBlocked) return;
     final ad = _interstitialAd;
     if (ad == null) {
       prepareForcedAd();
@@ -221,6 +288,7 @@ class AdService {
     _interstitialAd = null;
     final completer = Completer<void>();
     ad.fullScreenContentCallback = FullScreenContentCallback(
+      onAdClicked: (_) => unawaited(clickGuard.recordClick()),
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
         if (!completer.isCompleted) completer.complete();
@@ -253,7 +321,24 @@ class AdService {
   /// pub n'est prête : l'appelant affiche « pub indisponible », un chargement
   /// part, et le joueur peut retoucher le bouton quelques secondes plus tard.
   Future<bool> showRewardedAdForJoker() async {
-    if (!_canRequest) return false;
+    // Règle C7 : une vidéo demandée avant la réponse au consentement ouvre la
+    // fenêtre maintenant ; la vidéo se charge dès que la réponse est traitée.
+    final gate = ConsentGate.instance;
+    var justConsented = false;
+    if (gate.waiting) {
+      gate.askNow();
+      await gate.decided;
+      justConsented = true;
+    }
+    if (!_canRequest || adsHeld) return false;
+    if (_rewardedAd == null && justConsented) {
+      // Les pubs viennent juste d'être activées : le joueur a demandé cette
+      // vidéo, on lui laisse quelques secondes pour qu'elle se charge.
+      _preloadRewarded();
+      for (var i = 0; i < 30 && _rewardedAd == null && _rewardedLoading; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+      }
+    }
     final ad = _rewardedAd;
     if (ad == null) {
       _preloadRewarded();
@@ -263,6 +348,7 @@ class AdService {
     var earned = false;
     final completer = Completer<bool>();
     ad.fullScreenContentCallback = FullScreenContentCallback(
+      onAdClicked: (_) => unawaited(clickGuard.recordClick()),
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
         if (!completer.isCompleted) completer.complete(earned);
