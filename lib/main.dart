@@ -423,6 +423,14 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Android 11 peut retarder une alarme inexacte jusqu'à 75 % du délai
+      // restant : on repose les rappels à chaque retour au premier plan.
+      final game = context.read<GameState>();
+      unawaited(context
+          .read<NotificationService>()
+          .refreshOnResume(locale: context.read<AppSettings>().locale, advent: game.advent));
+    }
     // Filet de sécurité : force l'écriture immédiate de la sauvegarde quand
     // l'app passe en arrière-plan ou se ferme, sans attendre le débounce.
     if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {

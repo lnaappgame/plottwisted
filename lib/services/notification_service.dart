@@ -53,9 +53,64 @@ class NotificationService {
     await init();
     final granted = await requestPermission();
     if (!granted) return;
+    remindersArmed = true;
     await scheduleDailyDefiReminder(locale: locale);
     await scheduleWeeklyEnigmeReminder(locale: locale);
     await scheduleAdventReminders(advent.reminderTimes(), locale: locale);
+  }
+
+  /// Vrai une fois la permission accordée et les rappels posés. Tant qu'il est
+  /// faux (nouveau joueur avant la fin du tutoriel, permission refusée), la
+  /// reprise ne crée aucun rappel.
+  bool remindersArmed = false;
+
+  /// Notifications encore autorisées dans les réglages du téléphone ? (Un
+  /// joueur qui les a coupées ne voit jamais un rappel recréé.)
+  Future<bool> notificationsEnabled() async {
+    if (!_supported) return false;
+    try {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        return await _plugin
+                .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+                ?.areNotificationsEnabled() ??
+            false;
+      }
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Annule un rappel par son identifiant.
+  Future<void> cancelReminder(int id) async {
+    if (!_supported) return;
+    try {
+      await _plugin.cancel(id: id);
+    } catch (_) {}
+  }
+
+  /// Retour au premier plan (`AppLifecycleState.resumed`) : sur Android 11, une
+  /// alarme inexacte peut partir jusqu'à 75 % du délai restant en retard (un
+  /// rappel de 18 h posé à 13 h 42 peut sortir à 21 h 13 ; Android 12+ limite
+  /// à 1 h). On annule puis repose les mêmes rappels (mêmes identifiants,
+  /// même heure, même mode inexact) pour que le délai restant soit court.
+  /// Ne fait rien si les rappels n'ont pas été armés (tutoriel en cours,
+  /// permission refusée) ou si le joueur les a coupés.
+  Future<void> refreshOnResume({required String locale, required AdventCalendar advent}) async {
+    if (!remindersArmed) return;
+    if (!await notificationsEnabled()) {
+      remindersArmed = false;
+      return;
+    }
+    final advents = advent.reminderTimes();
+    await cancelReminder(_idDefiDuJour);
+    await cancelReminder(_idEnigmeSemaine);
+    for (final day in advents.keys) {
+      await cancelReminder(_idAventBase + day);
+    }
+    await scheduleDailyDefiReminder(locale: locale);
+    await scheduleWeeklyEnigmeReminder(locale: locale);
+    await scheduleAdventReminders(advents, locale: locale);
   }
 
   /// Demande la permission d'envoyer des notifications (obligatoire à partir
