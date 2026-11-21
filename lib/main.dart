@@ -50,7 +50,10 @@ Future<void> main() async {
   // voit jamais le premier lancement allégé.
   final freshInstall = await saveService.loadSettings() == null;
   await appSettings.restore();
-  if (freshInstall) appSettings.beginOnboarding();
+  if (freshInstall) {
+    // Langue du téléphone au tout premier lancement (fr* = français, sinon anglais).
+    appSettings.beginOnboarding(deviceLanguage: PlatformDispatcher.instance.locale.languageCode);
+  }
   ForegroundClock.instance.start();
   // Persiste immédiatement (plutôt que d'attendre un premier changement de
   // réglage, qui peut ne jamais arriver) : sinon firstLaunchDay et playerId,

@@ -69,10 +69,22 @@ class AppSettings extends ChangeNotifier {
   int onboardingStep = 0;
 
   /// Nouvelle installation : le premier lancement allégé commence.
-  void beginOnboarding() {
+  ///
+  /// [deviceLanguage] : code de langue du téléphone ("fr", "en", "de"...). À la
+  /// toute première ouverture, `fr*` donne le français, toute autre langue
+  /// l'anglais ; elle est enregistrée comme un choix du joueur (changeable
+  /// dans les réglages).
+  void beginOnboarding({String? deviceLanguage}) {
     onboardingActive = true;
     onboardingStep = 0;
+    if (deviceLanguage != null) locale = localeForDeviceLanguage(deviceLanguage);
     notifyListeners();
+  }
+
+  /// Langue du jeu pour une langue de téléphone : français pour `fr*`, sinon anglais.
+  static String localeForDeviceLanguage(String code) {
+    final c = code.toLowerCase();
+    return c == 'fr' || c.startsWith('fr_') || c.startsWith('fr-') ? 'fr' : 'en';
   }
 
   /// Fin du tutoriel (ou sortie par « J'ai déjà joué ») : le jeu redevient
