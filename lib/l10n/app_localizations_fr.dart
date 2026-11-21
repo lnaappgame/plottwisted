@@ -589,6 +589,28 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameTutorialCategory => 'Tutoriel';
 
   @override
+  String get onboardRule1 =>
+      'Le nom en 🟢 vert est le vrai personnage. Quel est ce film ?';
+
+  @override
+  String get onboardRule2 =>
+      'Le nom en 🔵 bleu est le vrai acteur de ce rôle. Le vert reste le vrai personnage.';
+
+  @override
+  String get onboardRule3 =>
+      'Le nom en 🔴 rouge est un rôle du même acteur dans un autre film. Le vert reste le vrai personnage.';
+
+  @override
+  String get onboardAlreadyPlayed => 'J\'ai déjà joué';
+
+  @override
+  String get onboardDone =>
+      'Tutoriel terminé ! Le monde 1 est débloqué.\n\nUn nouveau défi t\'attend chaque jour : reviens demain !';
+
+  @override
+  String get onboardContinue => 'CONTINUER';
+
+  @override
   String homeStreakDays(int days) {
     return '📅 $days JOURS D\'AFFILÉE !';
   }

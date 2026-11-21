@@ -59,6 +59,39 @@ class AppSettings extends ChangeNotifier {
   int reviewRequestCount = 0;
   DateTime? lastReviewRequest;
 
+  // Premier lancement allégé (1.0.16, B1) : vrai seulement pour une toute
+  // nouvelle installation, de son ouverture jusqu'à la fin du tutoriel (ou
+  // « J'ai déjà joué »). Un joueur existant ne l'a jamais : la clé est absente
+  // de sa sauvegarde, donc faux.
+  bool onboardingActive = false;
+  // Dernière étape du premier lancement déjà mesurée (`tutorial_step`) : chaque
+  // étape n'est comptée qu'une fois, même si le joueur quitte et revient.
+  int onboardingStep = 0;
+
+  /// Nouvelle installation : le premier lancement allégé commence.
+  void beginOnboarding() {
+    onboardingActive = true;
+    onboardingStep = 0;
+    notifyListeners();
+  }
+
+  /// Fin du tutoriel (ou sortie par « J'ai déjà joué ») : le jeu redevient
+  /// celui de tout le monde.
+  void endOnboarding() {
+    if (!onboardingActive) return;
+    onboardingActive = false;
+    notifyListeners();
+  }
+
+  /// Retient l'étape [step] du premier lancement. Vrai si elle est nouvelle
+  /// (à mesurer), faux si elle l'a déjà été.
+  bool markOnboardingStep(int step) {
+    if (step <= onboardingStep) return false;
+    onboardingStep = step;
+    notifyListeners();
+    return true;
+  }
+
   // Saisie des lettres dans le jeu principal, l'énigme et le multijoueur :
   // 'tiles' (tuiles mélangées, par défaut), 'azerty' ou 'qwerty' (clavier
   // à l'écran, lettres proposées en surbrillance).
@@ -132,7 +165,11 @@ class AppSettings extends ChangeNotifier {
   /// plus [kMaxReviewRequests] par installation, espacées d'au moins
   /// [kReviewRequestGap]. Les stores filtrent aussi de leur côté (l'App
   /// Store n'affiche la fenêtre que 3 fois par an).
-  bool consumeReviewRequestPending({DateTime? now}) {
+  ///
+  /// Jamais pendant le tutoriel ([inTutorial], ou premier lancement encore en
+  /// cours) : la demande attend un autre moment, sans être comptée.
+  bool consumeReviewRequestPending({DateTime? now, bool inTutorial = false}) {
+    if (inTutorial || onboardingActive) return false;
     final t = now ?? DateTime.now();
     if (reviewRequestCount >= kMaxReviewRequests) return false;
     final last = lastReviewRequest;
@@ -160,6 +197,8 @@ class AppSettings extends ChangeNotifier {
         'lastReviewRequest': lastReviewRequest?.toIso8601String(),
         'inputMode': inputMode,
         'inputModeTipShown': inputModeTipShown,
+        'onboardingActive': onboardingActive,
+        'onboardingStep': onboardingStep,
         'firstLaunchDay': firstLaunchDay.toIso8601String(),
       };
 
@@ -190,6 +229,8 @@ class AppSettings extends ChangeNotifier {
     final mode = data['inputMode'] as String?;
     inputMode = const ['tiles', 'azerty', 'qwerty'].contains(mode) ? mode! : 'tiles';
     inputModeTipShown = data['inputModeTipShown'] as bool? ?? false;
+    onboardingActive = data['onboardingActive'] as bool? ?? false;
+    onboardingStep = data['onboardingStep'] as int? ?? 0;
     playerName = data['playerName'] as String? ?? playerName;
     playerId = data['playerId'] as String? ?? playerId;
     avatar = data['avatar'] as String? ?? avatar;

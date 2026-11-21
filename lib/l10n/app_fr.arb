@@ -194,6 +194,12 @@
   "@gameWorldCompleteMajor": {"placeholders": {"world": {"type": "String"}, "major": {"type": "String"}}},
   "gameAllContentComplete": "Cher cinéphile, de nouveaux niveaux arrivent très vite.",
   "gameTutorialCategory": "Tutoriel",
+  "onboardRule1": "Le nom en 🟢 vert est le vrai personnage. Quel est ce film ?",
+  "onboardRule2": "Le nom en 🔵 bleu est le vrai acteur de ce rôle. Le vert reste le vrai personnage.",
+  "onboardRule3": "Le nom en 🔴 rouge est un rôle du même acteur dans un autre film. Le vert reste le vrai personnage.",
+  "onboardAlreadyPlayed": "J'ai déjà joué",
+  "onboardDone": "Tutoriel terminé ! Le monde 1 est débloqué.\n\nUn nouveau défi t'attend chaque jour : reviens demain !",
+  "onboardContinue": "CONTINUER",
 
   "homeStreakDays": "📅 {days} JOURS D'AFFILÉE !",
   "@homeStreakDays": {"placeholders": {"days": {"type": "int"}}},

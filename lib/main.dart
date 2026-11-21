@@ -19,6 +19,7 @@ import 'services/analytics_service.dart';
 import 'services/app_settings.dart';
 import 'services/tcf_consent.dart';
 import 'services/cloud_sync_service.dart';
+import 'services/consent_flow.dart';
 import 'services/defi_state.dart';
 import 'services/enigme_state.dart';
 import 'services/game_state.dart';
@@ -44,7 +45,13 @@ Future<void> main() async {
   final adService = AdService(analytics: analytics);
   final saveService = SaveService();
   final appSettings = AppSettings(saveService: saveService);
+  // Toute première ouverture du jeu sur cet appareil (1.0.16, B1) : aucune
+  // préférence enregistrée. Un joueur existant a déjà les siennes, donc ne
+  // voit jamais le premier lancement allégé.
+  final freshInstall = await saveService.loadSettings() == null;
   await appSettings.restore();
+  if (freshInstall) appSettings.beginOnboarding();
+  ForegroundClock.instance.start();
   // Persiste immédiatement (plutôt que d'attendre un premier changement de
   // réglage, qui peut ne jamais arriver) : sinon firstLaunchDay et playerId,
   // générés "maintenant" à la construction ci-dessus, ne sont jamais écrits
@@ -56,6 +63,21 @@ Future<void> main() async {
   final gameState =
       GameState(adService: adService, saveService: saveService, settings: appSettings, analytics: analytics);
   await gameState.restore();
+  // Aucune pub avant la fin du tutoriel du premier lancement.
+  adService.adsHeld = appSettings.onboardingActive;
+  // Garde-fou : un joueur qui a déjà quitté le tutoriel n'est plus en premier lancement.
+  if (appSettings.onboardingActive && gameState.gameStarted && !gameState.inTutorial) {
+    appSettings.endOnboarding();
+    adService.adsHeld = false;
+  }
+  if (appSettings.onboardingActive) {
+    // Premier lancement : on arrive directement dans l'énigme 0-1 (sans
+    // animation, sans accueil, sans écran « Monde 0 »), chargée avant le
+    // premier affichage. La mesure du début passe avant celle de l'énigme.
+    if (!gameState.gameStarted) gameState.enterWorld(0);
+    gameState.startOnboardingMeasure();
+    if (!gameState.puzzleLoaded) gameState.loadPuzzle();
+  }
   final enigmeState = EnigmeState(saveService: saveService, settings: appSettings, analytics: analytics);
   await enigmeState.restore();
   final defiState = DefiState(saveService: saveService, analytics: analytics);
@@ -76,7 +98,10 @@ Future<void> main() async {
     // Premier moment de vraie fidélité (3 jours de suite joués) : bon point
     // d'ancrage pour la demande d'avis native du store, une seule fois par
     // installation (voir consumeReviewRequestPending) — calendrier actif ou non.
-    if (palier == 3 && appSettings.consumeReviewRequestPending()) reviewService.requestReview();
+    // Jamais pendant le tutoriel (1.0.16).
+    if (palier == 3 && appSettings.consumeReviewRequestPending(inTutorial: gameState.inTutorial)) {
+      reviewService.requestReview();
+    }
     if (!kStreakCalendarEnabled) return; // calendrier en refonte : pas de récompense
     switch (palier) {
       case 3:
@@ -185,6 +210,7 @@ Future<void> _initBackgroundServices({
   required NotificationService notificationService,
   required AppSettings appSettings,
   required AdventCalendar advent,
+  required bool alreadySucceeded,
 }) async {
   if (adsSupported) {
     // Classement de L'énigme de la semaine — jamais bloquant : une erreur
@@ -225,30 +251,43 @@ Future<void> _initBackgroundServices({
     // RGPD (UMP) — obligatoire pour les utilisateurs UE/UK/Suisse avant
     // toute requête publicitaire (détecté automatiquement par Google via
     // l'IP). Le même geste de consentement gouverne aussi Firebase
-    // Analytics ci-dessous, plutôt que d'imposer un second popup distinct.
-    final canRequestAds = await adService.requestConsentAndPrepareAds();
-    // Analytics : seulement si le joueur soumis au RGPD a accepté la
-    // finalité « mesure » (TCF 1 + 8), voir TcfConsent.
-    await TcfConsent.applyToAnalytics(canRequestAds: canRequestAds);
-    if (canRequestAds) {
-      await MobileAds.instance.initialize();
-      adService.enableAds();
-    }
+    // Analytics, plutôt que d'imposer un second popup distinct.
+    //
+    // Règle C7 du studio (1.0.16) : statut UMP lu sans fenêtre au lancement ;
+    // déjà réglé, mesure et pubs démarrent tout de suite ; sinon la fenêtre
+    // s'ouvre après la 1re énigme réussie, à la 1re vidéo demandée, ou au
+    // secours (180 s de jeu). Non attendu : le jeu ne s'arrête pas dessus.
+    unawaited(consentFlow(
+      settled: adService.consentAlreadySettled,
+      finish: () async {
+        final canRequestAds = await adService.requestConsentAndPrepareAds();
+        // Analytics : seulement si le joueur soumis au RGPD a accepté la
+        // finalité « mesure » (TCF 1 + 8), voir TcfConsent. Ce qui attendait
+        // en mémoire part (accord) ou est effacé (refus).
+        await TcfConsent.applyToAnalytics(canRequestAds: canRequestAds);
+        if (canRequestAds) {
+          await MobileAds.instance.initialize();
+          adService.enableAds();
+        }
+      },
+      log: (trigger, seconds) => adService.analytics.logConsentPrompt(trigger: trigger, seconds: seconds),
+      playSeconds: () => ForegroundClock.instance.seconds,
+      alreadySucceeded: alreadySucceeded,
+    ));
+    // Pas de rappels pendant le premier lancement : la permission est
+    // demandée à la fin du tutoriel (voir NotificationService.askAndSchedule).
+    // Pour les autres, elle suit le consentement comme avant.
+    if (!appSettings.onboardingActive) await ConsentGate.instance.decided;
   }
 
+  if (appSettings.onboardingActive) return;
   // Rappels locaux (Défi du jour, L'énigme de la semaine, cases du
   // calendrier de l'Avent) — replanifiés à chaque lancement plutôt que de
   // compter sur la persistance des alarmes après un redémarrage du
   // téléphone. Pas de réglage in-app pour les couper : un joueur qui n'en
   // veut pas passe par les paramètres système de l'app (comme
   // requestPermission() le lui propose déjà au 1er lancement).
-  await notificationService.init();
-  final granted = await notificationService.requestPermission();
-  if (granted) {
-    await notificationService.scheduleDailyDefiReminder(locale: appSettings.locale);
-    await notificationService.scheduleWeeklyEnigmeReminder(locale: appSettings.locale);
-    await notificationService.scheduleAdventReminders(advent.reminderTimes(), locale: appSettings.locale);
-  }
+  await notificationService.askAndSchedule(locale: appSettings.locale, advent: advent);
 }
 
 class CineDevinetteApp extends StatelessWidget {
@@ -361,6 +400,16 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Premier lancement (1.0.16, B1) : ni animation, ni écran JOUER, ni choix
+    // du tutoriel — directement l'énigme 0-1. Un joueur existant garde
+    // l'intro et l'accueil habituels.
+    final settings = context.read<AppSettings>();
+    if (settings.onboardingActive) {
+      _screen = _Screen.game;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startBackgroundServices();
+      });
+    }
   }
 
   @override
@@ -460,16 +509,22 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
   void _onIntroComplete() {
     if (!mounted) return;
     setState(() => _screen = _Screen.home);
+    _startBackgroundServices();
+  }
+
+  void _startBackgroundServices() {
     if (_backgroundServicesStarted) return;
     _backgroundServicesStarted = true;
     final adsSupported =
         !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
+    final game = context.read<GameState>();
     unawaited(_initBackgroundServices(
       adsSupported: adsSupported,
-      adService: context.read<GameState>().adService,
+      adService: game.adService,
       notificationService: context.read<NotificationService>(),
       appSettings: context.read<AppSettings>(),
-      advent: context.read<GameState>().advent,
+      advent: game.advent,
+      alreadySucceeded: game.hasWonAPuzzle,
     ));
   }
 

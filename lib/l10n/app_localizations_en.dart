@@ -585,6 +585,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameTutorialCategory => 'Tutorial';
 
   @override
+  String get onboardRule1 =>
+      'The name in 🟢 green is the real character. Which film is this?';
+
+  @override
+  String get onboardRule2 =>
+      'The name in 🔵 blue is the real actor in this role. Green is still the real character.';
+
+  @override
+  String get onboardRule3 =>
+      'The name in 🔴 red is a role the same actor played in another film. Green is still the real character.';
+
+  @override
+  String get onboardAlreadyPlayed => 'I\'ve played before';
+
+  @override
+  String get onboardDone =>
+      'Tutorial complete! World 1 is unlocked.\n\nA new challenge awaits you every day: come back tomorrow!';
+
+  @override
+  String get onboardContinue => 'CONTINUE';
+
+  @override
   String homeStreakDays(int days) {
     return '📅 $days DAY STREAK!';
   }

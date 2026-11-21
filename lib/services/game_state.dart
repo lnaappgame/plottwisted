@@ -9,6 +9,7 @@ import 'ad_service.dart';
 import 'analytics_service.dart';
 import 'advent_calendar.dart';
 import 'app_settings.dart';
+import 'consent_flow.dart';
 import 'halloween_event.dart';
 import 'save_service.dart';
 
@@ -48,8 +49,17 @@ class GameState extends ChangeNotifier implements TitleGrid {
   final AppSettings settings;
   final Random _rng = Random();
 
-  GameState({required this.adService, required this.saveService, required this.settings, AnalyticsService? analytics})
-      : analytics = analytics ?? AnalyticsService() {
+  /// Temps de jeu au premier plan (secondes), pour `tutorial_complete {seconds}`.
+  final int Function() _playSeconds;
+
+  GameState(
+      {required this.adService,
+      required this.saveService,
+      required this.settings,
+      AnalyticsService? analytics,
+      int Function()? playSeconds})
+      : analytics = analytics ?? AnalyticsService(),
+        _playSeconds = playSeconds ?? (() => ForegroundClock.instance.seconds) {
     settings.addListener(_onSettingsChanged);
   }
 
@@ -81,7 +91,9 @@ class GameState extends ChangeNotifier implements TitleGrid {
     final keptP1 = p1Colors, keptP2 = p2Colors, keptHint = hintRevealed;
     final keptStart = levelStartTime, keptAds = adsWatchedThisLevel, keptRedAd = redJokerAdWatchedThisLevel;
     final keptJokers = jokersUsed;
+    _quietLoad = true; // même niveau dans l'autre langue : pas un nouveau départ
     loadPuzzle();
+    _quietLoad = false;
     jokersUsed = keptJokers;
     p1Colors = _shownColors('p1', keptP1);
     p2Colors = _shownColors('p2', keptP2);
@@ -342,7 +354,11 @@ class GameState extends ChangeNotifier implements TitleGrid {
     halloween.restore(data['halloween']);
     advent.restore(data['advent']);
     final migrated = _unblockAfterNewWorlds();
-    if (hasPendingSolve) loadPuzzle();
+    if (hasPendingSolve) {
+      _quietLoad = true; // rechargé pour sa page de révélation : pas un nouveau départ
+      loadPuzzle();
+      _quietLoad = false;
+    }
     _restoring = false;
     if (migrated) await flushSave();
   }
@@ -494,6 +510,12 @@ class GameState extends ChangeNotifier implements TitleGrid {
   /// premier monde : un bon moment pour la demande d'avis store.
   bool get isHappySolve =>
       !inTutorial && worldIndex >= 2 && attemptRows.length == 1 && jokersUsed.isEmpty && !solvedWithSkip;
+
+  /// Le niveau 1-5 vient d'être terminé (1.0.16) : autre bon moment pour la
+  /// demande d'avis store, en plus de l'énigme trouvée du premier coup et des
+  /// 3 jours de suite. Le plafond (2 par installation) et le tutoriel sont
+  /// gérés par [AppSettings.consumeReviewRequestPending].
+  bool get isLevel15End => !inTutorial && worldIndex == 1 && currentLevelNumber == 5;
 
   // ─── Tutoriel ───
   bool orangeIntroShown = false;
@@ -819,8 +841,99 @@ class GameState extends ChangeNotifier implements TitleGrid {
     } else if (postponed != null) {
       _applySavedLevel(postponed);
     }
+    if (!_quietLoad) _measureLevelStart();
     notifyListeners();
   }
+
+  // ─── Mesure (1.0.16, B4) : début de niveau, premier lancement ───
+
+  bool _quietLoad = false;
+  String? _lastLoggedStart;
+
+  /// Étapes du premier lancement, dans l'ordre (le nom part dans `step_name`).
+  static const kOnboardingSteps = <int, String>{
+    1: 'launch',
+    2: 'puzzle_1_shown',
+    3: 'first_letter',
+    4: 'first_success',
+    5: 'puzzle_2_shown',
+    6: 'puzzle_3_shown',
+    7: 'puzzle_4_shown',
+  };
+
+  /// `level_start` à chaque niveau chargé (une fois par niveau et par
+  /// lancement), et l'étape « énigme affichée » du premier lancement.
+  void _measureLevelStart() {
+    final key = '$worldIndex-$currentLevelNumber';
+    if (_lastLoggedStart != key) {
+      _lastLoggedStart = key;
+      analytics.logLevelStart(world: worldIndex, level: currentLevelNumber);
+    }
+    if (inTutorial) {
+      const shown = {1: 2, 2: 5, 3: 6, 4: 7};
+      final step = shown[currentLevelNumber];
+      if (step != null) _onboardingStep(step);
+    }
+  }
+
+  void _onboardingStep(int step) {
+    if (!settings.onboardingActive || !settings.markOnboardingStep(step)) return;
+    analytics.logTutorialStep(step: step, stepName: kOnboardingSteps[step] ?? 'step_$step');
+  }
+
+  /// Premier lancement : début du tutoriel (`tutorial_begin` + 1re étape).
+  void startOnboardingMeasure() {
+    if (!settings.onboardingActive || settings.onboardingStep >= 1) return;
+    settings.markOnboardingStep(1);
+    // Le seul joker visible de l'énigme 0-1 doit servir : un « Révéler une
+    // lettre » offert (un nouveau joueur n'en a aucun).
+    if (revealCount < 1) grantJokers(reveal: 1);
+    analytics.logTutorialBegin();
+    analytics.logTutorialStep(step: 1, stepName: kOnboardingSteps[1]!);
+  }
+
+  /// Fin du tutoriel du premier lancement : `tutorial_complete {seconds}`, les
+  /// pubs redeviennent possibles. Sans effet pour un joueur existant.
+  void _completeOnboarding() {
+    if (!settings.onboardingActive) return;
+    analytics.logTutorialComplete(seconds: _playSeconds());
+    settings.endOnboarding();
+    adService.adsHeld = false;
+  }
+
+  /// « J'ai déjà joué » : le joueur sort du tutoriel pour le monde 1. Sans
+  /// effet hors premier lancement.
+  void skipOnboarding() {
+    if (!settings.onboardingActive) return;
+    if (puzzleLoaded && !hasPendingSolve) {
+      analytics.logLevelAbandon(
+          world: worldIndex,
+          level: currentLevelNumber,
+          seconds: DateTime.now().difference(levelStartTime).inSeconds,
+          reason: 'skip_tutorial');
+    }
+    analytics.logTutorialSkip(seconds: _playSeconds());
+    settings.endOnboarding();
+    adService.adsHeld = false;
+    enterWorld(1);
+    notifyListeners();
+  }
+
+  /// Première énigme du premier lancement (0-1) : règle du vert sur une ligne
+  /// et un seul joker visible.
+  bool get inOnboardingIntro => settings.onboardingActive && inTutorial && currentLevelNumber == 1;
+
+  /// Règle du niveau en cours à afficher dans l'écran (1 = vert, 2 = bleu,
+  /// 3 = rouge) pendant le premier lancement ; null sinon (dernier niveau du
+  /// tutoriel, ou joueur existant : fenêtres habituelles).
+  int? get onboardingRuleLevel =>
+      settings.onboardingActive && inTutorial && currentLevelNumber >= 1 && currentLevelNumber <= 3
+          ? currentLevelNumber
+          : null;
+
+  /// Le joueur a déjà réussi au moins une énigme (règle C7 : la fenêtre de
+  /// consentement n'attend alors pas une première réussite).
+  bool get hasWonAPuzzle => worldIndex > 0 || currentLevelNumber > 1 || hasPendingSolve;
 
   bool consumeOrangeIntroPending() {
     if (!orangeIntroPending) return false;
@@ -953,6 +1066,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     guess[target] = idx;
     tile.used = true;
     cursorIndex = _firstEmptySlotFrom(target + 1);
+    if (inTutorial && currentLevelNumber == 1) _onboardingStep(3);
     notifyListeners();
   }
 
@@ -1005,6 +1119,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       notifyListeners();
       _markSolved();
       analytics.logLevelCompleted(world: currentWorld.number, level: currentLevelNumber, difficulty: difficultyLabel);
+      if (inTutorial && currentLevelNumber == 1) _onboardingStep(4);
       return 'solved';
     }
 
@@ -1047,6 +1162,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
     lockedSlots.add(target);
     revealCount--;
     jokersUsed.add(JokerKind.reveal);
+    if (inTutorial && currentLevelNumber == 1) _onboardingStep(3);
     notifyListeners();
     return target;
   }
@@ -1435,6 +1551,7 @@ class GameState extends ChangeNotifier implements TitleGrid {
       return 'tutorial-final-transition';
     }
     if (wasTutorial && remainingLevels.isEmpty) {
+      _completeOnboarding();
       return 'tutorial-complete';
     }
     if (remainingLevels.isEmpty) {
@@ -1472,6 +1589,11 @@ class GameState extends ChangeNotifier implements TitleGrid {
     if (!canPostponeLevel) return;
     final state = _levelJson();
     if (state != null) _postponedLevels[state['key'] as String] = state;
+    analytics.logLevelAbandon(
+        world: worldIndex,
+        level: currentLevelNumber,
+        seconds: DateTime.now().difference(levelStartTime).inSeconds,
+        reason: 'postpone');
     remainingLevels.add(remainingLevels.removeAt(0));
     currentLevelNumber = remainingLevels.first;
     loadPuzzle();

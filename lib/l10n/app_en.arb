@@ -190,6 +190,12 @@
   "@gameWorldCompleteMajor": {"placeholders": {"world": {"type": "String"}, "major": {"type": "String"}}},
   "gameAllContentComplete": "Dear cinephile, new levels are coming very soon.",
   "gameTutorialCategory": "Tutorial",
+  "onboardRule1": "The name in 🟢 green is the real character. Which film is this?",
+  "onboardRule2": "The name in 🔵 blue is the real actor in this role. Green is still the real character.",
+  "onboardRule3": "The name in 🔴 red is a role the same actor played in another film. Green is still the real character.",
+  "onboardAlreadyPlayed": "I've played before",
+  "onboardDone": "Tutorial complete! World 1 is unlocked.\n\nA new challenge awaits you every day: come back tomorrow!",
+  "onboardContinue": "CONTINUE",
 
   "homeStreakDays": "📅 {days} DAY STREAK!",
   "@homeStreakDays": {"placeholders": {"days": {"type": "int"}}},

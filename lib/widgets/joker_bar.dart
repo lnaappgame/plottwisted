@@ -22,8 +22,17 @@ class JokerBar extends StatelessWidget {
   /// même utiliser « Révéler un mot », qui n'y dévoile qu'un tiers des lettres.
   final Future<bool> Function()? confirmRevealWordNerf;
   final JokerFx? fx;
+
+  /// Première énigme du premier lancement : un seul joker visible (« Révéler
+  /// une lettre »), les autres apparaissent plus tard.
+  final bool singleJoker;
   const JokerBar(
-      {super.key, required this.onWatchAdForJoker, required this.onRedJokerEmpty, this.confirmRevealWordNerf, this.fx});
+      {super.key,
+      required this.onWatchAdForJoker,
+      required this.onRedJokerEmpty,
+      this.confirmRevealWordNerf,
+      this.fx,
+      this.singleJoker = false});
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +46,17 @@ class JokerBar extends StatelessWidget {
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
     final t = AppLocalizations.of(context);
-    final kinds = [
-      JokerKind.reveal,
-      JokerKind.eliminate,
-      JokerKind.actor,
-      JokerKind.character,
-      JokerKind.hint,
-      JokerKind.revealWord,
-      if (game.currentPuzzleHasOrange) JokerKind.red,
-    ];
+    final kinds = singleJoker
+        ? [JokerKind.reveal]
+        : [
+            JokerKind.reveal,
+            JokerKind.eliminate,
+            JokerKind.actor,
+            JokerKind.character,
+            JokerKind.hint,
+            JokerKind.revealWord,
+            if (game.currentPuzzleHasOrange) JokerKind.red,
+          ];
 
     return Column(
       children: [

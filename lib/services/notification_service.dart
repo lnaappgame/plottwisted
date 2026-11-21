@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, Tar
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
+import 'advent_calendar.dart';
 
 /// Rappels locaux — jamais de serveur, purement basés sur le calendrier
 /// déterministe des modes "Défi du jour" (chaque jour) et "L'énigme de la
@@ -32,13 +33,29 @@ class NotificationService {
     if (!_supported || _initialized) return;
     try {
       tzdata.initializeTimeZones();
-      const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+      // Silhouette blanche (res/drawable/ic_stat_clap.xml), jamais l'icône en
+      // couleur du jeu : Android la peint en rond blanc dans le volet.
+      const androidInit = AndroidInitializationSettings('ic_stat_clap');
       const iosInit = DarwinInitializationSettings();
       await _plugin.initialize(settings: const InitializationSettings(android: androidInit, iOS: iosInit));
       _initialized = true;
     } catch (_) {
       // Jamais bloquant pour le démarrage de l'app.
     }
+  }
+
+  /// Demande la permission, puis planifie tous les rappels (Défi du jour,
+  /// énigme de la semaine, cases de l'Avent). Au lancement pour un joueur
+  /// existant ; à la fin du tutoriel pour un nouveau joueur (1.0.16 : jamais
+  /// de demande système pendant la prise en main, c'est le rendez-vous du
+  /// lendemain). Sans effet si la permission est refusée.
+  Future<void> askAndSchedule({required String locale, required AdventCalendar advent}) async {
+    await init();
+    final granted = await requestPermission();
+    if (!granted) return;
+    await scheduleDailyDefiReminder(locale: locale);
+    await scheduleWeeklyEnigmeReminder(locale: locale);
+    await scheduleAdventReminders(advent.reminderTimes(), locale: locale);
   }
 
   /// Demande la permission d'envoyer des notifications (obligatoire à partir

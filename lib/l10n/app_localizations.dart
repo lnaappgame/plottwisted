@@ -1082,6 +1082,42 @@ abstract class AppLocalizations {
   /// **'Tutoriel'**
   String get gameTutorialCategory;
 
+  /// No description provided for @onboardRule1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom en 🟢 vert est le vrai personnage. Quel est ce film ?'**
+  String get onboardRule1;
+
+  /// No description provided for @onboardRule2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom en 🔵 bleu est le vrai acteur de ce rôle. Le vert reste le vrai personnage.'**
+  String get onboardRule2;
+
+  /// No description provided for @onboardRule3.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom en 🔴 rouge est un rôle du même acteur dans un autre film. Le vert reste le vrai personnage.'**
+  String get onboardRule3;
+
+  /// No description provided for @onboardAlreadyPlayed.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai déjà joué'**
+  String get onboardAlreadyPlayed;
+
+  /// No description provided for @onboardDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tutoriel terminé ! Le monde 1 est débloqué.\n\nUn nouveau défi t\'attend chaque jour : reviens demain !'**
+  String get onboardDone;
+
+  /// No description provided for @onboardContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'CONTINUER'**
+  String get onboardContinue;
+
   /// No description provided for @homeStreakDays.
   ///
   /// In fr, this message translates to:
