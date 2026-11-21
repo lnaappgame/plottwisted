@@ -88,6 +88,21 @@ class AnalyticsService {
   Future<void> logConsentPrompt({required String trigger, required int seconds}) =>
       _log('consent_prompt', {'trigger': trigger, 'seconds': seconds});
 
+  // ─── Classement sur l'avancée (1.0.16) ───
+
+  /// Écran du classement ouvert : [rankBucket] = tranche du rang affiché
+  /// (`top10`, `top50`, `top100`, `top1000`, `more`, `none` sans niveau
+  /// résolu, `offline` si indisponible) ; [joined] = le joueur y apparaît.
+  /// Jamais le rang exact ni le pseudo.
+  Future<void> logLeaderboardOpen({required String rankBucket, required bool joined}) =>
+      _log('leaderboard_open', {'rank_bucket': rankBucket, 'joined': joined ? 1 : 0});
+
+  /// Le joueur choisit d'apparaître dans le classement.
+  Future<void> logLeaderboardJoin() => _log('leaderboard_join', {});
+
+  /// Le joueur se retire du classement.
+  Future<void> logLeaderboardLeave() => _log('leaderboard_leave', {});
+
   // ─── Envoi, avec mise en mémoire avant la réponse au consentement ───
 
   /// Événements d'avant la réponse au consentement : gardés en mémoire sur le

@@ -1381,4 +1381,124 @@ class AppLocalizationsFr extends AppLocalizations {
   String shareAdventText(int day, String grid, String details, String link) {
     return '🎄 Plot Twist(ed) · Calendrier de l\'Avent, case $day\n$grid$details\nÀ ton tour 👉 $link';
   }
+
+  @override
+  String get lbHomeButton => 'Classement';
+
+  @override
+  String get lbTitle => 'CLASSEMENT';
+
+  @override
+  String get lbSubtitle =>
+      'Les joueurs en français, classés par niveaux résolus';
+
+  @override
+  String get lbTop => 'TOP 50';
+
+  @override
+  String get lbEmpty => 'Personne pour l\'instant. Sois le premier !';
+
+  @override
+  String get lbLegend =>
+      'À droite, l\'avancée : 16-3 veut dire 15 mondes finis et 3 niveaux du suivant.';
+
+  @override
+  String get lbOffline =>
+      'Classement indisponible pour le moment. Vérifie ta connexion.';
+
+  @override
+  String get lbRetry => 'RÉESSAYER';
+
+  @override
+  String get lbYourPlace => 'TA PLACE';
+
+  @override
+  String lbRankOf(int rank, int total) {
+    final intl.NumberFormat rankNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String rankString = rankNumberFormat.format(rank);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      rank,
+      locale: localeName,
+      other: '${rankString}e sur $totalString',
+      one: '1er sur $totalString',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lbYou => 'Toi';
+
+  @override
+  String get lbNotJoined =>
+      'Tu n\'apparais pas dans le classement : cette place, toi seul la vois.';
+
+  @override
+  String get lbNoScore =>
+      'Résous ton premier niveau pour entrer dans le classement.';
+
+  @override
+  String get lbWaitingFirstLevel =>
+      'Tu apparaîtras dès ton premier niveau résolu.';
+
+  @override
+  String get lbJoinButton => 'APPARAÎTRE DANS LE CLASSEMENT';
+
+  @override
+  String get lbChangeName => 'Changer de pseudo';
+
+  @override
+  String get lbLeave => 'Me retirer';
+
+  @override
+  String get lbJoinTitle => 'APPARAÎTRE DANS LE CLASSEMENT ?';
+
+  @override
+  String get lbJoinText =>
+      'Ton pseudo et ton avancée seront visibles par tous les joueurs.\nC\'est facultatif, et tu peux te retirer quand tu veux.';
+
+  @override
+  String get lbRenameTitle => 'TON PSEUDO';
+
+  @override
+  String get lbJoinConfirm => 'APPARAÎTRE';
+
+  @override
+  String get lbSave => 'ENREGISTRER';
+
+  @override
+  String get lbNotNow => 'Pas maintenant';
+
+  @override
+  String get lbPseudoEmpty => 'Choisis un pseudo.';
+
+  @override
+  String get lbPseudoRefused =>
+      'Ce pseudo n\'est pas accepté. Choisis-en un autre (pas d\'insulte, de lien ni de numéro).';
+
+  @override
+  String get lbFailed => 'Pas de connexion. Réessaie dans un moment.';
+
+  @override
+  String get lbJoined => 'C\'est fait : tu apparais dans le classement !';
+
+  @override
+  String get lbLeaveTitle => 'TE RETIRER DU CLASSEMENT ?';
+
+  @override
+  String get lbLeaveText =>
+      'Ton pseudo et ton avancée seront effacés du classement. Ta partie, elle, ne change pas.';
+
+  @override
+  String get lbLeaveConfirm => 'ME RETIRER';
+
+  @override
+  String get lbLeft => 'C\'est fait : tu n\'apparais plus dans le classement.';
+
+  @override
+  String get lbSettingsLeave => 'Me retirer du classement';
 }

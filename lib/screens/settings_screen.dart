@@ -8,10 +8,12 @@ import '../services/defi_state.dart';
 import '../services/enigme_state.dart';
 import '../services/game_state.dart';
 import '../services/multiplayer_state.dart';
+import '../services/progress_leaderboard.dart';
 import '../services/save_service.dart';
 import '../services/streak_state.dart';
 import '../services/share_service.dart';
 import '../theme/app_theme.dart';
+import 'progress_leaderboard_screen.dart';
 
 // Page légale hébergée sur GitHub Pages (brouillon non relu par un juriste,
 // à faire valider avant publication réelle sur les stores — source dans
@@ -46,6 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
     final cloudSync = context.read<CloudSyncService>();
+    final progressLeaderboard = context.watch<ProgressLeaderboard?>();
     final t = AppLocalizations.of(context);
 
     return Dialog(
@@ -119,6 +122,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   textAlign: TextAlign.center,
                   style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
             ),
+            // Classement sur l'avancée : le retrait reste possible ici même
+            // interrupteur éteint (droit à l'effacement) ; rien sans inscription.
+            if (progressLeaderboard?.participating ?? false) ...[
+              const SizedBox(height: 6),
+              OutlinedButton(
+                key: const ValueKey('settingsLeaveLeaderboard'),
+                onPressed: () => confirmAndLeaveProgressLeaderboard(context),
+                child: Text(t.lbSettingsLeave,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+              ),
+            ],
             const SizedBox(height: 6),
             Wrap(
               alignment: WrapAlignment.center,

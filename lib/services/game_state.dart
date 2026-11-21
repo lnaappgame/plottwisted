@@ -577,7 +577,13 @@ class GameState extends ChangeNotifier implements TitleGrid {
   void _markSolved() {
     _solvedPendingKey = '$worldIndex-$currentLevelNumber';
     flushSave(); // sans attendre le délai de sauvegarde habituel
+    onLevelSolved?.call();
   }
+
+  /// Appelé à chaque niveau trouvé (bonne réponse ou joker « Passer
+  /// définitivement ») : le classement sur l'avancée y met à jour le score
+  /// (voir ProgressLeaderboard.onLevelSolved, branché dans main.dart).
+  void Function()? onLevelSolved;
 
   void enterWorld(int number) {
     gameStarted = true;

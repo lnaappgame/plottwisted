@@ -33,6 +33,14 @@ class SaveService {
   Future<void> saveStreak(Map<String, dynamic> data) => _write(_streakKey, data);
   Future<Map<String, dynamic>?> loadStreak() => _read(_streakKey);
 
+  // Classement sur l'avancée (1.0.16) : participation, dernier envoi,
+  // interrupteur en cache. Volontairement hors de la sauvegarde cloud : il
+  // dépend de l'identifiant Firebase de CE téléphone ; un document retrouvé
+  // en ligne est repris à l'ouverture du classement (voir ProgressLeaderboard).
+  static const _progressLeaderboardKey = 'cine_devinette_progress_leaderboard_v1';
+  Future<void> saveProgressLeaderboard(Map<String, dynamic> data) => _write(_progressLeaderboardKey, data);
+  Future<Map<String, dynamic>?> loadProgressLeaderboard() => _read(_progressLeaderboardKey);
+
   // ─── Sauvegarde/restauration groupée (voir CloudSyncService) — un seul
   // document Firestore contenant une copie de toutes les clés locales, pour
   // retrouver sa progression sur un nouvel appareil. ───

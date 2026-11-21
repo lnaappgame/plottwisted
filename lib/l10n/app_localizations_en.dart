@@ -1374,4 +1374,116 @@ class AppLocalizationsEn extends AppLocalizations {
   String shareAdventText(int day, String grid, String details, String link) {
     return '🎄 Plot Twist(ed) · Advent Calendar, door $day\n$grid$details\nYour turn 👉 $link';
   }
+
+  @override
+  String get lbHomeButton => 'Leaderboard';
+
+  @override
+  String get lbTitle => 'LEADERBOARD';
+
+  @override
+  String get lbSubtitle => 'Players in English, ranked by levels solved';
+
+  @override
+  String get lbTop => 'TOP 50';
+
+  @override
+  String get lbEmpty => 'Nobody here yet. Be the first!';
+
+  @override
+  String get lbLegend =>
+      'On the right, progress: 16-3 means 15 worlds done and 3 levels into the next one.';
+
+  @override
+  String get lbOffline =>
+      'Leaderboard unavailable right now. Check your connection.';
+
+  @override
+  String get lbRetry => 'TRY AGAIN';
+
+  @override
+  String get lbYourPlace => 'YOUR SPOT';
+
+  @override
+  String lbRankOf(int rank, int total) {
+    final intl.NumberFormat rankNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String rankString = rankNumberFormat.format(rank);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    return '#$rankString of $totalString';
+  }
+
+  @override
+  String get lbYou => 'You';
+
+  @override
+  String get lbNotJoined =>
+      'You\'re not on the leaderboard: only you can see this spot.';
+
+  @override
+  String get lbNoScore => 'Solve your first level to get on the leaderboard.';
+
+  @override
+  String get lbWaitingFirstLevel =>
+      'You\'ll show up as soon as you solve your first level.';
+
+  @override
+  String get lbJoinButton => 'JOIN THE LEADERBOARD';
+
+  @override
+  String get lbChangeName => 'Change nickname';
+
+  @override
+  String get lbLeave => 'Leave';
+
+  @override
+  String get lbJoinTitle => 'JOIN THE LEADERBOARD?';
+
+  @override
+  String get lbJoinText =>
+      'Your nickname and progress will be visible to all players.\nIt\'s optional, and you can leave whenever you want.';
+
+  @override
+  String get lbRenameTitle => 'YOUR NICKNAME';
+
+  @override
+  String get lbJoinConfirm => 'JOIN';
+
+  @override
+  String get lbSave => 'SAVE';
+
+  @override
+  String get lbNotNow => 'Not now';
+
+  @override
+  String get lbPseudoEmpty => 'Pick a nickname.';
+
+  @override
+  String get lbPseudoRefused =>
+      'This nickname isn\'t allowed. Pick another one (no insults, links or phone numbers).';
+
+  @override
+  String get lbFailed => 'No connection. Try again in a moment.';
+
+  @override
+  String get lbJoined => 'Done: you\'re on the leaderboard!';
+
+  @override
+  String get lbLeaveTitle => 'LEAVE THE LEADERBOARD?';
+
+  @override
+  String get lbLeaveText =>
+      'Your nickname and progress will be erased from the leaderboard. Your game itself won\'t change.';
+
+  @override
+  String get lbLeaveConfirm => 'LEAVE';
+
+  @override
+  String get lbLeft => 'Done: you\'re no longer on the leaderboard.';
+
+  @override
+  String get lbSettingsLeave => 'Leave the leaderboard';
 }

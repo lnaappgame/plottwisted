@@ -2424,6 +2424,198 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'🎄 Plot Twist(ed) · Calendrier de l\'Avent, case {day}\n{grid}{details}\nÀ ton tour 👉 {link}'**
   String shareAdventText(int day, String grid, String details, String link);
+
+  /// No description provided for @lbHomeButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement'**
+  String get lbHomeButton;
+
+  /// No description provided for @lbTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'CLASSEMENT'**
+  String get lbTitle;
+
+  /// No description provided for @lbSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les joueurs en français, classés par niveaux résolus'**
+  String get lbSubtitle;
+
+  /// No description provided for @lbTop.
+  ///
+  /// In fr, this message translates to:
+  /// **'TOP 50'**
+  String get lbTop;
+
+  /// No description provided for @lbEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personne pour l\'instant. Sois le premier !'**
+  String get lbEmpty;
+
+  /// No description provided for @lbLegend.
+  ///
+  /// In fr, this message translates to:
+  /// **'À droite, l\'avancée : 16-3 veut dire 15 mondes finis et 3 niveaux du suivant.'**
+  String get lbLegend;
+
+  /// No description provided for @lbOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement indisponible pour le moment. Vérifie ta connexion.'**
+  String get lbOffline;
+
+  /// No description provided for @lbRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'RÉESSAYER'**
+  String get lbRetry;
+
+  /// No description provided for @lbYourPlace.
+  ///
+  /// In fr, this message translates to:
+  /// **'TA PLACE'**
+  String get lbYourPlace;
+
+  /// No description provided for @lbRankOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'{rank, plural, =1{1er sur {total}} other{{rank}e sur {total}}}'**
+  String lbRankOf(int rank, int total);
+
+  /// No description provided for @lbYou.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toi'**
+  String get lbYou;
+
+  /// No description provided for @lbNotJoined.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu n\'apparais pas dans le classement : cette place, toi seul la vois.'**
+  String get lbNotJoined;
+
+  /// No description provided for @lbNoScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résous ton premier niveau pour entrer dans le classement.'**
+  String get lbNoScore;
+
+  /// No description provided for @lbWaitingFirstLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu apparaîtras dès ton premier niveau résolu.'**
+  String get lbWaitingFirstLevel;
+
+  /// No description provided for @lbJoinButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'APPARAÎTRE DANS LE CLASSEMENT'**
+  String get lbJoinButton;
+
+  /// No description provided for @lbChangeName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de pseudo'**
+  String get lbChangeName;
+
+  /// No description provided for @lbLeave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Me retirer'**
+  String get lbLeave;
+
+  /// No description provided for @lbJoinTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'APPARAÎTRE DANS LE CLASSEMENT ?'**
+  String get lbJoinTitle;
+
+  /// No description provided for @lbJoinText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton pseudo et ton avancée seront visibles par tous les joueurs.\nC\'est facultatif, et tu peux te retirer quand tu veux.'**
+  String get lbJoinText;
+
+  /// No description provided for @lbRenameTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'TON PSEUDO'**
+  String get lbRenameTitle;
+
+  /// No description provided for @lbJoinConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'APPARAÎTRE'**
+  String get lbJoinConfirm;
+
+  /// No description provided for @lbSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'ENREGISTRER'**
+  String get lbSave;
+
+  /// No description provided for @lbNotNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas maintenant'**
+  String get lbNotNow;
+
+  /// No description provided for @lbPseudoEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisis un pseudo.'**
+  String get lbPseudoEmpty;
+
+  /// No description provided for @lbPseudoRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce pseudo n\'est pas accepté. Choisis-en un autre (pas d\'insulte, de lien ni de numéro).'**
+  String get lbPseudoRefused;
+
+  /// No description provided for @lbFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessaie dans un moment.'**
+  String get lbFailed;
+
+  /// No description provided for @lbJoined.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait : tu apparais dans le classement !'**
+  String get lbJoined;
+
+  /// No description provided for @lbLeaveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'TE RETIRER DU CLASSEMENT ?'**
+  String get lbLeaveTitle;
+
+  /// No description provided for @lbLeaveText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton pseudo et ton avancée seront effacés du classement. Ta partie, elle, ne change pas.'**
+  String get lbLeaveText;
+
+  /// No description provided for @lbLeaveConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'ME RETIRER'**
+  String get lbLeaveConfirm;
+
+  /// No description provided for @lbLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait : tu n\'apparais plus dans le classement.'**
+  String get lbLeft;
+
+  /// No description provided for @lbSettingsLeave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Me retirer du classement'**
+  String get lbSettingsLeave;
 }
 
 class _AppLocalizationsDelegate

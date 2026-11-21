@@ -27,6 +27,8 @@ import 'services/leaderboard_service.dart';
 import 'services/multiplayer_matchmaking_service.dart';
 import 'services/multiplayer_state.dart';
 import 'services/notification_service.dart';
+import 'services/progress_leaderboard.dart';
+import 'services/progress_leaderboard_firestore.dart';
 import 'services/purchase_service.dart';
 import 'services/review_service.dart';
 import 'services/save_service.dart';
@@ -86,6 +88,21 @@ Future<void> main() async {
   final defiState = DefiState(saveService: saveService, analytics: analytics);
   await defiState.restore();
   final leaderboardService = LeaderboardService();
+  // Classement sur l'avancée (1.0.16) : état local chargé avant l'affichage
+  // (l'interrupteur garde sa dernière valeur lue), serveur lu plus tard,
+  // une fois Firebase prêt (voir _initBackgroundServices).
+  final progressLeaderboard = ProgressLeaderboard(
+    backend: FirestoreProgressLeaderboardBackend(),
+    saveService: saveService,
+    scoreSource: () => progressScoreOf(gameState),
+    langSource: () => appSettings.locale,
+    // Un seul pseudo : « Ton pseudo » de l'accueil.
+    pseudoSource: () => appSettings.playerId,
+    onPseudoChosen: appSettings.setPlayerId,
+    analytics: analytics,
+  );
+  await progressLeaderboard.restore();
+  gameState.onLevelSolved = progressLeaderboard.onLevelSolved;
   final multiplayerMatchmaking = MultiplayerMatchmakingService();
   final multiplayerState = MultiplayerState(
       saveService: saveService, matchmaking: multiplayerMatchmaking, settings: appSettings, analytics: analytics);
@@ -191,6 +208,7 @@ Future<void> main() async {
     streakState: streakState,
     saveService: saveService,
     cloudSyncService: cloudSyncService,
+    progressLeaderboard: progressLeaderboard,
   ));
 
   // Tout ce qui suit touche le réseau (RGPD/pubs, Firebase, permission de
@@ -214,6 +232,7 @@ Future<void> _initBackgroundServices({
   required AppSettings appSettings,
   required AdventCalendar advent,
   required bool alreadySucceeded,
+  ProgressLeaderboard? progressLeaderboard,
 }) async {
   if (adsSupported) {
     // Classement de L'énigme de la semaine — jamais bloquant : une erreur
@@ -250,6 +269,9 @@ Future<void> _initBackgroundServices({
         appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.deviceCheck,
       );
     } catch (_) {}
+    // Classement sur l'avancée : interrupteur (1 lecture), retrait en attente,
+    // rattrapage d'un envoi manqué. Non attendu, jamais bloquant.
+    if (progressLeaderboard != null) unawaited(progressLeaderboard.startup());
 
     // RGPD (UMP) — obligatoire pour les utilisateurs UE/UK/Suisse avant
     // toute requête publicitaire (détecté automatiquement par Google via
@@ -306,6 +328,9 @@ class CineDevinetteApp extends StatelessWidget {
   final StreakState streakState;
   final SaveService saveService;
   final CloudSyncService cloudSyncService;
+
+  /// Classement sur l'avancée (facultatif : absent, son entrée n'existe pas).
+  final ProgressLeaderboard? progressLeaderboard;
   const CineDevinetteApp({
     super.key,
     required this.adService,
@@ -320,6 +345,7 @@ class CineDevinetteApp extends StatelessWidget {
     required this.streakState,
     required this.saveService,
     required this.cloudSyncService,
+    this.progressLeaderboard,
   });
 
   @override
@@ -338,6 +364,7 @@ class CineDevinetteApp extends StatelessWidget {
         Provider.value(value: notificationService),
         Provider.value(value: saveService),
         Provider.value(value: cloudSyncService),
+        if (progressLeaderboard != null) ChangeNotifierProvider<ProgressLeaderboard>.value(value: progressLeaderboard!),
       ],
       child: Consumer<AppSettings>(
         builder: (context, settings, _) {
@@ -536,6 +563,7 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
       appSettings: context.read<AppSettings>(),
       advent: game.advent,
       alreadySucceeded: game.hasWonAPuzzle,
+      progressLeaderboard: context.read<ProgressLeaderboard?>(),
     ));
   }
 

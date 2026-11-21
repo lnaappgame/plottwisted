@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
+import '../services/progress_leaderboard.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/avatar_view.dart';
@@ -17,6 +18,7 @@ import 'defi_screen.dart';
 import 'enigme_screen.dart';
 import 'halloween_event_screen.dart';
 import 'multiplayer_screen.dart';
+import 'progress_leaderboard_screen.dart';
 import 'settings_screen.dart';
 import 'shop_screen.dart';
 import 'instructions_screen.dart';
@@ -106,6 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme);
     final streak = context.watch<StreakState>();
+    // Classement sur l'avancée : son entrée n'existe que si l'interrupteur à
+    // distance est allumé (et si le service est fourni).
+    final progressLeaderboard = context.watch<ProgressLeaderboard?>();
+    final showLeaderboard = progressLeaderboard?.enabled ?? false;
     final onPlay = widget.onPlay;
     final t = AppLocalizations.of(context);
     final poster = settings.posterHome;
@@ -149,41 +155,58 @@ class _HomeScreenState extends State<HomeScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
-                                borderRadius: BorderRadius.circular(20),
-                                onTap: () => showDialog(context: context, builder: (_) => const _ProfilDialog()),
-                                child: Container(
-                                  padding: const EdgeInsets.fromLTRB(6, 6, 14, 6),
-                                  decoration: BoxDecoration(
-                                    color: poster ? _kPosterInk : colors.bgPanel,
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  InkWell(
                                     borderRadius: BorderRadius.circular(20),
-                                    border: poster ? null : Border.all(color: AppColors.gold.withOpacity(0.3)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      AvatarView(avatar: settings.avatar, radius: 16, background: AppColors.gold),
-                                      const SizedBox(width: 8),
-                                      ConstrainedBox(
-                                        constraints: const BoxConstraints(maxWidth: 110),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(settings.displayPlayerName,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: AppTextStyles.body(
-                                                    size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
-                                            Text(settings.playerId,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: AppTextStyles.body(size: 10, color: colors.muted)),
-                                          ],
-                                        ),
+                                    onTap: () => showDialog(context: context, builder: (_) => const _ProfilDialog()),
+                                    child: Container(
+                                      padding: const EdgeInsets.fromLTRB(6, 6, 14, 6),
+                                      decoration: BoxDecoration(
+                                        color: poster ? _kPosterInk : colors.bgPanel,
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: poster ? null : Border.all(color: AppColors.gold.withOpacity(0.3)),
                                       ),
-                                    ],
+                                      child: Row(
+                                        children: [
+                                          AvatarView(avatar: settings.avatar, radius: 16, background: AppColors.gold),
+                                          const SizedBox(width: 8),
+                                          ConstrainedBox(
+                                            constraints: const BoxConstraints(maxWidth: 110),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(settings.displayPlayerName,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: AppTextStyles.body(
+                                                        size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
+                                                Text(settings.playerId,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: AppTextStyles.body(size: 10, color: colors.muted)),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  // Classement : à côté du profil (le joueur et sa place).
+                                  if (showLeaderboard) ...[
+                                    const SizedBox(width: 8),
+                                    _IconButton(
+                                      key: const ValueKey('homeLeaderboardButton'),
+                                      icon: Icons.emoji_events,
+                                      colors: colors,
+                                      semanticLabel: t.lbHomeButton,
+                                      onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (_) => const ProgressLeaderboardScreen())),
+                                    ),
+                                  ],
+                                ],
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -543,11 +566,12 @@ class _IconButton extends StatelessWidget {
   final IconData icon;
   final AppColors colors;
   final VoidCallback onTap;
-  const _IconButton({required this.icon, required this.colors, required this.onTap});
+  final String? semanticLabel;
+  const _IconButton({super.key, required this.icon, required this.colors, required this.onTap, this.semanticLabel});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    final button = InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -561,6 +585,8 @@ class _IconButton extends StatelessWidget {
         child: Icon(icon, color: AppColors.goldBright, size: 18),
       ),
     );
+    final label = semanticLabel;
+    return label == null ? button : Semantics(button: true, label: label, child: button);
   }
 }
 
