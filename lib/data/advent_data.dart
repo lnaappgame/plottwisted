@@ -11,6 +11,9 @@ import '../models/event_pitch.dart';
 /// test/advent_calendar_test.dart vérifie qu'aucun mot du titre n'apparaît
 /// dans son pitch (FR et EN).
 ///
+/// Réponses supplémentaires (acceptedFr / acceptedEn) : celles listées dans les
+/// notes (vérification Cowork du 21/11).
+///
 /// Écarts avec le fichier de notes :
 /// - case 1 : correction proposée dans les notes (FR et EN), car le texte
 ///   validé contenait « stole », un mot du titre anglais, et deux erreurs
@@ -31,6 +34,7 @@ const kAdventPitches = [
     pitchEn: "A green, furry creature living on top of a mountain dressed up as me to swipe the presents of an "
         "entire village, with his dog playing reindeer. I should have been furious, but his heart grew three sizes "
         "that same day. I forgave him.",
+    acceptedEn: ["The Grinch"],
   ),
   // 2 décembre
   EventPitch(
@@ -164,6 +168,7 @@ const kAdventPitches = [
     pitchEn: "A New York department store once hired me to replace its Thanksgiving parade Santa, who'd been "
         "celebrating a bit too early. I kept sending shoppers to the competition, and ended up in court having "
         "to prove I was really me. I won.",
+    acceptedFr: ["Le Miracle sur la 34e rue"],
   ),
   // 13 décembre
   EventPitch(
@@ -200,6 +205,7 @@ const kAdventPitches = [
     pitchEn: "People always ask me how it all started. Once upon a time, there was a lazy postman exiled to a "
         "frozen island up north, where two families had always hated each other, and a lonely woodsman who made "
         "toys. Needing 6,000 letters in a year, the postman had an idea…",
+    acceptedFr: ["Klaus"],
   ),
   // 16 décembre
   EventPitch(
@@ -225,6 +231,7 @@ const kAdventPitches = [
     pitchEn: "This year, with my eldest son running our high-tech operation, just one present got missed: a bike "
         "for a little girl in Cornwall, England. One child out of billions didn't matter, said my eldest. My "
         "youngest set off to deliver it before morning, with his grandad and the old sleigh.",
+    acceptedFr: ["Mission : Noël - Les Aventures de la famille Noël", "Mission Noël"],
   ),
   // 18 décembre
   EventPitch(
@@ -263,6 +270,7 @@ const kAdventPitches = [
     pitchEn: "My big brother always struggled to live in my shadow, especially once I became a saint. Now he's a "
         "repo man in Chicago. I brought him to the North Pole to work just as an efficiency expert was threatening "
         "to shut down my workshop. He put every child on the nice list.",
+    acceptedFr: ["Le Frère Noël"],
   ),
   // 21 décembre
   EventPitch(

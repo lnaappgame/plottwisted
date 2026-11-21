@@ -105,6 +105,33 @@ void main() {
       }
     });
 
+    test('longueurs : pitch FR 200 à 330 caractères, pitch EN 180 à 300', () {
+      for (final (i, p) in kAdventPitches.indexed) {
+        expect(p.pitchFr.length, inInclusiveRange(200, 330), reason: 'case ${i + 1} FR : ${p.pitchFr.length}');
+        expect(p.pitchEn.length, inInclusiveRange(180, 300), reason: 'case ${i + 1} EN : ${p.pitchEn.length}');
+      }
+    });
+
+    test('réponses supplémentaires acceptées (notes du 21/11)', () {
+      bool fr(int day, String a) => kAdventPitches[day - 1].accepts('fr', a);
+      bool en(int day, String a) => kAdventPitches[day - 1].accepts('en', a);
+      expect(fr(15, 'Klaus'), isTrue);
+      expect(fr(15, 'La Légende de Klaus'), isTrue);
+      expect(fr(20, 'Le Frère Noël'), isTrue);
+      expect(fr(20, 'frere noel'), isTrue);
+      expect(fr(17, 'Mission : Noël'), isTrue);
+      expect(fr(17, 'Mission : Noël - Les Aventures de la famille Noël'), isTrue);
+      expect(fr(17, 'mission noel'), isTrue);
+      expect(fr(12, 'Le Miracle sur la 34e rue'), isTrue);
+      expect(fr(12, 'Miracle sur la 34e rue'), isTrue);
+      expect(en(1, 'The Grinch'), isTrue);
+      expect(en(1, 'How the Grinch Stole Christmas'), isTrue);
+      expect(en(12, 'Miracle on 34th Street'), isTrue);
+      // Une réponse d'une autre case reste refusée.
+      expect(fr(15, 'Frère Noël'), isFalse);
+      expect(fr(20, 'Klaus'), isFalse);
+    });
+
     test('le contrôle des mots du titre attrape bien un mot interdit', () {
       // Les textes « validés » des notes, refusés pour cette raison.
       expect(_titleWordsInPitch('How the Grinch Stole Christmas', 'A small green creature stole my suit'), {'STOLE'});
