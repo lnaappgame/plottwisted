@@ -14,6 +14,7 @@ import 'screens/game_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/intro_teaser_screen.dart';
 import 'services/ad_service.dart';
+import 'services/advent_calendar.dart';
 import 'services/analytics_service.dart';
 import 'services/app_settings.dart';
 import 'services/tcf_consent.dart';
@@ -104,6 +105,9 @@ Future<void> main() async {
   multiplayerState.streakState = streakState;
 
   final notificationService = NotificationService();
+  // Case du calendrier de l'Avent trouvée le jour même : son rappel de 18 h
+  // n'a plus lieu d'être.
+  gameState.advent.onSolvedOnTime = notificationService.cancelAdventReminder;
   final cloudSyncService = CloudSyncService();
 
   final purchaseService = PurchaseService();
@@ -180,6 +184,7 @@ Future<void> _initBackgroundServices({
   required AdService adService,
   required NotificationService notificationService,
   required AppSettings appSettings,
+  required AdventCalendar advent,
 }) async {
   if (adsSupported) {
     // Classement de L'énigme de la semaine — jamais bloquant : une erreur
@@ -231,16 +236,18 @@ Future<void> _initBackgroundServices({
     }
   }
 
-  // Rappels locaux (Défi du jour, L'énigme de la semaine) — replanifiés à
-  // chaque lancement plutôt que de compter sur la persistance des alarmes
-  // après un redémarrage du téléphone. Pas de réglage in-app pour les
-  // couper : un joueur qui n'en veut pas passe par les paramètres système
-  // de l'app (comme requestPermission() le lui propose déjà au 1er lancement).
+  // Rappels locaux (Défi du jour, L'énigme de la semaine, cases du
+  // calendrier de l'Avent) — replanifiés à chaque lancement plutôt que de
+  // compter sur la persistance des alarmes après un redémarrage du
+  // téléphone. Pas de réglage in-app pour les couper : un joueur qui n'en
+  // veut pas passe par les paramètres système de l'app (comme
+  // requestPermission() le lui propose déjà au 1er lancement).
   await notificationService.init();
   final granted = await notificationService.requestPermission();
   if (granted) {
     await notificationService.scheduleDailyDefiReminder(locale: appSettings.locale);
     await notificationService.scheduleWeeklyEnigmeReminder(locale: appSettings.locale);
+    await notificationService.scheduleAdventReminders(advent.reminderTimes(), locale: appSettings.locale);
   }
 }
 
@@ -462,6 +469,7 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
       adService: context.read<GameState>().adService,
       notificationService: context.read<NotificationService>(),
       appSettings: context.read<AppSettings>(),
+      advent: context.read<GameState>().advent,
     ));
   }
 

@@ -1,27 +1,10 @@
-/// Un pitch de l'event Halloween : un film d'horreur ou d'Halloween raconté
-/// du point de vue (bienveillant) de son méchant. Pas de noms colorés ici :
-/// le joueur trouve le titre avec les seules lettres et trois jokers.
-class EventPitch {
-  final String titleFr;
-  final String titleEn;
-  final String year;
-  final String pitchFr;
-  final String pitchEn;
+import '../models/event_pitch.dart';
 
-  const EventPitch({
-    required this.titleFr,
-    required this.titleEn,
-    required this.year,
-    required this.pitchFr,
-    required this.pitchEn,
-  });
+export '../models/event_pitch.dart';
 
-  String titleFor(String locale) => locale == 'en' ? titleEn : titleFr;
-  String pitchFor(String locale) => locale == 'en' ? pitchEn : pitchFr;
-}
-
-/// Les 30 pitchs, dans l'ordre où le joueur les découvre (du plus facile au
-/// plus difficile).
+/// Les 30 pitchs de l'event Halloween, dans l'ordre où le joueur les découvre
+/// (du plus facile au plus difficile) : des films d'horreur ou d'Halloween
+/// racontés du point de vue (bienveillant) de leur méchant.
 const kHalloweenPitches = [
   EventPitch(
     titleFr: 'Les Dents de la mer',

@@ -19,6 +19,9 @@ class NotificationService {
   static const int _idDefiDuJour = 1;
   static const int _idEnigmeSemaine = 2;
 
+  /// Rappels du calendrier de l'Avent : un par case, id = base + jour.
+  static const int _idAventBase = 100;
+
   final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
   bool _initialized = false;
 
@@ -102,6 +105,35 @@ class NotificationService {
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
+    } catch (_) {}
+  }
+
+  /// Planifie (ou replanifie) les rappels du calendrier de l'Avent : un
+  /// rappel unique (pas de répétition) par case, à la date donnée par
+  /// [times] (jour de la case → heure locale du rappel, voir
+  /// AdventCalendar.reminderTimes). Appelé seulement si la permission de
+  /// notifier est accordée, comme les autres rappels.
+  Future<void> scheduleAdventReminders(Map<int, DateTime> times, {String locale = 'fr'}) async {
+    if (!_supported) return;
+    for (final e in times.entries) {
+      try {
+        await _plugin.zonedSchedule(
+          id: _idAventBase + e.key,
+          title: locale == 'en' ? '🎄 Movie Advent Calendar' : "🎄 Calendrier de l'Avent ciné",
+          body: locale == 'en' ? "Today's door is open 🎄" : 'La case du jour est ouverte 🎄',
+          scheduledDate: tz.TZDateTime.from(e.value, tz.local),
+          notificationDetails: _details,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        );
+      } catch (_) {}
+    }
+  }
+
+  /// Annule le rappel de la case [day] (trouvée avant 18 h).
+  Future<void> cancelAdventReminder(int day) async {
+    if (!_supported) return;
+    try {
+      await _plugin.cancel(id: _idAventBase + day);
     } catch (_) {}
   }
 

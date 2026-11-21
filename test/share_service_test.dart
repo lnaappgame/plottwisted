@@ -34,7 +34,7 @@ void main() {
     // La source reste dans ce que la page du lien accepte : [a-z0-9_-], 20 caractères au plus.
     for (final s in [ShareService.sourceLevel, ShareService.sourceDefi, ShareService.sourceEnigme,
         ShareService.sourceDuel, ShareService.sourceAskFriend, ShareService.sourceAskFriendEnigme,
-        ShareService.sourceInvite, ShareService.sourceEvent]) {
+        ShareService.sourceInvite, ShareService.sourceEvent, ShareService.sourceAdvent]) {
       expect(RegExp(r'^[a-z0-9_-]{1,20}$').hasMatch(s), isTrue, reason: s);
     }
   });

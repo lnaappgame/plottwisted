@@ -1258,5 +1258,105 @@ class AppLocalizationsFr extends AppLocalizations {
   String get evtBackToEvent => 'RETOUR À L\'EVENT';
 
   @override
-  String get avatarEventLocked => 'Avatars de l\'event Halloween';
+  String get avatarEventLocked => 'Avatars des events';
+
+  @override
+  String get homeAdventEvent => '🎄 CALENDRIER DE L\'AVENT';
+
+  @override
+  String get advTitle => 'CALENDRIER DE L\'AVENT';
+
+  @override
+  String get advUntil =>
+      'Du 1er au 25 décembre · rattrapage jusqu\'au 3 janvier';
+
+  @override
+  String get advIntroTitle => 'LE PÈRE NOËL FAIT SON CINÉMA';
+
+  @override
+  String get advIntro =>
+      'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de retrouver le titre.';
+
+  @override
+  String get advIntro2 =>
+      '24 films de Noël, plus une case bonus le 25 : une case à ouvrir chaque jour !';
+
+  @override
+  String get advRules =>
+      'Une case s\'ouvre chaque jour à minuit. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Jokers : Révéler, Éliminer et Révéler un mot.';
+
+  @override
+  String get advSkinHat => 'Bonnet de Noël : trouve ta première case';
+
+  @override
+  String get advSkinFinal => 'Bonnet sous la neige : trouve les 25 cases';
+
+  @override
+  String advProgress(int found, int total) {
+    return '$found/$total cases trouvées';
+  }
+
+  @override
+  String get advToday => 'AUJOURD\'HUI';
+
+  @override
+  String advCaseNumber(int day) {
+    return 'CASE $day';
+  }
+
+  @override
+  String get advCaseBonus => 'CASE BONUS';
+
+  @override
+  String advCaseLocked(int day) {
+    return 'Patience ! Cette case s\'ouvre le $day décembre.';
+  }
+
+  @override
+  String advPlayDay(int day) {
+    return 'JOUER LA CASE $day';
+  }
+
+  @override
+  String get advSantaSays => '🎅 LE PÈRE NOËL RACONTE';
+
+  @override
+  String get advOnTimeHint => 'Trouve-la aujourd\'hui : +1 joker !';
+
+  @override
+  String get advLateHint =>
+      'Case rattrapée : le joker n\'est donné que le jour même.';
+
+  @override
+  String get advAvatarUnlocked => 'Nouvel avatar débloqué : Bonnet de Noël !';
+
+  @override
+  String get advFinalReward =>
+      'Les 25 cases ! Gros lot : 5 jokers et l\'avatar Bonnet sous la neige !';
+
+  @override
+  String get advComeBack => 'Tu es à jour ! La prochaine case s\'ouvre demain.';
+
+  @override
+  String get advAllDone =>
+      'Bravo, tu as trouvé les 25 cases du calendrier ! Joyeux Noël !';
+
+  @override
+  String get advNotYet =>
+      'Le calendrier s\'ouvre le 1er décembre. À très vite !';
+
+  @override
+  String get advOver =>
+      'Le calendrier de l\'Avent est terminé. Merci d\'avoir joué, et bonne année !';
+
+  @override
+  String get advNext => 'CASE SUIVANTE';
+
+  @override
+  String get advBackToCalendar => 'RETOUR AU CALENDRIER';
+
+  @override
+  String shareAdventText(int day, String grid, String details, String link) {
+    return '🎄 Plot Twist(ed) · Calendrier de l\'Avent, case $day\n$grid$details\nÀ ton tour 👉 $link';
+  }
 }
