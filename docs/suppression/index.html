@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plot Twist(ed) — Supprimer ton compte et tes données</title>
+<meta name="description" content="Comment supprimer ton compte Plot Twisted et tes données : depuis l'application ou par e-mail, ce qui est supprimé et ce qui est conservé.">
+<link rel="alternate" hreflang="fr" href="https://lnaappgame.github.io/plottwisted/suppression/">
+<link rel="alternate" hreflang="en" href="https://lnaappgame.github.io/plottwisted/en/suppression/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F6F1E6;
+    --paper-deep: #EFE7D6;
+    --ink: #2B2118;
+    --ink-soft: #7A6D5C;
+    --gold: #A9782C;
+    --gold-bright: #8C6423;
+    --crimson: #7A1F2B;
+    --rule: #DDD0B4;
+    --card: #FFFFFF;
+    --shadow: rgba(43,33,24,0.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #17120D;
+      --paper-deep: #1D1610;
+      --ink: #ECE3D2;
+      --ink-soft: #A6987F;
+      --gold: #D9B15E;
+      --gold-bright: #E8C578;
+      --crimson: #D67587;
+      --rule: #3A2E22;
+      --card: #211A13;
+      --shadow: rgba(0,0,0,0.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #17120D;
+    --paper-deep: #1D1610;
+    --ink: #ECE3D2;
+    --ink-soft: #A6987F;
+    --gold: #D9B15E;
+    --gold-bright: #E8C578;
+    --crimson: #D67587;
+    --rule: #3A2E22;
+    --card: #211A13;
+    --shadow: rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Libre Franklin", system-ui, sans-serif;
+    line-height: 1.65;
+  }
+  .wrap{
+    max-width: 720px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 40px 64px;
+  }
+
+  header.top{
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .wordmark{
+    font-family: "Bebas Neue", system-ui, sans-serif;
+    letter-spacing: 0.04em;
+    font-size: clamp(2rem, 6vw, 2.6rem);
+    color: var(--gold);
+    line-height: 1;
+  }
+  .wordmark span{ color: var(--crimson) }
+  .kicker{
+    font-family: "Courier Prime", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  nav.tabs{
+    display:flex;
+    gap: 8px;
+    justify-content:center;
+    margin: 28px 0 8px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0;
+  }
+  nav.tabs button{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    padding: 10px 6px 12px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  nav.tabs button:hover{ color: var(--ink) }
+  nav.tabs button[aria-selected="true"]{
+    color: var(--ink);
+    border-bottom-color: var(--gold);
+  }
+  nav.tabs button:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .doc{ display:none }
+  .doc.active{ display:block }
+
+  .masthead{
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px -12px var(--shadow);
+    padding: 22px 24px;
+    margin: 28px 0 36px;
+    font-family: "Courier Prime", monospace;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.9;
+  }
+  .masthead strong{ color: var(--ink); font-weight: 700 }
+  .masthead .doctitle{
+    display:block;
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .masthead .updated{
+    display:block;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic;
+  }
+  .masthead .draftnote{
+    display:block;
+    margin-top: 10px;
+    color: var(--crimson);
+    font-style: normal;
+  }
+
+  h2{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin: 2.4em 0 0.7em;
+    text-wrap: balance;
+    scroll-margin-top: 16px;
+  }
+  h3{
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--gold-bright);
+    margin: 1.8em 0 0.5em;
+  }
+  p, li{
+    max-width: 64ch;
+    color: var(--ink);
+  }
+  p{ margin: 0 0 1em; }
+  strong{ color: var(--ink); font-weight: 700 }
+  a{ color: var(--gold-bright); text-decoration-color: var(--rule); text-underline-offset: 2px; }
+  a:hover{ text-decoration-color: var(--gold-bright); }
+  ul{ margin: 0 0 1.2em; padding-left: 1.3em; }
+  li{ margin-bottom: 0.5em; }
+
+  .toc{
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin: 24px 0 8px;
+    font-size: 0.88rem;
+  }
+  .toc summary{
+    cursor: pointer;
+    font-family: "Libre Franklin", sans-serif;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .toc ol{
+    margin: 14px 0 0;
+    padding-left: 1.2em;
+    columns: 2;
+    column-gap: 24px;
+  }
+  .toc li{ margin-bottom: 0.35em; break-inside: avoid; color: var(--ink-soft) }
+  .toc a{ color: var(--ink-soft) }
+  .toc a:hover{ color: var(--gold-bright) }
+
+  .tablewrap{ overflow-x: auto; margin: 1em 0 1.4em; }
+  table{
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 420px;
+    font-size: 0.92rem;
+  }
+  th, td{
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  th{
+    font-family: "Libre Franklin", sans-serif;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  hr.rule{
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 2.4em 0;
+  }
+
+  footer.contact{
+    margin-top: 3em;
+    padding-top: 1.6em;
+    border-top: 1px solid var(--rule);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  footer.contact .copybtn{
+    font-family: "Libre Franklin", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+  footer.contact .copybtn:hover{ border-color: var(--gold-bright) }
+
+  @media (max-width: 480px){
+    .toc ol{ columns: 1; }
+    nav.tabs{ font-size: 0.85rem; }
+  }
+
+  .langswitch{
+    margin-top: 12px;
+    font-size: 0.82rem;
+  }
+  .langswitch a{ color: var(--ink-soft) }
+  .langswitch a:hover{ color: var(--gold-bright) }
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="wordmark">PLOT TWIST<span>(ED)</span></div>
+    <div class="kicker">Suppression du compte et des données — LNA App</div>
+    <div class="langswitch"><a href="../en/suppression/" hreflang="en" lang="en">English version</a></div>
+  </header>
+
+  <article class="doc active">
+    <div class="masthead">
+      <span class="doctitle">Supprimer ton compte et tes données — Plot Twisted : Quiz Cinéma</span>
+      Application <strong>Plot Twisted : Quiz Cinéma</strong> (Plot Twist(ed)), publiée sur Google Play par <strong>LNA App Game</strong> et sur l'App Store par <strong>LNA App</strong><br>
+      <strong>LNA App</strong> — Damien Ellena, entrepreneur individuel (EI)<br>
+      12 montée du Château, 13650 Meyrargues, France<br>
+      Contact : lna.app.game@gmail.com
+      <span class="updated">Dernière mise à jour : 22 novembre 2026</span>
+    </div>
+
+    <h2 id="s1">1. Qui a un compte ?</h2>
+    <p>Plot Twist(ed) ne demande ni compte, ni nom, ni adresse e-mail pour jouer. Un compte n'existe que si tu as touché <strong>« Sauvegarder avec Google »</strong> dans les paramètres de l'application (Android) : ta progression est alors liée à ton compte Google pour pouvoir être restaurée sur un autre appareil. Si tu n'as jamais utilisé ce bouton, tu n'as pas de compte : seules les données décrites au point 5 peuvent exister, et tu peux en demander la suppression par e-mail (point 3).</p>
+
+    <h2 id="s2">2. Supprimer ton compte depuis l'application (le plus rapide)</h2>
+    <ol>
+      <li>Ouvre Plot Twisted et touche l'icône <strong>engrenage</strong> de l'écran d'accueil pour ouvrir les <strong>PARAMÈTRES</strong>.</li>
+      <li>Touche <strong>« Supprimer ma sauvegarde et me déconnecter »</strong> (ce bouton n'apparaît que si ta progression est liée à un compte Google, à partir de la version 1.0.16 de l'application ; avec une version plus ancienne, mets l'application à jour ou suis le point 3).</li>
+      <li>Confirme. Google peut te demander de choisir à nouveau ton compte, pour vérifier que c'est bien toi. La suppression est alors immédiate.</li>
+    </ol>
+    <p>Ta partie reste jouable sur ton téléphone : seule la copie enregistrée sur nos serveurs et le lien avec ton compte Google sont supprimés.</p>
+
+    <h2 id="s3">3. Supprimer ton compte sans l'application</h2>
+    <p>Si tu as désinstallé l'application ou n'as plus accès à ton appareil, écris-nous à <a href="mailto:lna.app.game@gmail.com?subject=Suppression%20de%20compte%20Plot%20Twisted">lna.app.game@gmail.com</a>, avec pour objet <strong>« Suppression de compte Plot Twisted »</strong>, en indiquant :</p>
+    <ul>
+      <li>l'adresse e-mail du compte Google que tu avais lié à l'application (écris-nous de préférence depuis cette adresse : cela nous permet de vérifier que la demande vient bien de toi) ;</li>
+      <li>si tu les connais, ton identifiant de joueur (par exemple « Cinéphile #123456 ») et ton pseudo.</li>
+    </ul>
+    <p>Nous supprimons les données décrites au point 4 et te le confirmons par e-mail dans un délai d'<strong>un mois</strong> au plus à compter de ta demande.</p>
+
+    <h2 id="s4">4. Ce qui est supprimé</h2>
+    <ul>
+      <li>la <strong>sauvegarde de ta progression</strong> enregistrée sur nos serveurs (Firebase Firestore) ;</li>
+      <li>ton <strong>entrée au classement des joueurs</strong> (pseudo et avancée), si tu y apparais ;</li>
+      <li>ta <strong>fiche Multijoueur</strong> (ton niveau « Elo ») ;</li>
+      <li>ton <strong>compte Firebase</strong> : l'identifiant technique, le lien avec ton compte Google et l'adresse e-mail que Google nous avait transmise. L'application est aussi déconnectée de ton compte Google.</li>
+    </ul>
+
+    <h2 id="s5">5. Ce qui n'est pas supprimé, et pendant combien de temps</h2>
+    <ul>
+      <li><strong>Ta progression sur ton téléphone</strong> : elle y reste tant que tu ne désinstalles pas l'application ou n'utilises pas « Réinitialiser la sauvegarde » dans les paramètres.</li>
+      <li><strong>Tes temps à l'énigme de la semaine</strong> : ils sont enregistrés sous un identifiant technique, sans nom, sans pseudo ni e-mail, et ne sont plus reliés à aucun compte après la suppression. Ils sont effacés au plus tard <strong>24 mois</strong> après la semaine concernée.</li>
+      <li><strong>Les manches Multijoueur déjà jouées</strong> (temps, victoire ou défaite, et le pseudo affiché à tes adversaires) : elles ne sont pas rattachées à ton compte et sont effacées au plus tard <strong>24 mois</strong> après la partie. Si tu veux qu'on les efface plus tôt, indique-nous ton pseudo par e-mail (point 3).</li>
+      <li><strong>La mesure d'audience et les rapports de plantage</strong> (Firebase Analytics et Crashlytics) : ces données techniques ne contiennent ni ton nom ni ton e-mail et ne sont pas reliées à ton compte Google. Les données rattachées à un appareil sont effacées automatiquement au bout de <strong>14 mois</strong> (Analytics) et de <strong>90 jours</strong> (Crashlytics) ; il ne reste ensuite que des statistiques globales, sans lien avec un appareil.</li>
+      <li><strong>Tes achats</strong> : Google Play et l'App Store conservent l'historique de tes achats selon leurs propres règles. Un achat permanent (par exemple le retrait des publicités) reste attaché à ton compte Google Play ou Apple et peut être récupéré avec « Restaurer mes achats ».</li>
+      <li><strong>Les données publicitaires</strong> (Google AdMob) : elles sont traitées directement par Google. Tu peux les gérer sur <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">myadcenter.google.com</a> et dans les réglages de ton téléphone (identifiant publicitaire).</li>
+    </ul>
+
+    <h2 id="s6">6. Supprimer seulement certaines données</h2>
+    <ul>
+      <li><strong>Classement des joueurs</strong> : touche « Me retirer » sur l'écran du classement, ou « Me retirer du classement » dans les paramètres. Ton pseudo et ton avancée sont effacés de nos serveurs.</li>
+      <li><strong>Progression sur le téléphone</strong> : « Réinitialiser la sauvegarde » dans les paramètres.</li>
+      <li><strong>Mesure d'audience</strong> : « Options de confidentialité des pubs » dans les paramètres, en refusant la finalité de mesure.</li>
+      <li>Pour toute autre donnée : écris-nous (point 3).</li>
+    </ul>
+
+    <h2 id="s7">7. Pour en savoir plus</h2>
+    <p>Le détail des données traitées et de tes droits figure dans la <a href="../">politique de confidentialité de Plot Twist(ed)</a>. Pour toute question : <a href="mailto:lna.app.game@gmail.com">lna.app.game@gmail.com</a> — LNA App, 12 montée du Château, 13650 Meyrargues, France. Tu peux aussi introduire une réclamation auprès de la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
+  </article>
+</div>
+
+</body>
+</html>

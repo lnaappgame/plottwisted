@@ -334,6 +334,7 @@
       <li>L'ensemble de tes données de jeu locales (progression, paramètres, avatar, identifiant de joueur) est alors copié sur les serveurs <strong>Firestore</strong> de Google, dans un document technique associé à cet identifiant, afin de pouvoir être restauré sur un autre appareil ou après une réinstallation.</li>
     </ul>
     <p>Cette fonctionnalité est strictement optionnelle : si tu ne l'actives jamais, aucune de ces données n'est transmise et seul le fonctionnement décrit au point 2.1 s'applique.</p>
+    <p>Tu peux à tout moment supprimer ce compte, ta sauvegarde et le lien avec ton compte Google : depuis l'application (Paramètres → « Supprimer ma sauvegarde et me déconnecter », à partir de la version 1.0.16), ou sans l'application en suivant la page <a href="suppression/">Supprimer ton compte et tes données</a>, qui détaille aussi ce qui est supprimé et ce qui est conservé.</p>
 
     <h3>2.3 Classements en ligne et Multijoueur (Firestore)</h3>
     <p>Les modes <strong>L'énigme de la semaine</strong> et <strong>Multijoueur</strong>, ainsi que le <strong>classement des joueurs</strong> (facultatif), reposent sur un classement ou une comparaison de performances communs à plusieurs joueurs, ce qui suppose de transmettre certaines données à nos serveurs <strong>Firebase Firestore</strong>, rattachées à l'identifiant technique anonyme mentionné au point 2.2 ; ni ton nom ni ton adresse e-mail n'y figurent :</p>
@@ -359,7 +360,11 @@
     <h3>2.7 Polices de caractères (Google Fonts)</h3>
     <p>L'application charge certaines polices de caractères depuis les serveurs de Google au premier lancement. Cet appel technique ne transmet aucune donnée personnelle au-delà de ce qui est strictement nécessaire à la livraison du fichier de police (adresse IP, traitée directement par Google).</p>
 
-    <h3>2.8 Ce que nous ne faisons pas</h3>
+    <h3>2.8 Rappels et demande d'avis</h3>
+    <p><strong>Rappels.</strong> Si tu l'acceptes, l'application programme sur ton téléphone des rappels (Défi du jour, L'énigme de la semaine et, en décembre, cases du calendrier de l'Avent). Tout se passe sur ton appareil : aucune donnée n'est envoyée pour cela. Tu peux les arrêter à tout moment dans les réglages de ton téléphone.</p>
+    <p><strong>Demande d'avis.</strong> De temps en temps, l'application peut afficher la fenêtre d'avis de Google Play ou de l'App Store. Ta note et ton commentaire vont directement au store, selon ses propres règles ; LNA App ne les reçoit pas avec ton identité.</p>
+
+    <h3>2.9 Ce que nous ne faisons pas</h3>
     <p>LNA App ne vend aucune donnée à des tiers, n'exploite aucun outil de mesure ou de ciblage publicitaire en dehors de ceux listés ci-dessus (Google AdMob, Firebase), n'utilise les données décrites aux points 2.2 à 2.4 à aucune autre fin que celle pour laquelle elles ont été collectées, et n'a pas accès à tes contacts, photos, localisation précise ou autres données de ton appareil non mentionnées dans cette politique.</p>
 
     <h2 id="c3">3. Base légale et finalités</h2>
@@ -381,10 +386,10 @@
     <h2 id="c6">6. Durée de conservation</h2>
     <ul>
       <li>Les données de jeu locales (point 2.1) sont conservées sur ton appareil tant que tu ne désinstalles pas l'application ou ne les réinitialises pas manuellement.</li>
-      <li>Les données de sauvegarde liées à un compte Google (point 2.2) sont conservées jusqu'à ce que tu en demandes la suppression (voir point 7) ou que tu supprimes toi-même la liaison à ton compte Google.</li>
+      <li>Les données de sauvegarde liées à un compte Google (point 2.2) sont conservées jusqu'à ce que tu les supprimes depuis l'application ou que tu en demandes la suppression (voir point 7 et la page <a href="suppression/">Supprimer ton compte et tes données</a>).</li>
       <li>Les résultats de classement et de manches Multijoueur, pseudo compris (point 2.3), sont conservés au plus <strong>24 mois</strong> après la semaine ou la partie concernée, puis supprimés de nos serveurs.</li>
       <li>Le pseudo et l'avancée du classement des joueurs (point 2.3) sont conservés tant que tu y apparais, et au plus <strong>24 mois</strong> après ta dernière progression ; ils sont supprimés dès que tu te retires du classement.</li>
-      <li>Les données de mesure d'audience et de diagnostic (point 2.4) sont conservées selon les durées par défaut de Firebase Analytics et Crashlytics, généralement de l'ordre de plusieurs mois.</li>
+      <li>Les données de mesure d'audience rattachées à un appareil (Firebase Analytics, point 2.4) sont conservées <strong>14 mois</strong>, et les rapports de plantage (Crashlytics) <strong>90 jours</strong>, puis supprimés automatiquement.</li>
       <li>Les données traitées par Google dans le cadre d'AdMob ou de Google Play sont conservées selon les durées définies par Google.</li>
     </ul>
 
@@ -392,7 +397,8 @@
     <p>Conformément au RGPD, tu disposes d'un droit d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité sur les données te concernant. Ces droits s'exercent :</p>
     <ul>
       <li>pour les données de jeu locales (point 2.1) : directement depuis l'application (Paramètres → Réinitialiser la sauvegarde) ou en désinstallant l'application ;</li>
-      <li>pour les données de sauvegarde ou de classement liées à Firebase (points 2.2 et 2.3) : en nous contactant à l'adresse indiquée au point 11, en précisant l'identifiant de joueur affiché dans l'application (par exemple « Cinéphile #123456 ») ou l'adresse e-mail du compte Google lié, afin que nous puissions localiser et supprimer les données correspondantes ;</li>
+      <li>pour ton compte et ta sauvegarde liés à Google (point 2.2) : directement depuis l'application (Paramètres → « Supprimer ma sauvegarde et me déconnecter »), ou sans l'application en suivant la page <a href="suppression/">Supprimer ton compte et tes données</a> ;</li>
+      <li>pour les autres données de classement ou de Multijoueur (point 2.3) : en nous contactant à l'adresse indiquée au point 11, en précisant l'identifiant de joueur affiché dans l'application (par exemple « Cinéphile #123456 »), ton pseudo ou l'adresse e-mail du compte Google lié, afin que nous puissions localiser et supprimer les données correspondantes ;</li>
       <li>pour ton pseudo (point 2.3) : directement depuis l'écran d'accueil de l'application ; les manches déjà enregistrées avec l'ancien pseudo peuvent être supprimées sur demande ;</li>
       <li>pour le classement des joueurs (point 2.3) : directement depuis l'écran du classement (« Me retirer ») ou les Réglages (« Me retirer du classement »), ce qui efface ton pseudo et ton avancée ;</li>
       <li>pour la mesure d'audience (point 2.4) : à tout moment depuis l'application (Paramètres → « Options de confidentialité des pubs », en refusant la finalité de mesure), ou en nous écrivant (point 11) ;</li>
@@ -428,7 +434,7 @@
       SIRET : 790 346 076 00025<br>
       TVA intracommunautaire : FR 19790346076<br>
       Directeur de la publication : Damien Ellena
-      <span class="updated">Dernière mise à jour : 5 novembre 2026</span>
+      <span class="updated">Dernière mise à jour : 22 novembre 2026</span>
     </div>
 
     <details class="toc">
@@ -513,8 +519,8 @@
 
     <h2 id="g7">7. Identité de joueur et connexion Google (optionnelle)</h2>
     <p>Par défaut, l'Application attribue à chaque Utilisateur un identifiant de joueur généré automatiquement (par exemple sous la forme « Cinéphile #123456 ») ainsi qu'un avatar, sans qu'aucune information permettant d'identifier directement l'Utilisateur ne soit demandée ni collectée.</p>
-    <p>L'Application propose, de façon strictement optionnelle et à l'initiative de l'Utilisateur (bouton « Sauvegarder avec Google » dans les réglages), de lier la Progression à un compte Google via le service d'authentification Google Sign-In. Cette liaison a pour seul objet de permettre la sauvegarde de la Progression sur les serveurs Firebase de l'Éditeur et sa restauration ultérieure (par exemple après un changement d'appareil ou une réinstallation), et ne crée pas de compte utilisateur au sens d'un espace personnel consultable par des tiers.</p>
-    <p><strong>Pseudo.</strong> L'Utilisateur peut remplacer l'identifiant par défaut par un pseudo de son choix (20 caractères au plus). Ce pseudo est la seule information le désignant au sein de l'Application ; il est affiché aux autres joueurs dans le mode Multijoueur (article 9). L'Utilisateur s'engage à choisir un pseudo qui ne contienne ni son nom réel ni aucune donnée personnelle, et qui ne soit ni injurieux, ni discriminatoire, ni obscène, ni contraire aux droits d'un tiers. L'Éditeur peut remplacer par l'identifiant par défaut tout pseudo contraire à ces règles (article 15).</p>
+    <p>L'Application propose, de façon strictement optionnelle et à l'initiative de l'Utilisateur (bouton « Sauvegarder avec Google » dans les réglages), de lier la Progression à un compte Google via le service d'authentification Google Sign-In. Cette liaison a pour seul objet de permettre la sauvegarde de la Progression sur les serveurs Firebase de l'Éditeur et sa restauration ultérieure (par exemple après un changement d'appareil ou une réinstallation). Cette liaison crée un compte au sein de l'Application (un identifiant technique lié au compte Google de l'Utilisateur). L'Utilisateur peut supprimer ce compte et sa sauvegarde à tout moment, depuis l'Application (« Supprimer ma sauvegarde et me déconnecter », à partir de la version 1.0.16) ou en suivant la page <a href="suppression/">Supprimer ton compte et tes données</a>.</p>
+    <p><strong>Pseudo.</strong> L'Utilisateur peut remplacer l'identifiant par défaut par un pseudo de son choix (20 caractères au plus). Ce pseudo est la seule information le désignant au sein de l'Application ; il est affiché aux autres joueurs dans le mode Multijoueur et, si l'Utilisateur choisit d'y apparaître, dans le classement des joueurs (article 9). L'Utilisateur s'engage à choisir un pseudo qui ne contienne ni son nom réel ni aucune donnée personnelle, et qui ne soit ni injurieux, ni discriminatoire, ni obscène, ni contraire aux droits d'un tiers. L'Éditeur peut remplacer par l'identifiant par défaut tout pseudo contraire à ces règles (article 15).</p>
     <p>L'Utilisateur reste libre de ne jamais activer cette fonctionnalité, l'ensemble des modes de jeu restant accessibles sans elle, la Progression étant alors uniquement conservée localement comme décrit à l'article 8.</p>
 
     <h2 id="g8">8. Sauvegarde et progression</h2>
@@ -525,6 +531,7 @@
     <h2 id="g9">9. Fonctionnalités en ligne : classements et multijoueur</h2>
     <p><strong>L'énigme de la semaine.</strong> Le temps de résolution de l'Utilisateur ainsi que son classement relatif aux autres joueurs de la même semaine sont transmis et conservés sur les serveurs Firebase de l'Éditeur, associés à un identifiant anonyme technique (et non à une identité personnelle), afin de calculer et d'afficher un classement commun. Ce classement est réinitialisé chaque semaine ; un historique personnel des résultats passés reste consultable localement sur l'appareil de l'Utilisateur.</p>
     <p><strong>Multijoueur.</strong> Ce mode ne met pas en relation deux joueurs en temps réel : il compare la performance de l'Utilisateur à un temps de référence, qui peut provenir d'une partie réellement enregistrée par un autre joueur à un moment différent, ou d'un temps de calibration générique lorsque les données réelles disponibles pour une énigme donnée sont insuffisantes. Le résultat de chaque manche jouée par l'Utilisateur (temps, victoire/défaite) est conservé sur les serveurs de l'Éditeur pour alimenter ce mécanisme au bénéfice de l'ensemble des joueurs, avec le pseudo de l'Utilisateur (article 7), qui est affiché comme nom d'adversaire aux joueurs affrontant ensuite ce temps de référence. Ces données sont conservées au plus 24 mois.</p>
+    <p><strong>Classement des joueurs (facultatif).</strong> Si l'Utilisateur choisit d'y apparaître, son pseudo et son avancée (nombre de niveaux résolus, affiché sous la forme « monde-niveau ») sont enregistrés sur les serveurs de l'Éditeur et visibles par tous les joueurs. L'Utilisateur peut s'en retirer à tout moment (« Me retirer » sur l'écran du classement, ou « Me retirer du classement » dans les paramètres) : son pseudo et son avancée sont alors effacés. Ces données sont conservées au plus 24 mois après la dernière progression.</p>
     <p>L'Utilisateur s'engage à ne pas manipuler artificiellement ces mécanismes (automatisation, exploitation de failles techniques) dans le but de fausser un classement ou d'obtenir un avantage indu ; l'Éditeur se réserve le droit de retirer d'un classement tout résultat dont l'obtention serait manifestement frauduleuse.</p>
     <p>Ces fonctionnalités nécessitent une connexion Internet active et ne sont pas disponibles hors ligne. Le nombre de parties Multijoueur quotidiennes peut être limité, avec possibilité d'obtenir des parties supplémentaires par le visionnage de publicités facultatives.</p>
 
@@ -556,7 +563,7 @@
     <p><strong>11.6 Garantie légale de conformité.</strong> Les contenus numériques fournis par l'Application, y compris ceux débloqués par un Achat Intégré, bénéficient de la garantie légale de conformité prévue aux articles L.224-25-12 et suivants du Code de la consommation. L'Éditeur répond des défauts de conformité existant au moment de la fourniture et qui apparaissent dans un délai de deux ans à compter de celle-ci, ainsi que de ceux résultant d'une absence de mise à jour nécessaire au maintien de la conformité pendant la période à laquelle l'Utilisateur peut légitimement s'attendre. En cas de défaut (par exemple un contenu acheté qui n'est pas débloqué), l'Utilisateur contacte l'Éditeur (article 28), qui procède à la mise en conformité sans frais et dans un délai raisonnable ; à défaut, l'Utilisateur peut obtenir une réduction du prix ou la résolution du contrat dans les conditions prévues par la loi. Cette garantie s'exerce sans préjudice des politiques de remboursement des Stores.</p>
 
     <h2 id="g12">12. Notifications</h2>
-    <p>L'Application peut proposer d'envoyer des notifications locales (rappel du Défi du jour, rappel hebdomadaire de L'énigme de la semaine), générées directement par l'appareil de l'Utilisateur sans recours à un serveur distant. Ces notifications peuvent être désactivées à tout moment depuis les réglages du système d'exploitation de l'appareil.</p>
+    <p>L'Application peut proposer d'envoyer des notifications locales (rappel du Défi du jour, rappel hebdomadaire de L'énigme de la semaine et, en décembre, rappels du calendrier de l'Avent), générées directement par l'appareil de l'Utilisateur sans recours à un serveur distant. Ces notifications peuvent être désactivées à tout moment depuis les réglages du système d'exploitation de l'appareil.</p>
 
     <h2 id="g13">13. Propriété intellectuelle</h2>
     <p>L'Application, son code source, son interface, ses graphismes, ses textes, sa charte graphique et sa mécanique de jeu sont la propriété exclusive de LNA App ou de ses concédants de licence, et sont protégés par le droit de la propriété intellectuelle. Toute reproduction, représentation, modification, adaptation, ou exploitation non autorisée, totale ou partielle, de l'Application est strictement interdite.</p>
@@ -599,7 +606,7 @@
     <p>L'Éditeur se réserve le droit de modifier les présentes CGU à tout moment, notamment lors de l'ajout de nouvelles fonctionnalités, de l'évolution de la réglementation applicable, ou d'un changement dans les services tiers utilisés. Toute modification substantielle sera signalée dans l'Application ou sur sa fiche store, et prendra effet à la publication d'une nouvelle version de l'Application intégrant ces modifications ou à la date qui y sera indiquée. La poursuite de l'utilisation de l'Application après entrée en vigueur des modifications vaut acceptation des CGU modifiées ; l'Utilisateur qui ne les accepte pas cesse d'utiliser l'Application (article 21).</p>
 
     <h2 id="g21">21. Durée, suppression et résiliation</h2>
-    <p>Les présentes CGU s'appliquent tant que l'Utilisateur utilise l'Application. L'Utilisateur peut à tout moment cesser d'utiliser l'Application en la désinstallant de son appareil, ce qui entraîne la suppression de la Progression sauvegardée localement (la Progression sauvegardée via la connexion Google décrite à l'article 7 restant conservée sur les serveurs de l'Éditeur jusqu'à demande de suppression conformément à la Politique de confidentialité).</p>
+    <p>Les présentes CGU s'appliquent tant que l'Utilisateur utilise l'Application. L'Utilisateur peut à tout moment cesser d'utiliser l'Application en la désinstallant de son appareil, ce qui entraîne la suppression de la Progression sauvegardée localement (la Progression sauvegardée via la connexion Google décrite à l'article 7 restant conservée sur les serveurs de l'Éditeur jusqu'à sa suppression par l'Utilisateur depuis l'Application ou sur demande, conformément à la Politique de confidentialité et à la page <a href="suppression/">Supprimer ton compte et tes données</a>).</p>
     <p>L'Éditeur se réserve le droit de cesser l'exploitation de l'Application ou de certaines de ses fonctionnalités en ligne, notamment en cas d'impossibilité économique ou technique de les maintenir, sous réserve d'un délai de préavis raisonnable lorsque les circonstances le permettent.</p>
 
     <h2 id="g22">22. Divisibilité</h2>

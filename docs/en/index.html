@@ -344,6 +344,7 @@
       <li>All of your local game data (progress, settings, avatar, player ID) is then copied to Google's <strong>Firestore</strong> servers, in a technical document associated with this identifier, so that it can be restored on another device or after a reinstall.</li>
     </ul>
     <p>This feature is strictly optional: if you never turn it on, none of this data is sent and only what is described in section 2.1 applies.</p>
+    <p>You can delete this account, your backup and the link with your Google account at any time: from the app (Settings → “Delete my backup and sign out”, from version 1.0.16 onwards), or without the app by following the page <a href="suppression/">Delete your account and your data</a>, which also details what is deleted and what is kept.</p>
 
     <h3>2.3 Online leaderboards and Multiplayer (Firestore)</h3>
     <p>The <strong>Weekly Puzzle</strong> and <strong>Multiplayer</strong> modes, as well as the optional <strong>player leaderboard</strong>, rely on a leaderboard or a comparison of performances shared by several players, which requires sending some data to our <strong>Firebase Firestore</strong> servers, attached to the anonymous technical identifier mentioned in section 2.2; neither your name nor your email address appears in it:</p>
@@ -369,7 +370,11 @@
     <h3>2.7 Fonts (Google Fonts)</h3>
     <p>The app loads some fonts from Google's servers on first launch. This technical request does not send any personal data beyond what is strictly necessary to deliver the font file (IP address, processed directly by Google).</p>
 
-    <h3>2.8 What we do not do</h3>
+    <h3>2.8 Reminders and rating requests</h3>
+    <p><strong>Reminders.</strong> If you accept them, the app schedules reminders on your phone (Daily Challenge, Weekly Puzzle and, in December, Advent calendar boxes). Everything happens on your device: no data is sent for this. You can stop them at any time in your phone's settings.</p>
+    <p><strong>Rating requests.</strong> From time to time, the app may show the Google Play or App Store rating window. Your rating and review go directly to the store, under its own rules; LNA App does not receive them together with your identity.</p>
+
+    <h3>2.9 What we do not do</h3>
     <p>LNA App does not sell any data to third parties, does not use any analytics or ad-targeting tool other than those listed above (Google AdMob, Firebase), does not use the data described in sections 2.2 to 2.4 for any purpose other than the one it was collected for, and has no access to your contacts, photos, precise location or any other data on your device not mentioned in this policy.</p>
 
     <h2 id="c3">3. Legal basis and purposes</h2>
@@ -391,10 +396,10 @@
     <h2 id="c6">6. Retention periods</h2>
     <ul>
       <li>Local game data (section 2.1) is kept on your device until you uninstall the app or reset it manually.</li>
-      <li>Backup data linked to a Google account (section 2.2) is kept until you ask for it to be deleted (see section 7) or remove the link to your Google account yourself.</li>
+      <li>Backup data linked to a Google account (section 2.2) is kept until you delete it from the app or ask for it to be deleted (see section 7 and the page <a href="suppression/">Delete your account and your data</a>).</li>
       <li>Leaderboard and Multiplayer round results, nickname included (section 2.3), are kept for at most <strong>24 months</strong> after the week or game concerned, then deleted from our servers.</li>
       <li>The nickname and progress shown on the player leaderboard (section 2.3) are kept for as long as you appear on it, and for at most <strong>24 months</strong> after your last progress; they are deleted as soon as you leave the leaderboard.</li>
-      <li>Analytics and diagnostic data (section 2.4) is kept for the default periods of Firebase Analytics and Crashlytics, generally several months.</li>
+      <li>Usage measurement data linked to a device (Firebase Analytics, section 2.4) is kept for <strong>14 months</strong>, and crash reports (Crashlytics) for <strong>90 days</strong>, then deleted automatically.</li>
       <li>Data processed by Google for AdMob or Google Play is kept for the periods set by Google.</li>
     </ul>
 
@@ -402,7 +407,8 @@
     <p>Under the GDPR, you have the right to access, rectify, erase, restrict, object to and port the data concerning you. You can exercise these rights:</p>
     <ul>
       <li>for local game data (section 2.1): directly in the app (Settings → Reset save data) or by uninstalling the app;</li>
-      <li>for backup or leaderboard data stored with Firebase (sections 2.2 and 2.3): by contacting us at the address given in section 11, stating the player ID shown in the app (for example “Cinephile #123456”) or the email address of the linked Google account, so that we can find and delete the corresponding data;</li>
+      <li>for your account and backup linked to Google (section 2.2): directly from the app (Settings → “Delete my backup and sign out”), or without the app by following the page <a href="suppression/">Delete your account and your data</a>;</li>
+      <li>for other leaderboard or Multiplayer data (section 2.3): by contacting us at the address given in section 11, stating the player ID shown in the app (for example “Cinephile #123456”), your nickname or the email address of the linked Google account, so that we can find and delete the corresponding data;</li>
       <li>for your nickname (section 2.3): directly from the app's home screen; rounds already recorded with the old nickname can be deleted on request;</li>
       <li>for the player leaderboard (section 2.3): directly from the leaderboard screen (“Leave”) or the Settings (“Leave the leaderboard”), which erases your nickname and progress;</li>
       <li>for analytics (section 2.4): at any time from the app (Settings → “Ad privacy options”, refusing the measurement purpose), or by writing to us (section 11);</li>
@@ -438,7 +444,7 @@
       SIRET (French business ID): 790 346 076 00025<br>
       EU VAT number: FR 19790346076<br>
       Publication director: Damien Ellena
-      <span class="updated">Last updated: November 5, 2026 (English translation: November 5, 2026)</span>
+      <span class="updated">Last updated: November 22, 2026 (English translation: November 22, 2026)</span>
     </div>
 
     <details class="toc">
@@ -523,8 +529,8 @@
 
     <h2 id="g7">7. Player identity and Google sign-in (optional)</h2>
     <p>By default, the App gives each User an automatically generated player ID (for example “Cinephile #123456”) and an avatar, without any information that could directly identify the User being requested or collected.</p>
-    <p>The App offers, strictly optionally and at the User's initiative (“Save with Google” button in the settings), to link the Progress to a Google account through the Google Sign-In authentication service. The sole purpose of this link is to back up the Progress on the Publisher's Firebase servers and restore it later (for example after changing device or reinstalling), and it does not create a user account in the sense of a personal space viewable by third parties.</p>
-    <p><strong>Nickname.</strong> The User may replace the default identifier with a nickname of their choice (20 characters at most). This nickname is the only information designating them within the App; it is shown to other players in Multiplayer mode (section 9). The User undertakes to choose a nickname that contains neither their real name nor any personal data, and that is not insulting, discriminatory, obscene or contrary to the rights of a third party. The Publisher may replace any nickname that breaks these rules with the default identifier (section 15).</p>
+    <p>The App offers, strictly optionally and at the User's initiative (“Save with Google” button in the settings), to link the Progress to a Google account through the Google Sign-In authentication service. The sole purpose of this link is to back up the Progress on the Publisher's Firebase servers and restore it later (for example after changing device or reinstalling). This link creates an account within the App (a technical identifier linked to the User's Google account). The User may delete this account and their backup at any time, from the App (“Delete my backup and sign out”, from version 1.0.16 onwards) or by following the page <a href="suppression/">Delete your account and your data</a>.</p>
+    <p><strong>Nickname.</strong> The User may replace the default identifier with a nickname of their choice (20 characters at most). This nickname is the only information designating them within the App; it is shown to other players in Multiplayer mode and, if the User chooses to appear on it, on the player leaderboard (section 9). The User undertakes to choose a nickname that contains neither their real name nor any personal data, and that is not insulting, discriminatory, obscene or contrary to the rights of a third party. The Publisher may replace any nickname that breaks these rules with the default identifier (section 15).</p>
     <p>The User remains free never to turn on this feature; all game modes remain available without it, the Progress then being kept locally only, as described in section 8.</p>
 
     <h2 id="g8">8. Saving and progress</h2>
@@ -535,6 +541,7 @@
     <h2 id="g9">9. Online features: leaderboards and multiplayer</h2>
     <p><strong>Weekly Puzzle.</strong> The User's solving time and their ranking relative to the other players of the same week are sent to and kept on the Publisher's Firebase servers, associated with an anonymous technical identifier (and not with a personal identity), in order to calculate and display a shared leaderboard. This leaderboard is reset every week; a personal history of past results remains available locally on the User's device.</p>
     <p><strong>Multiplayer.</strong> This mode does not connect two players in real time: it compares the User's performance with a reference time, which may come from a game actually recorded by another player at a different time, or from a generic calibration time when the real data available for a given puzzle is insufficient. The result of each round played by the User (time, win/loss) is kept on the Publisher's servers to feed this mechanism for the benefit of all players, together with the User's nickname (section 7), which is shown as the opponent's name to players who later race against this reference time. This data is kept for at most 24 months.</p>
+    <p><strong>Player leaderboard (optional).</strong> If the User chooses to appear on it, their nickname and progress (number of levels solved, shown as “world-level”) are stored on the Publisher's servers and visible to all players. The User may leave it at any time (“Leave” on the leaderboard screen, or “Leave the leaderboard” in the settings): their nickname and progress are then erased. This data is kept for at most 24 months after the last progress.</p>
     <p>The User undertakes not to artificially manipulate these mechanisms (automation, exploitation of technical flaws) in order to distort a leaderboard or obtain an undue advantage; the Publisher reserves the right to remove from a leaderboard any result obviously obtained fraudulently.</p>
     <p>These features require an active internet connection and are not available offline. The number of daily Multiplayer games may be limited, with the option of getting extra games by watching optional ads.</p>
 
@@ -566,7 +573,7 @@
     <p><strong>11.6 Legal guarantee of conformity.</strong> The digital content supplied by the App, including content unlocked by an In-App Purchase, is covered by the legal guarantee of conformity provided for in Articles L.224-25-12 et seq. of the French Consumer Code. The Publisher is liable for any lack of conformity existing at the time of supply and appearing within two years of it, as well as for any lack of conformity resulting from a failure to supply the updates needed to keep the content in conformity during the period the User can reasonably expect. In the event of a defect (for example purchased content that is not unlocked), the User contacts the Publisher (section 28), who brings the content into conformity free of charge and within a reasonable time; failing that, the User may obtain a price reduction or termination of the contract under the conditions provided by law. This guarantee applies without prejudice to the Stores' refund policies.</p>
 
     <h2 id="g12">12. Notifications</h2>
-    <p>The App may offer to send local notifications (Daily Challenge reminder, weekly Weekly Puzzle reminder), generated directly by the User's device without using a remote server. These notifications can be turned off at any time in the settings of the device's operating system.</p>
+    <p>The App may offer to send local notifications (Daily Challenge reminder, weekly Weekly Puzzle reminder and, in December, Advent calendar reminders), generated directly by the User's device without using a remote server. These notifications can be turned off at any time in the settings of the device's operating system.</p>
 
     <h2 id="g13">13. Intellectual property</h2>
     <p>The App, its source code, interface, graphics, texts, visual identity and game mechanics are the exclusive property of LNA App or its licensors, and are protected by intellectual property law. Any unauthorized reproduction, representation, modification, adaptation or exploitation of the App, in whole or in part, is strictly prohibited.</p>
@@ -609,7 +616,7 @@
     <p>The Publisher reserves the right to change these Terms at any time, in particular when new features are added, when the applicable regulations change, or when the third-party services used change. Any substantial change will be announced in the App or on its store page, and will take effect upon publication of a new version of the App incorporating these changes or on the date indicated therein. Continued use of the App after the changes take effect constitutes acceptance of the amended Terms; a User who does not accept them stops using the App (section 21).</p>
 
     <h2 id="g21">21. Term, deletion and termination</h2>
-    <p>These Terms apply for as long as the User uses the App. The User may stop using the App at any time by uninstalling it from their device, which deletes the Progress saved locally (Progress saved through the Google sign-in described in section 7 remains on the Publisher's servers until deletion is requested in accordance with the Privacy Policy).</p>
+    <p>These Terms apply for as long as the User uses the App. The User may stop using the App at any time by uninstalling it from their device, which deletes the Progress saved locally (Progress saved through the Google sign-in described in section 7 remains on the Publisher's servers until the User deletes it from the App or deletion is requested, in accordance with the Privacy Policy and the page <a href="suppression/">Delete your account and your data</a>).</p>
     <p>The Publisher reserves the right to stop operating the App or some of its online features, in particular if it becomes economically or technically impossible to maintain them, subject to reasonable notice where circumstances allow.</p>
 
     <h2 id="g22">22. Severability</h2>
