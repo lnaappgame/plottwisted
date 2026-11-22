@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
@@ -6,13 +7,51 @@ import '../services/app_settings.dart';
 import '../services/purchase_service.dart';
 import '../theme/app_theme.dart';
 
-class ShopScreen extends StatelessWidget {
+class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
 
   @override
+  State<ShopScreen> createState() => _ShopScreenState();
+}
+
+class _ShopScreenState extends State<ShopScreen> {
+  // Message d'achat affiché dans la boutique elle-même : une SnackBar
+  // s'afficherait sur l'écran du dessous, derrière le voile et la fenêtre
+  // de la boutique.
+  String? _notice;
+
+  @override
+  void initState() {
+    super.initState();
+    // Le store n'a pas répondu au lancement : nouvel essai à l'ouverture ;
+    // les prix apparaissent dès qu'il répond, sans rouvrir la boutique.
+    unawaited(context.read<PurchaseService>().reloadIfNeeded());
+  }
+
+  Future<void> _restore(PurchaseService purchase, AppLocalizations t) async {
+    final messenger = ScaffoldMessenger.of(context);
+    var message = t.shopRestoreDone;
+    try {
+      await purchase.restore();
+    } catch (_) {
+      message = t.shopUnavailable;
+    }
+    if (mounted) {
+      setState(() => _notice = message);
+    } else {
+      // Boutique déjà fermée : plus rien ne cache la SnackBar.
+      messenger.showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final settings = context.watch<AppSettings>();
     final purchase = context.read<PurchaseService>();
+    return ListenableBuilder(listenable: purchase.changes, builder: (context, _) => _buildShop(context, purchase));
+  }
+
+  Widget _buildShop(BuildContext context, PurchaseService purchase) {
+    final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme);
     final t = AppLocalizations.of(context);
 
@@ -26,7 +65,15 @@ class ShopScreen extends StatelessWidget {
           children: [
             Text(t.shopTitle, style: AppTextStyles.display(size: 24)),
             const SizedBox(height: 12),
-            if (!purchase.available) ...[
+            if (purchase.loading) ...[
+              Text(
+                t.commonLoading,
+                key: const ValueKey('shopLoading'),
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(size: 12, color: colors.muted),
+              ),
+              const SizedBox(height: 12),
+            ] else if (!purchase.available) ...[
               Text(
                 purchase.lastError ?? t.shopUnavailable,
                 textAlign: TextAlign.center,
@@ -109,16 +156,19 @@ class ShopScreen extends StatelessWidget {
             // le retrait des pubs après une réinstallation ou un changement
             // d'appareil (jamais les jokers, voir PurchaseService).
             TextButton(
-              onPressed: purchase.available
-                  ? () async {
-                      final messenger = ScaffoldMessenger.of(context);
-                      await purchase.restore();
-                      messenger.showSnackBar(SnackBar(content: Text(t.shopRestoreDone)));
-                    }
-                  : null,
+              onPressed: purchase.available ? () => _restore(purchase, t) : null,
               child: Text(t.shopRestore,
                   style: AppTextStyles.body(size: 12, color: colors.muted).copyWith(decoration: TextDecoration.underline)),
             ),
+            if (_notice != null) ...[
+              Text(
+                _notice!,
+                key: const ValueKey('shopNotice'),
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(size: 12, color: AppColors.gold),
+              ),
+              const SizedBox(height: 8),
+            ],
             OutlinedButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(t.commonClose, style: AppTextStyles.body(size: 13, color: AppColors.gold)),

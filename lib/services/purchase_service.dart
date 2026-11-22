@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart' show TargetPlatform, debugPrint, defaultTargetPlatform, kIsWeb, visibleForTesting;
+import 'package:flutter/foundation.dart'
+    show Listenable, TargetPlatform, ValueNotifier, debugPrint, defaultTargetPlatform, kIsWeb, visibleForTesting;
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart' show BillingResponse, PurchaseStateWrapper;
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
@@ -44,6 +45,19 @@ class PurchaseService {
   /// déjà accordés lors de l'achat d'origine.
   void Function(ShopItem item)? onPurchaseRestored;
 
+  /// Prévient la boutique ouverte quand le store répond (disponibilité,
+  /// prix). Pas de ChangeNotifier : le service est fourni par un simple
+  /// Provider, qui refuse les Listenable.
+  Listenable get changes => _changes;
+  final ValueNotifier<int> _changes = ValueNotifier(0);
+
+  bool _started = false; // flux d'achats branché, mémoire des achats relue
+  Future<void>? _loading;
+  bool _launchRestoreDone = false;
+
+  /// Un chargement du store est en cours (lancement ou nouvel essai).
+  bool get loading => _loading != null;
+
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _processedPurchaseIds = (prefs.getStringList(_processedIdsKey) ?? []).toSet();
@@ -51,34 +65,86 @@ class PurchaseService {
       lastError = 'Boutique indisponible sur le web.';
       return;
     }
-    available = await _iap.isAvailable();
-    _subscription = _iap.purchaseStream.listen(handlePurchaseUpdates, onError: (_) {});
+    // Branché avant tout appel au store : un achat qui aboutit est livré
+    // même si le store n'a pas encore répondu à la boutique.
+    _subscription = purchaseUpdates.listen(handlePurchaseUpdates, onError: (_) {});
+    _started = true;
+    await reloadIfNeeded();
+  }
+
+  /// Charge le store s'il n'a pas répondu : au lancement ([init]), puis à
+  /// chaque ouverture de la boutique et au retour au premier plan. Sans ce
+  /// nouvel essai, un store muet au lancement (réseau absent, Play Store en
+  /// cours de mise à jour, erreur ou réponse vide) gardait la boutique et le
+  /// « Sans pub » fermés, sans prix, jusqu'à la mort du processus. Un seul
+  /// chargement à la fois ; rien n'est redemandé une fois les prix connus.
+  /// Réessaie aussi les consommations Android en échec.
+  Future<void> reloadIfNeeded() async {
+    if (!_started) return;
+    if (!available || products.isEmpty) {
+      final load = _loading ??= _load();
+      _changes.value++;
+      try {
+        await load;
+      } finally {
+        if (identical(_loading, load)) _loading = null;
+        _changes.value++;
+      }
+    }
+    await retryFailedConsumptions();
+  }
+
+  Future<void> _load() async {
+    try {
+      available = await storeIsAvailable();
+    } catch (e) {
+      available = false;
+      debugPrint('Boutique : $e');
+    }
     if (!available) {
       lastError = 'Boutique indisponible sur cet appareil.';
       return;
     }
-    final response = await _iap.queryProductDetails(kShopItems.map((i) => i.productId).toSet());
-    products = {for (final p in response.productDetails) p.id: p};
-    if (response.notFoundIDs.isNotEmpty || products.isEmpty) {
+    try {
+      final response = await queryStoreProducts(kShopItems.map((i) => i.productId).toSet());
+      // Réponse vide ou en erreur : les prix déjà connus restent, et le
+      // prochain essai redemande.
+      if (response.productDetails.isNotEmpty) {
+        products = {for (final p in response.productDetails) p.id: p};
+      }
       // Attendu tant qu'aucun compte Play Console / App Store Connect n'a
       // configuré ces ID produits — voir README.
-      lastError = 'Produits non configurés côté store (voir README).';
+      lastError = response.notFoundIDs.isNotEmpty || products.isEmpty
+          ? 'Produits non configurés côté store (voir README).'
+          : null;
+    } catch (e) {
+      debugPrint('Boutique : $e');
     }
     // Android : un achat payé alors que le jeu était fermé (tué pendant le
     // paiement, paiement en espèces abouti plus tard) n'arrive dans le flux
     // que par une restauration. Sans elle, il attendrait « Restaurer mes
     // achats », et Google rembourse tout seul un achat non acquitté au bout
     // de 3 jours. Elle consomme aussi un consommable resté en suspens (voir
-    // handlePurchaseUpdates). L'iPhone ne change pas : StoreKit renvoie de
-    // lui-même les transactions non terminées.
-    if (defaultTargetPlatform == TargetPlatform.android) {
+    // handlePurchaseUpdates). Une fois par lancement, dès que le store
+    // répond. L'iPhone ne change pas : StoreKit renvoie de lui-même les
+    // transactions non terminées.
+    if (!_launchRestoreDone && defaultTargetPlatform == TargetPlatform.android) {
       try {
         await restoreStorePurchases();
+        _launchRestoreDone = true;
       } catch (e) {
         debugPrint('Boutique : $e');
       }
     }
   }
+
+  /// Accès au store, remplacés par des faux dans les tests.
+  @visibleForTesting
+  Stream<List<PurchaseDetails>> get purchaseUpdates => _iap.purchaseStream;
+  @visibleForTesting
+  Future<bool> storeIsAvailable() => _iap.isAvailable();
+  @visibleForTesting
+  Future<ProductDetailsResponse> queryStoreProducts(Set<String> ids) => _iap.queryProductDetails(ids);
 
   void dispose() {
     _subscription?.cancel();
@@ -176,7 +242,8 @@ class PurchaseService {
   bool _consumptionRetryDue = false;
 
   /// Android : réessaie les consommations qui ont échoué (retour au premier
-  /// plan). La restauration renvoie ces achats dans le flux ; déjà livrés et
+  /// plan, ouverture de la boutique : voir [reloadIfNeeded]). La
+  /// restauration renvoie ces achats dans le flux ; déjà livrés et
   /// notés, ils y sont seulement consommés, jamais relivrés. Le lancement
   /// suivant les réessaie de toute façon (restauration de [init]).
   Future<void> retryFailedConsumptions() async {
