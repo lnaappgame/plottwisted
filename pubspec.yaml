@@ -18,6 +18,7 @@ dependencies:
   shared_preferences: ^2.3.2 # sauvegarde locale de la progression
   shared_preferences_android: ^2.4.0 # lecture du consentement TCF ecrit par UMP (TcfConsent)
   in_app_purchase: ^3.2.3   # boutique (jokers, retrait des pubs)
+  in_app_purchase_android: ^0.5.2 # état du paiement et consommation des achats restaurés (même version, 22/11)
   firebase_core: ^3.8.0     # classement de L'énigme de la semaine
   firebase_auth: ^5.3.3     # identifiant anonyme par appareil, sans compte joueur
   cloud_firestore: ^5.5.0   # stockage des temps de résolution

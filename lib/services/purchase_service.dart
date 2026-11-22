@@ -1,6 +1,8 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart' show kIsWeb, visibleForTesting;
+import 'package:flutter/foundation.dart' show TargetPlatform, debugPrint, defaultTargetPlatform, kIsWeb, visibleForTesting;
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/billing_client_wrappers.dart' show BillingResponse, PurchaseStateWrapper;
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/shop_item.dart';
 
@@ -31,13 +33,15 @@ class PurchaseService {
   static const _processedIdsKey = 'cine_devinette_processed_purchase_ids_v1';
   Set<String> _processedPurchaseIds = {};
 
-  /// Appelé pour chaque achat validé, avec l'article de boutique concerné.
+  /// Appelé pour chaque achat validé, avec l'article de boutique concerné —
+  /// y compris, sur Android, un achat restauré jamais acquitté : payé mais
+  /// jamais livré (jeu tué pendant le paiement), il est livré en entier.
   void Function(ShopItem item)? onPurchaseComplete;
 
-  /// Appelé pour un achat non consommable restauré (« Restaurer mes achats »,
-  /// réinstallation, autre appareil) : seuls ses avantages permanents
-  /// (retrait des pubs) doivent être rendus, jamais ses jokers, déjà
-  /// accordés lors de l'achat d'origine.
+  /// Appelé pour un achat non consommable restauré déjà livré (« Restaurer
+  /// mes achats », réinstallation, autre appareil) : seuls ses avantages
+  /// permanents (retrait des pubs) doivent être rendus, jamais ses jokers,
+  /// déjà accordés lors de l'achat d'origine.
   void Function(ShopItem item)? onPurchaseRestored;
 
   Future<void> init() async {
@@ -59,6 +63,20 @@ class PurchaseService {
       // Attendu tant qu'aucun compte Play Console / App Store Connect n'a
       // configuré ces ID produits — voir README.
       lastError = 'Produits non configurés côté store (voir README).';
+    }
+    // Android : un achat payé alors que le jeu était fermé (tué pendant le
+    // paiement, paiement en espèces abouti plus tard) n'arrive dans le flux
+    // que par une restauration. Sans elle, il attendrait « Restaurer mes
+    // achats », et Google rembourse tout seul un achat non acquitté au bout
+    // de 3 jours. Elle consomme aussi un consommable resté en suspens (voir
+    // handlePurchaseUpdates). L'iPhone ne change pas : StoreKit renvoie de
+    // lui-même les transactions non terminées.
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      try {
+        await _iap.restorePurchases();
+      } catch (e) {
+        debugPrint('Boutique : $e');
+      }
     }
   }
 
@@ -120,39 +138,101 @@ class PurchaseService {
     await _iap.restorePurchases();
   }
 
+  /// Acquitte [purchase] auprès du store. Remplacé par un faux dans les tests.
+  @visibleForTesting
+  Future<void> completePurchase(PurchaseDetails purchase) => _iap.completePurchase(purchase);
+
+  /// Android : consomme [purchase] ; il pourra être racheté et ne reviendra
+  /// plus, même après une réinstallation (la consommation vaut acquittement).
+  /// Remplacé par un faux dans les tests.
+  @visibleForTesting
+  Future<void> consumePurchase(PurchaseDetails purchase) async {
+    final result = await _iap.getPlatformAddition<InAppPurchaseAndroidPlatformAddition>().consumePurchase(purchase);
+    if (result.responseCode != BillingResponse.ok) {
+      // Réessayé à la prochaine restauration (chaque lancement sur Android),
+      // sans relivrer : l'achat est déjà dans _processedPurchaseIds.
+      debugPrint('Boutique : consommation refusée (${result.responseCode})');
+    }
+  }
+
+  /// Clé de l'anti-doublon : l'identifiant de la commande. Sur Android,
+  /// Google n'en donne pas pour un achat par code promo : le jeton d'achat
+  /// (unique) le remplace, sinon ces achats partageraient tous la clé vide et
+  /// seul le premier serait livré. Sur l'iPhone, rien ne change.
+  static String? _purchaseKey(PurchaseDetails purchase) {
+    final id = purchase.purchaseID;
+    if (purchase is! GooglePlayPurchaseDetails || (id != null && id.isNotEmpty)) return id;
+    final token = purchase.verificationData.serverVerificationData;
+    return token.isEmpty ? null : token;
+  }
+
   @visibleForTesting
   Future<void> handlePurchaseUpdates(List<PurchaseDetails> purchases) async {
     for (final purchase in purchases) {
-      if (purchase.status == PurchaseStatus.purchased || purchase.status == PurchaseStatus.restored) {
-        ShopItem? item;
-        for (final candidate in kShopItems) {
-          if (candidate.productId == purchase.productID) {
-            item = candidate;
-            break;
-          }
-        }
-        final purchaseId = purchase.purchaseID;
-        final dejaTraite = purchaseId != null && _processedPurchaseIds.contains(purchaseId);
-        // Non-consommable restauré : avantages permanents seulement, sinon une
-        // réinstallation suivie d'une restauration redonnerait les jokers des
-        // packs. (Un consommable « restauré » n'existe que sur Android, s'il
-        // n'a jamais été consommé : achat jamais livré, livré ci-dessous.)
-        if (purchase.status == PurchaseStatus.restored && item != null && !item.isConsumable) {
-          onPurchaseRestored?.call(item);
-        } else if (!dejaTraite) {
-          if (item != null) onPurchaseComplete?.call(item);
-          if (purchaseId != null) {
-            _processedPurchaseIds.add(purchaseId);
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setStringList(_processedIdsKey, _processedPurchaseIds.toList());
-          }
-        }
-        if (purchase.pendingCompletePurchase) {
-          await _iap.completePurchase(purchase);
+      // status == pending / error / canceled : rien à faire, l'UI n'a jamais
+      // accordé la récompense (elle n'est accordée que sur purchased/restored)
+      // et aucun bouton ne reste « en cours » : la boutique n'a pas d'état
+      // d'achat en cours, une annulation sans productID ne bloque donc rien.
+      if (purchase.status != PurchaseStatus.purchased && purchase.status != PurchaseStatus.restored) continue;
+      // Android : la restauration rend aussi, marqué « restored », un achat
+      // dont le paiement attend encore (espèces, autorisation parentale). Ni
+      // livré ni acquitté : il reviendra une fois payé.
+      if (purchase is GooglePlayPurchaseDetails &&
+          purchase.billingClientPurchase.purchaseState == PurchaseStateWrapper.pending) {
+        continue;
+      }
+      ShopItem? item;
+      for (final candidate in kShopItems) {
+        if (candidate.productId == purchase.productID) {
+          item = candidate;
+          break;
         }
       }
-      // status == error / canceled : rien à faire, l'UI n'a jamais accordé
-      // la récompense (elle n'est accordée que sur purchased/restored).
+      final restaure = purchase.status == PurchaseStatus.restored;
+      final android = purchase is GooglePlayPurchaseDetails;
+      final key = _purchaseKey(purchase);
+      final dejaTraite = key != null && _processedPurchaseIds.contains(key);
+      // Android : le jeu n'acquitte un achat qu'après l'avoir livré. Un achat
+      // restauré jamais acquitté a donc été payé mais jamais livré (jeu tué
+      // pendant le paiement, paiement en attente abouti jeu fermé) : c'est un
+      // achat neuf, livré en entier, jokers des packs compris. (Sur l'iPhone,
+      // une restauration reste toujours à terminer : ce signe n'y veut rien
+      // dire, et le comportement n'y change pas.)
+      final payeJamaisLivre = restaure && android && purchase.pendingCompletePurchase;
+      final consommableAndroidRestaure = restaure && android && item != null && item.isConsumable;
+      // Consommable Android restauré déjà acquitté : livré par une version
+      // précédente, jamais consommé ; rien à redonner, même si la mémoire des
+      // achats traités a disparu avec une réinstallation.
+      final dejaLivre = dejaTraite || (consommableAndroidRestaure && !payeJamaisLivre);
+      if (restaure && !payeJamaisLivre && item != null && !item.isConsumable) {
+        // Non-consommable restauré, déjà livré : avantages permanents
+        // seulement, sinon une réinstallation suivie d'une restauration
+        // redonnerait les jokers des packs.
+        onPurchaseRestored?.call(item);
+      } else if (!dejaLivre) {
+        if (item != null) onPurchaseComplete?.call(item);
+        if (key != null) {
+          _processedPurchaseIds.add(key);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setStringList(_processedIdsKey, _processedPurchaseIds.toList());
+        }
+      }
+      if (consommableAndroidRestaure) {
+        // Android : un consommable restauré n'a jamais été consommé (la
+        // consommation automatique du plugin ne vaut que pour un achat ouvert
+        // dans cette session de jeu) : il est consommé, livré ci-dessus ou
+        // non, pour pouvoir être racheté et ne plus revenir. Pas de
+        // completePurchase : la consommation vaut acquittement.
+        try {
+          await consumePurchase(purchase);
+        } catch (e) {
+          debugPrint('Boutique : $e');
+        }
+        continue;
+      }
+      if (purchase.pendingCompletePurchase) {
+        await completePurchase(purchase);
+      }
     }
   }
 }
