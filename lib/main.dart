@@ -7,7 +7,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/game_screen.dart';
@@ -290,8 +289,9 @@ Future<void> _initBackgroundServices({
         // finalité « mesure » (TCF 1 + 8), voir TcfConsent. Ce qui attendait
         // en mémoire part (accord) ou est effacé (refus).
         await TcfConsent.applyToAnalytics(canRequestAds: canRequestAds);
-        if (canRequestAds) {
-          await MobileAds.instance.initialize();
+        // Plafond de classification « T » appliqué avant le SDK et avant la
+        // toute première requête (voir AdService.prepareSdk).
+        if (canRequestAds && await adService.prepareSdk()) {
           adService.enableAds();
         }
       },

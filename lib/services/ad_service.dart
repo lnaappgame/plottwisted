@@ -22,9 +22,46 @@ import 'tcf_consent.dart';
 /// sont simplement indisponibles (aucune récompense, aucun blocage).
 class AdService {
   final AnalyticsService analytics;
-  AdService({AnalyticsService? analytics, AdClickGuard? clickGuard})
-      : analytics = analytics ?? AnalyticsService(),
-        clickGuard = clickGuard ?? AdClickGuard();
+
+  /// [applyRequestConfiguration] et [initializeSdk] remplacent les appels au
+  /// SDK AdMob dans les tests.
+  AdService({
+    AnalyticsService? analytics,
+    AdClickGuard? clickGuard,
+    Future<void> Function(RequestConfiguration configuration)? applyRequestConfiguration,
+    Future<void> Function()? initializeSdk,
+  })  : analytics = analytics ?? AnalyticsService(),
+        clickGuard = clickGuard ?? AdClickGuard(),
+        _applyRequestConfiguration =
+            applyRequestConfiguration ?? ((c) => MobileAds.instance.updateRequestConfiguration(c)),
+        _initializeSdk = initializeSdk ?? (() => MobileAds.instance.initialize());
+
+  final Future<void> Function(RequestConfiguration configuration) _applyRequestConfiguration;
+  final Future<void> Function() _initializeSdk;
+
+  /// Plafond de classification des annonces : « T » (Ado), quel que soit le
+  /// réglage du compte AdMob, comme Faisceau, Méninges, Jardin et le Clos.
+  static RequestConfiguration get requestConfiguration =>
+      RequestConfiguration(maxAdContentRating: MaxAdContentRating.t);
+
+  bool _ratingCapApplied = false;
+
+  /// Après le consentement, avant [enableAds] : applique le plafond de
+  /// classification puis initialise le SDK. Vrai si les deux ont réussi ;
+  /// sinon aucune pub n'est demandée de la session (jamais de requête sans
+  /// le plafond).
+  Future<bool> prepareSdk() async {
+    if (!_adsSupported) return false;
+    try {
+      await _applyRequestConfiguration(requestConfiguration);
+      _ratingCapApplied = true;
+      await _initializeSdk();
+      return true;
+    } catch (e) {
+      debugPrint('AdMob : préparation impossible ($e)');
+      return false;
+    }
+  }
 
   /// Plafond de clics par jour (voir [AdClickGuard]).
   final AdClickGuard clickGuard;
@@ -47,7 +84,7 @@ class AdService {
   /// Flux de consentement RGPD (UMP) — obligatoire avant toute requête
   /// publicitaire pour les utilisateurs UE/UK/Suisse (détecté automatiquement
   /// par Google via l'IP, aucune détection à coder ici). À appeler une seule
-  /// fois au démarrage, avant [enableAds] et avant `MobileAds.instance.initialize()`.
+  /// fois au démarrage, avant [prepareSdk] et [enableAds].
   /// Retourne `false` (jamais bloquant) en cas d'erreur ou de refus — l'app
   /// continue simplement sans pub.
   Future<bool> requestConsentAndPrepareAds() async {
@@ -203,11 +240,11 @@ class AdService {
 
   bool get _canRequest => _enabled && _adsSupported;
 
-  /// À appeler une fois au démarrage, après le consentement et
-  /// `MobileAds.instance.initialize()` : autorise les requêtes publicitaires
-  /// et précharge une pub de chaque format.
+  /// À appeler une fois au démarrage, après le consentement et [prepareSdk] :
+  /// autorise les requêtes publicitaires et précharge une pub de chaque
+  /// format. Sans effet tant que le plafond « T » n'est pas en place.
   void enableAds() {
-    if (!_adsSupported) return;
+    if (!_adsSupported || !_ratingCapApplied) return;
     _enabled = true;
     unawaited(clickGuard.load().whenComplete(preload));
   }
