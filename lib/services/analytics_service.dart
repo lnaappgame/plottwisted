@@ -26,8 +26,11 @@ class AnalyticsService {
   Future<void> logSkipJokerUsed({required int world, required int level}) =>
       _log('skip_joker_used', {'world': world, 'level': level});
 
+  /// Défi du jour terminé : [bonus] = défi bonus (1) ou non (0). Jamais de
+  /// booléen dans les paramètres : Firebase n'accepte que du texte ou des
+  /// nombres (en debug, un booléen fait échouer l'assertion du plugin).
   Future<void> logDefiCompleted({required bool bonus, required int seconds}) =>
-      _log('defi_completed', {'bonus': bonus, 'seconds': seconds});
+      _log('defi_completed', {'bonus': bonus ? 1 : 0, 'seconds': seconds});
 
   Future<void> logEnigmeSolved({required int day}) => _log('enigme_solved', {'day': day});
 
