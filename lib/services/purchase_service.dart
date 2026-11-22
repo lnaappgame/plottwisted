@@ -73,7 +73,7 @@ class PurchaseService {
     // lui-même les transactions non terminées.
     if (defaultTargetPlatform == TargetPlatform.android) {
       try {
-        await _iap.restorePurchases();
+        await restoreStorePurchases();
       } catch (e) {
         debugPrint('Boutique : $e');
       }
@@ -127,18 +127,29 @@ class PurchaseService {
     if (product == null) return;
     final param = PurchaseParam(productDetails: product);
     if (item.isConsumable) {
-      await _iap.buyConsumable(purchaseParam: param);
+      // Android : jamais de consommation automatique. Le plugin consommerait
+      // l'achat (ce qui vaut acquittement) AVANT de le passer au jeu, et sur
+      // un échec le marquerait « erreur » : payé, ni livré ni rachetable
+      // jusqu'au lancement suivant. Le jeu livre d'abord, puis consomme (voir
+      // handlePurchaseUpdates). iPhone : obligatoire pour StoreKit, la
+      // transaction n'y est terminée qu'après la livraison.
+      await buyConsumableOnStore(param, autoConsume: defaultTargetPlatform != TargetPlatform.android);
     } else {
       await _iap.buyNonConsumable(purchaseParam: param);
     }
   }
+
+  /// Lance l'achat d'un consommable. Remplacé par un faux dans les tests.
+  @visibleForTesting
+  Future<bool> buyConsumableOnStore(PurchaseParam param, {required bool autoConsume}) =>
+      _iap.buyConsumable(purchaseParam: param, autoConsume: autoConsume);
 
   /// Relance la restauration des achats auprès du store (obligatoire chez
   /// Apple dès qu'on vend des non-consommables). Les achats retrouvés
   /// arrivent ensuite dans le flux d'achats, avec le statut `restored`.
   Future<void> restore() async {
     if (!available) return;
-    await _iap.restorePurchases();
+    await restoreStorePurchases();
   }
 
   /// Acquitte [purchase] auprès du store. Remplacé par un faux dans les tests.
@@ -147,14 +158,35 @@ class PurchaseService {
 
   /// Android : consomme [purchase] ; il pourra être racheté et ne reviendra
   /// plus, même après une réinstallation (la consommation vaut acquittement).
-  /// Remplacé par un faux dans les tests.
+  /// Lève une erreur si Google refuse. Remplacé par un faux dans les tests.
   @visibleForTesting
   Future<void> consumePurchase(PurchaseDetails purchase) async {
     final result = await _iap.getPlatformAddition<InAppPurchaseAndroidPlatformAddition>().consumePurchase(purchase);
     if (result.responseCode != BillingResponse.ok) {
-      // Réessayé à la prochaine restauration (chaque lancement sur Android),
-      // sans relivrer : l'achat est déjà dans _processedPurchaseIds.
-      debugPrint('Boutique : consommation refusée (${result.responseCode})');
+      throw StateError('consommation refusée (${result.responseCode})');
+    }
+  }
+
+  /// Relance la restauration auprès du store. Remplacé par un faux dans les tests.
+  @visibleForTesting
+  Future<void> restoreStorePurchases() => _iap.restorePurchases();
+
+  // Une consommation a échoué depuis la dernière restauration : l'achat,
+  // livré et noté, attend chez Google d'être consommé.
+  bool _consumptionRetryDue = false;
+
+  /// Android : réessaie les consommations qui ont échoué (retour au premier
+  /// plan). La restauration renvoie ces achats dans le flux ; déjà livrés et
+  /// notés, ils y sont seulement consommés, jamais relivrés. Le lancement
+  /// suivant les réessaie de toute façon (restauration de [init]).
+  Future<void> retryFailedConsumptions() async {
+    if (!_consumptionRetryDue || !available) return;
+    _consumptionRetryDue = false;
+    try {
+      await restoreStorePurchases();
+    } catch (e) {
+      _consumptionRetryDue = true;
+      debugPrint('Boutique : $e');
     }
   }
 
@@ -202,7 +234,10 @@ class PurchaseService {
       // une restauration reste toujours à terminer : ce signe n'y veut rien
       // dire, et le comportement n'y change pas.)
       final payeJamaisLivre = restaure && android && purchase.pendingCompletePurchase;
-      final consommableAndroidRestaure = restaure && android && item != null && item.isConsumable;
+      // Consommable Android, neuf ou restauré : le jeu le consomme lui-même,
+      // une fois livré (voir buy : jamais de consommation automatique).
+      final consommableAndroid = android && item != null && item.isConsumable;
+      final consommableAndroidRestaure = restaure && consommableAndroid;
       // Consommable Android restauré déjà acquitté : livré par une version
       // précédente, jamais consommé ; rien à redonner, même si la mémoire des
       // achats traités a disparu avec une réinstallation.
@@ -220,15 +255,18 @@ class PurchaseService {
           await prefs.setStringList(_processedIdsKey, _processedPurchaseIds.toList());
         }
       }
-      if (consommableAndroidRestaure) {
-        // Android : un consommable restauré n'a jamais été consommé (la
-        // consommation automatique du plugin ne vaut que pour un achat ouvert
-        // dans cette session de jeu) : il est consommé, livré ci-dessus ou
-        // non, pour pouvoir être racheté et ne plus revenir. Pas de
-        // completePurchase : la consommation vaut acquittement.
+      if (consommableAndroid) {
+        // Android : un consommable, neuf ou restauré, n'est consommé qu'ici,
+        // livré ci-dessus (ou déjà livré) et noté sur le disque : il pourra
+        // être racheté et ne reviendra plus. Pas de completePurchase : la
+        // consommation vaut acquittement. Si elle échoue, rien n'est
+        // acquitté ni relivré : l'achat revient à la restauration suivante
+        // (retour au premier plan, lancement), où seule la consommation est
+        // réessayée.
         try {
           await consumePurchase(purchase);
         } catch (e) {
+          _consumptionRetryDue = true;
           debugPrint('Boutique : $e');
         }
         continue;

@@ -457,6 +457,9 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
       unawaited(context
           .read<NotificationService>()
           .refreshOnResume(locale: context.read<AppSettings>().locale, advent: game.advent));
+      // Android : un consommable livré dont la consommation a échoué est
+      // reconsommé (jamais relivré), sans attendre le prochain lancement.
+      unawaited(context.read<PurchaseService>().retryFailedConsumptions());
     }
     // Filet de sécurité : force l'écriture immédiate de la sauvegarde quand
     // l'app passe en arrière-plan ou se ferme, sans attendre le débounce.

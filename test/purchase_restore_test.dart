@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show TargetPlatform, debugDefaultTargetPlatformOverride;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart' show PurchaseStateWrapper, PurchaseWrapper;
@@ -44,13 +45,44 @@ GooglePlayPurchaseDetails _android(String productId,
 /// sont notés au lieu d'être envoyés à Google Play / l'App Store.
 class _FakeStorePurchaseService extends PurchaseService {
   final acknowledged = <String?>[];
+
+  /// Consommations demandées (réussies ou non).
   final consumed = <String?>[];
+
+  /// Google refuse la consommation (réseau, service indisponible...).
+  bool failConsume = false;
+
+  /// Ordre des étapes : livraison (notée par le test) et consommation.
+  final journal = <String>[];
+
+  /// Ce que Google renvoie à une restauration.
+  List<PurchaseDetails> owned = [];
+  int restoreCalls = 0;
+  final autoConsumeArgs = <bool>[];
 
   @override
   Future<void> completePurchase(PurchaseDetails purchase) async => acknowledged.add(purchase.purchaseID);
 
   @override
-  Future<void> consumePurchase(PurchaseDetails purchase) async => consumed.add(purchase.purchaseID);
+  Future<void> consumePurchase(PurchaseDetails purchase) async {
+    consumed.add(purchase.purchaseID);
+    final prefs = await SharedPreferences.getInstance();
+    final noted = prefs.getStringList('cine_devinette_processed_purchase_ids_v1') ?? [];
+    journal.add('consommation ${purchase.purchaseID}${noted.contains(purchase.purchaseID) ? ' (notée)' : ''}');
+    if (failConsume) throw StateError('consommation refusée (BillingResponse.serviceUnavailable)');
+  }
+
+  @override
+  Future<void> restoreStorePurchases() async {
+    restoreCalls++;
+    await handlePurchaseUpdates(owned);
+  }
+
+  @override
+  Future<bool> buyConsumableOnStore(PurchaseParam param, {required bool autoConsume}) async {
+    autoConsumeArgs.add(autoConsume);
+    return true;
+  }
 }
 
 void main() {
@@ -151,10 +183,64 @@ void main() {
     await s.service.handlePurchaseUpdates([_android('red_jokers_pack_3', orderId: 'GPA.12', acknowledged: true)]);
     expect(s.completed, ['jokers_pack_10']);
     expect(s.service.consumed, ['GPA.11', 'GPA.11', 'GPA.12']);
-    // Une fois consommé, un nouvel achat du même produit est bien livré.
+    // Une fois consommé, un nouvel achat du même produit est bien livré, puis consommé par le jeu.
     await s.service.handlePurchaseUpdates([_android('jokers_pack_10', status: PurchaseStatus.purchased, orderId: 'GPA.13')]);
     expect(s.completed, ['jokers_pack_10', 'jokers_pack_10']);
-    expect(s.service.acknowledged, ['GPA.13']);
+    expect(s.service.consumed, ['GPA.11', 'GPA.11', 'GPA.12', 'GPA.13']);
+    expect(s.service.acknowledged, isEmpty);
+  });
+
+  test('Android : consommable neuf : livré et noté AVANT d\'être consommé ; consommation en échec : '
+      'jamais acquitté ni relivré, consommation réessayée plus tard', () async {
+    final s = setUpService();
+    final service = s.service..failConsume = true;
+    service.onPurchaseComplete = (ShopItem item) {
+      s.completed.add(item.productId);
+      service.journal.add('livraison ${item.productId}');
+    };
+    final achat = _android('jokers_pack_10', status: PurchaseStatus.purchased, orderId: 'GPA.40');
+    await service.handlePurchaseUpdates([achat]);
+    expect(s.completed, ['jokers_pack_10'], reason: 'payé : livré même si Google refuse la consommation');
+    expect(service.journal, ['livraison jokers_pack_10', 'consommation GPA.40 (notée)'],
+        reason: 'livré, puis noté sur le disque, puis seulement consommé');
+    expect(service.acknowledged, isEmpty, reason: 'jamais acquitté à la place de la consommation');
+
+    // Le même achat renvoyé par le flux (ou par la restauration du lancement suivant, mémoire relue
+    // sur le disque) : pas relivré, seulement reconsommé.
+    service.available = true;
+    service.owned = [_android('jokers_pack_10', orderId: 'GPA.40')];
+    await service.retryFailedConsumptions();
+    expect(service.restoreCalls, 1, reason: 'retour au premier plan : la consommation est réessayée');
+    expect(s.completed, ['jokers_pack_10'], reason: 'jamais livré deux fois');
+    expect(service.consumed, ['GPA.40', 'GPA.40']);
+
+    // Consommation enfin acceptée : plus rien à réessayer.
+    service.failConsume = false;
+    await service.retryFailedConsumptions();
+    expect(service.restoreCalls, 2);
+    expect(service.consumed, ['GPA.40', 'GPA.40', 'GPA.40']);
+    await service.retryFailedConsumptions();
+    expect(service.restoreCalls, 2, reason: 'aucune restauration inutile une fois consommé');
+    expect(s.completed, ['jokers_pack_10']);
+    expect(service.acknowledged, isEmpty);
+  });
+
+  test('achat d\'un consommable : pas de consommation automatique sur Android, obligatoire sur iPhone', () async {
+    final service = _FakeStorePurchaseService()
+      ..products = {
+        'jokers_pack_10': ProductDetails(
+            id: 'jokers_pack_10', title: '', description: '', price: '2,99 €', rawPrice: 2.99, currencyCode: 'EUR'),
+      };
+    final pack10 = kShopItems.firstWhere((i) => i.productId == 'jokers_pack_10');
+    try {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      await service.buy(pack10);
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      await service.buy(pack10);
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
+    expect(service.autoConsumeArgs, [false, true]);
   });
 
   test('Android : paiement en attente marqué restauré : ni livré, ni acquitté, ni consommé ; livré une fois payé', () async {
