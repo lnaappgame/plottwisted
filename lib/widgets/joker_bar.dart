@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
@@ -70,7 +71,11 @@ class JokerBar extends StatelessWidget {
         ),
         if (!game.inTutorial) ...[
           const SizedBox(height: 10),
-          WinJokerButton(label: t.jokerWinOne, colors: colors, onTap: onWatchAdForJoker),
+          WinJokerButton(
+              label: t.jokerWinOne,
+              colors: colors,
+              onTap: onWatchAdForJoker,
+              busy: game.adService.rewardedInProgress),
         ],
       ],
     );
@@ -187,7 +192,12 @@ class EventJokerBar extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          WinJokerButton(key: const ValueKey('eventWinJoker'), label: t.jokerWinOne, colors: colors, onTap: onWatchAd),
+          WinJokerButton(
+              key: const ValueKey('eventWinJoker'),
+              label: t.jokerWinOne,
+              colors: colors,
+              onTap: onWatchAd,
+              busy: game.adService.rewardedInProgress),
         ],
       ),
     );
@@ -199,15 +209,26 @@ class WinJokerButton extends StatelessWidget {
   final String label;
   final AppColors colors;
   final VoidCallback onTap;
-  const WinJokerButton({super.key, required this.label, required this.colors, required this.onTap});
+
+  /// Vidéo en cours ([AdService.rewardedInProgress]) : indicateur à la place
+  /// du pictogramme, touchers ignorés.
+  final ValueListenable<bool>? busy;
+  const WinJokerButton({super.key, required this.label, required this.colors, required this.onTap, this.busy});
 
   @override
   Widget build(BuildContext context) {
+    final busy = this.busy;
+    if (busy == null) return _build(false);
+    return ValueListenableBuilder<bool>(valueListenable: busy, builder: (context, value, _) => _build(value));
+  }
+
+  Widget _build(bool busy) {
     return Semantics(
       button: true,
+      enabled: !busy,
       label: label,
       child: GestureDetector(
-        onTap: onTap,
+        onTap: busy ? null : onTap,
         child: Container(
           constraints: const BoxConstraints(maxWidth: 324),
           width: double.infinity,
@@ -223,7 +244,15 @@ class WinJokerButton extends StatelessWidget {
             children: [
               Text(label, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
               const SizedBox(width: 8),
-              Text('🎬▶️', style: AppTextStyles.body(size: 10, color: colors.muted)),
+              if (busy)
+                const SizedBox(
+                  key: ValueKey('winJokerLoading'),
+                  width: 12,
+                  height: 12,
+                  child: CircularProgressIndicator(strokeWidth: 1.6, color: AppColors.goldBright),
+                )
+              else
+                Text('🎬▶️', style: AppTextStyles.body(size: 10, color: colors.muted)),
             ],
           ),
         ),

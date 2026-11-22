@@ -286,6 +286,9 @@ class _GameScreenState extends State<GameScreen> {
   Future<void> _onWatchAdForJoker() async {
     final game = context.read<GameState>();
     if (game.inTutorial) return;
+    // Double toucher : la vidéo du 1er est déjà en route (indicateur sur le
+    // bouton) ; rien à lancer, ni « pub indisponible » à afficher.
+    if (game.adService.rewardedInProgress.value) return;
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned) {
@@ -366,6 +369,7 @@ class _GameScreenState extends State<GameScreen> {
       _toast(t.jokerRedLockedToast);
       return;
     }
+    if (game.adService.rewardedInProgress.value) return; // double toucher
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned && game.peutRegarderPubJokerRouge) {
@@ -395,6 +399,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _watchAdForMinorBonus() async {
     final game = context.read<GameState>();
+    if (game.adService.rewardedInProgress.value) return; // double toucher
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned) {

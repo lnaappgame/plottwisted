@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform, debugPrint;
+import 'package:flutter/foundation.dart' show ValueNotifier, kIsWeb, defaultTargetPlatform, TargetPlatform, debugPrint;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'ad_click_guard.dart';
 import 'analytics_service.dart';
@@ -357,7 +357,26 @@ class AdService {
   /// effectivement été gagnée (pub regardée jusqu'au bout) ; false si aucune
   /// pub n'est prête : l'appelant affiche « pub indisponible », un chargement
   /// part, et le joueur peut retoucher le bouton quelques secondes plus tard.
+  ///
+  /// Une seule séquence à la fois ([rewardedInProgress]) : un second appel
+  /// pendant la première (double toucher) rend false tout de suite, sans
+  /// chargement ni vidéo ; la récompense reste à la première, une seule fois.
   Future<bool> showRewardedAdForJoker() async {
+    if (rewardedInProgress.value) return false;
+    rewardedInProgress.value = true;
+    try {
+      return await _showRewardedAd();
+    } finally {
+      rewardedInProgress.value = false;
+    }
+  }
+
+  /// Vrai pendant toute une séquence de vidéo récompensée : fenêtre de
+  /// consentement, court chargement après l'accord (jusqu'à 6 s), vidéo.
+  /// Les boutons « vidéo » y affichent un indicateur et ignorent les touchers.
+  final ValueNotifier<bool> rewardedInProgress = ValueNotifier(false);
+
+  Future<bool> _showRewardedAd() async {
     // Règle C7 : une vidéo demandée avant la réponse au consentement ouvre la
     // fenêtre maintenant ; la vidéo se charge dès que la réponse est traitée.
     final gate = ConsentGate.instance;
