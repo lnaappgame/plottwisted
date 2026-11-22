@@ -355,6 +355,8 @@
   "shopUnavailable": "Shop unavailable right now.",
   "shopRestore": "Restore purchases",
   "shopRestoreDone": "Check started: if you had bought ad removal, it is back.",
+  "shopCompareAtNote": "instead of {price} separately",
+  "@shopCompareAtNote": {"placeholders": {"price": {"type": "String"}}},
 
   "shareButton": "Share",
   "shareAskFriend": "Ask a friend",

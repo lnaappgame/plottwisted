@@ -1080,6 +1080,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.';
 
   @override
+  String shopCompareAtNote(String price) {
+    return 'au lieu de $price à l\'unité';
+  }
+
+  @override
   String get shareButton => 'Partager';
 
   @override

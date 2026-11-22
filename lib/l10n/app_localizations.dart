@@ -1935,6 +1935,12 @@ abstract class AppLocalizations {
   /// **'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.'**
   String get shopRestoreDone;
 
+  /// No description provided for @shopCompareAtNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'au lieu de {price} à l\'unité'**
+  String shopCompareAtNote(String price);
+
   /// No description provided for @shareButton.
   ///
   /// In fr, this message translates to:

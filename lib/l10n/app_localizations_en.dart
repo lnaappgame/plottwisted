@@ -1075,6 +1075,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Check started: if you had bought ad removal, it is back.';
 
   @override
+  String shopCompareAtNote(String price) {
+    return 'instead of $price separately';
+  }
+
+  @override
   String get shareButton => 'Share';
 
   @override

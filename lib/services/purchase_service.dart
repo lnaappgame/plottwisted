@@ -90,6 +90,9 @@ class PurchaseService {
 
   /// Prix barré de [item] : somme des articles équivalents achetés
   /// séparément, null si l'un d'eux n'est pas chargé ou si les devises diffèrent.
+  /// La boutique l'accompagne toujours de son explication (« au lieu de X à
+  /// l'unité », `shopCompareAtNote`) : un prix barré seul laisserait croire
+  /// à un ancien prix du pack.
   /// Écrit au même format que les prix du store (symbole, position,
   /// séparateur) : formaté selon la langue du jeu, il donnait « 12,96 $ » à
   /// côté de « $8.99 » quand le compte du joueur est américain.

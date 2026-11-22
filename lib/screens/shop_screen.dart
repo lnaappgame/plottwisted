@@ -60,6 +60,12 @@ class ShopScreen extends StatelessWidget {
                                 if (item.subtitleFor(settings.locale) != null)
                                   Text(item.subtitleFor(settings.locale)!,
                                       style: AppTextStyles.body(size: 11, color: colors.muted)),
+                                // Le prix barré est la somme des articles achetés
+                                // séparément : on le dit en toutes lettres.
+                                if (compareAtPrice != null)
+                                  Text(t.shopCompareAtNote(compareAtPrice),
+                                      key: ValueKey('shopCompareAtNote_${item.productId}'),
+                                      style: AppTextStyles.body(size: 11, weight: FontWeight.w700, color: AppColors.gold)),
                               ],
                             ),
                           ),
