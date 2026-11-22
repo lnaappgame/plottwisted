@@ -605,15 +605,22 @@ class ProgressLeaderboard extends ChangeNotifier {
   /// l'effacement ne dépend pas de l'interrupteur. Hors ligne, la
   /// suppression est retentée au prochain lancement (et à la prochaine
   /// ouverture du classement).
-  Future<void> leave() => _serial(() async {
+  ///
+  /// Aussi appelé par la suppression du compte (Réglages), même pour un
+  /// joueur que le téléphone ne croit pas inscrit : un document repris après
+  /// une réinstallation est effacé lui aussi. Vrai si les deux suppressions
+  /// ont réussi (document absent compris). La mesure `leaderboard_leave` ne
+  /// part que pour un joueur qui apparaissait.
+  Future<bool> leave() => _serial(() async {
         _deferred?.cancel();
         _deferred = null;
+        final wasIn = _participating;
         _participating = false;
         _pendingDelete = true;
         await _save();
         _notify();
-        unawaited(analytics?.logLeaderboardLeave());
-        await _deleteNow();
+        if (wasIn) unawaited(analytics?.logLeaderboardLeave());
+        return _deleteNow();
       });
 
   /// La proposition de la première ouverture a été faite.

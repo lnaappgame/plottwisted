@@ -150,6 +150,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsResetConfirm2Cta => 'Reset';
 
   @override
+  String get settingsDeleteAccount => 'Delete my backup and sign out';
+
+  @override
+  String get settingsDeleteAccountTitle => '⚠️ Delete your backup?';
+
+  @override
+  String settingsDeleteAccountBody(String email) {
+    return 'Your online backup, your account linked to Google ($email), your spot on the leaderboard and your Multiplayer profile will be permanently deleted. The game keeps working normally and your progress stays on this phone.';
+  }
+
+  @override
+  String get settingsDeleteAccountCta => 'Delete';
+
+  @override
+  String get settingsDeleteAccountDoneSnack =>
+      '✅ Done: your online backup and your account have been deleted. Your progress stays on this phone.';
+
+  @override
+  String get settingsDeleteAccountPartialTitle => 'Account deleted';
+
+  @override
+  String get settingsDeleteAccountPartialBody =>
+      'Your account has been deleted, but some of your online data couldn\'t be erased. To finish, use the deletion web page.';
+
+  @override
+  String get settingsDeleteAccountReauthTitle =>
+      '⚠️ Google confirmation needed';
+
+  @override
+  String get settingsDeleteAccountReauthBody =>
+      'Google needs to confirm it\'s really you before your account can be deleted. Try again and pick the same Google account, or use the deletion web page.';
+
+  @override
+  String get settingsDeleteAccountFailedTitle => '⚠️ Deletion failed';
+
+  @override
+  String get settingsDeleteAccountFailedBody =>
+      'Your account couldn\'t be deleted. Check your connection and try again, or use the deletion web page.';
+
+  @override
+  String get settingsDeleteAccountOpenPage => 'Open the web page';
+
+  @override
+  String get settingsDeleteDataLink => 'Delete my account and data (web page)';
+
+  @override
   String get commonRulesTitle => 'GAME RULES';
 
   @override

@@ -47,19 +47,23 @@ service cloud.firestore {
     // Elo courant par joueur — un document par joueur (contrairement à
     // multiplayer_runs), utilisé uniquement pour le calcul du pourcentage
     // mondial (lecture agrégée sur toute la collection, donc publique).
-    // Écriture limitée à SON PROPRE document.
+    // Écriture limitée à SON PROPRE document. Suppression de son propre
+    // document permise (1.0.16) : « Supprimer ma sauvegarde et me
+    // déconnecter » des Réglages efface la fiche Elo avant le compte.
     match /multiplayer_players/{uid} {
       allow read: if true;
       allow write: if request.auth != null
                    && request.auth.uid == uid
                    && request.resource.data.elo is int;
+      allow delete: if request.auth != null && request.auth.uid == uid;
     }
 
     // Sauvegarde cloud liée à un compte Google (CloudSyncService.backup/
     // restore) — contient l'intégralité des données de jeu locales de
     // l'utilisateur : contrairement aux classements, PAS de lecture
     // publique. Seul le propriétaire du document (son propre UID Firebase,
-    // anonyme ou lié à Google) peut le lire ou l'écraser.
+    // anonyme ou lié à Google) peut le lire, l'écraser ou le supprimer
+    // (write couvre delete : utilisé par la suppression du compte, 1.0.16).
     match /backups/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }

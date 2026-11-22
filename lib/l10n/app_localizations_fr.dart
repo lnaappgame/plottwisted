@@ -151,6 +151,54 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsResetConfirm2Cta => 'Réinitialiser';
 
   @override
+  String get settingsDeleteAccount =>
+      'Supprimer ma sauvegarde et me déconnecter';
+
+  @override
+  String get settingsDeleteAccountTitle => '⚠️ Supprimer ta sauvegarde ?';
+
+  @override
+  String settingsDeleteAccountBody(String email) {
+    return 'Ta sauvegarde en ligne, ton compte lié à Google ($email), ta place au classement et ta fiche Multijoueur seront supprimés définitivement. Le jeu continue de fonctionner normalement et ta partie reste sur ce téléphone.';
+  }
+
+  @override
+  String get settingsDeleteAccountCta => 'Supprimer';
+
+  @override
+  String get settingsDeleteAccountDoneSnack =>
+      '✅ C\'est fait : ta sauvegarde en ligne et ton compte sont supprimés. Ta partie reste sur ce téléphone.';
+
+  @override
+  String get settingsDeleteAccountPartialTitle => 'Compte supprimé';
+
+  @override
+  String get settingsDeleteAccountPartialBody =>
+      'Ton compte est supprimé, mais une partie de tes données en ligne n\'a pas pu être effacée. Pour finir, passe par la page web de suppression.';
+
+  @override
+  String get settingsDeleteAccountReauthTitle =>
+      '⚠️ Confirmation de Google nécessaire';
+
+  @override
+  String get settingsDeleteAccountReauthBody =>
+      'Google doit confirmer que c\'est bien toi avant de supprimer ton compte. Réessaie en choisissant le même compte Google, ou passe par la page web de suppression.';
+
+  @override
+  String get settingsDeleteAccountFailedTitle => '⚠️ Suppression impossible';
+
+  @override
+  String get settingsDeleteAccountFailedBody =>
+      'Ton compte n\'a pas pu être supprimé. Vérifie ta connexion et réessaie, ou passe par la page web de suppression.';
+
+  @override
+  String get settingsDeleteAccountOpenPage => 'Ouvrir la page web';
+
+  @override
+  String get settingsDeleteDataLink =>
+      'Supprimer mon compte et mes données (page web)';
+
+  @override
   String get commonRulesTitle => 'RÈGLES DU JEU';
 
   @override

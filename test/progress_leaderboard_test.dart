@@ -503,11 +503,31 @@ void main() {
       expect(h.analytics.events, ['join', 'leave']);
     });
 
-    test('retrait hors ligne : retenté au lancement suivant', () async {
+    test('retrait : vrai si les deux suppressions ont réussi', () async {
+      final h = Harness();
+      await h.joined(s: 3);
+      expect(await h.lb.leave(), isTrue);
+    });
+
+    test('retrait d\'un joueur que le téléphone ne croit pas inscrit (suppression du compte) : '
+        'document effacé partout, sans mesure « leave »', () async {
+      final h = Harness();
+      // Document repris d'une installation précédente, inconnu du téléphone.
+      h.backend.docs['fr']!['moi'] = (pseudo: 'Ancien', score: 40);
+      await h.lb.startup();
+      expect(h.lb.participating, isFalse);
+      expect(await h.lb.leave(), isTrue);
+      expect(h.backend.deletes.toSet(), {'fr', 'en'});
+      expect(h.backend.docs['fr'], isEmpty);
+      expect(h.analytics.events, isNot(contains('leave')));
+      expect(h.lb.pendingDelete, isFalse);
+    });
+
+    test('retrait hors ligne : faux, et retenté au lancement suivant', () async {
       final h = Harness();
       await h.joined(s: 3);
       h.backend.failDeletes = true;
-      await h.lb.leave();
+      expect(await h.lb.leave(), isFalse);
       expect(h.lb.participating, isFalse);
       expect(h.lb.pendingDelete, isTrue);
       h.backend.failDeletes = false;

@@ -362,6 +362,84 @@ abstract class AppLocalizations {
   /// **'Réinitialiser'**
   String get settingsResetConfirm2Cta;
 
+  /// No description provided for @settingsDeleteAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer ma sauvegarde et me déconnecter'**
+  String get settingsDeleteAccount;
+
+  /// No description provided for @settingsDeleteAccountTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚠️ Supprimer ta sauvegarde ?'**
+  String get settingsDeleteAccountTitle;
+
+  /// No description provided for @settingsDeleteAccountBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta sauvegarde en ligne, ton compte lié à Google ({email}), ta place au classement et ta fiche Multijoueur seront supprimés définitivement. Le jeu continue de fonctionner normalement et ta partie reste sur ce téléphone.'**
+  String settingsDeleteAccountBody(String email);
+
+  /// No description provided for @settingsDeleteAccountCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get settingsDeleteAccountCta;
+
+  /// No description provided for @settingsDeleteAccountDoneSnack.
+  ///
+  /// In fr, this message translates to:
+  /// **'✅ C\'est fait : ta sauvegarde en ligne et ton compte sont supprimés. Ta partie reste sur ce téléphone.'**
+  String get settingsDeleteAccountDoneSnack;
+
+  /// No description provided for @settingsDeleteAccountPartialTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte supprimé'**
+  String get settingsDeleteAccountPartialTitle;
+
+  /// No description provided for @settingsDeleteAccountPartialBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton compte est supprimé, mais une partie de tes données en ligne n\'a pas pu être effacée. Pour finir, passe par la page web de suppression.'**
+  String get settingsDeleteAccountPartialBody;
+
+  /// No description provided for @settingsDeleteAccountReauthTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚠️ Confirmation de Google nécessaire'**
+  String get settingsDeleteAccountReauthTitle;
+
+  /// No description provided for @settingsDeleteAccountReauthBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Google doit confirmer que c\'est bien toi avant de supprimer ton compte. Réessaie en choisissant le même compte Google, ou passe par la page web de suppression.'**
+  String get settingsDeleteAccountReauthBody;
+
+  /// No description provided for @settingsDeleteAccountFailedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚠️ Suppression impossible'**
+  String get settingsDeleteAccountFailedTitle;
+
+  /// No description provided for @settingsDeleteAccountFailedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton compte n\'a pas pu être supprimé. Vérifie ta connexion et réessaie, ou passe par la page web de suppression.'**
+  String get settingsDeleteAccountFailedBody;
+
+  /// No description provided for @settingsDeleteAccountOpenPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la page web'**
+  String get settingsDeleteAccountOpenPage;
+
+  /// No description provided for @settingsDeleteDataLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer mon compte et mes données (page web)'**
+  String get settingsDeleteDataLink;
+
   /// No description provided for @commonRulesTitle.
   ///
   /// In fr, this message translates to:
