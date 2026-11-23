@@ -113,6 +113,51 @@ void main() {
     expect(state.currentCaseIndex, 2);
   });
 
+  test('terminer le défi OFFICIEL marque le jour comme fait et prévient (rappel de 18 h reporté)', () async {
+    final state = _state();
+    var prevenu = 0;
+    state.onOfficielTermine = () => prevenu++;
+    state.clock = () => DateTime.utc(2026, 11, 23, 9); // le matin, jour GMT du 23/11
+    state.currentIndex = 0;
+    state.currentDayStart = defiDayStart(state.clock());
+    expect(state.officielFaitAujourdhui, isFalse);
+    final defi = state.defiDuJour;
+    state.startDefi(defi, bonus: false);
+    for (var i = 0; i < defi.cases.length; i++) {
+      state.onCaseTapped(i);
+    }
+    await Future.delayed(const Duration(milliseconds: 1100));
+    expect(state.solved, isTrue);
+    expect(prevenu, 1);
+    expect(state.officielFaitAujourdhui, isTrue);
+    // Toujours vrai le soir même (18 h), plus vrai le lendemain.
+    state.clock = () => DateTime.utc(2026, 11, 23, 17);
+    expect(state.officielFaitAujourdhui, isTrue);
+    state.clock = () => DateTime.utc(2026, 11, 24, 1);
+    expect(state.officielFaitAujourdhui, isFalse);
+    // Le marqueur survit à la sauvegarde.
+    final copie = _state();
+    copie.clock = () => DateTime.utc(2026, 11, 23, 17);
+    copie.officielDoneDayStart = DateTime.tryParse(state.toJson()['officielDoneDayStart'] as String);
+    expect(copie.officielFaitAujourdhui, isTrue);
+  });
+
+  test('terminer un défi BONUS ne marque pas le jour et ne prévient pas', () async {
+    final state = _state();
+    var prevenu = 0;
+    state.onOfficielTermine = () => prevenu++;
+    state.currentIndex = 0;
+    final bonus = kDefis.firstWhere((d) => d.id != state.defiDuJour.id);
+    state.startDefi(bonus, bonus: true);
+    for (var i = 0; i < bonus.cases.length; i++) {
+      state.onCaseTapped(i);
+    }
+    await Future.delayed(const Duration(milliseconds: 1100));
+    expect(state.solved, isTrue);
+    expect(prevenu, 0);
+    expect(state.officielFaitAujourdhui, isFalse);
+  });
+
   test('terminer le défi calcule le temps total et retient le meilleur temps', () async {
     final state = _state();
     state.currentIndex = 0;

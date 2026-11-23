@@ -230,6 +230,7 @@ Future<void> _initBackgroundServices({
   required NotificationService notificationService,
   required AppSettings appSettings,
   required AdventCalendar advent,
+  required DefiState defiState,
   required bool alreadySucceeded,
   ProgressLeaderboard? progressLeaderboard,
 }) async {
@@ -312,7 +313,11 @@ Future<void> _initBackgroundServices({
   // téléphone. Pas de réglage in-app pour les couper : un joueur qui n'en
   // veut pas passe par les paramètres système de l'app (comme
   // requestPermission() le lui propose déjà au 1er lancement).
-  await notificationService.askAndSchedule(locale: appSettings.locale, advent: advent);
+  // Défi officiel déjà fait aujourd'hui : le rappel de 18 h est posé à partir
+  // de demain ; et dès qu'il est terminé dans la session, il est reporté.
+  defiState.onOfficielTermine = () => unawaited(notificationService.reporterRappelDefi(locale: appSettings.locale));
+  await notificationService.askAndSchedule(
+      locale: appSettings.locale, advent: advent, defiFaitAujourdhui: defiState.officielFaitAujourdhui);
 }
 
 class CineDevinetteApp extends StatelessWidget {
@@ -454,9 +459,10 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
       // Android 11 peut retarder une alarme inexacte jusqu'à 75 % du délai
       // restant : on repose les rappels à chaque retour au premier plan.
       final game = context.read<GameState>();
-      unawaited(context
-          .read<NotificationService>()
-          .refreshOnResume(locale: context.read<AppSettings>().locale, advent: game.advent));
+      unawaited(context.read<NotificationService>().refreshOnResume(
+          locale: context.read<AppSettings>().locale,
+          advent: game.advent,
+          defiFaitAujourdhui: context.read<DefiState>().officielFaitAujourdhui));
       // Boutique : le store qui n'avait pas répondu est réinterrogé (prix,
       // « Sans pub ») ; sur Android, un consommable livré dont la
       // consommation a échoué est reconsommé (jamais relivré).
@@ -566,6 +572,7 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
       notificationService: context.read<NotificationService>(),
       appSettings: context.read<AppSettings>(),
       advent: game.advent,
+      defiState: context.read<DefiState>(),
       alreadySucceeded: game.hasWonAPuzzle,
       progressLeaderboard: context.read<ProgressLeaderboard?>(),
     ));

@@ -24,7 +24,8 @@ class _FakeNotifications extends NotificationService {
   @override
   Future<void> cancelReminder(int id) async => calls.add('cancel:$id');
   @override
-  Future<void> scheduleDailyDefiReminder({int heure = 18, String locale = 'fr'}) async => calls.add('defi');
+  Future<void> scheduleDailyDefiReminder({int heure = 18, String locale = 'fr', bool sauterAujourdhui = false}) async =>
+      calls.add(sauterAujourdhui ? 'defi-demain' : 'defi');
   @override
   Future<void> scheduleWeeklyEnigmeReminder({int heure = 9, String locale = 'fr'}) async => calls.add('enigme');
   @override
@@ -80,5 +81,26 @@ void main() {
     await n.askAndSchedule(locale: 'fr', advent: advent);
     await n.refreshOnResume(locale: 'fr', advent: advent);
     expect(n.calls, isEmpty);
+  });
+
+  test('défi du jour déjà fait : le rappel de 18 h est posé à partir de demain', () async {
+    final n = _FakeNotifications();
+    await n.askAndSchedule(locale: 'fr', advent: advent, defiFaitAujourdhui: true);
+    expect(n.calls, contains('defi-demain'));
+    expect(n.calls, isNot(contains('defi')));
+    n.calls.clear();
+    await n.refreshOnResume(locale: 'fr', advent: advent, defiFaitAujourdhui: true);
+    expect(n.calls, contains('defi-demain'));
+    expect(n.calls, isNot(contains('defi')));
+  });
+
+  test('défi officiel terminé dans la session : le rappel du jour est annulé et reporté', () async {
+    final n = _FakeNotifications();
+    await n.reporterRappelDefi(locale: 'fr'); // pas encore armé : rien
+    expect(n.calls, isEmpty);
+    await n.askAndSchedule(locale: 'fr', advent: advent);
+    n.calls.clear();
+    await n.reporterRappelDefi(locale: 'fr');
+    expect(n.calls, ['cancel:1', 'defi-demain']);
   });
 }
