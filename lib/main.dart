@@ -250,9 +250,14 @@ Future<void> _initBackgroundServices({
       // si Firebase a pu s'initialiser, jamais de dépendance dure dessus.
       // Toujours active (jamais soumise au consentement RGPD/pubs) : la
       // stabilité de l'app relève de l'intérêt légitime, pas du marketing.
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      // Décision de studio (23/11) : une erreur Dart non rattrapée ne ferme
+      // jamais l'app, elle est donc enregistrée NON fatale ; seuls les
+      // plantages natifs comptent dans le taux « sans plantage ». Avant, une
+      // PlatformException asynchrone chez un seul joueur (1.0.15) comptait
+      // 23 « plantages ».
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
       PlatformDispatcher.instance.onError = (error, stack) {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
         return true;
       };
     } catch (_) {}
