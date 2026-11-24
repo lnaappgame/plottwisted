@@ -4,9 +4,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show LicenseEntryWithLineBreaks, LicenseRegistry, kDebugMode, kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/game_screen.dart';
@@ -38,6 +39,19 @@ import 'widgets/tablet_scale.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Polices embarquées (assets/google_fonts/) : google_fonts ne télécharge plus
+  // rien au lancement. En 1.0.15, les joueurs hors ligne au démarrage
+  // récoltaient une erreur « Failed host lookup fonts.gstatic.com »
+  // (Crashlytics : 17 fois chez 7 joueurs) et un texte en police de secours.
+  GoogleFonts.config.allowRuntimeFetching = false;
+  LicenseRegistry.addLicense(() async* {
+    for (final famille in const ['BebasNeue', 'LibreFranklin', 'Lexend']) {
+      yield LicenseEntryWithLineBreaks(
+        [famille],
+        await rootBundle.loadString('assets/google_fonts/OFL-$famille.txt'),
+      );
+    }
+  });
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

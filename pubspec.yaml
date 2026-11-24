@@ -50,6 +50,7 @@ flutter:
     - assets/sounds/
     - assets/icon/
     - assets/video/
+    - assets/google_fonts/
 
 # Génère les icônes d'app pour Android/iOS depuis assets/icon/*.png
 # (rendus depuis tool/icon/*.svg par tool/icon/render.ps1) :
