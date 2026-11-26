@@ -14,6 +14,16 @@ import '../models/event_pitch.dart';
 /// Réponses supplémentaires (acceptedFr / acceptedEn) : celles listées dans les
 /// notes (vérification Cowork du 21/11).
 ///
+/// Pièges (trapsFr / trapsEn) : une case se joue en QCM, le bon titre parmi
+/// trois pièges (demande de Damien du 26/11). Un piège est un vrai film connu,
+/// sous son titre officiel en France (FR) et aux États-Unis (EN), dans le même
+/// ordre dans les deux langues ; il colle à un détail du pitch (un autre film
+/// de Noël, un mot du titre, un acteur, un thème) sans que le pitch le décrive
+/// aussi bien que la réponse. Jamais le même film sous un autre titre, ni un
+/// film de la même saga que la réponse ; les autres films du calendrier servent
+/// au plus une ou deux fois. Le test test/advent_calendar_test.dart vérifie le
+/// nombre de pièges, leurs doublons, et qu'aucun n'est une réponse acceptée.
+///
 /// Écarts avec le fichier de notes :
 /// - case 1 : correction proposée dans les notes (FR et EN), car le texte
 ///   validé contenait « stole », un mot du titre anglais, et deux erreurs
@@ -21,7 +31,8 @@ import '../models/event_pitch.dart';
 /// - case 25 : correction EN proposée dans les notes (« alone » est un mot du
 ///   titre anglais, et il n'y a qu'un fer à repasser) ;
 /// - titres EN sans leur mention entre parenthèses (« (Dr. Seuss') »,
-///   « (Disney's) ») : la grille de lettres n'accepte qu'une réponse.
+///   « (Disney's) »), pièges compris (« The Lorax », pas « Dr. Seuss' The Lorax ») :
+///   le QCM affiche le titre court, sous lequel le film est connu.
 const kAdventPitches = [
   // 1er décembre
   EventPitch(
@@ -35,6 +46,9 @@ const kAdventPitches = [
         "entire village, with his dog playing reindeer. I should have been furious, but his heart grew three sizes "
         "that same day. I forgave him.",
     acceptedEn: ["The Grinch"],
+    // Pièges : Jack se déguise en Père Noël ; Shrek, créature verte et solitaire ; Le Lorax, du Dr Seuss.
+    trapsFr: ["L'Étrange Noël de monsieur Jack", "Shrek", "Le Lorax"],
+    trapsEn: ["The Nightmare Before Christmas", "Shrek", "The Lorax"],
   ),
   // 2 décembre
   EventPitch(
@@ -47,6 +61,9 @@ const kAdventPitches = [
     pitchEn: "One Christmas Eve, a steam train stopped outside the house of a boy who was starting to doubt me, "
         "and took him all the way to my village. I gave him a bell that fell from my reindeer's harness. Only those "
         "who still believe can hear it ring.",
+    // Pièges : trains : l'Orient-Express, le train des neiges, la gare de Hugo Cabret.
+    trapsFr: ["Le Crime de l'Orient-Express", "Snowpiercer, le Transperceneige", "Hugo Cabret"],
+    trapsEn: ["Murder on the Orient Express", "Snowpiercer", "Hugo"],
   ),
   // 3 décembre
   EventPitch(
@@ -59,6 +76,9 @@ const kAdventPitches = [
     pitchEn: "A New York cop who came to spend Christmas with his wife in Los Angeles spent the night barefoot in "
         "an office tower, fighting terrorists. Every year people ask me whether it's really a Christmas movie. "
         "To me, it is.",
+    // Pièges : flic à Noël à Los Angeles ; « Piège… » de Steven Seagal ; une tour.
+    trapsFr: ["L'Arme fatale", "Piège en haute mer", "La Tour infernale"],
+    trapsEn: ["Lethal Weapon", "Under Siege", "The Towering Inferno"],
   ),
   // 4 décembre
   EventPitch(
@@ -71,6 +91,9 @@ const kAdventPitches = [
     pitchEn: "An inventor gave his son an adorable little furball from a Chinatown shop as a Christmas present, "
         "with three rules: no bright light, no water, and never feed it after midnight. Every single rule got "
         "broken. Their small town had a holiday season I still remember.",
+    // Pièges : petites créatures adoptées par un enfant, poilues ou destructrices.
+    trapsFr: ["E.T. l'extra-terrestre", "Lilo et Stitch", "Monstres et Cie"],
+    trapsEn: ["E.T. the Extra-Terrestrial", "Lilo & Stitch", "Monsters, Inc."],
   ),
   // 5 décembre
   EventPitch(
@@ -83,6 +106,9 @@ const kAdventPitches = [
     pitchEn: "One Christmas Eve, a baby crawled into my sack at an orphanage. My helpers raised him at the North "
         "Pole, but as a grown-up he towered over every one of them. He went to New York to find his real father… "
         "who was on my naughty list.",
+    // Pièges : un enfant-adulte à New York ; une princesse perdue à New York ; un enfant élevé par d'autres.
+    trapsFr: ["Big", "Il était une fois", "Le Livre de la jungle"],
+    trapsEn: ["Big", "Enchanted", "The Jungle Book"],
   ),
   // 6 décembre
   EventPitch(
@@ -96,6 +122,9 @@ const kAdventPitches = [
     pitchEn: "The Pumpkin King, ruler of Halloween Town, wanted to take my place. He had three little monsters "
         "kidnap me, then did my rounds in a flying coffin pulled by skeleton reindeer, handing out terrifying "
         "presents. In the end, he came to rescue me himself.",
+    // Pièges : squelettes de Tim Burton ; trois sorcières d'Halloween ; animation image par image de Henry Selick.
+    trapsFr: ["Les Noces funèbres", "Hocus Pocus : Les Trois Sorcières", "Coraline"],
+    trapsEn: ["Corpse Bride", "Hocus Pocus", "Coraline"],
   ),
   // 7 décembre
   EventPitch(
@@ -108,6 +137,9 @@ const kAdventPitches = [
     pitchEn: "One Christmas Eve, a divorced dad startled me and I fell off his roof. He put on my suit, not "
         "knowing that, legally, this made him my replacement. Within a year, he'd grown a belly and a white beard "
         "that grew right back every time he shaved.",
+    // Pièges : pères divorcés (déguisé, ou qui ne peut plus mentir) ; des enfants font tomber le Père Noël.
+    trapsFr: ["Madame Doubtfire", "Menteur, menteur", "Les Chroniques de Noël"],
+    trapsEn: ["Mrs. Doubtfire", "Liar Liar", "The Christmas Chronicles"],
   ),
   // 8 décembre
   EventPitch(
@@ -120,6 +152,9 @@ const kAdventPitches = [
     pitchEn: "In London, five weeks out from the holidays, ten romantic stories cross paths. The Prime Minister "
         "dances through Downing Street, an aging rocker releases a festive cover, and a man confesses his feelings "
         "with cue cards on a doorstep. Nearly all of them made my nice list.",
+    // Pièges : comédies romantiques à Londres, histoires croisées.
+    trapsFr: ["Coup de foudre à Notting Hill", "Le Journal de Bridget Jones", "Valentine's Day"],
+    trapsEn: ["Notting Hill", "Bridget Jones's Diary", "Valentine's Day"],
   ),
   // 9 décembre
   EventPitch(
@@ -132,6 +167,9 @@ const kAdventPitches = [
     pitchEn: "London's most famous old miser was visited by three spirits. But this time, his clerk was a frog, "
         "the clerk's wife was a pink-snouted diva, and the whole tale was narrated by a blue, long-nosed whatever, "
         "with a rat for a sidekick.",
+    // Pièges : une grenouille, un rat, un cochon.
+    trapsFr: ["La Princesse et la Grenouille", "Ratatouille", "Babe, le cochon devenu berger"],
+    trapsEn: ["The Princess and the Frog", "Ratatouille", "Babe"],
   ),
   // 10 décembre
   EventPitch(
@@ -144,6 +182,9 @@ const kAdventPitches = [
     pitchEn: "In a mansion on a hill lived a young man his inventor never got to finish: he had blades where his "
         "fingers should have been. He trimmed hedges, styled the neighborhood ladies' hair, and while carving ice "
         "one holiday night, made it snow on the town for the first time.",
+    // Pièges : la créature d'un inventeur chez Tim Burton ; la neige qui tombe par magie ; Johnny Depp en inventeur.
+    trapsFr: ["Frankenweenie", "La Reine des neiges", "Charlie et la Chocolaterie"],
+    trapsEn: ["Frankenweenie", "Frozen", "Charlie and the Chocolate Factory"],
   ),
   // 11 décembre
   EventPitch(
@@ -156,6 +197,9 @@ const kAdventPitches = [
     pitchEn: "One Christmas Eve, a man facing ruin wished he'd never been born. An angel who hadn't yet earned his "
         "wings showed him what his little town would be like without him. Now, every time a bell rings on my tree, "
         "I know an angel just got his wings.",
+    // Pièges : la vie qu'il aurait eue, un soir de Noël ; un ange ; une petite ville et une leçon de vie.
+    trapsFr: ["Family Man", "La Cité des anges", "Un jour sans fin"],
+    trapsEn: ["The Family Man", "City of Angels", "Groundhog Day"],
   ),
   // 12 décembre
   EventPitch(
@@ -169,6 +213,9 @@ const kAdventPitches = [
         "celebrating a bit too early. I kept sending shoppers to the competition, and ended up in court having "
         "to prove I was really me. I won.",
     acceptedFr: ["Le Miracle sur la 34e rue"],
+    // Pièges : Noël dans un grand magasin de jouets de New York ; un procès ; un emploi dans un musée de New York.
+    trapsFr: ["Maman, j'ai encore raté l'avion !", "Des hommes d'honneur", "La Nuit au musée"],
+    trapsEn: ["Home Alone 2: Lost in New York", "A Few Good Men", "Night at the Museum"],
   ),
   // 13 décembre
   EventPitch(
@@ -181,6 +228,9 @@ const kAdventPitches = [
     pitchEn: "A heartbroken London journalist and a Los Angeles woman who'd forgotten how to cry swapped homes for "
         "two weeks over Christmas. The Californian found a snowy English cottage and the other's brother; the "
         "Londoner, an LA mansion, a film composer and an old screenwriter.",
+    // Pièges : Noël à Londres ; « Holiday » ; deux vies échangées à Noël.
+    trapsFr: ["Love Actually", "Vacances romaines", "Un fauteuil pour deux"],
+    trapsEn: ["Love Actually", "Roman Holiday", "Trading Places"],
   ),
   // 14 décembre
   EventPitch(
@@ -193,6 +243,9 @@ const kAdventPitches = [
     pitchEn: "A busy dad promised his son the hottest superhero action figure of the year, then forgot to buy it. "
         "On Christmas Eve he scoured Minneapolis for the last one, up against a mail carrier just as desperate. "
         "He even brawled with a gang of crooks dressed as me. I'll let it slide.",
+    // Pièges : le jouet que tout le monde veut ; Schwarzenegger en comédie ; des escrocs déguisés en Père Noël.
+    trapsFr: ["Toy Story", "Un flic à la maternelle", "Bad Santa"],
+    trapsEn: ["Toy Story", "Kindergarten Cop", "Bad Santa"],
   ),
   // 15 décembre
   EventPitch(
@@ -206,6 +259,9 @@ const kAdventPitches = [
         "frozen island up north, where two families had always hated each other, and a lonely woodsman who made "
         "toys. Needing 6,000 letters in a year, the postman had an idea…",
     acceptedFr: ["Klaus"],
+    // Pièges : « Légendes » et le Père Noël ; un vieux fabricant de jouets en bois ; une île glacée du Nord.
+    trapsFr: ["Les Cinq Légendes", "Pinocchio", "Dragons"],
+    trapsEn: ["Rise of the Guardians", "Pinocchio", "How to Train Your Dragon"],
   ),
   // 16 décembre
   EventPitch(
@@ -218,6 +274,9 @@ const kAdventPitches = [
     pitchEn: "London's most famous old miser gets a visit from three spirits, and I never tire of that tale. In "
         "this 2009 animated version, filmed with motion capture, a single actor plays the miser and all three "
         "ghosts. And I thought I was good at costumes!",
+    // Pièges : capture de mouvement, un acteur aux rôles multiples ; des esprits ; Jim Carrey qui se transforme.
+    trapsFr: ["Le Pôle express", "SOS Fantômes", "The Mask"],
+    trapsEn: ["The Polar Express", "Ghostbusters", "The Mask"],
   ),
   // 17 décembre
   EventPitch(
@@ -232,6 +291,9 @@ const kAdventPitches = [
         "for a little girl in Cornwall, England. One child out of billions didn't matter, said my eldest. My "
         "youngest set off to deliver it before morning, with his grandad and the old sleigh.",
     acceptedFr: ["Mission : Noël - Les Aventures de la famille Noël", "Mission Noël"],
+    // Pièges : « Mission » ; la famille du Père Noël ; « Arthur ».
+    trapsFr: ["Mission impossible", "Frère Noël", "Arthur et les Minimoys"],
+    trapsEn: ["Mission: Impossible", "Fred Claus", "Arthur and the Invisibles"],
   ),
   // 18 décembre
   EventPitch(
@@ -244,6 +306,9 @@ const kAdventPitches = [
     pitchEn: "A Chicago-area dad dreamed of the perfect old-fashioned family holiday. He covered his house in "
         "25,000 lights, uprooted a giant tree from the woods, and counted on his bonus to pay for a pool he'd "
         "already put money down on. His boss gave him a Jelly of the Month Club membership.",
+    // Pièges : les fêtes près de Chicago selon John Hughes ; un père qui veut une fête parfaite.
+    trapsFr: ["Un ticket pour deux", "Le Père de la mariée", "Maman, j'ai raté l'avion !"],
+    trapsEn: ["Planes, Trains and Automobiles", "Father of the Bride", "Home Alone"],
   ),
   // 19 décembre
   EventPitch(
@@ -257,6 +322,9 @@ const kAdventPitches = [
     pitchEn: "A young Londoner who's lost her way works year-round dressed as an elf, in a shop full of ornaments "
         "run by a boss who goes by my name. A mysterious young man helps her back on her feet, to the songs of a "
         "British pop legend. I won't spoil the ending, but it's all about heart.",
+    // Pièges : un film sur les chansons d'un groupe britannique ; « Last » et Londres ; un costume de lutin.
+    trapsFr: ["Yesterday", "Last Night in Soho", "Elfe"],
+    trapsEn: ["Yesterday", "Last Night in Soho", "Elf"],
   ),
   // 20 décembre
   EventPitch(
@@ -271,6 +339,9 @@ const kAdventPitches = [
         "repo man in Chicago. I brought him to the North Pole to work just as an efficiency expert was threatening "
         "to shut down my workshop. He put every child on the nice list.",
     acceptedFr: ["Le Frère Noël"],
+    // Pièges : des frères à Chicago ; « Frères » ; Claus et Clause.
+    trapsFr: ["The Blues Brothers", "Les Frères Grimm", "Super Noël"],
+    trapsEn: ["The Blues Brothers", "The Brothers Grimm", "The Santa Clause"],
   ),
   // 21 décembre
   EventPitch(
@@ -283,6 +354,9 @@ const kAdventPitches = [
     pitchEn: "The worst of my impersonators is a permanently grumpy thief. Every year, he and his partner, dressed "
         "as an elf, get hired at a mall, then crack its safe on Christmas Eve. This time, in Phoenix, a lonely "
         "little boy believed in him. It gave me hope.",
+    // Pièges : « Bad » ; un casse ; le voleur grincheux déguisé en Père Noël.
+    trapsFr: ["Bad Teacher", "Ocean's Eleven", "Le Grinch"],
+    trapsEn: ["Bad Teacher", "Ocean's Eleven", "How the Grinch Stole Christmas"],
   ),
   // 22 décembre
   EventPitch(
@@ -296,6 +370,9 @@ const kAdventPitches = [
     pitchEn: "One Christmas, a high-society couple abandoned their unusual baby in the sewers. Penguins raised "
         "him, and thirty-three years later he crashed his city's big tree-lighting. Add a secretary pushed out a "
         "window who came back in a cat costume, plus a masked vigilante: what a holiday!",
+    // Pièges : des manchots ; Tim Burton à Noël ; un justicier masqué.
+    trapsFr: ["Les Pingouins de Madagascar", "Edward aux mains d'argent", "Spider-Man"],
+    trapsEn: ["Penguins of Madagascar", "Edward Scissorhands", "Spider-Man"],
   ),
   // 23 décembre
   EventPitch(
@@ -308,6 +385,9 @@ const kAdventPitches = [
     pitchEn: "Every year, a San Francisco couple dodged their divorced parents by claiming to do charity work "
         "abroad, then jetted off to the sun. This time, fog grounded their flight and a TV crew caught them at "
         "the airport. The result: a visit to each of their parents, all in one day.",
+    // Pièges : « Quatre » / « Four » ; bloqués à l'aéroport ; la belle-famille.
+    trapsFr: ["Quatre mariages et un enterrement", "Le Terminal", "Mon beau-père et moi"],
+    trapsEn: ["Four Weddings and a Funeral", "The Terminal", "Meet the Parents"],
   ),
   // 24 décembre
   EventPitch(
@@ -321,6 +401,9 @@ const kAdventPitches = [
     pitchEn: "Mocked by his cousins at a disastrous family dinner, a little boy tore up the letter he'd written me "
         "and threw it out the window. I wasn't the one who came. It was a horned beast from Alpine folklore who "
         "punishes those who've lost the Christmas spirit, with killer toys and gingerbread men.",
+    // Pièges : des monstres à Noël ; une créature à cornes du folklore ; un héros à cornes.
+    trapsFr: ["Gremlins", "Le Labyrinthe de Pan", "Hellboy"],
+    trapsEn: ["Gremlins", "Pan's Labyrinth", "Hellboy"],
   ),
   // 25 décembre : case bonus
   EventPitch(
@@ -332,5 +415,8 @@ const kAdventPitches = [
         "quand même gardé sur la liste des enfants sages.",
     pitchEn: "This year, an eight-year-old boy asked me to bring his family back. Meanwhile, he defended his house "
         "single-handedly against two burglars, with an iron and paint cans. I still kept him on the nice list.",
+    // Pièges : Macaulay Culkin ; un garnement contre un cambrioleur ; une maison défendue contre des cambrioleurs.
+    trapsFr: ["Richie Rich", "Denis la Malice", "Panic Room"],
+    trapsEn: ["Richie Rich", "Dennis the Menace", "Panic Room"],
   ),
 ];
