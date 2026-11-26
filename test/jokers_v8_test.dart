@@ -65,10 +65,14 @@ Future<void> _pumpBar(WidgetTester tester, GameState game, JokerFx fx, void Func
           body: Stack(
             children: [
               if (above != null) Align(alignment: Alignment.topCenter, child: above),
+              // Colonne à sa taille : sans elle, la colonne de JokerBar prend
+              // toute la hauteur et sa 2e rangée recouvre le haut du pitch
+              // (le nom « le Joker », avec les polices embarquées).
               Align(
                   alignment: Alignment.bottomCenter,
-                  child: JokerBar(
-                      fx: fx, onWatchAdForJoker: () => onEvent('ad'), onRedJokerEmpty: () => onEvent('red'))),
+                  child: Column(mainAxisSize: MainAxisSize.min, children: [
+                    JokerBar(fx: fx, onWatchAdForJoker: () => onEvent('ad'), onRedJokerEmpty: () => onEvent('red')),
+                  ])),
               Positioned.fill(child: JokerFxLayer(fx: fx)),
             ],
           ),
