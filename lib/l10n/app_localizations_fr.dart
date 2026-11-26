@@ -151,6 +151,54 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsResetConfirm2Cta => 'Réinitialiser';
 
   @override
+  String get settingsDeleteAccount =>
+      'Supprimer ma sauvegarde et me déconnecter';
+
+  @override
+  String get settingsDeleteAccountTitle => '⚠️ Supprimer ta sauvegarde ?';
+
+  @override
+  String settingsDeleteAccountBody(String email) {
+    return 'Ta sauvegarde en ligne, ton compte lié à Google ($email), ta place au classement et ta fiche Multijoueur seront supprimés définitivement. Le jeu continue de fonctionner normalement et ta partie reste sur ce téléphone.';
+  }
+
+  @override
+  String get settingsDeleteAccountCta => 'Supprimer';
+
+  @override
+  String get settingsDeleteAccountDoneSnack =>
+      '✅ C\'est fait : ta sauvegarde en ligne et ton compte sont supprimés. Ta partie reste sur ce téléphone.';
+
+  @override
+  String get settingsDeleteAccountPartialTitle => 'Compte supprimé';
+
+  @override
+  String get settingsDeleteAccountPartialBody =>
+      'Ton compte est supprimé, mais une partie de tes données en ligne n\'a pas pu être effacée. Pour finir, passe par la page web de suppression.';
+
+  @override
+  String get settingsDeleteAccountReauthTitle =>
+      '⚠️ Confirmation de Google nécessaire';
+
+  @override
+  String get settingsDeleteAccountReauthBody =>
+      'Google doit confirmer que c\'est bien toi avant de supprimer ton compte. Réessaie en choisissant le même compte Google, ou passe par la page web de suppression.';
+
+  @override
+  String get settingsDeleteAccountFailedTitle => '⚠️ Suppression impossible';
+
+  @override
+  String get settingsDeleteAccountFailedBody =>
+      'Ton compte n\'a pas pu être supprimé. Vérifie ta connexion et réessaie, ou passe par la page web de suppression.';
+
+  @override
+  String get settingsDeleteAccountOpenPage => 'Ouvrir la page web';
+
+  @override
+  String get settingsDeleteDataLink =>
+      'Supprimer mon compte et mes données (page web)';
+
+  @override
   String get commonRulesTitle => 'RÈGLES DU JEU';
 
   @override
@@ -587,6 +635,28 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get gameTutorialCategory => 'Tutoriel';
+
+  @override
+  String get onboardRule1 =>
+      'Le nom en 🟢 vert est le vrai personnage. Quel est ce film ?';
+
+  @override
+  String get onboardRule2 =>
+      'Le nom en 🔵 bleu est le vrai acteur de ce rôle. Le vert reste le vrai personnage.';
+
+  @override
+  String get onboardRule3 =>
+      'Le nom en 🔴 rouge est un rôle du même acteur dans un autre film. Le vert reste le vrai personnage.';
+
+  @override
+  String get onboardAlreadyPlayed => 'J\'ai déjà joué';
+
+  @override
+  String get onboardDone =>
+      'Tutoriel terminé ! Le monde 1 est débloqué.\n\nUn nouveau défi t\'attend chaque jour : reviens demain !';
+
+  @override
+  String get onboardContinue => 'CONTINUER';
 
   @override
   String homeStreakDays(int days) {
@@ -1058,6 +1128,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.';
 
   @override
+  String shopCompareAtNote(String price) {
+    return 'au lieu de $price à l\'unité';
+  }
+
+  @override
   String get shareButton => 'Partager';
 
   @override
@@ -1258,5 +1333,235 @@ class AppLocalizationsFr extends AppLocalizations {
   String get evtBackToEvent => 'RETOUR À L\'EVENT';
 
   @override
-  String get avatarEventLocked => 'Avatars de l\'event Halloween';
+  String get avatarEventLocked => 'Avatars des events';
+
+  @override
+  String get homeAdventEvent => '🎄 CALENDRIER DE L\'AVENT';
+
+  @override
+  String get advTitle => 'CALENDRIER DE L\'AVENT';
+
+  @override
+  String get advUntil =>
+      'Du 1er au 25 décembre · rattrapage jusqu\'au 3 janvier';
+
+  @override
+  String get advIntroTitle => 'LE PÈRE NOËL FAIT SON CINÉMA';
+
+  @override
+  String get advIntro =>
+      'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de trouver le bon titre, sans tomber dans les pièges !';
+
+  @override
+  String get advIntro2 =>
+      '24 films de Noël, plus une case bonus le 25 : une case à ouvrir chaque jour !';
+
+  @override
+  String get advRules =>
+      'Une case s\'ouvre chaque jour à minuit : 4 titres, un seul est le bon, les 3 autres sont des pièges. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Joker : Retirer un piège (il utilise un joker Révéler).';
+
+  @override
+  String get advSkinHat => 'Bonnet de Noël : trouve ta première case';
+
+  @override
+  String get advSkinFinal => 'Bonnet sous la neige : trouve les 25 cases';
+
+  @override
+  String advProgress(int found, int total) {
+    return '$found/$total cases trouvées';
+  }
+
+  @override
+  String get advToday => 'AUJOURD\'HUI';
+
+  @override
+  String advCaseNumber(int day) {
+    return 'CASE $day';
+  }
+
+  @override
+  String get advCaseBonus => 'CASE BONUS';
+
+  @override
+  String advCaseLocked(int day) {
+    return 'Patience ! Cette case s\'ouvre le $day décembre.';
+  }
+
+  @override
+  String advPlayDay(int day) {
+    return 'JOUER LA CASE $day';
+  }
+
+  @override
+  String get advSantaSays => '🎅 LE PÈRE NOËL RACONTE';
+
+  @override
+  String get advPickTitle =>
+      'Quel est ce film ? 3 réponses sur 4 sont des pièges !';
+
+  @override
+  String get advTrap => 'Piège !';
+
+  @override
+  String get advRemoveTrap => 'RETIRER UN PIÈGE';
+
+  @override
+  String get advOnTimeHint => 'Trouve-la aujourd\'hui : +1 joker !';
+
+  @override
+  String get advLateHint =>
+      'Case rattrapée : le joker n\'est donné que le jour même.';
+
+  @override
+  String get advAvatarUnlocked => 'Nouvel avatar débloqué : Bonnet de Noël !';
+
+  @override
+  String get advFinalReward =>
+      'Les 25 cases ! Gros lot : 5 jokers et l\'avatar Bonnet sous la neige !';
+
+  @override
+  String get advComeBack => 'Tu es à jour ! La prochaine case s\'ouvre demain.';
+
+  @override
+  String get advAllDone =>
+      'Bravo, tu as trouvé les 25 cases du calendrier ! Joyeux Noël !';
+
+  @override
+  String get advNotYet =>
+      'Le calendrier s\'ouvre le 1er décembre. À très vite !';
+
+  @override
+  String get advOver =>
+      'Le calendrier de l\'Avent est terminé. Merci d\'avoir joué, et bonne année !';
+
+  @override
+  String get advNext => 'CASE SUIVANTE';
+
+  @override
+  String get advBackToCalendar => 'RETOUR AU CALENDRIER';
+
+  @override
+  String shareAdventText(int day, String grid, String details, String link) {
+    return '🎄 Plot Twist(ed) · Calendrier de l\'Avent, case $day\n$grid$details\nÀ ton tour 👉 $link';
+  }
+
+  @override
+  String get lbHomeButton => 'Classement';
+
+  @override
+  String get lbTitle => 'CLASSEMENT';
+
+  @override
+  String get lbSubtitle =>
+      'Les joueurs en français, classés par niveaux résolus';
+
+  @override
+  String get lbTop => 'TOP 50';
+
+  @override
+  String get lbEmpty => 'Personne pour l\'instant. Sois le premier !';
+
+  @override
+  String get lbLegend =>
+      'À droite, l\'avancée : 16-3 veut dire 15 mondes finis et 3 niveaux du suivant.';
+
+  @override
+  String get lbOffline =>
+      'Classement indisponible pour le moment. Vérifie ta connexion.';
+
+  @override
+  String get lbRetry => 'RÉESSAYER';
+
+  @override
+  String get lbYourPlace => 'TA PLACE';
+
+  @override
+  String lbRankOf(int rank, int total) {
+    final intl.NumberFormat rankNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String rankString = rankNumberFormat.format(rank);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    String _temp0 = intl.Intl.pluralLogic(
+      rank,
+      locale: localeName,
+      other: '${rankString}e sur $totalString',
+      one: '1er sur $totalString',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lbYou => 'Toi';
+
+  @override
+  String get lbNotJoined =>
+      'Tu n\'apparais pas dans le classement : cette place, toi seul la vois.';
+
+  @override
+  String get lbNoScore =>
+      'Résous ton premier niveau pour entrer dans le classement.';
+
+  @override
+  String get lbWaitingFirstLevel =>
+      'Tu apparaîtras dès ton premier niveau résolu.';
+
+  @override
+  String get lbJoinButton => 'APPARAÎTRE DANS LE CLASSEMENT';
+
+  @override
+  String get lbChangeName => 'Changer de pseudo';
+
+  @override
+  String get lbLeave => 'Me retirer';
+
+  @override
+  String get lbJoinTitle => 'APPARAÎTRE DANS LE CLASSEMENT ?';
+
+  @override
+  String get lbJoinText =>
+      'Ton pseudo et ton avancée seront visibles par tous les joueurs.\nC\'est facultatif, et tu peux te retirer quand tu veux.';
+
+  @override
+  String get lbRenameTitle => 'TON PSEUDO';
+
+  @override
+  String get lbJoinConfirm => 'APPARAÎTRE';
+
+  @override
+  String get lbSave => 'ENREGISTRER';
+
+  @override
+  String get lbNotNow => 'Pas maintenant';
+
+  @override
+  String get lbPseudoEmpty => 'Choisis un pseudo.';
+
+  @override
+  String get lbPseudoRefused =>
+      'Ce pseudo n\'est pas accepté. Choisis-en un autre (pas d\'insulte, de lien ni de numéro).';
+
+  @override
+  String get lbFailed => 'Pas de connexion. Réessaie dans un moment.';
+
+  @override
+  String get lbJoined => 'C\'est fait : tu apparais dans le classement !';
+
+  @override
+  String get lbLeaveTitle => 'TE RETIRER DU CLASSEMENT ?';
+
+  @override
+  String get lbLeaveText =>
+      'Ton pseudo et ton avancée seront effacés du classement. Ta partie, elle, ne change pas.';
+
+  @override
+  String get lbLeaveConfirm => 'ME RETIRER';
+
+  @override
+  String get lbLeft => 'C\'est fait : tu n\'apparais plus dans le classement.';
+
+  @override
+  String get lbSettingsLeave => 'Me retirer du classement';
 }

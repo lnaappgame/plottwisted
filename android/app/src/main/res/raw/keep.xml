@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- La petite icône de la notification n'est citée que par son nom, dans le code Dart : sans cette
+     ligne, la réduction des ressources du build de sortie la retirerait. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_stat_clap" />

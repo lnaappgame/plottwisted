@@ -150,6 +150,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsResetConfirm2Cta => 'Reset';
 
   @override
+  String get settingsDeleteAccount => 'Delete my backup and sign out';
+
+  @override
+  String get settingsDeleteAccountTitle => '⚠️ Delete your backup?';
+
+  @override
+  String settingsDeleteAccountBody(String email) {
+    return 'Your online backup, your account linked to Google ($email), your spot on the leaderboard and your Multiplayer profile will be permanently deleted. The game keeps working normally and your progress stays on this phone.';
+  }
+
+  @override
+  String get settingsDeleteAccountCta => 'Delete';
+
+  @override
+  String get settingsDeleteAccountDoneSnack =>
+      '✅ Done: your online backup and your account have been deleted. Your progress stays on this phone.';
+
+  @override
+  String get settingsDeleteAccountPartialTitle => 'Account deleted';
+
+  @override
+  String get settingsDeleteAccountPartialBody =>
+      'Your account has been deleted, but some of your online data couldn\'t be erased. To finish, use the deletion web page.';
+
+  @override
+  String get settingsDeleteAccountReauthTitle =>
+      '⚠️ Google confirmation needed';
+
+  @override
+  String get settingsDeleteAccountReauthBody =>
+      'Google needs to confirm it\'s really you before your account can be deleted. Try again and pick the same Google account, or use the deletion web page.';
+
+  @override
+  String get settingsDeleteAccountFailedTitle => '⚠️ Deletion failed';
+
+  @override
+  String get settingsDeleteAccountFailedBody =>
+      'Your account couldn\'t be deleted. Check your connection and try again, or use the deletion web page.';
+
+  @override
+  String get settingsDeleteAccountOpenPage => 'Open the web page';
+
+  @override
+  String get settingsDeleteDataLink => 'Delete my account and data (web page)';
+
+  @override
   String get commonRulesTitle => 'GAME RULES';
 
   @override
@@ -583,6 +629,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gameTutorialCategory => 'Tutorial';
+
+  @override
+  String get onboardRule1 =>
+      'The name in 🟢 green is the real character. Which film is this?';
+
+  @override
+  String get onboardRule2 =>
+      'The name in 🔵 blue is the real actor in this role. Green is still the real character.';
+
+  @override
+  String get onboardRule3 =>
+      'The name in 🔴 red is a role the same actor played in another film. Green is still the real character.';
+
+  @override
+  String get onboardAlreadyPlayed => 'I\'ve played before';
+
+  @override
+  String get onboardDone =>
+      'Tutorial complete! World 1 is unlocked.\n\nA new challenge awaits you every day: come back tomorrow!';
+
+  @override
+  String get onboardContinue => 'CONTINUE';
 
   @override
   String homeStreakDays(int days) {
@@ -1053,6 +1121,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Check started: if you had bought ad removal, it is back.';
 
   @override
+  String shopCompareAtNote(String price) {
+    return 'instead of $price separately';
+  }
+
+  @override
   String get shareButton => 'Share';
 
   @override
@@ -1252,5 +1325,225 @@ class AppLocalizationsEn extends AppLocalizations {
   String get evtBackToEvent => 'BACK TO THE EVENT';
 
   @override
-  String get avatarEventLocked => 'Halloween event avatars';
+  String get avatarEventLocked => 'Event avatars';
+
+  @override
+  String get homeAdventEvent => '🎄 ADVENT CALENDAR';
+
+  @override
+  String get advTitle => 'ADVENT CALENDAR';
+
+  @override
+  String get advUntil => 'December 1–25 · catch up until January 3';
+
+  @override
+  String get advIntroTitle => 'SANTA GOES TO THE MOVIES';
+
+  @override
+  String get advIntro =>
+      'This year, Santa is the storyteller! Every day in December, he tells you about a Christmas movie his own way: his rounds, his elves, his nice list… Can you pick the right title without falling into the traps?';
+
+  @override
+  String get advIntro2 =>
+      '24 Christmas movies, plus a bonus door on the 25th: one door to open every day!';
+
+  @override
+  String get advRules =>
+      'A new door opens every day at midnight: 4 titles, only one is right, the other 3 are traps. Solve it the same day to win a joker. Missed doors can be caught up until January 3, without the joker. Joker: Remove a trap (uses one Reveal joker).';
+
+  @override
+  String get advSkinHat => 'Santa hat: solve your first door';
+
+  @override
+  String get advSkinFinal => 'Snowy Santa hat: solve all 25 doors';
+
+  @override
+  String advProgress(int found, int total) {
+    return '$found/$total doors solved';
+  }
+
+  @override
+  String get advToday => 'TODAY';
+
+  @override
+  String advCaseNumber(int day) {
+    return 'DOOR $day';
+  }
+
+  @override
+  String get advCaseBonus => 'BONUS DOOR';
+
+  @override
+  String advCaseLocked(int day) {
+    return 'Patience! This door opens on December $day.';
+  }
+
+  @override
+  String advPlayDay(int day) {
+    return 'PLAY DOOR $day';
+  }
+
+  @override
+  String get advSantaSays => '🎅 SANTA SAYS';
+
+  @override
+  String get advPickTitle => 'Which movie is it? 3 of the 4 answers are traps!';
+
+  @override
+  String get advTrap => 'Trap!';
+
+  @override
+  String get advRemoveTrap => 'REMOVE A TRAP';
+
+  @override
+  String get advOnTimeHint => 'Solve it today: +1 joker!';
+
+  @override
+  String get advLateHint =>
+      'Catch-up door: the joker is only given on the day itself.';
+
+  @override
+  String get advAvatarUnlocked => 'New avatar unlocked: Santa hat!';
+
+  @override
+  String get advFinalReward =>
+      'All 25 doors! Jackpot: 5 jokers and the Snowy Santa hat avatar!';
+
+  @override
+  String get advComeBack =>
+      'You\'re all caught up! The next door opens tomorrow.';
+
+  @override
+  String get advAllDone =>
+      'Well done, you solved all 25 doors! Merry Christmas!';
+
+  @override
+  String get advNotYet => 'The calendar opens on December 1. See you soon!';
+
+  @override
+  String get advOver =>
+      'The Advent calendar is over. Thanks for playing, and happy new year!';
+
+  @override
+  String get advNext => 'NEXT DOOR';
+
+  @override
+  String get advBackToCalendar => 'BACK TO THE CALENDAR';
+
+  @override
+  String shareAdventText(int day, String grid, String details, String link) {
+    return '🎄 Plot Twist(ed) · Advent Calendar, door $day\n$grid$details\nYour turn 👉 $link';
+  }
+
+  @override
+  String get lbHomeButton => 'Leaderboard';
+
+  @override
+  String get lbTitle => 'LEADERBOARD';
+
+  @override
+  String get lbSubtitle => 'Players in English, ranked by levels solved';
+
+  @override
+  String get lbTop => 'TOP 50';
+
+  @override
+  String get lbEmpty => 'Nobody here yet. Be the first!';
+
+  @override
+  String get lbLegend =>
+      'On the right, progress: 16-3 means 15 worlds done and 3 levels into the next one.';
+
+  @override
+  String get lbOffline =>
+      'Leaderboard unavailable right now. Check your connection.';
+
+  @override
+  String get lbRetry => 'TRY AGAIN';
+
+  @override
+  String get lbYourPlace => 'YOUR SPOT';
+
+  @override
+  String lbRankOf(int rank, int total) {
+    final intl.NumberFormat rankNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String rankString = rankNumberFormat.format(rank);
+    final intl.NumberFormat totalNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String totalString = totalNumberFormat.format(total);
+
+    return '#$rankString of $totalString';
+  }
+
+  @override
+  String get lbYou => 'You';
+
+  @override
+  String get lbNotJoined =>
+      'You\'re not on the leaderboard: only you can see this spot.';
+
+  @override
+  String get lbNoScore => 'Solve your first level to get on the leaderboard.';
+
+  @override
+  String get lbWaitingFirstLevel =>
+      'You\'ll show up as soon as you solve your first level.';
+
+  @override
+  String get lbJoinButton => 'JOIN THE LEADERBOARD';
+
+  @override
+  String get lbChangeName => 'Change nickname';
+
+  @override
+  String get lbLeave => 'Leave';
+
+  @override
+  String get lbJoinTitle => 'JOIN THE LEADERBOARD?';
+
+  @override
+  String get lbJoinText =>
+      'Your nickname and progress will be visible to all players.\nIt\'s optional, and you can leave whenever you want.';
+
+  @override
+  String get lbRenameTitle => 'YOUR NICKNAME';
+
+  @override
+  String get lbJoinConfirm => 'JOIN';
+
+  @override
+  String get lbSave => 'SAVE';
+
+  @override
+  String get lbNotNow => 'Not now';
+
+  @override
+  String get lbPseudoEmpty => 'Pick a nickname.';
+
+  @override
+  String get lbPseudoRefused =>
+      'This nickname isn\'t allowed. Pick another one (no insults, links or phone numbers).';
+
+  @override
+  String get lbFailed => 'No connection. Try again in a moment.';
+
+  @override
+  String get lbJoined => 'Done: you\'re on the leaderboard!';
+
+  @override
+  String get lbLeaveTitle => 'LEAVE THE LEADERBOARD?';
+
+  @override
+  String get lbLeaveText =>
+      'Your nickname and progress will be erased from the leaderboard. Your game itself won\'t change.';
+
+  @override
+  String get lbLeaveConfirm => 'LEAVE';
+
+  @override
+  String get lbLeft => 'Done: you\'re no longer on the leaderboard.';
+
+  @override
+  String get lbSettingsLeave => 'Leave the leaderboard';
 }

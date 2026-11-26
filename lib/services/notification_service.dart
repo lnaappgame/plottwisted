@@ -1,7 +1,8 @@
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform, visibleForTesting;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
+import 'advent_calendar.dart';
 
 /// Rappels locaux — jamais de serveur, purement basés sur le calendrier
 /// déterministe des modes "Défi du jour" (chaque jour) et "L'énigme de la
@@ -19,6 +20,9 @@ class NotificationService {
   static const int _idDefiDuJour = 1;
   static const int _idEnigmeSemaine = 2;
 
+  /// Rappels du calendrier de l'Avent : un par case, id = base + jour.
+  static const int _idAventBase = 100;
+
   final FlutterLocalNotificationsPlugin _plugin = FlutterLocalNotificationsPlugin();
   bool _initialized = false;
 
@@ -29,13 +33,84 @@ class NotificationService {
     if (!_supported || _initialized) return;
     try {
       tzdata.initializeTimeZones();
-      const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+      // Silhouette blanche (res/drawable/ic_stat_clap.xml), jamais l'icône en
+      // couleur du jeu : Android la peint en rond blanc dans le volet.
+      const androidInit = AndroidInitializationSettings('ic_stat_clap');
       const iosInit = DarwinInitializationSettings();
       await _plugin.initialize(settings: const InitializationSettings(android: androidInit, iOS: iosInit));
       _initialized = true;
     } catch (_) {
       // Jamais bloquant pour le démarrage de l'app.
     }
+  }
+
+  /// Demande la permission, puis planifie tous les rappels (Défi du jour,
+  /// énigme de la semaine, cases de l'Avent). Au lancement pour un joueur
+  /// existant ; à la fin du tutoriel pour un nouveau joueur (1.0.16 : jamais
+  /// de demande système pendant la prise en main, c'est le rendez-vous du
+  /// lendemain). Sans effet si la permission est refusée.
+  Future<void> askAndSchedule({required String locale, required AdventCalendar advent, bool defiFaitAujourdhui = false}) async {
+    await init();
+    final granted = await requestPermission();
+    if (!granted) return;
+    remindersArmed = true;
+    await scheduleDailyDefiReminder(locale: locale, sauterAujourdhui: defiFaitAujourdhui);
+    await scheduleWeeklyEnigmeReminder(locale: locale);
+    await scheduleAdventReminders(advent.reminderTimes(), locale: locale);
+  }
+
+  /// Vrai une fois la permission accordée et les rappels posés. Tant qu'il est
+  /// faux (nouveau joueur avant la fin du tutoriel, permission refusée), la
+  /// reprise ne crée aucun rappel.
+  bool remindersArmed = false;
+
+  /// Notifications encore autorisées dans les réglages du téléphone ? (Un
+  /// joueur qui les a coupées ne voit jamais un rappel recréé.)
+  Future<bool> notificationsEnabled() async {
+    if (!_supported) return false;
+    try {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        return await _plugin
+                .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+                ?.areNotificationsEnabled() ??
+            false;
+      }
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Annule un rappel par son identifiant.
+  Future<void> cancelReminder(int id) async {
+    if (!_supported) return;
+    try {
+      await _plugin.cancel(id: id);
+    } catch (_) {}
+  }
+
+  /// Retour au premier plan (`AppLifecycleState.resumed`) : sur Android 11, une
+  /// alarme inexacte peut partir jusqu'à 75 % du délai restant en retard (un
+  /// rappel de 18 h posé à 13 h 42 peut sortir à 21 h 13 ; Android 12+ limite
+  /// à 1 h). On annule puis repose les mêmes rappels (mêmes identifiants,
+  /// même heure, même mode inexact) pour que le délai restant soit court.
+  /// Ne fait rien si les rappels n'ont pas été armés (tutoriel en cours,
+  /// permission refusée) ou si le joueur les a coupés.
+  Future<void> refreshOnResume({required String locale, required AdventCalendar advent, bool defiFaitAujourdhui = false}) async {
+    if (!remindersArmed) return;
+    if (!await notificationsEnabled()) {
+      remindersArmed = false;
+      return;
+    }
+    final advents = advent.reminderTimes();
+    await cancelReminder(_idDefiDuJour);
+    await cancelReminder(_idEnigmeSemaine);
+    for (final day in advents.keys) {
+      await cancelReminder(_idAventBase + day);
+    }
+    await scheduleDailyDefiReminder(locale: locale, sauterAujourdhui: defiFaitAujourdhui);
+    await scheduleWeeklyEnigmeReminder(locale: locale);
+    await scheduleAdventReminders(advents, locale: locale);
   }
 
   /// Demande la permission d'envoyer des notifications (obligatoire à partir
@@ -69,7 +144,12 @@ class NotificationService {
   /// jour à [heure]h locale. Idempotent — à rappeler à chaque démarrage de
   /// l'app plutôt que de dépendre de la persistance des alarmes après un
   /// redémarrage du téléphone (non garantie sans receiver natif dédié).
-  Future<void> scheduleDailyDefiReminder({int heure = 18, String locale = 'fr'}) async {
+  ///
+  /// [sauterAujourdhui] : le défi officiel du jour est déjà terminé, le
+  /// premier rappel est posé demain (la répétition quotidienne suit). Sans
+  /// ça, un joueur qui jouait le matin recevait quand même « Un nouveau défi
+  /// t'attend » à 18 h (retour d'un testeur, 23/11).
+  Future<void> scheduleDailyDefiReminder({int heure = 18, String locale = 'fr', bool sauterAujourdhui = false}) async {
     if (!_supported) return;
     try {
       await _plugin.zonedSchedule(
@@ -78,7 +158,7 @@ class NotificationService {
         body: locale == 'en'
             ? "A new challenge awaits — come give it a try!"
             : "Un nouveau défi t'attend — viens le tenter !",
-        scheduledDate: _prochaineOccurrence(heure: heure),
+        scheduledDate: _prochaineOccurrence(heure: heure, apresAujourdhui: sauterAujourdhui),
         notificationDetails: _details,
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.time,
@@ -105,6 +185,35 @@ class NotificationService {
     } catch (_) {}
   }
 
+  /// Planifie (ou replanifie) les rappels du calendrier de l'Avent : un
+  /// rappel unique (pas de répétition) par case, à la date donnée par
+  /// [times] (jour de la case → heure locale du rappel, voir
+  /// AdventCalendar.reminderTimes). Appelé seulement si la permission de
+  /// notifier est accordée, comme les autres rappels.
+  Future<void> scheduleAdventReminders(Map<int, DateTime> times, {String locale = 'fr'}) async {
+    if (!_supported) return;
+    for (final e in times.entries) {
+      try {
+        await _plugin.zonedSchedule(
+          id: _idAventBase + e.key,
+          title: locale == 'en' ? '🎄 Movie Advent Calendar' : "🎄 Calendrier de l'Avent ciné",
+          body: locale == 'en' ? "Today's door is open 🎄" : 'La case du jour est ouverte 🎄',
+          scheduledDate: tz.TZDateTime.from(e.value, tz.local),
+          notificationDetails: _details,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        );
+      } catch (_) {}
+    }
+  }
+
+  /// Annule le rappel de la case [day] (trouvée avant 18 h).
+  Future<void> cancelAdventReminder(int day) async {
+    if (!_supported) return;
+    try {
+      await _plugin.cancel(id: _idAventBase + day);
+    } catch (_) {}
+  }
+
   /// Prochaine occurrence future de [heure]h locale (aujourd'hui si pas
   /// encore passée, sinon le jour suivant), optionnellement calée sur un
   /// jour de la semaine précis ([jourSemaine], 1 = lundi comme [DateTime.monday]).
@@ -115,18 +224,34 @@ class NotificationService {
   /// ou non au vrai fuseau de l'appareil (le paquet `timezone` ne le détecte
   /// pas tout seul et vaut UTC par défaut, ce qui décalerait l'heure si on
   /// construisait directement un TZDateTime dans ce fuseau).
-  tz.TZDateTime _prochaineOccurrence({required int heure, int? jourSemaine}) {
-    final now = DateTime.now();
+  tz.TZDateTime _prochaineOccurrence({required int heure, int? jourSemaine, bool apresAujourdhui = false}) =>
+      tz.TZDateTime.from(prochaineOccurrenceLocale(DateTime.now(), heure: heure, jourSemaine: jourSemaine, apresAujourdhui: apresAujourdhui), tz.local);
+
+  /// Le calcul, en heure locale de l'appareil, séparé pour les tests.
+  /// [apresAujourdhui] (rappel quotidien seulement) : jamais aujourd'hui,
+  /// même si l'heure n'est pas encore passée.
+  @visibleForTesting
+  static DateTime prochaineOccurrenceLocale(DateTime now, {required int heure, int? jourSemaine, bool apresAujourdhui = false}) {
     var candidat = DateTime(now.year, now.month, now.day, heure);
     if (jourSemaine != null) {
       while (candidat.weekday != jourSemaine) {
         candidat = candidat.add(const Duration(days: 1));
       }
+    } else if (apresAujourdhui && !candidat.isBefore(now)) {
+      candidat = candidat.add(const Duration(days: 1));
     }
     if (candidat.isBefore(now)) {
       candidat = candidat.add(Duration(days: jourSemaine != null ? 7 : 1));
     }
-    return tz.TZDateTime.from(candidat, tz.local);
+    return candidat;
+  }
+
+  /// Le défi officiel du jour vient d'être terminé : le rappel de 18 h est
+  /// reposé à partir de demain. Sans effet si les rappels ne sont pas armés.
+  Future<void> reporterRappelDefi({required String locale}) async {
+    if (!remindersArmed) return;
+    await cancelReminder(_idDefiDuJour);
+    await scheduleDailyDefiReminder(locale: locale, sauterAujourdhui: true);
   }
 
 }

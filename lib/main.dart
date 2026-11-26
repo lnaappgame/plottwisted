@@ -4,20 +4,22 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show LicenseEntryWithLineBreaks, LicenseRegistry, kDebugMode, kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/game_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/intro_teaser_screen.dart';
 import 'services/ad_service.dart';
+import 'services/advent_calendar.dart';
 import 'services/analytics_service.dart';
 import 'services/app_settings.dart';
 import 'services/tcf_consent.dart';
 import 'services/cloud_sync_service.dart';
+import 'services/consent_flow.dart';
 import 'services/defi_state.dart';
 import 'services/enigme_state.dart';
 import 'services/game_state.dart';
@@ -25,6 +27,8 @@ import 'services/leaderboard_service.dart';
 import 'services/multiplayer_matchmaking_service.dart';
 import 'services/multiplayer_state.dart';
 import 'services/notification_service.dart';
+import 'services/progress_leaderboard.dart';
+import 'services/progress_leaderboard_firestore.dart';
 import 'services/purchase_service.dart';
 import 'services/review_service.dart';
 import 'services/save_service.dart';
@@ -35,6 +39,19 @@ import 'widgets/tablet_scale.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Polices embarquées (assets/google_fonts/) : google_fonts ne télécharge plus
+  // rien au lancement. En 1.0.15, les joueurs hors ligne au démarrage
+  // récoltaient une erreur « Failed host lookup fonts.gstatic.com »
+  // (Crashlytics : 17 fois chez 7 joueurs) et un texte en police de secours.
+  GoogleFonts.config.allowRuntimeFetching = false;
+  LicenseRegistry.addLicense(() async* {
+    for (final famille in const ['BebasNeue', 'LibreFranklin', 'Lexend']) {
+      yield LicenseEntryWithLineBreaks(
+        [famille],
+        await rootBundle.loadString('assets/google_fonts/OFL-$famille.txt'),
+      );
+    }
+  });
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -43,7 +60,16 @@ Future<void> main() async {
   final adService = AdService(analytics: analytics);
   final saveService = SaveService();
   final appSettings = AppSettings(saveService: saveService);
+  // Toute première ouverture du jeu sur cet appareil (1.0.16, B1) : aucune
+  // préférence enregistrée. Un joueur existant a déjà les siennes, donc ne
+  // voit jamais le premier lancement allégé.
+  final freshInstall = await saveService.loadSettings() == null;
   await appSettings.restore();
+  if (freshInstall) {
+    // Langue du téléphone au tout premier lancement (fr* = français, sinon anglais).
+    appSettings.beginOnboarding(deviceLanguage: PlatformDispatcher.instance.locale.languageCode);
+  }
+  ForegroundClock.instance.start();
   // Persiste immédiatement (plutôt que d'attendre un premier changement de
   // réglage, qui peut ne jamais arriver) : sinon firstLaunchDay et playerId,
   // générés "maintenant" à la construction ci-dessus, ne sont jamais écrits
@@ -55,11 +81,41 @@ Future<void> main() async {
   final gameState =
       GameState(adService: adService, saveService: saveService, settings: appSettings, analytics: analytics);
   await gameState.restore();
+  // Aucune pub avant la fin du tutoriel du premier lancement.
+  adService.adsHeld = appSettings.onboardingActive;
+  // Garde-fou : un joueur qui a déjà quitté le tutoriel n'est plus en premier lancement.
+  if (appSettings.onboardingActive && gameState.gameStarted && !gameState.inTutorial) {
+    appSettings.endOnboarding();
+    adService.adsHeld = false;
+  }
+  if (appSettings.onboardingActive) {
+    // Premier lancement : on arrive directement dans l'énigme 0-1 (sans
+    // animation, sans accueil, sans écran « Monde 0 »), chargée avant le
+    // premier affichage. La mesure du début passe avant celle de l'énigme.
+    if (!gameState.gameStarted) gameState.enterWorld(0);
+    gameState.startOnboardingMeasure();
+    if (!gameState.puzzleLoaded) gameState.loadPuzzle();
+  }
   final enigmeState = EnigmeState(saveService: saveService, settings: appSettings, analytics: analytics);
   await enigmeState.restore();
   final defiState = DefiState(saveService: saveService, analytics: analytics);
   await defiState.restore();
   final leaderboardService = LeaderboardService();
+  // Classement sur l'avancée (1.0.16) : état local chargé avant l'affichage
+  // (l'interrupteur garde sa dernière valeur lue), serveur lu plus tard,
+  // une fois Firebase prêt (voir _initBackgroundServices).
+  final progressLeaderboard = ProgressLeaderboard(
+    backend: FirestoreProgressLeaderboardBackend(),
+    saveService: saveService,
+    scoreSource: () => progressScoreOf(gameState),
+    langSource: () => appSettings.locale,
+    // Un seul pseudo : « Ton pseudo » de l'accueil.
+    pseudoSource: () => appSettings.playerId,
+    onPseudoChosen: appSettings.setPlayerId,
+    analytics: analytics,
+  );
+  await progressLeaderboard.restore();
+  gameState.onLevelSolved = progressLeaderboard.onLevelSolved;
   final multiplayerMatchmaking = MultiplayerMatchmakingService();
   final multiplayerState = MultiplayerState(
       saveService: saveService, matchmaking: multiplayerMatchmaking, settings: appSettings, analytics: analytics);
@@ -75,7 +131,10 @@ Future<void> main() async {
     // Premier moment de vraie fidélité (3 jours de suite joués) : bon point
     // d'ancrage pour la demande d'avis native du store, une seule fois par
     // installation (voir consumeReviewRequestPending) — calendrier actif ou non.
-    if (palier == 3 && appSettings.consumeReviewRequestPending()) reviewService.requestReview();
+    // Jamais pendant le tutoriel (1.0.16).
+    if (palier == 3 && appSettings.consumeReviewRequestPending(inTutorial: gameState.inTutorial)) {
+      reviewService.requestReview();
+    }
     if (!kStreakCalendarEnabled) return; // calendrier en refonte : pas de récompense
     switch (palier) {
       case 3:
@@ -104,6 +163,9 @@ Future<void> main() async {
   multiplayerState.streakState = streakState;
 
   final notificationService = NotificationService();
+  // Case du calendrier de l'Avent trouvée le jour même : son rappel de 18 h
+  // n'a plus lieu d'être.
+  gameState.advent.onSolvedOnTime = notificationService.cancelAdventReminder;
   final cloudSyncService = CloudSyncService();
 
   final purchaseService = PurchaseService();
@@ -159,6 +221,7 @@ Future<void> main() async {
     streakState: streakState,
     saveService: saveService,
     cloudSyncService: cloudSyncService,
+    progressLeaderboard: progressLeaderboard,
   ));
 
   // Tout ce qui suit touche le réseau (RGPD/pubs, Firebase, permission de
@@ -180,6 +243,10 @@ Future<void> _initBackgroundServices({
   required AdService adService,
   required NotificationService notificationService,
   required AppSettings appSettings,
+  required AdventCalendar advent,
+  required DefiState defiState,
+  required bool alreadySucceeded,
+  ProgressLeaderboard? progressLeaderboard,
 }) async {
   if (adsSupported) {
     // Classement de L'énigme de la semaine — jamais bloquant : une erreur
@@ -197,9 +264,14 @@ Future<void> _initBackgroundServices({
       // si Firebase a pu s'initialiser, jamais de dépendance dure dessus.
       // Toujours active (jamais soumise au consentement RGPD/pubs) : la
       // stabilité de l'app relève de l'intérêt légitime, pas du marketing.
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+      // Décision de studio (23/11) : une erreur Dart non rattrapée ne ferme
+      // jamais l'app, elle est donc enregistrée NON fatale ; seuls les
+      // plantages natifs comptent dans le taux « sans plantage ». Avant, une
+      // PlatformException asynchrone chez un seul joueur (1.0.15) comptait
+      // 23 « plantages ».
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
       PlatformDispatcher.instance.onError = (error, stack) {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
         return true;
       };
     } catch (_) {}
@@ -216,32 +288,55 @@ Future<void> _initBackgroundServices({
         appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.deviceCheck,
       );
     } catch (_) {}
+    // Classement sur l'avancée : interrupteur (1 lecture), retrait en attente,
+    // rattrapage d'un envoi manqué. Non attendu, jamais bloquant.
+    if (progressLeaderboard != null) unawaited(progressLeaderboard.startup());
 
     // RGPD (UMP) — obligatoire pour les utilisateurs UE/UK/Suisse avant
     // toute requête publicitaire (détecté automatiquement par Google via
     // l'IP). Le même geste de consentement gouverne aussi Firebase
-    // Analytics ci-dessous, plutôt que d'imposer un second popup distinct.
-    final canRequestAds = await adService.requestConsentAndPrepareAds();
-    // Analytics : seulement si le joueur soumis au RGPD a accepté la
-    // finalité « mesure » (TCF 1 + 8), voir TcfConsent.
-    await TcfConsent.applyToAnalytics(canRequestAds: canRequestAds);
-    if (canRequestAds) {
-      await MobileAds.instance.initialize();
-      adService.enableAds();
-    }
+    // Analytics, plutôt que d'imposer un second popup distinct.
+    //
+    // Règle C7 du studio (1.0.16) : statut UMP lu sans fenêtre au lancement ;
+    // déjà réglé, mesure et pubs démarrent tout de suite ; sinon la fenêtre
+    // s'ouvre après la 1re énigme réussie, à la 1re vidéo demandée, ou au
+    // secours (180 s de jeu). Non attendu : le jeu ne s'arrête pas dessus.
+    unawaited(consentFlow(
+      settled: adService.consentAlreadySettled,
+      finish: () async {
+        final canRequestAds = await adService.requestConsentAndPrepareAds();
+        // Analytics : seulement si le joueur soumis au RGPD a accepté la
+        // finalité « mesure » (TCF 1 + 8), voir TcfConsent. Ce qui attendait
+        // en mémoire part (accord) ou est effacé (refus).
+        await TcfConsent.applyToAnalytics(canRequestAds: canRequestAds);
+        // Plafond de classification « T » appliqué avant le SDK et avant la
+        // toute première requête (voir AdService.prepareSdk).
+        if (canRequestAds && await adService.prepareSdk()) {
+          adService.enableAds();
+        }
+      },
+      log: (trigger, seconds) => adService.analytics.logConsentPrompt(trigger: trigger, seconds: seconds),
+      playSeconds: () => ForegroundClock.instance.seconds,
+      alreadySucceeded: alreadySucceeded,
+    ));
+    // Pas de rappels pendant le premier lancement : la permission est
+    // demandée à la fin du tutoriel (voir NotificationService.askAndSchedule).
+    // Pour les autres, elle suit le consentement comme avant.
+    if (!appSettings.onboardingActive) await ConsentGate.instance.decided;
   }
 
-  // Rappels locaux (Défi du jour, L'énigme de la semaine) — replanifiés à
-  // chaque lancement plutôt que de compter sur la persistance des alarmes
-  // après un redémarrage du téléphone. Pas de réglage in-app pour les
-  // couper : un joueur qui n'en veut pas passe par les paramètres système
-  // de l'app (comme requestPermission() le lui propose déjà au 1er lancement).
-  await notificationService.init();
-  final granted = await notificationService.requestPermission();
-  if (granted) {
-    await notificationService.scheduleDailyDefiReminder(locale: appSettings.locale);
-    await notificationService.scheduleWeeklyEnigmeReminder(locale: appSettings.locale);
-  }
+  if (appSettings.onboardingActive) return;
+  // Rappels locaux (Défi du jour, L'énigme de la semaine, cases du
+  // calendrier de l'Avent) — replanifiés à chaque lancement plutôt que de
+  // compter sur la persistance des alarmes après un redémarrage du
+  // téléphone. Pas de réglage in-app pour les couper : un joueur qui n'en
+  // veut pas passe par les paramètres système de l'app (comme
+  // requestPermission() le lui propose déjà au 1er lancement).
+  // Défi officiel déjà fait aujourd'hui : le rappel de 18 h est posé à partir
+  // de demain ; et dès qu'il est terminé dans la session, il est reporté.
+  defiState.onOfficielTermine = () => unawaited(notificationService.reporterRappelDefi(locale: appSettings.locale));
+  await notificationService.askAndSchedule(
+      locale: appSettings.locale, advent: advent, defiFaitAujourdhui: defiState.officielFaitAujourdhui);
 }
 
 class CineDevinetteApp extends StatelessWidget {
@@ -257,6 +352,9 @@ class CineDevinetteApp extends StatelessWidget {
   final StreakState streakState;
   final SaveService saveService;
   final CloudSyncService cloudSyncService;
+
+  /// Classement sur l'avancée (facultatif : absent, son entrée n'existe pas).
+  final ProgressLeaderboard? progressLeaderboard;
   const CineDevinetteApp({
     super.key,
     required this.adService,
@@ -271,6 +369,7 @@ class CineDevinetteApp extends StatelessWidget {
     required this.streakState,
     required this.saveService,
     required this.cloudSyncService,
+    this.progressLeaderboard,
   });
 
   @override
@@ -289,6 +388,7 @@ class CineDevinetteApp extends StatelessWidget {
         Provider.value(value: notificationService),
         Provider.value(value: saveService),
         Provider.value(value: cloudSyncService),
+        if (progressLeaderboard != null) ChangeNotifierProvider<ProgressLeaderboard>.value(value: progressLeaderboard!),
       ],
       child: Consumer<AppSettings>(
         builder: (context, settings, _) {
@@ -354,6 +454,16 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Premier lancement (1.0.16, B1) : ni animation, ni écran JOUER, ni choix
+    // du tutoriel — directement l'énigme 0-1. Un joueur existant garde
+    // l'intro et l'accueil habituels.
+    final settings = context.read<AppSettings>();
+    if (settings.onboardingActive) {
+      _screen = _Screen.game;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startBackgroundServices();
+      });
+    }
   }
 
   @override
@@ -364,6 +474,19 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Android 11 peut retarder une alarme inexacte jusqu'à 75 % du délai
+      // restant : on repose les rappels à chaque retour au premier plan.
+      final game = context.read<GameState>();
+      unawaited(context.read<NotificationService>().refreshOnResume(
+          locale: context.read<AppSettings>().locale,
+          advent: game.advent,
+          defiFaitAujourdhui: context.read<DefiState>().officielFaitAujourdhui));
+      // Boutique : le store qui n'avait pas répondu est réinterrogé (prix,
+      // « Sans pub ») ; sur Android, un consommable livré dont la
+      // consommation a échoué est reconsommé (jamais relivré).
+      unawaited(context.read<PurchaseService>().reloadIfNeeded());
+    }
     // Filet de sécurité : force l'écriture immédiate de la sauvegarde quand
     // l'app passe en arrière-plan ou se ferme, sans attendre le débounce.
     if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
@@ -453,15 +576,24 @@ class _RootNavigatorState extends State<_RootNavigator> with WidgetsBindingObser
   void _onIntroComplete() {
     if (!mounted) return;
     setState(() => _screen = _Screen.home);
+    _startBackgroundServices();
+  }
+
+  void _startBackgroundServices() {
     if (_backgroundServicesStarted) return;
     _backgroundServicesStarted = true;
     final adsSupported =
         !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
+    final game = context.read<GameState>();
     unawaited(_initBackgroundServices(
       adsSupported: adsSupported,
-      adService: context.read<GameState>().adService,
+      adService: game.adService,
       notificationService: context.read<NotificationService>(),
       appSettings: context.read<AppSettings>(),
+      advent: game.advent,
+      defiState: context.read<DefiState>(),
+      alreadySucceeded: game.hasWonAPuzzle,
+      progressLeaderboard: context.read<ProgressLeaderboard?>(),
     ));
   }
 

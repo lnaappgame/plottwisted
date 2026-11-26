@@ -28,6 +28,7 @@ class ShareService {
   static const sourceAskFriendEnigme = 'p-aide-enigme';
   static const sourceInvite = 'p-invit';
   static const sourceEvent = 'p-halloween';
+  static const sourceAdvent = 'p-avent';
 
   static String link(String source) => '$_base?s=$source';
 

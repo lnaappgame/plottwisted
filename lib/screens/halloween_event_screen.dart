@@ -474,7 +474,7 @@ class _EventPitchScreenState extends State<EventPitchScreen> {
                     const SizedBox(height: 14),
                     LetterPool(grid: event, fx: _fx),
                     const SizedBox(height: 14),
-                    _EventJokerBar(
+                    EventJokerBar(
                       fx: _fx,
                       game: game,
                       onJoker: _onJoker,
@@ -525,57 +525,6 @@ class _EventPitchScreenState extends State<EventPitchScreen> {
               ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Révéler, Éliminer et Révéler un mot (stock du jeu principal), et la pub
-/// « Gagner un joker ».
-class _EventJokerBar extends StatelessWidget {
-  final JokerFx fx;
-  final GameState game;
-  final void Function(JokerKind kind, Color color) onJoker;
-  final VoidCallback onWatchAd;
-  const _EventJokerBar({required this.fx, required this.game, required this.onJoker, required this.onWatchAd});
-
-  @override
-  Widget build(BuildContext context) {
-    final settings = context.watch<AppSettings>();
-    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
-    final t = AppLocalizations.of(context);
-    return ListenableBuilder(
-      listenable: fx,
-      builder: (context, _) => Column(
-        children: [
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 12,
-            children: [
-              for (final kind in kEventJokers)
-                Builder(builder: (context) {
-                  final shown = (game.countOf(kind) - fx.pending(kind)).clamp(0, 999).toInt();
-                  final color = jokerColor(kind, colors);
-                  return JokerButton(
-                    key: fx.key('joker:${kind.name}'),
-                    label: jokerName(kind, t),
-                    icon: kind.icon,
-                    count: shown,
-                    color: color,
-                    colors: colors,
-                    active: false,
-                    disabled: false,
-                    tappable: shown > 0,
-                    subtitle: null,
-                    onTap: () => onJoker(kind, color),
-                  );
-                }),
-            ],
-          ),
-          const SizedBox(height: 10),
-          WinJokerButton(key: const ValueKey('eventWinJoker'), label: t.jokerWinOne, colors: colors, onTap: onWatchAd),
-        ],
       ),
     );
   }

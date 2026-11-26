@@ -1,9 +1,11 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/joker.dart';
 import '../services/app_settings.dart';
+import '../services/event_grid.dart';
 import '../services/game_state.dart';
 import '../theme/app_theme.dart';
 import 'joker_fx.dart';
@@ -21,8 +23,17 @@ class JokerBar extends StatelessWidget {
   /// même utiliser « Révéler un mot », qui n'y dévoile qu'un tiers des lettres.
   final Future<bool> Function()? confirmRevealWordNerf;
   final JokerFx? fx;
+
+  /// Première énigme du premier lancement : un seul joker visible (« Révéler
+  /// une lettre »), les autres apparaissent plus tard.
+  final bool singleJoker;
   const JokerBar(
-      {super.key, required this.onWatchAdForJoker, required this.onRedJokerEmpty, this.confirmRevealWordNerf, this.fx});
+      {super.key,
+      required this.onWatchAdForJoker,
+      required this.onRedJokerEmpty,
+      this.confirmRevealWordNerf,
+      this.fx,
+      this.singleJoker = false});
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +47,17 @@ class JokerBar extends StatelessWidget {
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
     final t = AppLocalizations.of(context);
-    final kinds = [
-      JokerKind.reveal,
-      JokerKind.eliminate,
-      JokerKind.actor,
-      JokerKind.character,
-      JokerKind.hint,
-      JokerKind.revealWord,
-      if (game.currentPuzzleHasOrange) JokerKind.red,
-    ];
+    final kinds = singleJoker
+        ? [JokerKind.reveal]
+        : [
+            JokerKind.reveal,
+            JokerKind.eliminate,
+            JokerKind.actor,
+            JokerKind.character,
+            JokerKind.hint,
+            JokerKind.revealWord,
+            if (game.currentPuzzleHasOrange) JokerKind.red,
+          ];
 
     return Column(
       children: [
@@ -58,7 +71,11 @@ class JokerBar extends StatelessWidget {
         ),
         if (!game.inTutorial) ...[
           const SizedBox(height: 10),
-          WinJokerButton(label: t.jokerWinOne, colors: colors, onTap: onWatchAdForJoker),
+          WinJokerButton(
+              label: t.jokerWinOne,
+              colors: colors,
+              onTap: onWatchAdForJoker,
+              busy: game.adService.rewardedInProgress),
         ],
       ],
     );
@@ -130,20 +147,88 @@ class JokerBar extends StatelessWidget {
   }
 }
 
-/// Bouton « Gagner un joker » (une pub), aussi utilisé par l'event Halloween.
+/// Barre de jokers des events en lettres (Halloween) : Révéler,
+/// Éliminer et Révéler un mot (stock du jeu principal), et la pub « Gagner
+/// un joker ».
+class EventJokerBar extends StatelessWidget {
+  final JokerFx fx;
+  final GameState game;
+  final void Function(JokerKind kind, Color color) onJoker;
+  final VoidCallback onWatchAd;
+  const EventJokerBar({super.key, required this.fx, required this.game, required this.onJoker, required this.onWatchAd});
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    return ListenableBuilder(
+      listenable: fx,
+      builder: (context, _) => Column(
+        children: [
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 12,
+            children: [
+              for (final kind in kEventJokers)
+                Builder(builder: (context) {
+                  final shown = (game.countOf(kind) - fx.pending(kind)).clamp(0, 999).toInt();
+                  final color = jokerColor(kind, colors);
+                  return JokerButton(
+                    key: fx.key('joker:${kind.name}'),
+                    label: jokerName(kind, t),
+                    icon: kind.icon,
+                    count: shown,
+                    color: color,
+                    colors: colors,
+                    active: false,
+                    disabled: false,
+                    tappable: shown > 0,
+                    subtitle: null,
+                    onTap: () => onJoker(kind, color),
+                  );
+                }),
+            ],
+          ),
+          const SizedBox(height: 10),
+          WinJokerButton(
+              key: const ValueKey('eventWinJoker'),
+              label: t.jokerWinOne,
+              colors: colors,
+              onTap: onWatchAd,
+              busy: game.adService.rewardedInProgress),
+        ],
+      ),
+    );
+  }
+}
+
+/// Bouton « Gagner un joker » (une pub), aussi utilisé par les events.
 class WinJokerButton extends StatelessWidget {
   final String label;
   final AppColors colors;
   final VoidCallback onTap;
-  const WinJokerButton({super.key, required this.label, required this.colors, required this.onTap});
+
+  /// Vidéo en cours ([AdService.rewardedInProgress]) : indicateur à la place
+  /// du pictogramme, touchers ignorés.
+  final ValueListenable<bool>? busy;
+  const WinJokerButton({super.key, required this.label, required this.colors, required this.onTap, this.busy});
 
   @override
   Widget build(BuildContext context) {
+    final busy = this.busy;
+    if (busy == null) return _build(false);
+    return ValueListenableBuilder<bool>(valueListenable: busy, builder: (context, value, _) => _build(value));
+  }
+
+  Widget _build(bool busy) {
     return Semantics(
       button: true,
+      enabled: !busy,
       label: label,
       child: GestureDetector(
-        onTap: onTap,
+        onTap: busy ? null : onTap,
         child: Container(
           constraints: const BoxConstraints(maxWidth: 324),
           width: double.infinity,
@@ -159,7 +244,15 @@ class WinJokerButton extends StatelessWidget {
             children: [
               Text(label, style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.goldBright)),
               const SizedBox(width: 8),
-              Text('🎬▶️', style: AppTextStyles.body(size: 10, color: colors.muted)),
+              if (busy)
+                const SizedBox(
+                  key: ValueKey('winJokerLoading'),
+                  width: 12,
+                  height: 12,
+                  child: CircularProgressIndicator(strokeWidth: 1.6, color: AppColors.goldBright),
+                )
+              else
+                Text('🎬▶️', style: AppTextStyles.body(size: 10, color: colors.muted)),
             ],
           ),
         ),

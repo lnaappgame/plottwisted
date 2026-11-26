@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_android/shared_preferences_android.dart';
+import 'analytics_service.dart';
 
 /// Consentement Analytics lu dans la réponse du joueur à la fenêtre RGPD
 /// (UMP de Google, norme IAB TCF v2.2) — 1.0.13.
@@ -28,34 +29,50 @@ class TcfConsent {
     return accepte(1) && accepte(8);
   }
 
-  /// Lit les valeurs TCF stockées par UMP. En cas d'erreur de lecture pour
-  /// un joueur dont on ne sait rien, on retombe sur l'ancien comportement
-  /// (la décision `canRequestAds` reste le premier verrou).
-  static Future<bool> analyticsAllowed() async {
+  /// Lit les valeurs TCF stockées par UMP. En cas d'erreur de lecture, la
+  /// mesure reste COUPÉE (1.0.16) : `canRequestAds` vaut aussi vrai après un
+  /// refus, donc il ne peut pas servir de verrou ; renvoyer vrai ici
+  /// rallumait Analytics chez un joueur européen qui avait refusé. Le joueur
+  /// hors RGPD perd seulement la mesure de cette session, jusqu'à la
+  /// prochaine lecture réussie (lancement suivant ou options de
+  /// confidentialité).
+  ///
+  /// [read] remplace la lecture des préférences dans les tests.
+  static Future<bool> analyticsAllowed({
+    Future<({int? gdprApplies, String? purposeConsents})> Function()? read,
+  }) async {
     try {
-      final prefs = SharedPreferencesAsync(
-        options: defaultTargetPlatform == TargetPlatform.android
-            ? const SharedPreferencesAsyncAndroidOptions(
-                backend: SharedPreferencesAndroidBackendLibrary.SharedPreferences,
-              )
-            : const SharedPreferencesOptions(),
-      );
-      final gdprApplies = await prefs.getInt('IABTCF_gdprApplies');
-      final purposes = await prefs.getString('IABTCF_PurposeConsents');
-      return analyticsAllowedFrom(gdprApplies: gdprApplies, purposeConsents: purposes);
+      final values = await (read ?? _readTcfValues)();
+      return analyticsAllowedFrom(gdprApplies: values.gdprApplies, purposeConsents: values.purposeConsents);
     } catch (e) {
       debugPrint('TcfConsent: $e');
-      return true;
+      return false;
     }
+  }
+
+  static Future<({int? gdprApplies, String? purposeConsents})> _readTcfValues() async {
+    final prefs = SharedPreferencesAsync(
+      options: defaultTargetPlatform == TargetPlatform.android
+          ? const SharedPreferencesAsyncAndroidOptions(
+              backend: SharedPreferencesAndroidBackendLibrary.SharedPreferences,
+            )
+          : const SharedPreferencesOptions(),
+    );
+    final gdprApplies = await prefs.getInt('IABTCF_gdprApplies');
+    final purposes = await prefs.getString('IABTCF_PurposeConsents');
+    return (gdprApplies: gdprApplies, purposeConsents: purposes);
   }
 
   /// Active ou coupe la collecte Analytics selon le consentement courant.
   /// Appelé au démarrage (après le popup) et à la fermeture du formulaire
   /// « Options de confidentialité des pubs » des Réglages.
-  static Future<void> applyToAnalytics({required bool canRequestAds}) async {
+  static Future<bool> applyToAnalytics({required bool canRequestAds}) async {
     final enabled = canRequestAds && await analyticsAllowed();
     try {
       await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(enabled);
     } catch (_) {}
+    // Ce qui attendait la réponse part (accord) ou est effacé (refus), 1.0.16.
+    AnalyticsService.consentDecided(enabled);
+    return enabled;
   }
 }

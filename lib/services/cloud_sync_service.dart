@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'account_deletion.dart';
+
+export 'account_deletion.dart' show AccountDeletionOutcome, AccountDeletionReport;
 
 /// Résultat du flux "lier mon compte Google" (voir [CloudSyncService.connectGoogleAccount]).
 enum AccountLinkResult {
@@ -117,8 +120,11 @@ class CloudSyncService {
 
   /// Sauvegarde l'intégralité des données locales fournies vers Firestore,
   /// sous le compte actuellement connecté. Retourne `true` en cas de succès.
+  /// Jamais pendant la suppression du compte : la sauvegarde automatique (app
+  /// mise en arrière-plan, par exemple par le sélecteur de compte Google)
+  /// recréerait `backups/{uid}` juste après sa suppression.
   Future<bool> backup(Map<String, dynamic> allLocalData) async {
-    if (!_supported) return false;
+    if (!_supported || _deletingAccount) return false;
     try {
       await _ensureFirebaseReady();
       final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -146,6 +152,82 @@ class CloudSyncService {
       return doc.data();
     } catch (_) {
       return null;
+    }
+  }
+
+  bool _deletingAccount = false;
+
+  /// Suppression du compte en cours (aucune sauvegarde ne part).
+  bool get deletingAccount => _deletingAccount;
+
+  static const _deletionTimeout = Duration(seconds: 10);
+
+  /// « Supprimer ma sauvegarde et me déconnecter » (Réglages, compte Google
+  /// lié) : efface `backups/{uid}`, l'entrée du classement des joueurs
+  /// ([leaveLeaderboard], le retrait existant, vrai s'il a réussi),
+  /// `multiplayer_players/{uid}`, puis le compte Firebase, et enfin la
+  /// connexion Google. Ordre et tolérance aux erreurs : voir
+  /// [runAccountDeletion]. La partie locale n'est pas touchée.
+  ///
+  /// Après coup, `currentUser` vaut null : les services qui en ont besoin
+  /// (classements, Multijoueur, sauvegarde) recréent un identifiant anonyme
+  /// au premier appel (`signInAnonymously` quand `currentUser == null`).
+  Future<AccountDeletionReport> deleteAccount({Future<bool> Function()? leaveLeaderboard}) async {
+    if (!_supported || Firebase.apps.isEmpty) return const AccountDeletionReport(AccountDeletionOutcome.failed);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return const AccountDeletionReport(AccountDeletionOutcome.failed);
+    final uid = user.uid;
+    final db = FirebaseFirestore.instance;
+    _deletingAccount = true;
+    try {
+      return await runAccountDeletion(AccountDeletionSteps(
+        deleteBackup: () => db.collection('backups').doc(uid).delete().timeout(_deletionTimeout),
+        deleteLeaderboardEntries: () async {
+          if (leaveLeaderboard == null) return;
+          if (!await leaveLeaderboard()) throw StateError('classement des joueurs non effacé');
+        },
+        deleteMultiplayerProfile: () => db.collection('multiplayer_players').doc(uid).delete().timeout(_deletionTimeout),
+        deleteUser: () async {
+          final current = FirebaseAuth.instance.currentUser;
+          // Jamais un autre compte que celui des données effacées ci-dessus.
+          if (current == null || current.uid != uid) throw StateError('compte changé pendant la suppression');
+          try {
+            await current.delete();
+            return UserDeletionStatus.done;
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'requires-recent-login') return UserDeletionStatus.requiresRecentLogin;
+            rethrow;
+          }
+        },
+        reauthenticate: () => _reauthenticateWithGoogle(uid),
+        disconnectGoogle: () async {
+          await _ensureGoogleInitialized();
+          await GoogleSignIn.instance.disconnect();
+        },
+      ));
+    } finally {
+      _deletingAccount = false;
+    }
+  }
+
+  /// Firebase demande une connexion récente pour supprimer le compte : le
+  /// sélecteur Google s'ouvre, le joueur choisit le même compte, puis la
+  /// session Firebase est reconfirmée avec ce jeton.
+  Future<ReauthStatus> _reauthenticateWithGoogle(String uid) async {
+    try {
+      await _ensureGoogleInitialized();
+      final account = await GoogleSignIn.instance.authenticate();
+      final idToken = account.authentication.idToken;
+      if (idToken == null) return ReauthStatus.failed;
+      final current = FirebaseAuth.instance.currentUser;
+      if (current == null || current.uid != uid) return ReauthStatus.failed;
+      // Un autre compte Google que celui lié : Firebase refuse (user-mismatch).
+      await current.reauthenticateWithCredential(GoogleAuthProvider.credential(idToken: idToken));
+      return ReauthStatus.ok;
+    } on GoogleSignInException catch (e) {
+      return e.code == GoogleSignInExceptionCode.canceled ? ReauthStatus.cancelled : ReauthStatus.failed;
+    } catch (_) {
+      return ReauthStatus.failed;
     }
   }
 }

@@ -362,6 +362,84 @@ abstract class AppLocalizations {
   /// **'Réinitialiser'**
   String get settingsResetConfirm2Cta;
 
+  /// No description provided for @settingsDeleteAccount.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer ma sauvegarde et me déconnecter'**
+  String get settingsDeleteAccount;
+
+  /// No description provided for @settingsDeleteAccountTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚠️ Supprimer ta sauvegarde ?'**
+  String get settingsDeleteAccountTitle;
+
+  /// No description provided for @settingsDeleteAccountBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta sauvegarde en ligne, ton compte lié à Google ({email}), ta place au classement et ta fiche Multijoueur seront supprimés définitivement. Le jeu continue de fonctionner normalement et ta partie reste sur ce téléphone.'**
+  String settingsDeleteAccountBody(String email);
+
+  /// No description provided for @settingsDeleteAccountCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer'**
+  String get settingsDeleteAccountCta;
+
+  /// No description provided for @settingsDeleteAccountDoneSnack.
+  ///
+  /// In fr, this message translates to:
+  /// **'✅ C\'est fait : ta sauvegarde en ligne et ton compte sont supprimés. Ta partie reste sur ce téléphone.'**
+  String get settingsDeleteAccountDoneSnack;
+
+  /// No description provided for @settingsDeleteAccountPartialTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Compte supprimé'**
+  String get settingsDeleteAccountPartialTitle;
+
+  /// No description provided for @settingsDeleteAccountPartialBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton compte est supprimé, mais une partie de tes données en ligne n\'a pas pu être effacée. Pour finir, passe par la page web de suppression.'**
+  String get settingsDeleteAccountPartialBody;
+
+  /// No description provided for @settingsDeleteAccountReauthTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚠️ Confirmation de Google nécessaire'**
+  String get settingsDeleteAccountReauthTitle;
+
+  /// No description provided for @settingsDeleteAccountReauthBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Google doit confirmer que c\'est bien toi avant de supprimer ton compte. Réessaie en choisissant le même compte Google, ou passe par la page web de suppression.'**
+  String get settingsDeleteAccountReauthBody;
+
+  /// No description provided for @settingsDeleteAccountFailedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'⚠️ Suppression impossible'**
+  String get settingsDeleteAccountFailedTitle;
+
+  /// No description provided for @settingsDeleteAccountFailedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton compte n\'a pas pu être supprimé. Vérifie ta connexion et réessaie, ou passe par la page web de suppression.'**
+  String get settingsDeleteAccountFailedBody;
+
+  /// No description provided for @settingsDeleteAccountOpenPage.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la page web'**
+  String get settingsDeleteAccountOpenPage;
+
+  /// No description provided for @settingsDeleteDataLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'Supprimer mon compte et mes données (page web)'**
+  String get settingsDeleteDataLink;
+
   /// No description provided for @commonRulesTitle.
   ///
   /// In fr, this message translates to:
@@ -1081,6 +1159,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Tutoriel'**
   String get gameTutorialCategory;
+
+  /// No description provided for @onboardRule1.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom en 🟢 vert est le vrai personnage. Quel est ce film ?'**
+  String get onboardRule1;
+
+  /// No description provided for @onboardRule2.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom en 🔵 bleu est le vrai acteur de ce rôle. Le vert reste le vrai personnage.'**
+  String get onboardRule2;
+
+  /// No description provided for @onboardRule3.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le nom en 🔴 rouge est un rôle du même acteur dans un autre film. Le vert reste le vrai personnage.'**
+  String get onboardRule3;
+
+  /// No description provided for @onboardAlreadyPlayed.
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'ai déjà joué'**
+  String get onboardAlreadyPlayed;
+
+  /// No description provided for @onboardDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tutoriel terminé ! Le monde 1 est débloqué.\n\nUn nouveau défi t\'attend chaque jour : reviens demain !'**
+  String get onboardDone;
+
+  /// No description provided for @onboardContinue.
+  ///
+  /// In fr, this message translates to:
+  /// **'CONTINUER'**
+  String get onboardContinue;
 
   /// No description provided for @homeStreakDays.
   ///
@@ -1899,6 +2013,12 @@ abstract class AppLocalizations {
   /// **'Vérification lancée : si tu avais acheté le retrait des pubs, il est rétabli.'**
   String get shopRestoreDone;
 
+  /// No description provided for @shopCompareAtNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'au lieu de {price} à l\'unité'**
+  String shopCompareAtNote(String price);
+
   /// No description provided for @shareButton.
   ///
   /// In fr, this message translates to:
@@ -2224,8 +2344,380 @@ abstract class AppLocalizations {
   /// No description provided for @avatarEventLocked.
   ///
   /// In fr, this message translates to:
-  /// **'Avatars de l\'event Halloween'**
+  /// **'Avatars des events'**
   String get avatarEventLocked;
+
+  /// No description provided for @homeAdventEvent.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎄 CALENDRIER DE L\'AVENT'**
+  String get homeAdventEvent;
+
+  /// No description provided for @advTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'CALENDRIER DE L\'AVENT'**
+  String get advTitle;
+
+  /// No description provided for @advUntil.
+  ///
+  /// In fr, this message translates to:
+  /// **'Du 1er au 25 décembre · rattrapage jusqu\'au 3 janvier'**
+  String get advUntil;
+
+  /// No description provided for @advIntroTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'LE PÈRE NOËL FAIT SON CINÉMA'**
+  String get advIntroTitle;
+
+  /// No description provided for @advIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de trouver le bon titre, sans tomber dans les pièges !'**
+  String get advIntro;
+
+  /// No description provided for @advIntro2.
+  ///
+  /// In fr, this message translates to:
+  /// **'24 films de Noël, plus une case bonus le 25 : une case à ouvrir chaque jour !'**
+  String get advIntro2;
+
+  /// No description provided for @advRules.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une case s\'ouvre chaque jour à minuit : 4 titres, un seul est le bon, les 3 autres sont des pièges. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Joker : Retirer un piège (il utilise un joker Révéler).'**
+  String get advRules;
+
+  /// No description provided for @advSkinHat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonnet de Noël : trouve ta première case'**
+  String get advSkinHat;
+
+  /// No description provided for @advSkinFinal.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonnet sous la neige : trouve les 25 cases'**
+  String get advSkinFinal;
+
+  /// No description provided for @advProgress.
+  ///
+  /// In fr, this message translates to:
+  /// **'{found}/{total} cases trouvées'**
+  String advProgress(int found, int total);
+
+  /// No description provided for @advToday.
+  ///
+  /// In fr, this message translates to:
+  /// **'AUJOURD\'HUI'**
+  String get advToday;
+
+  /// No description provided for @advCaseNumber.
+  ///
+  /// In fr, this message translates to:
+  /// **'CASE {day}'**
+  String advCaseNumber(int day);
+
+  /// No description provided for @advCaseBonus.
+  ///
+  /// In fr, this message translates to:
+  /// **'CASE BONUS'**
+  String get advCaseBonus;
+
+  /// No description provided for @advCaseLocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Patience ! Cette case s\'ouvre le {day} décembre.'**
+  String advCaseLocked(int day);
+
+  /// No description provided for @advPlayDay.
+  ///
+  /// In fr, this message translates to:
+  /// **'JOUER LA CASE {day}'**
+  String advPlayDay(int day);
+
+  /// No description provided for @advSantaSays.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎅 LE PÈRE NOËL RACONTE'**
+  String get advSantaSays;
+
+  /// No description provided for @advPickTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quel est ce film ? 3 réponses sur 4 sont des pièges !'**
+  String get advPickTitle;
+
+  /// No description provided for @advTrap.
+  ///
+  /// In fr, this message translates to:
+  /// **'Piège !'**
+  String get advTrap;
+
+  /// No description provided for @advRemoveTrap.
+  ///
+  /// In fr, this message translates to:
+  /// **'RETIRER UN PIÈGE'**
+  String get advRemoveTrap;
+
+  /// No description provided for @advOnTimeHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Trouve-la aujourd\'hui : +1 joker !'**
+  String get advOnTimeHint;
+
+  /// No description provided for @advLateHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Case rattrapée : le joker n\'est donné que le jour même.'**
+  String get advLateHint;
+
+  /// No description provided for @advAvatarUnlocked.
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvel avatar débloqué : Bonnet de Noël !'**
+  String get advAvatarUnlocked;
+
+  /// No description provided for @advFinalReward.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les 25 cases ! Gros lot : 5 jokers et l\'avatar Bonnet sous la neige !'**
+  String get advFinalReward;
+
+  /// No description provided for @advComeBack.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu es à jour ! La prochaine case s\'ouvre demain.'**
+  String get advComeBack;
+
+  /// No description provided for @advAllDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Bravo, tu as trouvé les 25 cases du calendrier ! Joyeux Noël !'**
+  String get advAllDone;
+
+  /// No description provided for @advNotYet.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le calendrier s\'ouvre le 1er décembre. À très vite !'**
+  String get advNotYet;
+
+  /// No description provided for @advOver.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le calendrier de l\'Avent est terminé. Merci d\'avoir joué, et bonne année !'**
+  String get advOver;
+
+  /// No description provided for @advNext.
+  ///
+  /// In fr, this message translates to:
+  /// **'CASE SUIVANTE'**
+  String get advNext;
+
+  /// No description provided for @advBackToCalendar.
+  ///
+  /// In fr, this message translates to:
+  /// **'RETOUR AU CALENDRIER'**
+  String get advBackToCalendar;
+
+  /// No description provided for @shareAdventText.
+  ///
+  /// In fr, this message translates to:
+  /// **'🎄 Plot Twist(ed) · Calendrier de l\'Avent, case {day}\n{grid}{details}\nÀ ton tour 👉 {link}'**
+  String shareAdventText(int day, String grid, String details, String link);
+
+  /// No description provided for @lbHomeButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement'**
+  String get lbHomeButton;
+
+  /// No description provided for @lbTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'CLASSEMENT'**
+  String get lbTitle;
+
+  /// No description provided for @lbSubtitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Les joueurs en français, classés par niveaux résolus'**
+  String get lbSubtitle;
+
+  /// No description provided for @lbTop.
+  ///
+  /// In fr, this message translates to:
+  /// **'TOP 50'**
+  String get lbTop;
+
+  /// No description provided for @lbEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Personne pour l\'instant. Sois le premier !'**
+  String get lbEmpty;
+
+  /// No description provided for @lbLegend.
+  ///
+  /// In fr, this message translates to:
+  /// **'À droite, l\'avancée : 16-3 veut dire 15 mondes finis et 3 niveaux du suivant.'**
+  String get lbLegend;
+
+  /// No description provided for @lbOffline.
+  ///
+  /// In fr, this message translates to:
+  /// **'Classement indisponible pour le moment. Vérifie ta connexion.'**
+  String get lbOffline;
+
+  /// No description provided for @lbRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'RÉESSAYER'**
+  String get lbRetry;
+
+  /// No description provided for @lbYourPlace.
+  ///
+  /// In fr, this message translates to:
+  /// **'TA PLACE'**
+  String get lbYourPlace;
+
+  /// No description provided for @lbRankOf.
+  ///
+  /// In fr, this message translates to:
+  /// **'{rank, plural, =1{1er sur {total}} other{{rank}e sur {total}}}'**
+  String lbRankOf(int rank, int total);
+
+  /// No description provided for @lbYou.
+  ///
+  /// In fr, this message translates to:
+  /// **'Toi'**
+  String get lbYou;
+
+  /// No description provided for @lbNotJoined.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu n\'apparais pas dans le classement : cette place, toi seul la vois.'**
+  String get lbNotJoined;
+
+  /// No description provided for @lbNoScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Résous ton premier niveau pour entrer dans le classement.'**
+  String get lbNoScore;
+
+  /// No description provided for @lbWaitingFirstLevel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu apparaîtras dès ton premier niveau résolu.'**
+  String get lbWaitingFirstLevel;
+
+  /// No description provided for @lbJoinButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'APPARAÎTRE DANS LE CLASSEMENT'**
+  String get lbJoinButton;
+
+  /// No description provided for @lbChangeName.
+  ///
+  /// In fr, this message translates to:
+  /// **'Changer de pseudo'**
+  String get lbChangeName;
+
+  /// No description provided for @lbLeave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Me retirer'**
+  String get lbLeave;
+
+  /// No description provided for @lbJoinTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'APPARAÎTRE DANS LE CLASSEMENT ?'**
+  String get lbJoinTitle;
+
+  /// No description provided for @lbJoinText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton pseudo et ton avancée seront visibles par tous les joueurs.\nC\'est facultatif, et tu peux te retirer quand tu veux.'**
+  String get lbJoinText;
+
+  /// No description provided for @lbRenameTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'TON PSEUDO'**
+  String get lbRenameTitle;
+
+  /// No description provided for @lbJoinConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'APPARAÎTRE'**
+  String get lbJoinConfirm;
+
+  /// No description provided for @lbSave.
+  ///
+  /// In fr, this message translates to:
+  /// **'ENREGISTRER'**
+  String get lbSave;
+
+  /// No description provided for @lbNotNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas maintenant'**
+  String get lbNotNow;
+
+  /// No description provided for @lbPseudoEmpty.
+  ///
+  /// In fr, this message translates to:
+  /// **'Choisis un pseudo.'**
+  String get lbPseudoEmpty;
+
+  /// No description provided for @lbPseudoRefused.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce pseudo n\'est pas accepté. Choisis-en un autre (pas d\'insulte, de lien ni de numéro).'**
+  String get lbPseudoRefused;
+
+  /// No description provided for @lbFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion. Réessaie dans un moment.'**
+  String get lbFailed;
+
+  /// No description provided for @lbJoined.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait : tu apparais dans le classement !'**
+  String get lbJoined;
+
+  /// No description provided for @lbLeaveTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'TE RETIRER DU CLASSEMENT ?'**
+  String get lbLeaveTitle;
+
+  /// No description provided for @lbLeaveText.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton pseudo et ton avancée seront effacés du classement. Ta partie, elle, ne change pas.'**
+  String get lbLeaveText;
+
+  /// No description provided for @lbLeaveConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'ME RETIRER'**
+  String get lbLeaveConfirm;
+
+  /// No description provided for @lbLeft.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est fait : tu n\'apparais plus dans le classement.'**
+  String get lbLeft;
+
+  /// No description provided for @lbSettingsLeave.
+  ///
+  /// In fr, this message translates to:
+  /// **'Me retirer du classement'**
+  String get lbSettingsLeave;
 }
 
 class _AppLocalizationsDelegate

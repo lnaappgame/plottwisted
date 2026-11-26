@@ -113,7 +113,24 @@ class _DailyWheelDialogState extends State<DailyWheelDialog> with TickerProvider
     Widget buttons;
     if (_busy || _locked) {
       // Pendant la rotation puis le temps de lecture du gain : rien à toucher.
-      buttons = const SizedBox(height: 48);
+      // Pendant la vidéo (et son court chargement après le consentement) :
+      // un indicateur.
+      buttons = SizedBox(
+        height: 48,
+        child: ValueListenableBuilder<bool>(
+          valueListenable: game.adService.rewardedInProgress,
+          builder: (context, adBusy, _) => adBusy
+              ? const Center(
+                  child: SizedBox(
+                    key: ValueKey('wheelAdLoading'),
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.goldBright),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+      );
     } else if (freeAvailable) {
       buttons = SizedBox(
         width: double.infinity,

@@ -47,21 +47,91 @@ service cloud.firestore {
     // Elo courant par joueur — un document par joueur (contrairement à
     // multiplayer_runs), utilisé uniquement pour le calcul du pourcentage
     // mondial (lecture agrégée sur toute la collection, donc publique).
-    // Écriture limitée à SON PROPRE document.
+    // Écriture limitée à SON PROPRE document. Suppression de son propre
+    // document permise (1.0.16) : « Supprimer ma sauvegarde et me
+    // déconnecter » des Réglages efface la fiche Elo avant le compte.
     match /multiplayer_players/{uid} {
       allow read: if true;
       allow write: if request.auth != null
                    && request.auth.uid == uid
                    && request.resource.data.elo is int;
+      allow delete: if request.auth != null && request.auth.uid == uid;
     }
 
     // Sauvegarde cloud liée à un compte Google (CloudSyncService.backup/
     // restore) — contient l'intégralité des données de jeu locales de
     // l'utilisateur : contrairement aux classements, PAS de lecture
     // publique. Seul le propriétaire du document (son propre UID Firebase,
-    // anonyme ou lié à Google) peut le lire ou l'écraser.
+    // anonyme ou lié à Google) peut le lire, l'écraser ou le supprimer
+    // (write couvre delete : utilisé par la suppression du compte, 1.0.16).
     match /backups/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // ─── Classement sur l'avancée (1.0.16) ───
+    // Un classement par langue de contenu (deux collections, pour ne pas
+    // avoir besoin d'index composite) ; un document par joueur volontaire,
+    // identifié par son UID anonyme Firebase :
+    //   { pseudo: string 1-20, score: int 1-600 (niveaux résolus),
+    //     updatedAt: heure du serveur, expireAt: date de suppression (TTL) }
+    // Vérifié contre lib/services/progress_leaderboard_firestore.dart.
+
+    // Document valide : seulement les 4 champs attendus, tous présents.
+    // updatedAt doit être l'heure du serveur (FieldValue.serverTimestamp()) ;
+    // expireAt = 24 mois après l'écriture (data_retention.dart), borné ici
+    // entre 1 jour et 3 ans pour qu'il ne puisse ni manquer ni être repoussé
+    // indéfiniment.
+    function isValidProgressEntry(data) {
+      return data.keys().hasOnly(['pseudo', 'score', 'updatedAt', 'expireAt'])
+          && data.keys().hasAll(['pseudo', 'score', 'updatedAt', 'expireAt'])
+          && data.pseudo is string
+          && data.pseudo.size() >= 1
+          && data.pseudo.size() <= 20
+          && data.score is int
+          && data.score >= 1
+          && data.score <= 600
+          && data.updatedAt == request.time
+          && data.expireAt is timestamp
+          && data.expireAt > request.time + duration.value(1, 'd')
+          && data.expireAt < request.time + duration.value(1100, 'd');
+    }
+
+    // Lecture publique (top 50, rang et total par count()). Création et mise
+    // à jour seulement de SON document, avec un score qui ne descend jamais
+    // (un changement de pseudo garde le même score). Suppression de son
+    // propre document permise : c'est le retrait du joueur (droit à
+    // l'effacement).
+    match /progress_leaderboard_fr/{uid} {
+      allow read: if true;
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && isValidProgressEntry(request.resource.data);
+      allow update: if request.auth != null
+                    && request.auth.uid == uid
+                    && isValidProgressEntry(request.resource.data)
+                    && request.resource.data.score >= resource.data.score;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /progress_leaderboard_en/{uid} {
+      allow read: if true;
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && isValidProgressEntry(request.resource.data);
+      allow update: if request.auth != null
+                    && request.auth.uid == uid
+                    && isValidProgressEntry(request.resource.data)
+                    && request.resource.data.score >= resource.data.score;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Réglages publics du jeu, dont l'interrupteur du classement sur
+    // l'avancée (app_config/public, champ booléen
+    // progressLeaderboardEnabled). Lus par tous au lancement ; modifiés
+    // seulement depuis la console Firebase (qui ignore ces règles).
+    match /app_config/{doc} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }

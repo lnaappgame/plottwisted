@@ -22,4 +22,19 @@ void main() {
       expect(TcfConsent.analyticsAllowedFrom(gdprApplies: 1, purposeConsents: '1111111'), isFalse);
     });
   });
+
+  group('TcfConsent.analyticsAllowed (lecture des préférences)', () {
+    test('erreur de lecture : mesure coupée (canRequestAds vaut aussi vrai après un refus)', () async {
+      final allowed = await TcfConsent.analyticsAllowed(read: () async => throw StateError('préférences illisibles'));
+      expect(allowed, isFalse);
+    });
+
+    test('lecture réussie : la règle TCF s\'applique', () async {
+      expect(await TcfConsent.analyticsAllowed(read: () async => (gdprApplies: 1, purposeConsents: '1000000100')),
+          isTrue);
+      expect(await TcfConsent.analyticsAllowed(read: () async => (gdprApplies: 1, purposeConsents: '0000000000')),
+          isFalse);
+      expect(await TcfConsent.analyticsAllowed(read: () async => (gdprApplies: null, purposeConsents: null)), isTrue);
+    });
+  });
 }

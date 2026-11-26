@@ -7,7 +7,9 @@ import '../l10n/app_localizations.dart';
 import '../models/joker.dart';
 import '../models/puzzle.dart';
 import '../services/app_settings.dart';
+import '../services/consent_flow.dart';
 import '../services/game_state.dart';
+import '../services/notification_service.dart';
 import '../services/review_service.dart';
 import '../services/sound_service.dart';
 import '../services/streak_state.dart';
@@ -99,6 +101,8 @@ class _GameScreenState extends State<GameScreen> {
         return;
       }
     }
+    // Premier lancement : main() a déjà chargé l'énigme 0-1 (puzzleLoaded),
+    // donc ni écran « Monde 0, indice de départ » ni fenêtre de règle.
     _pendingWorldChoice = game.puzzleLoaded ? null : [game.currentWorld.number];
   }
 
@@ -208,7 +212,9 @@ class _GameScreenState extends State<GameScreen> {
       return;
     }
 
-    if (game.inTutorial) {
+    // Premier lancement : la règle est écrite dans l'écran (voir
+    // _OnboardingRuleLine), jamais en fenêtre.
+    if (game.inTutorial && game.onboardingRuleLevel == null) {
       switch (game.currentLevelNumber) {
         case 1:
           _showTutorialDialog(t.gameTutorial1, onClose: then);
@@ -224,7 +230,8 @@ class _GameScreenState extends State<GameScreen> {
     if (then != null) WidgetsBinding.instance.addPostFrameCallback((_) => then());
   }
 
-  void _showTutorialDialog(String message, {VoidCallback? onClose, List<InlineSpan>? richSpans}) {
+  void _showTutorialDialog(String message,
+      {VoidCallback? onClose, List<InlineSpan>? richSpans, String? buttonLabel}) {
     final colors = AppColors(context.read<AppSettings>().isLightTheme);
     final t = AppLocalizations.of(context);
     final textStyle = AppTextStyles.body(size: 14, color: colors.cream).copyWith(height: 1.5);
@@ -254,7 +261,8 @@ class _GameScreenState extends State<GameScreen> {
                     Navigator.of(context).pop();
                     onClose?.call();
                   },
-                  child: Text(t.gameUnderstood, style: AppTextStyles.display(size: 15, color: colors.cream)),
+                  child: Text(buttonLabel ?? t.gameUnderstood,
+                      style: AppTextStyles.display(size: 15, color: colors.cream)),
                 ),
               ),
             ],
@@ -278,6 +286,9 @@ class _GameScreenState extends State<GameScreen> {
   Future<void> _onWatchAdForJoker() async {
     final game = context.read<GameState>();
     if (game.inTutorial) return;
+    // Double toucher : la vidéo du 1er est déjà en route (indicateur sur le
+    // bouton) ; rien à lancer, ni « pub indisponible » à afficher.
+    if (game.adService.rewardedInProgress.value) return;
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned) {
@@ -358,6 +369,7 @@ class _GameScreenState extends State<GameScreen> {
       _toast(t.jokerRedLockedToast);
       return;
     }
+    if (game.adService.rewardedInProgress.value) return; // double toucher
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned && game.peutRegarderPubJokerRouge) {
@@ -387,6 +399,7 @@ class _GameScreenState extends State<GameScreen> {
 
   Future<void> _watchAdForMinorBonus() async {
     final game = context.read<GameState>();
+    if (game.adService.rewardedInProgress.value) return; // double toucher
     final earned = await game.adService.showRewardedAdForJoker();
     if (!mounted) return;
     if (earned) {
@@ -500,6 +513,17 @@ class _GameScreenState extends State<GameScreen> {
 
     final wasTutorial = game.inTutorial;
     final mustAd = game.mustShowForcedAd;
+    final settings = context.read<AppSettings>();
+    final wasOnboarding = settings.onboardingActive;
+
+    // Règle C7 : la première énigme réussie, à la sortie de son écran de
+    // réussite, ouvre la fenêtre de consentement si elle n'a pas encore eu
+    // lieu (sans effet une fois la réponse donnée).
+    ConsentGate.instance.firstSuccess();
+    // Fin du niveau 1-5 : moment de demande de note (2 au plus par installation).
+    if (game.isLevel15End && settings.consumeReviewRequestPending(inTutorial: game.inTutorial)) {
+      _review.requestReview();
+    }
 
     final status = game.advanceAfterSolve();
 
@@ -507,6 +531,12 @@ class _GameScreenState extends State<GameScreen> {
     game.pendingMinorJokerLabel = null;
     if (minorKind != null) _queuedReward = (eyebrow: null, grants: [RewardGrant(minorKind, 1)]);
 
+    if (wasOnboarding && status == 'tutorial-final-transition') {
+      // Premier lancement : pas de fenêtre « tu as l'air prêt », on enchaîne
+      // sur le dernier niveau du tutoriel.
+      _loadWithTutorialCheck();
+      return;
+    }
     if (wasTutorial && status == 'tutorial-final-transition') {
       // Charge déjà le niveau 0-4 avant d'afficher le dialogue, pour que le
       // pitch/la grille dessous correspondent à l'en-tête ("Monde 0-4") dès
@@ -518,6 +548,23 @@ class _GameScreenState extends State<GameScreen> {
       _showTutorialDialog(
         t.gameTutorialFinalTransition,
         onClose: _checkIntroDialogsAfterLoad,
+      );
+      return;
+    }
+    if (wasOnboarding && status == 'tutorial-complete') {
+      // Premier lancement : fin du tutoriel et rendez-vous du lendemain. C'est
+      // ici, après un vrai succès, que la permission de notifications est
+      // demandée (jamais pendant la prise en main).
+      _showTutorialDialog(
+        t.onboardDone,
+        buttonLabel: t.onboardContinue,
+        onClose: () {
+          game.enterWorld(1);
+          setState(() => _pendingWorldChoice = [1]);
+          unawaited(context
+              .read<NotificationService>()
+              .askAndSchedule(locale: settings.locale, advent: game.advent));
+        },
       );
       return;
     }
@@ -569,6 +616,18 @@ class _GameScreenState extends State<GameScreen> {
       return;
     }
     _loadWithTutorialCheck();
+  }
+
+  /// « J'ai déjà joué » (premier lancement) : le joueur quitte le tutoriel pour
+  /// le monde 1. Il retrouve le comportement de l'ancien « Passer au monde 1 ».
+  void _onAlreadyPlayed() {
+    final game = context.read<GameState>();
+    if (!context.read<AppSettings>().onboardingActive || _showResult) return;
+    game.skipOnboarding();
+    // Un joueur qui revient n'a pas encore répondu au consentement : c'est le
+    // bon moment (sans effet si la réponse est déjà donnée).
+    ConsentGate.instance.firstSuccess();
+    setState(() => _pendingWorldChoice = [1]);
   }
 
   /// Partage le pitch tel qu'affiché (noms et pastilles de couleur, jokers
@@ -686,6 +745,33 @@ class _GameScreenState extends State<GameScreen> {
                         const SizedBox(width: 36),
                       ],
                     ),
+                    if (settings.onboardingActive && game.inTutorial)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: _onAlreadyPlayed,
+                          style: TextButton.styleFrom(
+                              minimumSize: const Size(0, 28), padding: const EdgeInsets.symmetric(horizontal: 6)),
+                          child: Text(AppLocalizations.of(context).onboardAlreadyPlayed,
+                              style: AppTextStyles.body(size: 12, color: colors.muted)
+                                  .copyWith(decoration: TextDecoration.underline)),
+                        ),
+                      ),
+                    if (game.onboardingRuleLevel != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          switch (game.onboardingRuleLevel) {
+                            1 => AppLocalizations.of(context).onboardRule1,
+                            2 => AppLocalizations.of(context).onboardRule2,
+                            _ => AppLocalizations.of(context).onboardRule3,
+                          },
+                          key: const ValueKey('onboarding-rule'),
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.body(size: 14, weight: FontWeight.w600, color: colors.cream)
+                              .copyWith(height: 1.4),
+                        ),
+                      ),
                     const SizedBox(height: 10),
                     PitchCard(fx: _fx),
                     // « Demander à un ami » : partage le pitch du niveau en cours.
@@ -705,6 +791,7 @@ class _GameScreenState extends State<GameScreen> {
                       onWatchAdForJoker: _onWatchAdForJoker,
                       onRedJokerEmpty: _onRedJokerEmpty,
                       confirmRevealWordNerf: _confirmRevealWordNerf,
+                      singleJoker: game.inOnboardingIntro,
                     ),
                     const SizedBox(height: 10),
                     Row(

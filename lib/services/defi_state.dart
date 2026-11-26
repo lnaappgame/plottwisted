@@ -40,6 +40,15 @@ class DefiState extends ChangeNotifier {
   /// Accorde un joker mineur ou majeur tiré au hasard et renvoie lequel —
   /// câblé vers GameState depuis main.dart (les jokers y sont stockés).
   JokerKind Function({required bool minor})? grantJoker;
+
+  /// Appelé quand le défi OFFICIEL du jour vient d'être terminé (pas un
+  /// bonus) : main.dart y reporte le rappel de 18 h au lendemain, sinon la
+  /// notification « Un nouveau défi t'attend » partait quand même le soir
+  /// chez un joueur qui avait joué le matin (signalé par un testeur le 23/11).
+  void Function()? onOfficielTermine;
+
+  /// Horloge, remplaçable dans les tests.
+  DateTime Function() clock = DateTime.now;
   final Random _rng = Random();
   DefiState({required this.saveService, AnalyticsService? analytics}) : analytics = analytics ?? AnalyticsService();
 
@@ -65,6 +74,13 @@ class DefiState extends ChangeNotifier {
   DateTime? currentDayStart;
 
   Defi get defiDuJour => kDefis[currentIndex.clamp(0, kDefis.length - 1)];
+
+  /// Début (minuit GMT) du dernier jour où le défi officiel a été terminé.
+  DateTime? officielDoneDayStart;
+
+  /// Vrai si le défi officiel d'aujourd'hui (jour GMT) est déjà terminé : le
+  /// rappel quotidien n'a alors plus lieu d'être avant demain.
+  bool get officielFaitAujourdhui => officielDoneDayStart != null && officielDoneDayStart == defiDayStart(clock());
 
   /// À appeler à chaque ouverture de l'écran : détecte un changement de jour
   /// GMT et met à jour le défi officiel en conséquence. [firstLaunchDay] est
@@ -227,6 +243,10 @@ class DefiState extends ChangeNotifier {
     isNewBest = prevBest == null || totalSeconds! < prevBest;
     if (isNewBest!) bestTimes[id] = totalSeconds!;
     if (!playedDefiIds.contains(id)) playedDefiIds = [...playedDefiIds, id];
+    if (!isBonus) {
+      officielDoneDayStart = currentDayStart ?? defiDayStart(clock());
+      onOfficielTermine?.call();
+    }
     if (rewardsEligible) {
       final earned = [
         if (penaltySeconds == 0) (DefiBonus.perfect, true),
@@ -247,6 +267,7 @@ class DefiState extends ChangeNotifier {
   Map<String, dynamic> toJson() => {
         'currentIndex': currentIndex,
         'currentDayStart': currentDayStart?.toIso8601String(),
+        'officielDoneDayStart': officielDoneDayStart?.toIso8601String(),
         'playedDefiIds': playedDefiIds,
         'bestTimes': bestTimes,
       };
@@ -267,6 +288,8 @@ class DefiState extends ChangeNotifier {
     currentIndex = data['currentIndex'] as int? ?? -1;
     final ds = data['currentDayStart'] as String?;
     currentDayStart = ds != null ? DateTime.tryParse(ds) : null;
+    final od = data['officielDoneDayStart'] as String?;
+    officielDoneDayStart = od != null ? DateTime.tryParse(od) : null;
     playedDefiIds = (data['playedDefiIds'] as List?)?.cast<String>() ?? [];
     final bt = data['bestTimes'] as Map?;
     bestTimes = bt != null ? bt.map((k, v) => MapEntry(k as String, v as int)) : {};

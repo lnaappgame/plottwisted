@@ -8,10 +8,12 @@ import '../services/defi_state.dart';
 import '../services/enigme_state.dart';
 import '../services/game_state.dart';
 import '../services/multiplayer_state.dart';
+import '../services/progress_leaderboard.dart';
 import '../services/save_service.dart';
 import '../services/streak_state.dart';
 import '../services/share_service.dart';
 import '../theme/app_theme.dart';
+import 'progress_leaderboard_screen.dart';
 
 // Page légale hébergée sur GitHub Pages (brouillon non relu par un juriste,
 // à faire valider avant publication réelle sur les stores — source dans
@@ -31,6 +33,17 @@ String _legalUrl(BuildContext context, {required bool terms}) {
   return '$_kLegalBaseUrl#${terms ? 'cgu' : 'conf'}';
 }
 
+/// Page web « Supprimer mon compte et mes données » (lien des Réglages et
+/// des fenêtres d'échec de la suppression du compte), en français ou en
+/// anglais selon la langue du jeu.
+String accountDeletionPageUrl(String languageCode) =>
+    languageCode == 'en' ? '${_kLegalBaseUrl}en/suppression/' : '${_kLegalBaseUrl}suppression/';
+
+Future<void> _openAccountDeletionPage(BuildContext context) => launchUrl(
+      Uri.parse(accountDeletionPageUrl(Localizations.localeOf(context).languageCode)),
+      mode: LaunchMode.externalApplication,
+    );
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -46,6 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final settings = context.watch<AppSettings>();
     final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
     final cloudSync = context.read<CloudSyncService>();
+    final progressLeaderboard = context.watch<ProgressLeaderboard?>();
     final t = AppLocalizations.of(context);
 
     return Dialog(
@@ -119,6 +133,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   textAlign: TextAlign.center,
                   style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
             ),
+            // Classement sur l'avancée : le retrait reste possible ici même
+            // interrupteur éteint (droit à l'effacement) ; rien sans inscription.
+            if (progressLeaderboard?.participating ?? false) ...[
+              const SizedBox(height: 6),
+              OutlinedButton(
+                key: const ValueKey('settingsLeaveLeaderboard'),
+                onPressed: () => confirmAndLeaveProgressLeaderboard(context),
+                child: Text(t.lbSettingsLeave,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+              ),
+            ],
             const SizedBox(height: 6),
             Wrap(
               alignment: WrapAlignment.center,
@@ -135,6 +161,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onTap: () => launchUrl(Uri.parse(_legalUrl(context, terms: false)), mode: LaunchMode.externalApplication),
                 ),
               ],
+            ),
+            // Suppression du compte et des données par la page web : pour tous
+            // les joueurs (classement, Multijoueur), compte Google lié ou non.
+            Center(
+              child: _LegalLink(
+                key: const ValueKey('settingsDeleteDataLink'),
+                label: t.settingsDeleteDataLink, colors: colors,
+                onTap: () => _openAccountDeletionPage(context),
+              ),
             ),
             if (cloudBackupAvailable) ...[
               const SizedBox(height: 12),
@@ -190,14 +225,146 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 textAlign: TextAlign.center,
                 style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
           )
-        else
+        else ...[
           OutlinedButton(
             onPressed: () => _onManualBackup(context),
             child: Text(t.settingsSaveNow,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
           ),
+          const SizedBox(height: 6),
+          // Règle Google Play : un compte créé dans l'appli (connexion Google
+          // liée) doit pouvoir y être supprimé.
+          OutlinedButton(
+            key: const ValueKey('settingsDeleteAccount'),
+            style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.crimsonBright)),
+            onPressed: () => _onDeleteAccount(context),
+            child: Text(t.settingsDeleteAccount,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.crimsonBright)),
+          ),
+        ],
       ],
+    );
+  }
+
+  /// « Supprimer ma sauvegarde et me déconnecter » : une confirmation claire,
+  /// puis suppression de la sauvegarde en ligne, de l'entrée du classement,
+  /// de la fiche Multijoueur, du compte Firebase et de la connexion Google
+  /// (voir CloudSyncService.deleteAccount). La partie locale reste intacte.
+  Future<void> _onDeleteAccount(BuildContext context) async {
+    final cloudSync = context.read<CloudSyncService>();
+    final leaderboard = context.read<ProgressLeaderboard?>();
+    final settings = context.read<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    final messenger = ScaffoldMessenger.maybeOf(context);
+
+    final yes = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: colors.bgPanel2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(22),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(t.settingsDeleteAccountTitle,
+                  textAlign: TextAlign.center, style: AppTextStyles.display(size: 18, color: AppColors.crimsonBright)),
+              const SizedBox(height: 12),
+              Text(t.settingsDeleteAccountBody(cloudSync.linkedEmail ?? 'Google'),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body(size: 13, color: colors.cream).copyWith(height: 1.5)),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      key: const ValueKey('settingsDeleteAccountCancel'),
+                      onPressed: () => Navigator.of(dialogContext).pop(false),
+                      child: Text(t.settingsCancel,
+                          style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: colors.muted)),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      key: const ValueKey('settingsDeleteAccountConfirm'),
+                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
+                      onPressed: () => Navigator.of(dialogContext).pop(true),
+                      child: Text(t.settingsDeleteAccountCta,
+                          style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: colors.cream)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (yes != true || !context.mounted) return;
+
+    setState(() => _syncing = true);
+    final report = await cloudSync.deleteAccount(leaveLeaderboard: leaderboard?.leave);
+    if (mounted) setState(() => _syncing = false);
+    if (!context.mounted) return;
+
+    switch (report.outcome) {
+      case AccountDeletionOutcome.deleted:
+        messenger?.showSnackBar(
+          SnackBar(content: Text(t.settingsDeleteAccountDoneSnack), duration: const Duration(seconds: 4)),
+        );
+      case AccountDeletionOutcome.deletedWithLeftovers:
+        await _showDeletionInfo(context, t.settingsDeleteAccountPartialTitle, t.settingsDeleteAccountPartialBody);
+      case AccountDeletionOutcome.needsRecentLogin:
+        await _showDeletionInfo(context, t.settingsDeleteAccountReauthTitle, t.settingsDeleteAccountReauthBody);
+      case AccountDeletionOutcome.failed:
+        await _showDeletionInfo(context, t.settingsDeleteAccountFailedTitle, t.settingsDeleteAccountFailedBody);
+    }
+  }
+
+  /// Fenêtre d'information après une suppression incomplète, avec le lien
+  /// vers la page web de suppression.
+  Future<void> _showDeletionInfo(BuildContext context, String title, String body) async {
+    final settings = context.read<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: colors.bgPanel2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(22),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(title, textAlign: TextAlign.center, style: AppTextStyles.display(size: 18, color: AppColors.gold)),
+              const SizedBox(height: 12),
+              Text(body,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.body(size: 13, color: colors.cream).copyWith(height: 1.5)),
+              const SizedBox(height: 18),
+              OutlinedButton(
+                key: const ValueKey('settingsDeleteAccountOpenPage'),
+                onPressed: () => _openAccountDeletionPage(dialogContext),
+                child: Text(t.settingsDeleteAccountOpenPage,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.body(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(t.settingsUnderstood, style: AppTextStyles.display(size: 15, color: colors.cream)),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -542,7 +709,7 @@ class _LegalLink extends StatelessWidget {
   final String label;
   final AppColors colors;
   final VoidCallback onTap;
-  const _LegalLink({required this.label, required this.colors, required this.onTap});
+  const _LegalLink({super.key, required this.label, required this.colors, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
