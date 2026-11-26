@@ -164,7 +164,17 @@ class AdventCalendar {
 
   int get caseCount => kAdventPitches.length;
 
+  /// APK de test seulement, jamais en production :
+  /// `--dart-define=ADVENT_TEST_DATE=2026-12-05` fait croire au calendrier
+  /// qu'on est ce jour-là (pour essayer les cases avant le 1er décembre).
+  /// Vide dans les builds de production : aucun effet.
+  static const String _testDate = String.fromEnvironment('ADVENT_TEST_DATE');
+
   DateTime get _today {
+    if (_testDate.isNotEmpty) {
+      final t = DateTime.tryParse(_testDate);
+      if (t != null) return DateTime(t.year, t.month, t.day);
+    }
     final d = game.clock();
     return DateTime(d.year, d.month, d.day);
   }
