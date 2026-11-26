@@ -1350,7 +1350,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get advIntro =>
-      'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de retrouver le titre.';
+      'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de trouver le bon titre, sans tomber dans les pièges !';
 
   @override
   String get advIntro2 =>
@@ -1358,7 +1358,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get advRules =>
-      'Une case s\'ouvre chaque jour à minuit. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Jokers : Révéler, Éliminer et Révéler un mot.';
+      'Une case s\'ouvre chaque jour à minuit : 4 titres, un seul est le bon, les 3 autres sont des pièges. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Joker : Retirer un piège (il utilise un joker Révéler).';
 
   @override
   String get advSkinHat => 'Bonnet de Noël : trouve ta première case';
@@ -1394,6 +1394,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get advSantaSays => '🎅 LE PÈRE NOËL RACONTE';
+
+  @override
+  String get advPickTitle =>
+      'Quel est ce film ? 3 réponses sur 4 sont des pièges !';
+
+  @override
+  String get advTrap => 'Piège !';
+
+  @override
+  String get advRemoveTrap => 'RETIRER UN PIÈGE';
 
   @override
   String get advOnTimeHint => 'Trouve-la aujourd\'hui : +1 joker !';

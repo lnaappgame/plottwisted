@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../data/advent_data.dart';
 import '../l10n/app_localizations.dart';
-import '../models/joker.dart';
 import '../services/advent_calendar.dart';
 import '../services/app_settings.dart';
 import '../services/game_state.dart';
@@ -12,12 +11,10 @@ import '../services/share_service.dart';
 import '../services/sound_service.dart';
 import '../services/streak_state.dart';
 import '../theme/app_theme.dart';
-import '../widgets/answer_row.dart';
 import '../widgets/avatar_view.dart';
 import '../widgets/joker_bar.dart';
 import '../widgets/joker_fx.dart';
 import '../widgets/joker_style.dart';
-import '../widgets/letter_pool.dart';
 import '../widgets/scifi_background.dart';
 
 /// Couleurs du calendrier : rouge Noël et vert sapin sur une nuit d'hiver,
@@ -361,10 +358,12 @@ class _SkinsCard extends StatelessWidget {
   }
 }
 
-/// Une case du calendrier, jouée comme dans le jeu principal : tuiles ou
-/// clavier, Révéler / Éliminer / Révéler un mot, une pub pour un joker et
-/// VALIDER. Après la victoire, « CASE SUIVANTE » mène à la case du jour ou
-/// à la plus ancienne case manquée.
+/// Une case du calendrier, en QCM : le pitch du Père Noël, puis 4 titres à
+/// toucher, le bon et 3 pièges. Un piège touché est barré (« Piège ! ») et le
+/// joueur retente ; la case est trouvée au bon titre. Un seul joker (Retirer
+/// un piège), et une pub pour en gagner un. Après la victoire,
+/// « CASE SUIVANTE » mène à la case du jour ou à la plus ancienne case
+/// manquée.
 class AdventCaseScreen extends StatefulWidget {
   final int day;
   const AdventCaseScreen({super.key, required this.day});
@@ -384,7 +383,7 @@ class _AdventCaseScreenState extends State<AdventCaseScreen> {
   bool _adBusy = false;
 
   /// Faux si la case demandée n'était pas jouable (pas encore ouverte, déjà
-  /// trouvée, calendrier fermé) : l'écran le dit au lieu d'afficher une autre grille.
+  /// trouvée, calendrier fermé) : l'écran le dit au lieu d'afficher une autre case.
   bool _opened = false;
 
   AdventCalendar get _advent => context.read<GameState>().advent;
@@ -409,30 +408,32 @@ class _AdventCaseScreenState extends State<AdventCaseScreen> {
       ..showSnackBar(SnackBar(content: Text(message), duration: const Duration(seconds: 2)));
   }
 
-  void _onValidate() {
+  void _onChoice(AdventChoice choice) {
     final settings = context.read<AppSettings>();
     final sound = context.read<SoundService>();
-    final t = AppLocalizations.of(context);
+    final answer = _advent.choose(choice.id);
+    if (answer == AdventAnswer.ignored) return;
     if (settings.vibrationsOn) HapticFeedback.lightImpact();
-    switch (_advent.validate()) {
-      case 'incomplete':
-        _toast(t.gameIncomplete);
-      case 'wrong':
-        if (settings.sfxOn) sound.playWrong();
-        _toast(t.gameWrong);
-      case 'solved':
-        if (settings.sfxOn) sound.playCorrect();
-        context.read<StreakState>().recordAction();
-        setState(() => _revealing = true);
-        _revealTimer?.cancel();
-        _revealTimer = Timer(const Duration(seconds: 1), () {
-          if (!mounted) return;
-          setState(() {
-            _revealing = false;
-            _showResult = true;
-          });
-        });
+    if (answer == AdventAnswer.trap) {
+      if (settings.sfxOn) sound.playWrong();
+      return;
     }
+    if (settings.sfxOn) sound.playCorrect();
+    context.read<StreakState>().recordAction();
+    setState(() => _revealing = true);
+    _revealTimer?.cancel();
+    _revealTimer = Timer(const Duration(seconds: 1), () {
+      if (!mounted) return;
+      setState(() {
+        _revealing = false;
+        _showResult = true;
+      });
+    });
+  }
+
+  void _onRemoveTrap(Color color) {
+    final trap = _advent.removeTrap();
+    if (trap != null) _fx.beam(kAdventTrapJoker, color, ['choice:$trap']);
   }
 
   void _onNext() {
@@ -467,56 +468,6 @@ class _AdventCaseScreenState extends State<AdventCaseScreen> {
     }
   }
 
-  /// Titre d'un seul mot, la première fois : « Révéler un mot » n'y dévoile
-  /// qu'un tiers des lettres, le joueur peut garder son joker.
-  Future<bool> _confirmRevealWordNerf() async {
-    final game = context.read<GameState>();
-    final t = AppLocalizations.of(context);
-    final use = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        backgroundColor: _Xm.panel2,
-        title: Text(t.nerfRevealWordTitle,
-            textAlign: TextAlign.center, style: AppTextStyles.display(size: 20, color: _Xm.gold)),
-        content: Text(t.nerfRevealWordBody(_advent.revealWordNerfCount),
-            textAlign: TextAlign.center, style: AppTextStyles.body(size: 14, color: _Xm.snow).copyWith(height: 1.5)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(t.commonCancel, style: AppTextStyles.body(size: 13, color: _Xm.muted)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: _Xm.button),
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(t.nerfRevealWordUse, style: AppTextStyles.body(size: 14, weight: FontWeight.w700, color: _Xm.snow)),
-          ),
-        ],
-      ),
-    );
-    game.markRevealWordNerfExplained();
-    return use ?? false;
-  }
-
-  Future<void> _onJoker(JokerKind kind, Color color) async {
-    final advent = _advent;
-    final game = context.read<GameState>();
-    switch (kind) {
-      case JokerKind.reveal:
-        final slot = advent.useRevealJoker();
-        if (slot != null) _fx.beam(kind, color, ['slot:$slot']);
-      case JokerKind.eliminate:
-        final tiles = advent.useEliminateJoker();
-        _fx.beam(kind, color, [for (final i in tiles) 'tile:$i']);
-      case JokerKind.revealWord:
-        if (advent.revealWordIsNerfed && !game.revealWordNerfExplained && !await _confirmRevealWordNerf()) return;
-        if (!mounted) return;
-        final slots = advent.useRevealWordJoker();
-        _fx.beam(kind, color, [for (final i in slots) 'slot:$i']);
-      default:
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final game = context.watch<GameState>();
@@ -524,7 +475,7 @@ class _AdventCaseScreenState extends State<AdventCaseScreen> {
     final settings = context.watch<AppSettings>();
     final t = AppLocalizations.of(context);
     final locale = settings.locale;
-    final day = _opened ? advent.loadedDay : null;
+    final day = _opened ? advent.selectedDay : null;
 
     if (day == null) {
       return SciFiScaffold(baseColor: _Xm.bg, body: SafeArea(child: _NoCaseView(advent: advent)));
@@ -590,31 +541,32 @@ class _AdventCaseScreenState extends State<AdventCaseScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    AnswerRow(grid: advent, fx: _fx, highlightSolved: _revealing || _showResult),
-                    const SizedBox(height: 14),
-                    LetterPool(grid: advent, fx: _fx),
-                    const SizedBox(height: 14),
-                    EventJokerBar(fx: _fx, game: game, onJoker: _onJoker, onWatchAd: _onWatchAdForJoker),
+                    Text(t.advPickTitle,
+                        key: const ValueKey('adventPickTitle'),
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.body(size: 13, weight: FontWeight.w700, color: _Xm.gold)),
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: advent.clearLastLetter,
-                            child: Text(t.commonClear, style: AppTextStyles.display(size: 15, color: AppColors.gold)),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: ElevatedButton(
-                            key: const ValueKey('adventValidate'),
-                            style: ElevatedButton.styleFrom(backgroundColor: AppColors.crimson),
-                            onPressed: _onValidate,
-                            child: Text(t.commonValidate, style: AppTextStyles.display(size: 15, color: _Xm.snow)),
-                          ),
-                        ),
-                      ],
+                    ListenableBuilder(
+                      listenable: _fx,
+                      builder: (context, _) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (final choice in advent.choicesOf(day, locale)) ...[
+                            _ChoiceButton(
+                              key: _fx.key('choice:${choice.id}'),
+                              choice: choice,
+                              // Le faisceau du joker n'a pas encore atteint ce piège : il reste affiché.
+                              removed: choice.removed && !_fx.isIncoming('choice:${choice.id}'),
+                              found: choice.isAnswer && (_revealing || _showResult || solvedHere),
+                              onTap: () => _onChoice(choice),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ],
+                      ),
                     ),
+                    const SizedBox(height: 4),
+                    _AdventJokerBar(fx: _fx, game: game, onRemoveTrap: _onRemoveTrap, onWatchAd: _onWatchAdForJoker),
                   ],
                 ),
               ),
@@ -633,6 +585,114 @@ class _AdventCaseScreenState extends State<AdventCaseScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Une réponse du QCM, à toucher. Piège touché : barré, avec « Piège ! » ;
+/// piège retiré par le joker : barré et pâli ; bon titre trouvé : en vert.
+class _ChoiceButton extends StatelessWidget {
+  final AdventChoice choice;
+  final bool removed;
+  final bool found;
+  final VoidCallback onTap;
+  const _ChoiceButton(
+      {super.key, required this.choice, required this.removed, required this.found, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    final hit = choice.hit;
+    final out = hit || removed;
+    final Color border =
+        found ? _Xm.success : (hit ? _Xm.red : (removed ? _Xm.panel2 : _Xm.gold.withValues(alpha: 0.55)));
+    final Color fill = found ? _Xm.green.withValues(alpha: 0.45) : (hit ? _Xm.redSoft : _Xm.panel);
+    return Opacity(
+      opacity: removed ? 0.35 : 1,
+      child: Material(
+        color: fill,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: out || found ? null : onTap,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 54),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: border, width: found ? 2 : 1.4),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    choice.title,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.display(size: 20, color: out ? _Xm.muted : _Xm.snow).copyWith(
+                        decoration: out ? TextDecoration.lineThrough : null,
+                        decorationColor: hit ? _Xm.red : _Xm.muted,
+                        decorationThickness: 2),
+                  ),
+                ),
+                if (hit) ...[
+                  const SizedBox(width: 8),
+                  Text(t.advTrap, style: AppTextStyles.body(size: 12, weight: FontWeight.w800, color: _Xm.red)),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Le joker d'une case, « Retirer un piège » (il dépense un joker Révéler
+/// du stock du jeu principal), et la pub « Gagner un joker ».
+class _AdventJokerBar extends StatelessWidget {
+  final JokerFx fx;
+  final GameState game;
+  final void Function(Color color) onRemoveTrap;
+  final VoidCallback onWatchAd;
+  const _AdventJokerBar({required this.fx, required this.game, required this.onRemoveTrap, required this.onWatchAd});
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<AppSettings>();
+    final colors = AppColors(settings.isLightTheme, colorblind: settings.colorblindMode);
+    final t = AppLocalizations.of(context);
+    const kind = kAdventTrapJoker;
+    return ListenableBuilder(
+      listenable: fx,
+      builder: (context, _) {
+        final shown = (game.countOf(kind) - fx.pending(kind)).clamp(0, 999).toInt();
+        final color = jokerColor(kind, colors);
+        final trapLeft = game.advent.hasTrapLeft;
+        return Column(
+          children: [
+            JokerButton(
+              key: fx.key('joker:${kind.name}'),
+              label: t.advRemoveTrap,
+              icon: kind.icon,
+              count: shown,
+              color: color,
+              colors: colors,
+              active: false,
+              disabled: !trapLeft,
+              tappable: shown > 0 && trapLeft,
+              subtitle: null,
+              onTap: () => onRemoveTrap(color),
+            ),
+            const SizedBox(height: 10),
+            WinJokerButton(
+                key: const ValueKey('eventWinJoker'),
+                label: t.jokerWinOne,
+                colors: colors,
+                onTap: onWatchAd,
+                busy: game.adService.rewardedInProgress),
+          ],
+        );
+      },
     );
   }
 }

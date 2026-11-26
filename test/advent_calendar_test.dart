@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:cine_devinette/data/advent_data.dart';
 import 'package:cine_devinette/l10n/app_localizations.dart';
+import 'package:cine_devinette/models/event_pitch.dart';
 import 'package:cine_devinette/models/joker.dart';
 import 'package:cine_devinette/screens/advent_calendar_screen.dart';
 import 'package:cine_devinette/screens/home_screen.dart';
@@ -12,11 +13,12 @@ import 'package:cine_devinette/services/ad_service.dart';
 import 'package:cine_devinette/services/advent_calendar.dart';
 import 'package:cine_devinette/services/analytics_service.dart';
 import 'package:cine_devinette/services/app_settings.dart';
-import 'package:cine_devinette/services/event_grid.dart';
+import 'package:cine_devinette/services/event_grid.dart' show kEventJokers;
 import 'package:cine_devinette/services/game_state.dart';
 import 'package:cine_devinette/services/save_service.dart';
 import 'package:cine_devinette/services/sound_service.dart';
 import 'package:cine_devinette/services/streak_state.dart';
+import 'package:cine_devinette/widgets/letter_pool.dart';
 
 /// Analytics sans Firebase : garde les cases trouvées.
 class _FakeAnalytics extends AnalyticsService {
@@ -39,28 +41,17 @@ GameState _newGame(_Clock clock, {AnalyticsService? analytics}) {
     ..clock = () => clock.now;
 }
 
-/// Remplit les cases encore vides avec les bonnes lettres.
-void _typeTitle(EventGrid e) {
-  for (var s = 0; s < e.slots.length; s++) {
-    final slot = e.slots[s];
-    if (slot.isSpace || slot.isAuto || e.guess[s] != null) continue;
-    final tile = e.pool.firstWhere((t) => t.letter == slot.char && !t.used && !t.eliminated);
-    e.onBlankTap(s);
-    e.onLetterTap(tile);
-  }
-}
-
-String _answer(EventGrid e) => e.slots.map((s) => s.char).join();
-
-/// Ouvre et trouve la case [day] ; retourne ce qu'elle a rapporté.
+/// Ouvre et trouve la case [day] du premier coup ; retourne ce qu'elle a rapporté.
 AdventSolveReward _solve(AdventCalendar a, int day) {
   expect(a.open(day), isTrue, reason: 'case $day');
-  _typeTitle(a);
-  expect(a.validate(), 'solved', reason: 'case $day');
+  expect(a.choose(kAdventAnswerId), AdventAnswer.solved, reason: 'case $day');
   return a.lastReward!;
 }
 
 int _eventJokers(GameState g) => kEventJokers.map(g.countOf).reduce((a, b) => a + b);
+
+/// Clé de comparaison des titres : sans accents, majuscules ni ponctuation.
+String _key(String title) => EventPitch.titleKey(title);
 
 /// Petits mots tolérés dans un pitch même s'ils sont dans le titre (« le »,
 /// « de », « the », « of »… : tous les mots de 1 ou 2 lettres, plus ceux-ci).
@@ -93,7 +84,7 @@ void main() {
         expect(p.pitchFr.trim(), isNotEmpty, reason: p.titleFr);
         expect(p.pitchEn.trim(), isNotEmpty, reason: p.titleEn);
         expect(RegExp(r'^\d{4}$').hasMatch(p.year), isTrue, reason: p.titleFr);
-        // Pas de mention entre parenthèses dans une réponse à taper.
+        // Pas de mention entre parenthèses dans un titre affiché.
         expect(p.titleEn.contains('('), isFalse, reason: p.titleEn);
       }
     });
@@ -138,6 +129,168 @@ void main() {
       expect(_titleWordsInPitch('Home Alone', 'he defended his house alone against two burglars'), {'ALONE'});
       expect(_titleWordsInPitch('Mission : Noël', 'quatre Noëls à enchaîner'), {'NOEL'});
       expect(_titleWordsInPitch('Le Grinch', 'Je le connais'), isEmpty, reason: '« le » est toléré');
+    });
+
+    test('pièges : 3 FR et 3 EN par case, jamais le titre ni une réponse acceptée, aucun doublon dans une case', () {
+      for (final (i, p) in kAdventPitches.indexed) {
+        final c = 'case ${i + 1} (${p.titleFr})';
+        expect(p.trapsFr.length, 3, reason: c);
+        expect(p.trapsEn.length, 3, reason: c);
+        // Le titre et les réponses acceptées, dans les deux langues : un piège
+        // n'est jamais le même film sous son autre titre.
+        final answers = {for (final t in [p.titleFr, p.titleEn, ...p.acceptedFr, ...p.acceptedEn]) _key(t)};
+        for (final trap in [...p.trapsFr, ...p.trapsEn]) {
+          expect(trap.trim(), isNotEmpty, reason: c);
+          expect(trap, trap.trim(), reason: '$c : espaces autour de « $trap »');
+          expect(answers.contains(_key(trap)), isFalse, reason: '$c : « $trap » est une réponse');
+          expect(trap.contains('('), isFalse, reason: '$c : « $trap »');
+        }
+        expect(p.trapsFr.map(_key).toSet().length, 3, reason: '$c : doublon FR ${p.trapsFr}');
+        expect(p.trapsEn.map(_key).toSet().length, 3, reason: '$c : doublon EN ${p.trapsEn}');
+      }
+    });
+
+    test('pièges variés : un même film sert de piège au plus 2 fois dans le calendrier', () {
+      final uses = <String, int>{};
+      for (final p in kAdventPitches) {
+        for (final trap in p.trapsFr) {
+          uses[_key(trap)] = (uses[_key(trap)] ?? 0) + 1;
+        }
+      }
+      expect(uses.entries.where((e) => e.value > 2).map((e) => e.key), isEmpty);
+      // Les films du calendrier servent de pièges, mais pas trop souvent.
+      final calendarTitles = {for (final p in kAdventPitches) _key(p.titleFr)};
+      final calendarTraps = uses.entries.where((e) => calendarTitles.contains(e.key)).fold(0, (n, e) => n + e.value);
+      expect(calendarTraps, lessThanOrEqualTo(25), reason: 'au plus un tiers des 75 pièges');
+    });
+  });
+
+  group('QCM', () {
+    test('quatre réponses : le bon titre et ses 3 pièges, en français ou en anglais', () {
+      final a = _newGame(_Clock(DateTime(2026, 12, 25))).advent;
+      for (var day = 1; day <= 25; day++) {
+        final p = kAdventPitches[day - 1];
+        final fr = a.choicesOf(day, 'fr');
+        final en = a.choicesOf(day, 'en');
+        expect(fr.length, 4);
+        expect(fr.where((c) => c.isAnswer).single.title, p.titleFr);
+        expect(en.where((c) => c.isAnswer).single.title, p.titleEn);
+        expect(fr.map((c) => c.title).toSet(), {p.titleFr, ...p.trapsFr});
+        expect(en.map((c) => c.title).toSet(), {p.titleEn, ...p.trapsEn});
+        // Le même film à la même place dans les deux langues.
+        expect(en.map((c) => c.id), fr.map((c) => c.id));
+        expect(fr.every((c) => c.playable), isTrue);
+      }
+    });
+
+    test('ordre mélangé mais stable : le même à chaque fois, le bon titre pas toujours à la même place', () {
+      final places = <int, int>{};
+      for (var day = 1; day <= 25; day++) {
+        final order = AdventCalendar.choiceOrder(day);
+        expect(AdventCalendar.choiceOrder(day), order, reason: 'case $day');
+        expect(order.toSet(), {kAdventAnswerId, 0, 1, 2});
+        final place = order.indexOf(kAdventAnswerId);
+        places[place] = (places[place] ?? 0) + 1;
+      }
+      // Valeurs figées : l'ordre ne doit pas changer d'une version à l'autre.
+      expect(AdventCalendar.choiceOrder(1), [1, 0, kAdventAnswerId, 2]);
+      expect(AdventCalendar.choiceOrder(25), [0, 2, 1, kAdventAnswerId]);
+      expect(places.keys.toSet(), {0, 1, 2, 3});
+      for (final n in places.values) {
+        expect(n, inInclusiveRange(5, 8), reason: '$places');
+      }
+    });
+
+    test('un piège touché est barré, le joueur retente, la case est trouvée au bon titre', () {
+      final analytics = _FakeAnalytics();
+      final game = _newGame(_Clock(DateTime(2026, 12, 3, 12)), analytics: analytics);
+      final a = game.advent;
+      expect(a.open(3), isTrue);
+      expect(a.choose(1), AdventAnswer.trap);
+      expect(a.choicesOf(3, 'fr').firstWhere((c) => c.id == 1).hit, isTrue);
+      expect(a.choose(1), AdventAnswer.ignored, reason: 'déjà barré');
+      expect(a.isSolved(3), isFalse);
+      expect(a.choose(2), AdventAnswer.trap);
+      expect(analytics.solvedCases, isEmpty, reason: 'un piège ne trouve pas la case');
+      expect(a.choose(kAdventAnswerId), AdventAnswer.solved);
+      expect(a.isSolved(3), isTrue);
+      expect(a.choose(0), AdventAnswer.ignored, reason: 'case déjà trouvée');
+      expect(a.attemptRows, [
+        [false],
+        [false],
+        [true]
+      ]);
+      expect(a.jokersUsed, isEmpty);
+      expect(analytics.solvedCases, [(3, true)]);
+      expect(a.lastReward!.dayJoker, isNotNull, reason: 'les pièges touchés ne retirent pas le joker du jour');
+    });
+
+    test('retirer un piège : coûte un joker Révéler, jamais le bon titre, jusqu\'au dernier piège', () {
+      final game = _newGame(_Clock(DateTime(2026, 12, 5)))..grantJokers(reveal: 4, eliminate: 2);
+      final a = game.advent..open(5);
+      expect(kAdventTrapJoker, JokerKind.reveal);
+      final removed = {for (var i = 0; i < 3; i++) a.removeTrap()};
+      expect(removed, {0, 1, 2});
+      expect(game.revealCount, 1);
+      expect(game.eliminateCount, 2, reason: 'les autres jokers ne servent pas ici');
+      expect(a.hasTrapLeft, isFalse);
+      expect(a.removeTrap(), isNull, reason: 'plus de piège : joker gardé');
+      expect(game.revealCount, 1);
+      final choices = a.choicesOf(5, 'fr');
+      expect(choices.where((c) => c.playable).single.isAnswer, isTrue);
+      expect(choices.where((c) => c.removed).length, 3);
+      expect(a.jokersUsed, [JokerKind.reveal, JokerKind.reveal, JokerKind.reveal]);
+      expect(a.choose(0), AdventAnswer.ignored, reason: 'un piège retiré ne se touche plus');
+      expect(a.choose(kAdventAnswerId), AdventAnswer.solved);
+      expect(a.attemptRows, [
+        [true]
+      ]);
+    });
+
+    test('retirer un piège : sans joker Révéler, rien ne se passe ; un piège touché n\'est jamais retiré', () {
+      final game = _newGame(_Clock(DateTime(2026, 12, 5)));
+      final a = game.advent..open(5);
+      expect(game.revealCount, 0);
+      expect(a.removeTrap(), isNull);
+      expect(a.choicesOf(5, 'fr').every((c) => c.playable), isTrue);
+
+      game.grantJokers(reveal: 3);
+      a.choose(2);
+      expect({a.removeTrap(), a.removeTrap()}, {0, 1});
+      expect(a.removeTrap(), isNull);
+      expect(game.revealCount, 1);
+    });
+
+    test('pub « Gagner un joker » d\'une case : un joker Révéler, celui de « Retirer un piège »', () {
+      final game = _newGame(_Clock(DateTime(2026, 12, 5)));
+      expect(game.advent.grantAdJoker(), JokerKind.reveal);
+      expect(game.revealCount, 1);
+    });
+
+    test('une case commencée garde ses pièges barrés et retirés quand le joueur en ouvre une autre', () {
+      final game = _newGame(_Clock(DateTime(2026, 12, 5)))..grantJokers(reveal: 1);
+      final a = game.advent..open(5);
+      a.choose(0);
+      final removed = a.removeTrap()!;
+      a.open(3);
+      expect(a.choicesOf(3, 'fr').every((c) => c.playable), isTrue);
+      expect(a.jokersUsed, isEmpty);
+      a.open(5);
+      final choices = a.choicesOf(5, 'fr');
+      expect(choices.firstWhere((c) => c.id == 0).hit, isTrue);
+      expect(choices.firstWhere((c) => c.id == removed).removed, isTrue);
+      expect(a.jokersUsed, [JokerKind.reveal]);
+    });
+
+    test('changement de langue : les mêmes pièges restent barrés, avec leur titre anglais', () {
+      final game = _newGame(_Clock(DateTime(2026, 12, 25)));
+      final a = game.advent..open(25);
+      a.choose(1);
+      game.settings.setLocale('en');
+      final en = a.choicesOf(25, game.settings.locale);
+      expect(en.firstWhere((c) => c.id == 1).title, kAdventPitches[24].trapsEn[1]);
+      expect(en.firstWhere((c) => c.id == 1).hit, isTrue);
+      expect(en.firstWhere((c) => c.isAnswer).title, 'Home Alone');
     });
   });
 
@@ -293,61 +446,6 @@ void main() {
     });
   });
 
-  group('grille', () {
-    test('titre en anglais quand le jeu est en anglais', () {
-      final game = _newGame(_Clock(DateTime(2026, 12, 25)))..settings.setLocale('en');
-      game.advent.open(25);
-      expect(_answer(game.advent), 'HOME ALONE');
-      game.settings.setLocale('fr');
-      game.advent.loadCurrent();
-      expect(_answer(game.advent), "MAMAN, J'AI RATE L'AVION !");
-    });
-
-    test('ponctuation seule (« : », « ! ») : rien à trouver, jamais un joker gaspillé dessus', () {
-      final game = _newGame(_Clock(DateTime(2026, 12, 25)))..revealWordCount = 1;
-      final a = game.advent..open(17);
-      expect(_answer(a), 'MISSION : NOEL');
-      expect(a.lockedWords, {1});
-      final revealed = a.useRevealWordJoker();
-      expect(revealed, isNotEmpty);
-      expect(game.revealWordCount, 0);
-      expect(revealed.every((i) => !a.slots[i].isAuto), isTrue);
-      _typeTitle(a);
-      expect(a.validate(), 'solved');
-
-      a.open(25); // MAMAN, J'AI RATE L'AVION !
-      final wrong = a.pool.firstWhere((t) => !_answer(a).contains(t.letter));
-      a.onBlankTap(0);
-      a.onLetterTap(wrong);
-      _typeTitle(a);
-      expect(a.validate(), 'wrong');
-      expect(a.attemptRows.last, [false, true, true, true], reason: 'le « ! » ne compte pas');
-    });
-
-    test('titre avec des chiffres : chiffres du titre et deux leurres', () {
-      final a = _newGame(_Clock(DateTime(2026, 12, 12))).advent..open(12);
-      expect(_answer(a), 'MIRACLE SUR LA 34E RUE');
-      final digits = a.pool.where((t) => RegExp(r'^[0-9]$').hasMatch(t.letter)).map((t) => t.letter).toList();
-      expect(digits.length, 4);
-      expect(digits, containsAll(['3', '4']));
-      _typeTitle(a);
-      expect(a.validate(), 'solved');
-    });
-
-    test('une case laissée en cours garde sa grille quand le joueur en ouvre une autre', () {
-      final game = _newGame(_Clock(DateTime(2026, 12, 5)))..grantJokers(eliminate: 1);
-      final a = game.advent..open(5); // ELFE
-      a.onLetterTap(a.pool.firstWhere((t) => t.letter == 'E'));
-      expect(a.useEliminateJoker().length, 3);
-      final eliminated = [for (final t in a.pool) t.eliminated];
-      a.open(3);
-      expect(_answer(a), 'PIEGE DE CRISTAL');
-      a.open(5);
-      expect(a.pool[a.guess[0]!].letter, 'E');
-      expect([for (final t in a.pool) t.eliminated], eliminated);
-    });
-  });
-
   test('rappels de 18 h : un par case encore à trouver, jamais dans le passé', () {
     final clock = _Clock(DateTime(2026, 11, 20));
     final a = _newGame(clock).advent;
@@ -383,14 +481,15 @@ void main() {
     expect(kAdventCaseSolvedEvent.length, lessThanOrEqualTo(40));
   });
 
-  test('le calendrier est sauvegardé avec le jeu, grille en cours comprise', () async {
+  test('le calendrier est sauvegardé avec le jeu, case en cours comprise', () async {
     final clock = _Clock(DateTime(2026, 12, 3, 12));
-    final game = _newGame(clock);
+    final game = _newGame(clock)..grantJokers(reveal: 1);
     final a = game.advent;
     _solve(a, 3);
     _solve(a, 1);
-    a.open(2); // LE POLE EXPRESS
-    a.onLetterTap(a.pool.firstWhere((t) => t.letter == 'L'));
+    a.open(2);
+    a.choose(1);
+    final removed = a.removeTrap()!;
     await game.flushSave();
 
     final reopened = _newGame(_Clock(DateTime(2026, 12, 4)));
@@ -399,10 +498,14 @@ void main() {
     expect(r.solved, {1, 3});
     expect(r.solvedOnTime, {3});
     expect(r.open(2), isTrue);
-    expect(r.pool[r.guess[0]!].letter, 'L');
+    final choices = r.choicesOf(2, 'fr');
+    expect(choices.firstWhere((c) => c.id == 1).hit, isTrue);
+    expect(choices.firstWhere((c) => c.id == removed).removed, isTrue);
+    expect(r.jokersUsed, [JokerKind.reveal]);
+    expect(r.open(3), isFalse, reason: 'case déjà trouvée');
   });
 
-  test('une sauvegarde d\'une autre année est ignorée', () {
+  test('une sauvegarde d\'une autre année, ou illisible, est ignorée', () {
     final a = _newGame(_Clock(DateTime(2026, 12, 3))).advent;
     a.restore({'year': 2025, 'solved': [1, 2], 'onTime': [1], 'finalRewardGranted': true});
     expect(a.solved, isEmpty);
@@ -410,6 +513,26 @@ void main() {
     a.restore({'year': kAdventYear, 'solved': [1, 2, 99, 'x'], 'onTime': [1, 5]});
     expect(a.solved, {1, 2});
     expect(a.solvedOnTime, {1}, reason: 'une case « à l\'heure » doit être trouvée');
+
+    // Anciennes grilles de lettres (clé 'grids') et cases illisibles : écartées.
+    a.restore({
+      'year': kAdventYear,
+      'solved': [1],
+      'grids': {'2': {'answer': 'LE POLE EXPRESS'}},
+      'cases': {
+        '1': {'hits': [0]}, // case déjà trouvée
+        '2': {'hits': [7, 'x', 1, 1], 'removed': [1, 2, -1], 'jokers': ['reveal', 'inconnu']},
+        '3': 'illisible',
+        '99': {'hits': [0]},
+      },
+    });
+    expect(a.open(2), isTrue);
+    final choices = a.choicesOf(2, 'fr');
+    expect([for (final c in choices) if (c.hit) c.id], [1]);
+    expect([for (final c in choices) if (c.removed) c.id], [2]);
+    expect(a.jokersUsed, [JokerKind.reveal]);
+    expect(a.open(3), isTrue);
+    expect(a.choicesOf(3, 'fr').every((c) => c.playable), isTrue);
   });
 
   test('avatars de l\'Avent : jamais affichés sans avoir été gagnés', () async {
@@ -422,7 +545,7 @@ void main() {
   });
 
   group('écrans', () {
-    Widget app(GameState game, Widget home) => MultiProvider(
+    Widget app(GameState game, Widget home, {Locale locale = const Locale('fr')}) => MultiProvider(
           providers: [
             ChangeNotifierProvider.value(value: game.settings),
             ChangeNotifierProvider.value(value: game),
@@ -432,22 +555,29 @@ void main() {
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            locale: const Locale('fr'),
+            locale: locale,
             home: home,
           ),
         );
 
-    testWidgets('calendrier : case fermée, case du jour trouvée, puis case rattrapée', (tester) async {
+    Future<void> tapText(WidgetTester tester, String text) async {
+      await tester.ensureVisible(find.text(text));
+      await tester.tap(find.text(text));
+      await tester.pump();
+    }
+
+    testWidgets('calendrier : case fermée, case du jour en QCM avec un piège, puis case rattrapée', (tester) async {
       tester.view.physicalSize = const Size(1080, 2400);
       tester.view.devicePixelRatio = 2.6;
       addTearDown(tester.view.reset);
-      final game = _newGame(_Clock(DateTime(2026, 12, 3, 12)));
+      final game = _newGame(_Clock(DateTime(2026, 12, 3, 12)))..grantJokers(reveal: 1);
       await tester.pumpWidget(app(game, const AdventCalendarScreen()));
       await tester.pump();
       expect(find.text('LE PÈRE NOËL FAIT SON CINÉMA'), findsOneWidget);
-      expect(find.text('0/25 cases trouvées'), findsOneWidget);
 
       final list = find.byType(Scrollable).first; // la page (la grille des cases ne défile pas)
+      await tester.scrollUntilVisible(find.byKey(const ValueKey('adventProgress')), 200, scrollable: list);
+      expect(find.text('0/25 cases trouvées'), findsOneWidget);
       await tester.scrollUntilVisible(find.byKey(const ValueKey('adventCase10')), 200, scrollable: list);
       await tester.tap(find.byKey(const ValueKey('adventCase10')));
       await tester.pump();
@@ -466,14 +596,34 @@ void main() {
       expect(find.textContaining('Un policier new-yorkais'), findsOneWidget);
       expect(find.text('Trouve-la aujourd\'hui : +1 joker !'), findsOneWidget);
 
-      _typeTitle(game.advent);
+      // QCM : le titre et ses 3 pièges, plus de tuiles de lettres ni de VALIDER.
+      final pitch = kAdventPitches[2];
+      for (final title in [pitch.titleFr, ...pitch.trapsFr]) {
+        expect(find.text(title), findsOneWidget, reason: title);
+      }
+      expect(find.byType(LetterPool), findsNothing);
+      expect(find.byKey(const ValueKey('adventValidate')), findsNothing);
+      expect(find.text('RETIRER UN PIÈGE'), findsOneWidget);
+      expect(find.text('RÉVÉLER'), findsNothing);
+
+      // Un piège : barré « Piège ! », on retente.
+      await tapText(tester, pitch.trapsFr[0]);
+      expect(find.text('Piège !'), findsOneWidget);
+      expect(game.advent.isSolved(3), isFalse);
+      expect(find.byKey(const ValueKey('adventSolvedTitle')), findsNothing);
+
+      // Le joker retire un autre piège.
+      await tester.ensureVisible(find.text('RETIRER UN PIÈGE'));
+      await tester.tap(find.text('RETIRER UN PIÈGE'));
       await tester.pump();
-      await tester.ensureVisible(find.byKey(const ValueKey('adventValidate')));
-      await tester.tap(find.byKey(const ValueKey('adventValidate')));
-      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      expect(game.revealCount, 0);
+      expect(game.advent.choicesOf(3, 'fr').where((c) => c.removed).length, 1);
+
+      await tapText(tester, pitch.titleFr);
       await tester.pump(const Duration(milliseconds: 1100));
       expect(find.byKey(const ValueKey('adventSolvedTitle')), findsOneWidget);
-      expect(find.text('Piège de cristal'), findsOneWidget);
+      expect(tester.widget<Text>(find.byKey(const ValueKey('adventSolvedTitle'))).data, 'Piège de cristal');
       expect(find.byKey(const ValueKey('adventRewardJoker')), findsOneWidget);
       expect(find.text('Nouvel avatar débloqué : Bonnet de Noël !'), findsOneWidget);
 
@@ -481,7 +631,27 @@ void main() {
       await tester.pump();
       expect(find.text('🎄 CASE 1'), findsOneWidget);
       expect(find.text('Case rattrapée : le joker n\'est donné que le jour même.'), findsOneWidget);
-      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('Piège !'), findsNothing, reason: 'nouvelle case, aucun piège touché');
+      expect(find.text(kAdventPitches[0].titleFr), findsOneWidget);
+      await tester.pump(const Duration(seconds: 3));
+    });
+
+    testWidgets('case en anglais : titres et pièges anglais, petit écran sans débordement', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(320, 640));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final game = _newGame(_Clock(DateTime(2026, 12, 2, 12)))..settings.setLocale('en');
+      await tester.pumpWidget(app(game, const AdventCaseScreen(day: 2), locale: const Locale('en')));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      final pitch = kAdventPitches[1];
+      for (final title in [pitch.titleEn, ...pitch.trapsEn]) {
+        expect(find.text(title), findsOneWidget, reason: title);
+      }
+      expect(find.text('REMOVE A TRAP'), findsOneWidget);
+      await tapText(tester, pitch.trapsEn[2]);
+      expect(find.text('Trap!'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pump(const Duration(seconds: 1)); // sauvegarde différée
     });
 
     Future<void> pumpHome(WidgetTester tester, DateTime now) async {

@@ -147,7 +147,7 @@ class JokerBar extends StatelessWidget {
   }
 }
 
-/// Barre de jokers des events (Halloween, calendrier de l'Avent) : Révéler,
+/// Barre de jokers des events en lettres (Halloween) : Révéler,
 /// Éliminer et Révéler un mot (stock du jeu principal), et la pub « Gagner
 /// un joker ».
 class EventJokerBar extends StatelessWidget {

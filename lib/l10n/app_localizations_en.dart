@@ -1341,7 +1341,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get advIntro =>
-      'This year, Santa is the storyteller! Every day in December, he tells you about a Christmas movie his own way: his rounds, his elves, his nice list… Can you find the title?';
+      'This year, Santa is the storyteller! Every day in December, he tells you about a Christmas movie his own way: his rounds, his elves, his nice list… Can you pick the right title without falling into the traps?';
 
   @override
   String get advIntro2 =>
@@ -1349,7 +1349,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get advRules =>
-      'A new door opens every day at midnight. Solve it the same day to win a joker. Missed doors can be caught up until January 3, without the joker. Jokers: Reveal, Eliminate and Reveal a word.';
+      'A new door opens every day at midnight: 4 titles, only one is right, the other 3 are traps. Solve it the same day to win a joker. Missed doors can be caught up until January 3, without the joker. Joker: Remove a trap (uses one Reveal joker).';
 
   @override
   String get advSkinHat => 'Santa hat: solve your first door';
@@ -1385,6 +1385,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get advSantaSays => '🎅 SANTA SAYS';
+
+  @override
+  String get advPickTitle => 'Which movie is it? 3 of the 4 answers are traps!';
+
+  @override
+  String get advTrap => 'Trap!';
+
+  @override
+  String get advRemoveTrap => 'REMOVE A TRAP';
 
   @override
   String get advOnTimeHint => 'Solve it today: +1 joker!';

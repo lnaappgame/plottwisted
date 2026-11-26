@@ -8,7 +8,8 @@ import 'game_state.dart';
 /// sont aussi ceux que rapportent leurs pubs et leurs récompenses.
 const kEventJokers = [JokerKind.reveal, JokerKind.eliminate, JokerKind.revealWord];
 
-/// La grille de titre des events (Halloween, calendrier de l'Avent), jouée
+/// La grille de titre des events en lettres (Halloween ; le calendrier de
+/// l'Avent se joue en QCM, voir AdventCalendar), jouée
 /// comme dans le jeu principal : tuiles ou clavier, mots justes gardés après
 /// une erreur, jokers Révéler / Éliminer / Révéler un mot puisés dans le
 /// stock du jeu principal. Chaque event dit quel pitch afficher

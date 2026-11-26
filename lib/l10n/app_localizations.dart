@@ -2374,7 +2374,7 @@ abstract class AppLocalizations {
   /// No description provided for @advIntro.
   ///
   /// In fr, this message translates to:
-  /// **'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de retrouver le titre.'**
+  /// **'Cette année, c\'est le Père Noël qui raconte ! Chaque jour de décembre, il te parle à sa façon d\'un film de Noël : sa tournée, ses lutins, sa liste des enfants sages… À toi de trouver le bon titre, sans tomber dans les pièges !'**
   String get advIntro;
 
   /// No description provided for @advIntro2.
@@ -2386,7 +2386,7 @@ abstract class AppLocalizations {
   /// No description provided for @advRules.
   ///
   /// In fr, this message translates to:
-  /// **'Une case s\'ouvre chaque jour à minuit. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Jokers : Révéler, Éliminer et Révéler un mot.'**
+  /// **'Une case s\'ouvre chaque jour à minuit : 4 titres, un seul est le bon, les 3 autres sont des pièges. Trouvée le jour même, elle rapporte 1 joker. Une case manquée se rattrape jusqu\'au 3 janvier, sans le joker. Joker : Retirer un piège (il utilise un joker Révéler).'**
   String get advRules;
 
   /// No description provided for @advSkinHat.
@@ -2442,6 +2442,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'🎅 LE PÈRE NOËL RACONTE'**
   String get advSantaSays;
+
+  /// No description provided for @advPickTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Quel est ce film ? 3 réponses sur 4 sont des pièges !'**
+  String get advPickTitle;
+
+  /// No description provided for @advTrap.
+  ///
+  /// In fr, this message translates to:
+  /// **'Piège !'**
+  String get advTrap;
+
+  /// No description provided for @advRemoveTrap.
+  ///
+  /// In fr, this message translates to:
+  /// **'RETIRER UN PIÈGE'**
+  String get advRemoveTrap;
 
   /// No description provided for @advOnTimeHint.
   ///
